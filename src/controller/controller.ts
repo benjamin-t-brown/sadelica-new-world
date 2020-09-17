@@ -37,8 +37,8 @@ const G_controller_playerInputComplete = () => {
   G_model_setInputDisabled(true);
   const world = G_model_getCurrentWorld();
   const room = G_model_worldGetCurrentRoom(world);
-  for (let i = 0; i < room.a.length; i++) {
-    const act = room.a[i];
+  for (let i = 0; i < room.actors.length; i++) {
+    const act = room.actors[i];
     G_model_actorSetShouldUpdate(act, true);
   }
   G_controller_updateWorld();
@@ -84,10 +84,10 @@ const G_controller_updateWorld = () => {
     return;
   }
 
-  for (let i = 0; i < room.a.length; i++) {
-    const act = room.a[i];
+  for (let i = 0; i < room.actors.length; i++) {
+    const act = room.actors[i];
     if (G_model_actorIsDead(act)) {
-      room.a.splice(i, 1);
+      room.actors.splice(i, 1);
       i--;
       G_controller_dropItemActor(act, room);
       G_view_playSound('dead');

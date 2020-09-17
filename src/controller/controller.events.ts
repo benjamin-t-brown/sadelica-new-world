@@ -97,7 +97,7 @@ const G_controller_initEvents = () => {
     36: UP_LEFT,
     38: UP,
     33: UP_RIGHT,
-    32: PAUSE, // space
+    // 32: PAUSE, // space
     98: DOWN, // num lock on
     99: DOWN_RIGHT,
     97: DOWN_LEFT,
@@ -153,13 +153,23 @@ const G_controller_initEvents = () => {
         debounceRender(world);
         break;
       case key === 192: // tilde
-        console.log('tilde');
         const nearbyItemsAt = G_model_roomGetSurroundingItemsAt(room, actor);
         const [item, x, y] = nearbyItemsAt[0] || [];
         if (item) {
           G_controller_acquireItem(item, actor, x, y, room);
         }
         break;
+      case key === 32: { //space
+        const actors = G_model_roomGetSurroundingActorsAt(room, actor);
+        console.log('NEARBY', actors);
+        const act = actors[0] || [];
+        if (act) {
+          const talkTriggerName = G_model_actorGetTalkTrigger(act);
+          if (talkTriggerName) {
+            G_controller_playDialog(talkTriggerName);
+          }
+        }
+      }
       default: {
         // number keys not including 0
         if (!ev.shiftKey && key > 48 && key <= 57) {

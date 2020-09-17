@@ -17,6 +17,7 @@ G_view_renderWorld
 G_view_renderMap
 G_view_renderUi
 G_view_playSound
+G_initActors
 */
 
 const G_start = () => {
@@ -43,6 +44,7 @@ const main = async () => {
     ['map', 'res/map.png', 64, 64, 1, 1, ['map']],
   ]);
 
+  G_initActors()
   G_controller_initEvents();
   G_start();
   //G_view_renderMap(world, 1);

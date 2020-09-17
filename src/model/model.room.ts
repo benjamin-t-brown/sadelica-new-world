@@ -20,7 +20,7 @@ interface Room {
   visMap: number[][];
   explMap: number[][];
   p: Particle[];
-  a: Actor[];
+  actors: Actor[];
   items: ItemAt[];
   lvl: number;
   id: number;
@@ -50,8 +50,8 @@ const G_model_roomGetActorAt = (
   x: number,
   y: number
 ): Actor | null => {
-  for (let i = 0; i < room.a.length; i++) {
-    const actor = room.a[i];
+  for (let i = 0; i < room.actors.length; i++) {
+    const actor = room.actors[i];
     const [x2, y2] = G_model_actorGetPosition(actor);
     if (x2 === x && y2 === y) {
       return actor;
@@ -148,6 +148,24 @@ const G_model_roomGetSurroundingItemsAt = (
   for (let i = -1; i <= 1; i++) {
     for (let j = -1; j <= 1; j++) {
       ret = ret.concat(G_model_roomGetItemsAt(room, x + j, y + i));
+    }
+  }
+  return ret;
+};
+
+const G_model_roomGetSurroundingActorsAt = (
+  room: Room,
+  actor: Actor
+): Actor[] => {
+  let ret: Actor[] = [];
+  const [x, y] = G_model_actorGetPosition(actor);
+
+  for (let i = -1; i <= 1; i++) {
+    for (let j = -1; j <= 1; j++) {
+      const act = G_model_roomGetActorAt(room, x + j, y + i);
+      if (act) {
+        ret = ret.concat([act]);
+      }
     }
   }
   return ret;

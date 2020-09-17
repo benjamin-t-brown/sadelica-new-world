@@ -175,7 +175,7 @@ const G_model_createWorld = (spritePrefix: string): World => {
 
   // create initial rooms
   for (let i = 0; i < numRooms; i++) {
-    const room = {
+    const room: Room = {
       lvl: 0,
       id: i,
       tiles: [] as Tile[],
@@ -183,7 +183,7 @@ const G_model_createWorld = (spritePrefix: string): World => {
       visMap: G_controller_createEmptyVisMap([roomSize, roomSize]),
       explMap: G_controller_createEmptyVisMap([roomSize, roomSize]),
       items: [] as ItemAt[],
-      a: [] as Actor[],
+      actors: [] as Actor[],
       mod: '',
     };
     world.rooms.push(room);
@@ -198,14 +198,12 @@ const G_model_createWorld = (spritePrefix: string): World => {
   // read room data from image sprites and set the tiles accordingly
   const pngSize = 64;
   for (let i = 0; i < 1; i++) {
-    const { tiles, mod } = world.rooms[i];
+    const { tiles, mod, actors } = world.rooms[i];
     const [, ctx] = G_model_createCanvas(pngSize, pngSize);
     const worldX = i % 8;
     const worldY = Math.floor(i / 8);
-    const characters: Actor[] = [];
 
     const sprite = spritePrefix + '_' + i + mod;
-    console.log('draw map sprite', sprite);
     G_view_drawSprite(sprite, 0, 0, 1, ctx);
     const { data } = ctx.getImageData(0, 0, pngSize, pngSize);
     let ctr = 0;
@@ -216,9 +214,12 @@ const G_model_createWorld = (spritePrefix: string): World => {
       const ty = Math.floor(ctr / pngSize);
       const tInd = to1d(tx, ty, roomSize);
       tiles[tInd] = ['terrain1_' + ind, ind, tx, ty, false];
-      const chTemplate = G_ACTORS_MAP[[worldX, worldY, tx, ty].join(',')];
+      const key = [worldX, worldY, tx, ty].join(',');
+      const chTemplate = G_ACTORS_MAP[key];
+      // console.log('check key', chTemplate, key);
       if (chTemplate) {
-        characters.push(G_model_createActorFromChTemplate(tx, ty, chTemplate));
+        const act = G_model_createActorFromChTemplate(tx, ty, chTemplate);
+        actors.push(act);
       }
       ctr++;
     }

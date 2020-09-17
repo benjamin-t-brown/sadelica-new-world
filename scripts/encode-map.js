@@ -41,32 +41,21 @@ const TILE_SIZE = 16;
 const ROOM_SIZE = 64;
 
 fs.writeFileSync(
-  __dirname + '/../src/lib/actors.js',
+  __dirname + '/../src/js/actors.js',
   actorsArray.reduce((file, { name, x, y }) => {
     const xGlobal = Math.floor(x / TILE_SIZE);
     const yGlobal = Math.floor(y / TILE_SIZE);
     const xWorld = Math.floor(xGlobal / ROOM_SIZE);
     const yWorld = Math.floor(yGlobal / ROOM_SIZE);
     const xLocal = xGlobal % ROOM_SIZE;
-    const yLocal = yGlobal % ROOM_SIZE;
-    console.log(
-      'WHAT THE ',
-      x,
-      y,
-      xGlobal,
-      yGlobal,
-      xWorld,
-      yWorld,
-      xLocal,
-      yLocal
-    );
+    const yLocal = yGlobal % ROOM_SIZE - 1;
     return `${file}\n  G_ACTORS_MAP['${[xWorld, yWorld, xLocal, yLocal].join(
       ','
     )}'] = ${name};`;
   }, 'const G_ACTORS_MAP = {};\nconst G_initActors = () => {') + '\n};\n'
 );
 
-console.log('wrote', __dirname + '/../lib/actors.js');
+console.log('wrote', __dirname + '/../js/actors.js');
 
 const main = async () => {
   const path = __dirname + '/map-template.png';

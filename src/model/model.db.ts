@@ -394,11 +394,11 @@ type CharacterDefinition = [
 
 const G_CH_ALINEA_DOCKMASTER: CharacterDefinition = [
   2,
-  'a',
+  'actors1',
   'Dockmaster',
   hp(6),
   G_BEHAVIOR_NONE,
-  'TALK_TRIGGER',
+  'sadelica',
   'STEP_TRIGGER',
   0,
 ];

@@ -239,3 +239,7 @@ const G_model_actorGetDamage = (actor: Actor): DmgMinMax => {
   }
   return [min, max];
 };
+
+const G_model_actorGetTalkTrigger = (actor: Actor): string => {
+  return actor[14] || '';
+};
