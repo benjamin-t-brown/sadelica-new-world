@@ -20,10 +20,12 @@ type Actor = [
   0 | 1, // 7 direction
   Behavior, // 8 behavior
   boolean, // 9 shouldUpdateThisRound
-  boolean, // 10 attacking
+  boolean, // 10 is attacking
   number, // 11 drop lvl
   number, // 12 equipped item,
-  (() => void) | any // 13 onDeath
+  (() => void) | any, // 13 onDeath
+  string, // 14 talkTrigger
+  string // 15 stepTrigger
 ];
 
 const G_FACING_LEFT = 0;
@@ -32,6 +34,41 @@ const G_FACING_RIGHT = 1;
 type Allegiance = 0 | 1;
 const G_ALLEGIANCE_PLAYER = 0;
 const G_ALLEGIANCE_ENEMY = 1;
+
+const G_model_createActorFromChTemplate = (
+  x: number,
+  y: number,
+  template: CharacterDefinition
+): Actor => {
+  const [
+    spriteIndex,
+    spriteSheet,
+    actorName,
+    stats,
+    behavior,
+    talkTrigger,
+    stepTrigger,
+    dropLevel,
+  ] = template;
+  return [
+    actorName,
+    spriteSheet,
+    spriteIndex,
+    x,
+    y,
+    stats,
+    [],
+    G_FACING_LEFT,
+    behavior,
+    false,
+    false,
+    dropLevel,
+    0,
+    () => {},
+    talkTrigger,
+    stepTrigger,
+  ];
+};
 
 const G_model_actorGetName = (actor: Actor) => {
   return actor[0];

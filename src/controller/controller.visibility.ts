@@ -82,13 +82,19 @@ const G_controller_setVisibility = (chx: number, chy: number, room: Room) => {
     }
   };
 
-  let boxSize = 7;
-  for (let i = -boxSize; i <= boxSize; i++) {
-    castRay(chx, chy, chx + i, chy + boxSize); // top side of box
-    castRay(chx, chy, chx + i, chy - boxSize); // bottom side of box
-    castRay(chx, chy, chx + boxSize, chy + i); // right side of box
-    castRay(chx, chy, chx - boxSize, chy + i); // left side of box
-  }
+  const castRayInBox = (boxSize: number) => {
+    for (let i = -boxSize; i <= boxSize; i++) {
+      castRay(chx, chy, chx + i, chy + boxSize); // top side of box
+      castRay(chx, chy, chx + i, chy - boxSize); // bottom side of box
+      castRay(chx, chy, chx + boxSize, chy + i); // right side of box
+      castRay(chx, chy, chx - boxSize, chy + i); // left side of box
+    }
+  };
+  castRayInBox(8);
+  castRayInBox(7);
+  castRayInBox(6);
+  castRayInBox(5);
+  // castRayInBox(4);
 
   visMap[chy][chx] = 1;
 

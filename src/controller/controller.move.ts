@@ -41,7 +41,7 @@ type Direction = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '0';
 const changeRoomIfOOb = (player: Player): boolean => {
   const actor = G_model_playerGetActor(player);
   let [px, py] = G_model_actorGetPosition(actor);
-  let [wx, wy] = player;
+  let { wx, wy } = player;
   let origWx = wx;
   let origWy = wy;
   const roomSize = G_model_getRoomSize();

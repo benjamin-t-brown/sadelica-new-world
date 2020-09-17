@@ -23,6 +23,7 @@ G_controller_dropItem
 G_utils_getTargets
 G_utils_randInRange
 G_BEHAVIOR_RAND
+G_BEHAVIOR_NONE
 G_TARGETING_SINGLE
 G_TARGETING_3X3
 G_TILE_CHEST
@@ -150,7 +151,6 @@ const G_ITEM_KEY: Item = [
           }
         }
       }
-      G_model_setCutsceneLine('You are nearby nothing to unlock!');
       G_view_playSound('cancel');
 
       return false;
@@ -380,7 +380,30 @@ const G_CHEST_LVL3 = [G_ITEM_MAGIC_SWORD, [G_ITEM_SCROLL_EVISCERATE, 3]];
 
 const hp = (n: number): Stats => [n, n];
 
-// sprite index, lvl, name, Stats, Inventory, behavior
+// sprite index, spritesheet, Stats, inventory, behavior, talkTrigger, stepTrigger, dropLevel
+type CharacterDefinition = [
+  number,
+  string,
+  string,
+  Stats,
+  Behavior,
+  string,
+  string,
+  number
+];
+
+const G_CH_ALINEA_DOCKMASTER: CharacterDefinition = [
+  2,
+  'a',
+  'Dockmaster',
+  hp(6),
+  G_BEHAVIOR_NONE,
+  'TALK_TRIGGER',
+  'STEP_TRIGGER',
+  0,
+];
+
+// sprite index, lvl, name, Stats, behavior
 type EnemyDefinition = [number, number, string, Stats, Behavior];
 const G_ENEMY_MINOR_GOLEM: EnemyDefinition = [
   2,

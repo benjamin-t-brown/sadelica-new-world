@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "rm -rf src/*.map src/main.js && tsc --sourceMap false && node scripts/build src",
+    "build": "rm -rf src/*.map src/main.js && yarn encode-map && tsc --sourceMap false && node scripts/build src",
     "watch": "tsc --watch",
     "encode-map": "node scripts/encode-map.js"
   },

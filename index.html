@@ -3,7 +3,7 @@
     body {
       margin: 0;
       /* overflow: hidden; */
-      background: #444;
+      background: #493c2b;
       font-family: monospace;
       color: #eee;
       user-select: none;
@@ -28,27 +28,65 @@
     }
     #canvasDiv {
       position: relative;
-      width: 576px;
-      height: 576px;
-      border-top: 2px outset #777;
-      border-bottom: 2px inset #777;
+      width: 544px;
+      height: 544px;
+      border-top: 2px outset #9d9d9d;
+      border-bottom: 2px inset #9d9d9d;
+    }
+    #leftPane {
+      position: relative;
+      height: calc(544px + 4px);
+      min-width: 200px;
     }
     #rightPane {
-      height: 580px;
+      position: relative;
+      height: calc(544px + 4px);
       width: 200px;
+    }
+    #dialog {
+      scroll-behavior: smooth;
+      position: absolute;
+      left: 0;
+      top: 0;
+      padding-bottom: 2rem;
+      width: 100%;
+      transition: height 0.33s ease-out, opacity 0.33s linear;
+      border: 2px outset #9d9d9d;
+      background: #2f484e;
+      box-sizing: border-box;
+      overflow-y: scroll;
+      overflow-x: visible;
+      font-size: 1rem;
+    }
+    #dialog-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.25s linear;
+      z-index: -1;
+    }
+    .overlay {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.25);
+      height: 100%;
+      width: 100%;
+      transition: width 0.33s ease-out, height 0.33s ease-out;
+      top: 0;
     }
     .inventory {
       width: 100%;
-      height: 580px;
+      height: 100%;
       overflow-y: scroll;
-      background: #666;
+      background: #656d71;
+      border: 2px outset #9d9d9d;
+      box-sizing: border-box;
     }
     .item {
       width: 300px;
       height: 32px;
-      padding: 8px;
-      border: 2px outset #777;
-      background: #666;
+      padding: 2px;
+      border: 2px outset #9d9d9d;
+      background: #656d71;
       cursor: default;
     }
     .menu-item-ctr {
@@ -63,14 +101,14 @@
       border-style: inset;
     }
     .cyc-item {
-      color: #ddd;
+      color: #ccc;
     }
     .cyc-item:active {
-      color: #888;
+      color: #fff;
     }
     .info-item {
-      background: #666;
-      border: 2px outset #777;
+      background: #656d71;
+      border: 2px outset #9d9d9d;
       width: 192px;
     }
     .stats {
@@ -95,24 +133,40 @@
     }
     .title {
       text-align: center;
-      border: 2px outset #777;
+      border: 2px outset #9d9d9d;
       padding: 5px;
       text-align: center;
-      background: #666;
+      background: #656d71;
       position: sticky;
       top: 0;
     }
-    .dona {
-      width: unset;
-      margin: 10px;
-      background: #666;
-      color: #ffe762;
+    .dialog-line {
+      margin: 12px;
+      min-height: 16px;
+      animation: fade-in 0.25s 1;
+      color: #fff;
+    }
+    .dialog-line-choice {
+    }
+    .dialog-line-choice:hover {
+      filter: brightness(80%);
+    }
+    .dialog-line-choice:active {
+      filter: brightness(120%);
+    }
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
     }
   </style>
-  <title>Realm 404</title>
+  <title>Sadelica: NW</title>
   <script src="main.js"></script>
   <div class="hrz" style="height: 100%; display: none;">
-    <div id="invDiv"></div>
+    <div id="leftPane"></div>
     <div id="canvasDiv">
       <svg id="tgt" width="600" height="600">
         <line
@@ -123,6 +177,7 @@
           style="stroke: rgb(185, 185, 185); stroke-width: 2;"
         />
       </svg>
+      <div id="dialog"></div>
     </div>
     <div id="rightPane" class="vrt"></div>
   </div>

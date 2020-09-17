@@ -13,7 +13,7 @@ const G_model_itemGetName = (item: Item): string => {
   return item[1];
 };
 const G_model_itemGetSprite = (item: Item): string => {
-  return 'misc_' + item[0];
+  return 'misc1_' + item[0];
 };
 
 const G_model_itemGetBaseItem = (itemObj: GenericItem): Item => {

@@ -186,7 +186,7 @@ const G_model_getCanvas = (): HTMLCanvasElement => {
   if (model_canvas) {
     return model_canvas as HTMLCanvasElement;
   } else {
-    const [canvas, ctx] = G_model_createCanvas(512 + 32 * 2, 512 + 32 * 2);
+    const [canvas, ctx] = G_model_createCanvas(544, 544);
     canvas.id = 'canv';
     ctx.lineWidth = 2;
     (window as any).canvasDiv.appendChild(canvas);

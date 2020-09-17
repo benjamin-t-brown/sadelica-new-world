@@ -94,7 +94,7 @@ const G_model_roomSetTileAt = (
 ) => {
   const tile = G_model_roomGetTileAt(room, x, y);
   if (tile) {
-    tile[0] = 't_' + id;
+    tile[0] = 'terrain1_' + id;
     tile[1] = id;
   }
 };

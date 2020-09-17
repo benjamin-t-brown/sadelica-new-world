@@ -1,6 +1,13 @@
+/*
+global
+G_model_createCanvas
+G_view_drawSprite
+*/
+
 const G_VIEW_DIV = 'div';
 const G_VIEW_INNER_HTML = 'innerHTML';
 const G_VIEW_ONCLICK = 'onclick';
+const cachedItemIconDataUrls = {};
 
 const G_view_appendChild = (parent: HTMLElement, child: HTMLElement) => {
   parent.appendChild(child);
@@ -31,4 +38,14 @@ const G_view_setStyle = (
   for (let i in style) {
     elem.style[i] = style[i];
   }
+};
+const G_view_cacheItemIconDataUrl = (spriteName: string): string => {
+  let ret = cachedItemIconDataUrls[spriteName];
+  if (!ret) {
+    const [canvas, ctx] = G_model_createCanvas(32, 32);
+    G_view_drawSprite(spriteName, 0, 0, 2, ctx);
+    ret = canvas.toDataURL();
+    cachedItemIconDataUrls[spriteName] = ret;
+  }
+  return ret;
 };

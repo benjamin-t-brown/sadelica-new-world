@@ -9,9 +9,8 @@ G_model_playerGetActor
 G_model_roomGetSurroundingItemsAt
 G_controller_acquireItem
 G_view_drawSprite
+G_view_cacheItemIconDataUrl
 */
-
-const itemCanvasCache = {};
 
 const PickupItemsRow = (
   item: GenericItem,
@@ -35,14 +34,7 @@ const PickupItemsRow = (
   const amount = G_model_itemGetAmount(item);
   const itemName = G_model_itemGetName(baseItem);
   const itemSprite = G_model_itemGetSprite(baseItem);
-
-  let url = itemCanvasCache[itemSprite];
-  if (!url) {
-    const [canvas, ctx] = G_model_createCanvas(32, 32);
-    G_view_drawSprite(itemSprite, 0, 0, 2, ctx);
-    url = canvas.toDataURL();
-    itemCanvasCache[itemSprite] = url;
-  }
+  const url = G_view_cacheItemIconDataUrl(itemSprite);
 
   return (
     <div

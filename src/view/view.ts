@@ -19,11 +19,12 @@ G_model_itemGetSprite
 G_model_actorGetStats
 G_model_statsGetHp
 G_model_statsGetMaxHp
+G_model_getCamera
 */
 
 const G_view_clearScreen = () => {
   const canvas = G_model_getCanvas();
-  G_view_drawRect(0, 0, canvas.width, canvas.height, '#333');
+  G_view_drawRect(0, 0, canvas.width, canvas.height, 'black');
 };
 
 const G_view_setOpacity = (opacity: number, ctx?: CanvasRenderingContext2D) => {
@@ -89,18 +90,20 @@ const G_view_drawRect = (
 
 const G_view_drawActor = (
   actor: Actor,
+  camera: Rect,
   scale: number,
   xOff: number,
   yOff: number
 ) => {
   const [x, y] = G_model_actorGetPosition(actor);
+  const [cameraX, cameraY] = camera;
   const sprite = G_model_actorGetSprite(actor);
   const tileSize = G_model_getTileSize();
   const tileSizeScaled = tileSize * scale;
   G_view_drawSprite(
     sprite,
-    xOff + x * tileSizeScaled,
-    yOff + y * tileSizeScaled,
+    xOff + x * tileSizeScaled - cameraX * tileSizeScaled,
+    yOff + y * tileSizeScaled - cameraY * tileSizeScaled,
     scale
   );
 
@@ -130,6 +133,7 @@ const G_view_drawActor = (
 
 const G_view_drawParticle = (
   particle: Particle,
+  camera: Rect,
   scale: number,
   xOff: number,
   yOff: number
@@ -139,8 +143,9 @@ const G_view_drawParticle = (
   const tileSize = G_model_getTileSize();
   const halfSize = (tileSize * scale) / 2;
   const tileSizeScaled = tileSize * scale;
-  const px = xOff + x * tileSizeScaled;
-  const py = yOff + y * tileSizeScaled;
+  const [cameraX, cameraY] = camera;
+  const px = xOff + x * tileSizeScaled - cameraX * tileSizeScaled;
+  const py = yOff + y * tileSizeScaled - cameraY * tileSizeScaled;
   if (sprite) {
     G_view_drawSprite(sprite, px, py, scale);
   }
@@ -155,6 +160,7 @@ const G_view_drawParticle = (
 
 const G_view_drawItem = (
   item: Item,
+  camera: Rect,
   x: number,
   y: number,
   scale: number,
@@ -162,9 +168,10 @@ const G_view_drawItem = (
   yOff: number
 ) => {
   const sprite = G_model_itemGetSprite(item);
+  const [cameraX, cameraY] = camera;
   const tileSize = G_model_getTileSize() * scale;
-  const px = xOff + x * tileSize;
-  const py = yOff + y * tileSize;
+  const px = xOff + x * tileSize - cameraX * tileSize;
+  const py = yOff + y * tileSize - cameraY * tileSize;
   G_view_drawSprite(sprite, px + 8, py + 8, scale - 1);
 };
 
@@ -175,21 +182,27 @@ const G_view_renderWorld = (world: World, scale: number) => {
   const [wx, wy] = G_model_playerGetWorldPosition(player);
   const tileSizeScaled = tileSize * scale;
   const currentRoom = world.rooms[wy * worldSize + wx];
+
+  const actor = G_model_playerGetActor(player);
+  const camera = G_model_getCamera(world);
+  const [cameraX, cameraY, cameraW, cameraH] = camera;
+  G_view_drawActor(actor, camera, scale, 0, 0);
+
   for (let i in currentRoom.tiles) {
     const [sprite, , tx, ty] = currentRoom.tiles[i];
-    const x = tx * tileSizeScaled;
-    const y = ty * tileSizeScaled;
+    const x = tx * tileSizeScaled - cameraX * tileSizeScaled;
+    const y = ty * tileSizeScaled - cameraY * tileSizeScaled;
     if (G_model_roomPosIsExplored(currentRoom, tx, ty)) {
       G_view_drawSprite(sprite, x, y, scale);
     } else {
-      G_view_drawRect(x, y, tileSizeScaled, tileSizeScaled, '#333', true);
+      G_view_drawRect(x, y, tileSizeScaled, tileSizeScaled, 'black', true);
     }
   }
   for (let i in currentRoom.items) {
     const [itemObj, x, y] = currentRoom.items[i];
     const item = G_model_itemGetBaseItem(itemObj);
     if (G_model_roomPosIsVisible(currentRoom, x, y)) {
-      G_view_drawItem(item, x, y, scale, 0, 0);
+      G_view_drawItem(item, camera, x, y, scale, 0, 0);
     }
   }
   for (let i in currentRoom.tiles) {
@@ -199,7 +212,7 @@ const G_view_renderWorld = (world: World, scale: number) => {
     const y = ty * tileSizeScaled;
     if (G_model_roomPosIsVisible(currentRoom, tx, ty)) {
       if (actor) {
-        G_view_drawActor(actor, scale, 0, 0);
+        G_view_drawActor(actor, camera, scale, 0, 0);
       }
     } else if (G_model_roomPosIsExplored(currentRoom, tx, ty)) {
       G_view_setOpacity(0.15);
@@ -207,19 +220,16 @@ const G_view_renderWorld = (world: World, scale: number) => {
       G_view_setOpacity(1);
     }
     if (highlighted) {
-      G_view_drawRect(x, y, tileSizeScaled, tileSizeScaled, '#ddd', true);
+      G_view_drawRect(x, y, tileSizeScaled, tileSizeScaled, '#ccc', true);
     }
   }
 
-  const actor = G_model_playerGetActor(player);
-  G_view_drawActor(actor, scale, 0, 0);
-
   for (let i = 0; i < currentRoom.p.length; i++) {
     const particle = currentRoom.p[i];
-    G_view_drawParticle(particle, scale, 0, 0);
+    G_view_drawParticle(particle, camera, scale, 0, 0);
   }
 
-  // G_view_renderMap(world, 0.5, 0, 700);
+  // G_view_renderMap(world, 0.5, 0, 0);
 };
 
 // const G_view_renderMap = (

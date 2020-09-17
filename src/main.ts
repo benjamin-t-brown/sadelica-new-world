@@ -31,8 +31,18 @@ const G_start = () => {
 
 const main = async () => {
   await G_model_loadImagesAndSprites([
-    ['packed', 'res/packed.png', 16, 16, 2, 2, ['map', 't', 'a', 'misc']],
+    [
+      'packed',
+      'res/packed.png',
+      16,
+      16,
+      2,
+      2,
+      ['terrain2', 'terrain1', 'actors1', 'misc1'],
+    ],
+    ['map', 'res/map.png', 64, 64, 1, 1, ['map']],
   ]);
+
   G_controller_initEvents();
   G_start();
   //G_view_renderMap(world, 1);

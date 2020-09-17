@@ -2,6 +2,8 @@ type TargetArea = 0 | 1;
 const G_TARGETING_SINGLE = 0;
 const G_TARGETING_3X3 = 1;
 
+type Rect = [number, number, number, number];
+
 const G_utils_getTargets = (
   x: number,
   y: number,
@@ -46,4 +48,10 @@ const G_utils_pointRectCollides = (
   y2: number
 ): boolean => {
   return x >= x1 && x <= x2 && y >= y1 && y <= y2;
+};
+
+const G_utils_waitMs = async (ms: number) => {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms);
+  });
 };

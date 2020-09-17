@@ -130,9 +130,6 @@ const G_controller_initEvents = () => {
       return;
     }
 
-    // allows use of the cutscene text to show for 1 frame, then go away
-    G_model_setCutsceneLine('');
-
     const movePlayer = (direction: Direction) => {
       G_controller_stopTargeting();
       G_controller_movePlayer(world.player, direction, world);
@@ -144,6 +141,7 @@ const G_controller_initEvents = () => {
     const room = G_model_worldGetCurrentRoom(world);
     switch (true) {
       case ((k: number) => k >= 1 && k <= 9)(Number(key)): // isDirection
+        ev.preventDefault();
         movePlayer(key as Direction);
         break;
       case key === 27:
