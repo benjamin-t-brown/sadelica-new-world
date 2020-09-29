@@ -7,6 +7,7 @@ G_controller_useItem
 G_controller_equipItem
 G_controller_acquireItem
 G_controller_render
+G_controller_playDialog
 G_model_getTileSize
 G_model_getCurrentWorld
 G_model_getCanvas
@@ -32,14 +33,16 @@ G_model_setSelectedInventoryItemIndex
 G_model_roomGetSurroundingItemsAt
 G_model_addLog
 G_model_setCutsceneLine
+G_model_roomGetSurroundingActorsAt
+G_model_actorGetTalkTrigger
 G_view_showTargetingLine
 G_view_hideTargetingLine
 G_view_clearScreen
 G_view_renderWorld
 G_view_renderUi
+G_view_playSound
 G_utils_getTargets
 G_utils_cycleItemInArr
-G_view_playSound
 LEFT
 RIGHT
 UP
@@ -159,14 +162,15 @@ const G_controller_initEvents = () => {
           G_controller_acquireItem(item, actor, x, y, room);
         }
         break;
-      case key === 32: { //space
+      case key === 32: {
+        //space
         const actors = G_model_roomGetSurroundingActorsAt(room, actor);
         console.log('NEARBY', actors);
         const act = actors[0] || [];
         if (act) {
           const talkTriggerName = G_model_actorGetTalkTrigger(act);
           if (talkTriggerName) {
-            G_controller_playDialog(talkTriggerName);
+            G_controller_playDialog(talkTriggerName, act);
           }
         }
       }

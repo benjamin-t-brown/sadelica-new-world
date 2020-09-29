@@ -22,7 +22,7 @@ G_initActors
 
 const G_start = () => {
   G_model_setInputDisabled(false);
-  const world = G_model_createWorld('map');
+  const world = G_model_createWorld('map1');
   G_model_setCurrentWorld(world);
   console.log('world', world);
   G_controller_render(world);
@@ -32,19 +32,12 @@ const G_start = () => {
 
 const main = async () => {
   await G_model_loadImagesAndSprites([
-    [
-      'packed',
-      'res/packed.png',
-      16,
-      16,
-      2,
-      2,
-      ['terrain2', 'terrain1', 'actors1', 'misc1'],
-    ],
-    ['map', 'res/map.png', 64, 64, 1, 1, ['map']],
+    ['terrain1', 'res/terrain1.png', 16, 16, 1, 1, ['terrain1']],
+    ['actors1', 'res/actors1.png', 16, 16, 1, 1, ['actors1']],
+    ['map1', 'res/map1.png', 64, 64, 1, 1, ['map1']],
   ]);
 
-  G_initActors()
+  G_initActors();
   G_controller_initEvents();
   G_start();
   //G_view_renderMap(world, 1);

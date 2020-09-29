@@ -35,6 +35,61 @@ type Allegiance = 0 | 1;
 const G_ALLEGIANCE_PLAYER = 0;
 const G_ALLEGIANCE_ENEMY = 1;
 
+const G_createStats = (n: number): Stats => [n, n];
+
+interface ICreateCharacter {
+  spriteIndex?: number;
+  spriteSheet?: string;
+  name: string;
+  stats?: Stats;
+  behavior?: Behavior;
+  talkTrigger?: string;
+  talkPortrait?: string;
+  stepTrigger?: string;
+  dropLevel?: number;
+  facing?: number;
+}
+
+const CHARACTER_DEFAULTS: ICreateCharacter = {
+  spriteIndex: 0,
+  spriteSheet: 'actors1',
+  name: 'Actor',
+  stats: G_createStats(100),
+  behavior: G_BEHAVIOR_NONE,
+  talkTrigger: '',
+  talkPortrait: '',
+  stepTrigger: '',
+  dropLevel: 0,
+  facing: G_FACING_RIGHT,
+};
+
+function G_createCharacterTemplate(
+  props: ICreateCharacter
+): CharacterDefinition {
+  const {
+    spriteIndex,
+    spriteSheet,
+    name,
+    stats,
+    behavior,
+    talkTrigger,
+    stepTrigger,
+    dropLevel,
+    facing,
+  } = { ...CHARACTER_DEFAULTS, ...props };
+  return [
+    spriteIndex as number,
+    spriteSheet as string,
+    name,
+    stats as Stats,
+    behavior as Behavior,
+    talkTrigger as string,
+    stepTrigger as string,
+    dropLevel as number,
+    facing as number,
+  ];
+}
+
 const G_model_createActorFromChTemplate = (
   x: number,
   y: number,
@@ -49,6 +104,7 @@ const G_model_createActorFromChTemplate = (
     talkTrigger,
     stepTrigger,
     dropLevel,
+    facing,
   ] = template;
   return [
     actorName,
@@ -58,7 +114,7 @@ const G_model_createActorFromChTemplate = (
     y,
     stats,
     [],
-    G_FACING_LEFT,
+    facing as 0 | 1,
     behavior,
     false,
     false,

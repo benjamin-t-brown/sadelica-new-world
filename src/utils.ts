@@ -55,3 +55,11 @@ const G_utils_waitMs = async (ms: number) => {
     setTimeout(resolve, ms);
   });
 };
+
+const G_utils_to4d = (xGlobal, yGlobal, innerSize) => {
+  const xWorld = Math.floor(xGlobal / innerSize);
+  const yWorld = Math.floor(yGlobal / innerSize);
+  const xLocal = xGlobal % innerSize;
+  const yLocal = (yGlobal % innerSize) - 1;
+  return [xWorld, yWorld, xLocal, yLocal];
+};

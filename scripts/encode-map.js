@@ -16,24 +16,29 @@ const execAsync = async command => {
   });
 };
 
-const colors = {
-  0: [50, 115, 69], // grass
-  1: [63, 40, 50], // dirt
-  2: [255, 255, 255], // snow
-  3: [255, 231, 98], // sand
-  4: [25, 61, 63], // tree
-  5: [35, 71, 93], // tree snow
-  6: [0, 0, 0], // wall
-  7: [79, 103, 129], // floor
-  8: [60, 60, 60], // open gate
-  9: [80, 30, 30], // closed gate
-  10: [184, 111, 80], // chest
-  11: [4, 132, 209], // water
-  12: [229, 59, 68], // lava
-  13: [44, 232, 244], // ice
-  14: [251, 146, 43], // sandstorm
-  15: [175, 191, 210], // something
-};
+// const colors = {
+//   0: [50, 115, 69], // grass
+//   1: [63, 40, 50], // dirt
+//   2: [255, 255, 255], // snow
+//   3: [255, 231, 98], // sand
+//   4: [25, 61, 63], // tree
+//   5: [35, 71, 93], // tree snow
+//   6: [0, 0, 0], // wall
+//   7: [79, 103, 129], // floor
+//   8: [60, 60, 60], // open gate
+//   9: [80, 30, 30], // closed gate
+//   10: [184, 111, 80], // chest
+//   11: [4, 132, 209], // water
+//   12: [229, 59, 68], // lava
+//   13: [44, 232, 244], // ice
+//   14: [251, 146, 43], // sandstorm
+//   15: [175, 191, 210], // something
+// };
+
+const colors = {};
+for (let i = 0; i < 256; i++) {
+  colors[i] = [i, i, i];
+}
 const mapArray = map.layers[0].data;
 const actorsArray = map.layers[1].objects;
 
@@ -48,7 +53,7 @@ fs.writeFileSync(
     const xWorld = Math.floor(xGlobal / ROOM_SIZE);
     const yWorld = Math.floor(yGlobal / ROOM_SIZE);
     const xLocal = xGlobal % ROOM_SIZE;
-    const yLocal = yGlobal % ROOM_SIZE - 1;
+    const yLocal = (yGlobal % ROOM_SIZE) - 1;
     return `${file}\n  G_ACTORS_MAP['${[xWorld, yWorld, xLocal, yLocal].join(
       ','
     )}'] = ${name};`;
@@ -97,10 +102,11 @@ const main = async () => {
   fs.writeFileSync(path2, buffer);
   console.log('wrote ' + path2);
   await execAsync(
-    `convert -depth 24 -composite -geometry -0-0 ${__dirname}/../res/map.png ${__dirname}/map-encoded.png ${__dirname}/../res/map.png`
+    `convert -depth 24 -composite -geometry -0-0 ${__dirname}/../res/map1.png ${__dirname}/map-encoded.png ${__dirname}/../res/map1.png`
   );
-  await execAsync(`advpng -z -4 -f -i 3 ${__dirname}/../res/map.png `);
-  await execAsync(`advpng -z -4 -f -i 3 ${__dirname}/../res/packed.png `);
+  await execAsync(`advpng -z -4 -f -i 3 ${__dirname}/../res/map1.png `);
+  await execAsync(`advpng -z -4 -f -i 3 ${__dirname}/../res/actors1.png `);
+  await execAsync(`advpng -z -4 -f -i 3 ${__dirname}/../res/terrain1.png `);
   await execAsync(`rm -rf ${__dirname}/map-encoded.png`);
 };
 main();

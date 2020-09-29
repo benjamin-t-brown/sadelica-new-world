@@ -1,0 +1,18 @@
+AP: Action Points, units spend these to move.
+
+Base AP: 2
+
+Costs:
+
+Using item: 2AP
+Moving: 1AP
+Attacking: 2AP
+Waiting: All AP.
+
+---
+
+Attacking removes all movement points.
+
+MOV: Default 2.
+ATT: Default 1.
+

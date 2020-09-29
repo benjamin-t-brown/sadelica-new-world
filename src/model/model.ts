@@ -16,6 +16,7 @@ let model_targetType: TargetArea | null = null;
 let model_updateUiThisRound: boolean = false;
 let model_isVictory = false;
 let model_dialogVisible = false;
+let model_dialogActor: Actor | null = null;
 let model_dialogLines: { text: string; color?: string; cb?: () => void }[] = [];
 let model_leftPaneOverlayVisible = false;
 let model_rightPaneOverlayVisible = false;
@@ -121,3 +122,7 @@ const G_model_getDialogLines = (): {
 }[] => model_dialogLines;
 const G_model_getDialogVisible = (): boolean => model_dialogVisible;
 const G_model_setDialogVisible = (v: boolean) => (model_dialogVisible = v);
+const G_model_setDialogActor = (v: Actor | null) => {
+  model_dialogActor = v;
+};
+const G_model_getDialogActor = () => model_dialogActor;

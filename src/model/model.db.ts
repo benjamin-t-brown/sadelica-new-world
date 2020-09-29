@@ -29,6 +29,7 @@ G_TARGETING_3X3
 G_TILE_CHEST
 G_TILE_GATE
 G_TILE_GRASS
+G_createStats
 */
 
 type TargetingType = 0 | 1;
@@ -378,8 +379,6 @@ const G_DROPS_LVL3 = [
 ];
 const G_CHEST_LVL3 = [G_ITEM_MAGIC_SWORD, [G_ITEM_SCROLL_EVISCERATE, 3]];
 
-const hp = (n: number): Stats => [n, n];
-
 // sprite index, spritesheet, Stats, inventory, behavior, talkTrigger, stepTrigger, dropLevel
 type CharacterDefinition = [
   number,
@@ -389,19 +388,11 @@ type CharacterDefinition = [
   Behavior,
   string,
   string,
-  number
+  number, //dropLevel
+  number //facing
 ];
 
-const G_CH_ALINEA_DOCKMASTER: CharacterDefinition = [
-  2,
-  'actors1',
-  'Dockmaster',
-  hp(6),
-  G_BEHAVIOR_NONE,
-  'sadelica',
-  'STEP_TRIGGER',
-  0,
-];
+const hp = G_createStats;
 
 // sprite index, lvl, name, Stats, behavior
 type EnemyDefinition = [number, number, string, Stats, Behavior];

@@ -112,7 +112,7 @@ const build = async () => {
   const result = await execAsync(
     `stat -c '%n %s' ${__dirname}/../${outputDirName}.zip`
   );
-  await execAsync(`mv src.zip dist/realm404.zip`);
+  await execAsync(`mv src.zip dist/SadelicaNewWorld.zip`);
   const bytes = parseInt(result.split(' ')[1]);
   const kb13 = 13312;
   console.log(`${bytes}b of ${kb13}b (${((bytes * 100) / kb13).toFixed(2)}%)`);

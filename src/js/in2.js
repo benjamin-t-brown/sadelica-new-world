@@ -147,6 +147,12 @@ var player = (window.player = /*eslint-disable-line*/ {
     return _helper(path.split('.'), this.state);
   },
   set(path, val) {
+    if (path === 'curIN2n') {
+      return this.set('nodes.' + val);
+    }
+    if (path === 'curIN2f') {
+      return this.set('files.' + val.replace('.json', ''));
+    }
     val = val === undefined ? true : val;
     let _helper = (keys, obj) => {
       let k = keys.shift();

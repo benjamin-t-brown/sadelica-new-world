@@ -8,6 +8,7 @@ const G_VIEW_DIV = 'div';
 const G_VIEW_INNER_HTML = 'innerHTML';
 const G_VIEW_ONCLICK = 'onclick';
 const cachedItemIconDataUrls = {};
+const cachedPortraitIconDataUrls = {};
 
 const G_view_appendChild = (parent: HTMLElement, child: HTMLElement) => {
   parent.appendChild(child);
@@ -46,6 +47,17 @@ const G_view_cacheItemIconDataUrl = (spriteName: string): string => {
     G_view_drawSprite(spriteName, 0, 0, 2, ctx);
     ret = canvas.toDataURL();
     cachedItemIconDataUrls[spriteName] = ret;
+  }
+  return ret;
+};
+
+const G_view_cachePortraitIconDataUrl = (spriteName: string): string => {
+  let ret = cachedPortraitIconDataUrls[spriteName];
+  if (!ret) {
+    const [canvas, ctx] = G_model_createCanvas(32, 32);
+    G_view_drawSprite(spriteName, 0, 0, 2, ctx);
+    ret = canvas.toDataURL();
+    cachedPortraitIconDataUrls[spriteName] = ret;
   }
   return ret;
 };

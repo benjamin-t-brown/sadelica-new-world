@@ -22,7 +22,7 @@ Alinea is not the largest town nor its port the grandest, but the plethora of la
 
 - (choose character)
 
-Argow nods.  "It's a number.  301.  You find it and tell 'em 'Dancing Thieves'."
+Argow nods.  "It's a number.  9.  You find it and tell 'em 'Dancing Thieves'."
 
 - (choose explanation)
 

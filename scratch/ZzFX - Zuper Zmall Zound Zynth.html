@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://killedbyapixel.github.io/ZzFX/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ZzFX - Zuper Zmall Zound Zynth</title>
+
+<meta name="google" content="notranslate">
+<meta property="og:title" content="ZzFX - Zuper Zmall Zound Zynth">
+<meta property="og:description" content="A tiny sound effects generator for games and websites!">
+<meta name="twitter:image" content="screenshot.jpg">
+<meta property="og:image" content="screenshot.jpg">
+<link rel="shortcut icon" type="image/x-icon" href="https://killedbyapixel.github.io/ZzFX/favicon.png">
+<style>
+*                            { font-family:courier; }
+a                            { color:#5AF; }
+button                       { margin:3px; font-size:18px;}
+button.large                 { height:26px; }
+button.rand                  { width:15px; height:15px; background:#FF4; }
+button.reset                 { width:15px; height:15px; background:#4F4; }
+.soundSelect                 { overflow-x:hidden; height:350px; }
+.slider                      { cursor: pointer; }
+input.lock                   { width:15px; height:15px; }
+.setting                     { width:200px; }
+textarea                     { height:50px; cursor:text; resize:none; }
+body,input,select,textarea   { color:#FFF; font-size:18px;}
+select,input,textarea,canvas { background:#000; border:1px solid #FFF; }
+option:hover                 { background:#333; }
+option:checked               { background:#FF0; color:#F00; }
+body                         { user-select:none; }
+</style>
+<style data-styled-components=""></style></head>
+<body bgcolor="#222">
+<center>
+<table>
+<tbody><tr>
+<td style="text-align:right;">
+<font size="7"><b><div id="div_logo" style="display: inline; color: rgb(113, 227, 152);">ℤ𝕫𝔽𝕏</div></b></font>
+</td>
+<td style="text-align:left">
+<div style="display: inline; font-size: 22px; color: rgb(226, 212, 250);" id="div_logo2">
+<i>Zuper Zmall Zound Zynth</i>
+</div>
+</td>
+<td style="text-align:center;width:340px" rowspan="2">
+<div id="div_masterVolume">Master Volume 27%</div>
+<input id="slider_masterVolume" title="Volume to scale all sounds by in percent" type="range" min="0" max="100" value="30" style="width:90%" oninput="UpdateSettings();SaveLocalStorage()">
+<canvas title="Image of sound wave, click to play the sound [SPACE]" id="canvas_soundWave" width="350" height="80" style="width:100%"></canvas>
+<button class="large" title="Create new random sound [INS]" onclick="AddPresetSound()">Random</button><button class="large" title="Make a new sound with mutated parameters [M]" onclick="CopySelected(1)">Mutate</button><button class="large" title="Make copy of selected sound [C]" onclick="CopySelected()">Copy</button>
+<br>
+<button class="large" title="Generate random pickup sound" onclick="AddPresetSound(&#39;Pickup&#39;)">Pickup</button><button class="large" title="Generate random powerup sound" onclick="AddPresetSound(&#39;Powerup&#39;)">Powerup</button><button class="large" title="Generate random shoot sound" onclick="AddPresetSound(&#39;Shoot&#39;)">Shoot</button>
+<br>
+<button class="large" title="Generate random jump sound" onclick="AddPresetSound(&#39;Jump&#39;)">Jump</button><button class="large" title="Generate random blip sound" onclick="AddPresetSound(&#39;Blip&#39;)">Blip</button><button class="large" title="Generate random hit sound" onclick="AddPresetSound(&#39;Hit&#39;)">Hit</button><button class="large" title="Generate random explosion sound" onclick="AddPresetSound(&#39;Explosion&#39;)">Explosion</button>
+<br>
+<button class="large" title="Toggle favorite on current sound [F]" onclick="FavoriteSelected()">Favorite</button><button class="large" title="Generate default sound" onclick="SelectedToTop()">Top</button><button title="Remove selected sound [DEL]" class="large" onclick="RemoveSelected()">Remove</button>
+<br>
+<select id="select_soundList" class="soundSelect" onclick="loadedSound=0;LoadSelected(1)" onchange="LoadSelected(1)" size="2" style="margin:5px;width:100%"><option value="704" style="color: white;">* Random 690 - Mutation 3</option><option value="703" style="color: white;">Random 690 - Mutation 2</option><option value="702" style="color: white;">Random 690 - Mutation 1</option><option value="701" style="color: white;">* Random 690</option><option value="700" style="color: white;">Random 689</option><option value="699" style="color: white;">Random 688</option><option value="698" style="color: white;">Random 687</option><option value="697" style="color: white;">Random 686</option><option value="696" style="color: white;">Random 685</option><option value="695" style="color: white;">Random 684</option><option value="694" style="color: white;">Random 683</option><option value="693" style="color: white;">Random 682</option><option value="692" style="color: white;">Random 681</option><option value="691" style="color: white;">Random 680</option><option value="690" style="color: white;">Random 679</option><option value="689" style="color: white;">Random 678</option><option value="688" style="color: white;">Random 677</option><option value="687" style="color: white;">Random 676</option><option value="686" style="color: white;">Random 675</option><option value="685" style="color: white;">Random 674</option><option value="684" style="color: white;">Random 673</option><option value="683" style="color: white;">Random 672</option><option value="682" style="color: white;">Random 671</option><option value="681" style="color: white;">Random 670</option><option value="680" style="color: white;">Random 669</option><option value="679" style="color: white;">Random 668</option><option value="678" style="color: white;">Random 667</option><option value="677" style="color: white;">Random 666</option><option value="676" style="color: white;">Random 665</option><option value="675" style="color: white;">Random 664</option><option value="674" style="color: white;">Random 663</option><option value="673" style="color: white;">Random 662</option><option value="672" style="color: white;">Random 661</option><option value="671" style="color: white;">Random 660</option><option value="670" style="color: white;">Random 659</option><option value="669" style="color: white;">Random 658</option><option value="668" style="color: white;">Random 657</option><option value="667" style="color: white;">* Random 656</option><option value="666" style="color: white;">Random 655</option><option value="665" style="color: white;">Random 654</option><option value="664" style="color: white;">Random 653</option><option value="663" style="color: white;">Random 652</option><option value="662" style="color: white;">Random 651</option><option value="661" style="color: white;">Random 650</option><option value="660" style="color: white;">Random 649</option><option value="659" style="color: white;">Random 648</option><option value="658" style="color: white;">Random 647</option><option value="657" style="color: white;">Random 646</option><option value="656" style="color: white;">Random 645</option><option value="655" style="color: white;">Random 644</option><option value="654" style="color: white;">Random 643</option><option value="653" style="color: white;">Random 642</option><option value="652" style="color: white;">Random 641</option><option value="651" style="color: white;">Random 640</option><option value="650" style="color: white;">Random 639</option><option value="649" style="color: white;">Random 638</option><option value="648" style="color: white;">Random 637</option><option value="647" style="color: white;">Random 636</option><option value="646" style="color: white;">Random 635</option><option value="645" style="color: white;">Random 634</option><option value="644" style="color: white;">Random 633</option><option value="643" style="color: white;">Random 632</option><option value="642" style="color: white;">Random 631</option><option value="641" style="color: white;">Random 630</option><option value="640" style="color: white;">Random 629</option><option value="639" style="color: white;">Random 628</option><option value="638" style="color: white;">Random 627</option><option value="637" style="color: white;">Random 626</option><option value="636" style="color: white;">Random 625</option><option value="635" style="color: white;">Random 624</option><option value="634" style="color: white;">Random 623</option><option value="633" style="color: white;">Random 622</option><option value="632" style="color: white;">Random 621</option><option value="631" style="color: white;">Random 620</option><option value="630" style="color: white;">Random 619</option><option value="629" style="color: white;">Random 618</option><option value="628" style="color: white;">Random 617</option><option value="627" style="color: white;">Random 616</option><option value="626" style="color: white;">Random 615</option><option value="625" style="color: white;">Random 614</option><option value="624" style="color: white;">Random 613</option><option value="623" style="color: white;">Random 612</option><option value="622" style="color: white;">Random 611</option><option value="621" style="color: white;">Random 610</option><option value="620" style="color: white;">Random 609</option><option value="619" style="color: white;">Random 608</option><option value="618" style="color: white;">* Random 607</option><option value="617" style="color: white;">Random 606</option><option value="616" style="color: white;">Random 605</option><option value="615" style="color: white;">Random 604</option><option value="614" style="color: white;">Random 603</option><option value="613" style="color: white;">Random 602</option><option value="612" style="color: white;">Random 601</option><option value="611" style="color: white;">Random 600</option><option value="610" style="color: white;">Random 599</option><option value="609" style="color: white;">Random 598</option><option value="608" style="color: white;">Random 597</option><option value="607" style="color: white;">Random 596</option><option value="606" style="color: white;">Blip 595</option><option value="605" style="color: white;">Blip 594</option><option value="604" style="color: white;">Blip 593</option><option value="603" style="color: white;">Blip 592</option><option value="602" style="color: white;">Blip 591</option><option value="601" style="color: white;">Hit 590</option><option value="600" style="color: white;">Jump 589</option><option value="599" style="color: white;">Blip 588</option><option value="598" style="color: white;">Blip 587</option><option value="597" style="color: white;">Blip 586</option><option value="596" style="color: white;">Blip 585</option><option value="595" style="color: white;">Blip 584</option><option value="594" style="color: white;">Blip 583</option><option value="593" style="color: white;">Blip 582</option><option value="592" style="color: white;">Blip 581</option><option value="591" style="color: white;">Blip 580</option><option value="590" style="color: white;">Blip 579</option><option value="589" style="color: white;">Blip 578</option><option value="588" style="color: white;">Blip 577</option><option value="587" style="color: white;">Blip 576</option><option value="586" style="color: white;">Blip 575</option><option value="585" style="color: white;">Blip 574</option><option value="584" style="color: white;">Blip 573</option><option value="583" style="color: white;">Blip 572</option><option value="582" style="color: white;">Blip 571</option><option value="581" style="color: white;">* Blip 570</option><option value="580" style="color: white;">Blip 569</option><option value="579" style="color: white;">Blip 568</option><option value="578" style="color: white;">Blip 567</option><option value="577" style="color: white;">Blip 566</option><option value="576" style="color: white;">Blip 565</option><option value="575" style="color: white;">Blip 564</option><option value="574" style="color: white;">Blip 563</option><option value="573" style="color: white;">Blip 562</option><option value="572" style="color: white;">Hit 561</option><option value="571" style="color: white;">Blip 560</option><option value="570" style="color: white;">Blip 559</option><option value="569" style="color: white;">Blip 558</option><option value="568" style="color: white;">Powerup 557</option><option value="567" style="color: white;">Powerup 556</option><option value="566" style="color: white;">Powerup 555</option><option value="565" style="color: white;">Powerup 554</option><option value="564" style="color: white;">* Blip 553</option><option value="563" style="color: white;">Blip 552</option><option value="562" style="color: white;">Blip 551</option><option value="561" style="color: white;">Blip 550</option><option value="560" style="color: white;">Blip 549</option><option value="559" style="color: white;">Blip 548</option><option value="558" style="color: white;">Blip 547</option><option value="557" style="color: white;">Blip 546</option><option value="556" style="color: white;">Blip 545</option><option value="555" style="color: white;">Blip 544</option><option value="554" style="color: white;">Blip 543</option><option value="553" style="color: white;">Blip 542</option><option value="552" style="color: white;">Blip 541</option><option value="551" style="color: white;">Blip 540</option><option value="550" style="color: white;">Blip 539</option><option value="549" style="color: white;">Blip 538</option><option value="548" style="color: white;">Blip 537</option><option value="547" style="color: white;">Blip 536</option><option value="546" style="color: white;">Blip 535</option><option value="545" style="color: white;">Blip 534</option><option value="544" style="color: white;">Blip 533</option><option value="543" style="color: white;">Blip 532</option><option value="542" style="color: white;">Blip 531</option><option value="541" style="color: white;">* Blip 530</option><option value="540" style="color: white;">Blip 529</option><option value="539" style="color: white;">Blip 528</option><option value="538" style="color: white;">Blip 527</option><option value="537" style="color: white;">Blip 526</option><option value="536" style="color: white;">Blip 525</option><option value="535" style="color: white;">Blip 524</option><option value="534" style="color: white;">Blip 523</option><option value="533" style="color: white;">Blip 522</option><option value="532" style="color: white;">Blip 521</option><option value="531" style="color: white;">Blip 520</option><option value="530" style="color: white;">Blip 519</option><option value="529" style="color: white;">Blip 518</option><option value="528" style="color: white;">Blip 517</option><option value="527" style="color: white;">Blip 516</option><option value="526" style="color: white;">Blip 515</option><option value="525" style="color: white;">Blip 514</option><option value="524" style="color: white;">Blip 513</option><option value="523" style="color: white;">Blip 512</option><option value="522" style="color: white;">Blip 511</option><option value="521" style="color: white;">Blip 510</option><option value="520" style="color: white;">Blip 509</option><option value="519" style="color: white;">Blip 508</option><option value="518" style="color: white;">Blip 507</option><option value="517" style="color: white;">Blip 506</option><option value="516" style="color: white;">Pickup 505</option><option value="515" style="color: white;">Pickup 504</option><option value="514" style="color: white;">Pickup 503</option><option value="513" style="color: white;">Pickup 502</option><option value="512" style="color: white;">Pickup 501</option><option value="511" style="color: white;">* Loaded Sound 500</option><option value="510" style="color: white;">Loaded Sound 499</option><option value="509" style="color: white;">Loaded Sound 498</option><option value="508" style="color: white;">Blip 497</option><option value="507" style="color: white;">Blip 496</option><option value="506" style="color: white;">Blip 495</option><option value="505" style="color: white;">Blip 494</option><option value="504" style="color: white;">Blip 493</option><option value="503" style="color: white;">Blip 492</option><option value="502" style="color: white;">Blip 491</option><option value="501" style="color: white;">Blip 490</option><option value="500" style="color: white;">Powerup 489</option><option value="499" style="color: white;">Pickup 488</option><option value="498" style="color: white;">Random 487</option><option value="497" style="color: white;">Random 486</option><option value="496" style="color: white;">Blip 485</option><option value="495" style="color: white;">Blip 484</option><option value="494" style="color: white;">Blip 483</option><option value="493" style="color: white;">Blip 482</option><option value="492" style="color: white;">Blip 481</option><option value="491" style="color: white;">Blip 480</option><option value="490" style="color: white;">Blip 479</option><option value="489" style="color: white;">Blip 478</option><option value="488" style="color: white;">Blip 477</option><option value="487" style="color: white;">Blip 476</option><option value="486" style="color: white;">* Blip 475</option><option value="485" style="color: white;">Blip 474</option><option value="484" style="color: white;">Blip 473</option><option value="483" style="color: white;">Blip 472</option><option value="482" style="color: white;">Blip 471</option><option value="481" style="color: white;">Blip 470</option><option value="480" style="color: white;">Blip 469</option><option value="479" style="color: white;">Blip 468</option><option value="478" style="color: white;">Blip 467</option><option value="477" style="color: white;">Blip 466</option><option value="476" style="color: white;">Blip 465</option><option value="475" style="color: white;">Random 464</option><option value="474" style="color: white;">Random 463</option><option value="473" style="color: white;">Random 462</option><option value="472" style="color: white;">Random 461</option><option value="471" style="color: white;">Random 460</option><option value="470" style="color: white;">Random 459</option><option value="469" style="color: white;">Random 458</option><option value="468" style="color: white;">Random 457</option><option value="467" style="color: white;">Random 456</option><option value="466" style="color: white;">Random 455</option><option value="465" style="color: white;">Random 454</option><option value="464" style="color: white;">Random 453</option><option value="463" style="color: white;">Random 452</option><option value="462" style="color: white;">Random 451</option><option value="461" style="color: white;">Random 450</option><option value="460" style="color: white;">Random 449</option><option value="459" style="color: white;">Random 448</option><option value="458" style="color: white;">Random 447</option><option value="457" style="color: white;">Random 446</option><option value="456" style="color: white;">Random 445</option><option value="455" style="color: white;">Random 444</option><option value="454" style="color: white;">Random 443</option><option value="453" style="color: white;">Random 442</option><option value="452" style="color: white;">Random 441</option><option value="451" style="color: white;">Random 440</option><option value="450" style="color: white;">Random 439</option><option value="449" style="color: white;">Random 438</option><option value="448" style="color: white;">Random 437</option><option value="447" style="color: white;">Random 436</option><option value="446" style="color: white;">Random 435</option><option value="445" style="color: white;">Random 434</option><option value="444" style="color: white;">Random 433</option><option value="443" style="color: white;">Random 432</option><option value="442" style="color: white;">Random 431</option><option value="441" style="color: white;">Random 430</option><option value="440" style="color: white;">Random 429</option><option value="439" style="color: white;">Random 428</option><option value="438" style="color: white;">Random 427</option><option value="437" style="color: white;">Random 426</option><option value="436" style="color: white;">Random 425</option><option value="435" style="color: white;">Random 424</option><option value="434" style="color: white;">Random 423</option><option value="433" style="color: white;">Random 422</option><option value="432" style="color: white;">Random 421</option><option value="431" style="color: white;">Random 420</option><option value="430" style="color: white;">Random 419</option><option value="429" style="color: white;">* Random 418</option><option value="428" style="color: white;">Random 417</option><option value="427" style="color: white;">Random 416</option><option value="426" style="color: white;">Random 415</option><option value="425" style="color: white;">Random 414</option><option value="424" style="color: white;">Random 413</option><option value="423" style="color: white;">Random 412</option><option value="422" style="color: white;">Random 411</option><option value="421" style="color: white;">Random 410</option><option value="420" style="color: white;">Random 409</option><option value="419" style="color: white;">Random 408</option><option value="418" style="color: white;">* Blip 407</option><option value="417" style="color: white;">Blip 406</option><option value="416" style="color: white;">Blip 405</option><option value="415" style="color: white;">Random 404</option><option value="414" style="color: white;">Random 403</option><option value="413" style="color: white;">Random 402</option><option value="412" style="color: white;">Random 401</option><option value="411" style="color: white;">Random 400</option><option value="410" style="color: white;">Random 399</option><option value="409" style="color: white;">Random 398</option><option value="408" style="color: white;">Random 397</option><option value="407" style="color: white;">Random 396</option><option value="406" style="color: white;">Random 395</option><option value="405" style="color: white;">Random 394</option><option value="404" style="color: white;">Random 393</option><option value="403" style="color: white;">Random 392</option><option value="402" style="color: white;">Random 391</option><option value="401" style="color: white;">Loaded Sound 390</option><option value="400" style="color: white;">Random 389</option><option value="399" style="color: white;">Random 388</option><option value="398" style="color: white;">Random 387</option><option value="397" style="color: white;">* Random 386</option><option value="396" style="color: white;">Random 385</option><option value="395" style="color: white;">Random 384</option><option value="394" style="color: white;">Random 383</option><option value="393" style="color: white;">Random 382</option><option value="392" style="color: white;">Random 381</option><option value="391" style="color: white;">Random 380</option><option value="390" style="color: white;">Random 379</option><option value="389" style="color: white;">Random 378</option><option value="388" style="color: white;">Random 377</option><option value="387" style="color: white;">* Random 376</option><option value="386" style="color: white;">Random 375</option><option value="385" style="color: white;">Random 374</option><option value="384" style="color: white;">Random 373</option><option value="383" style="color: white;">Random 372</option><option value="382" style="color: white;">Random 371</option><option value="381" style="color: white;">Random 370</option><option value="380" style="color: white;">Random 369</option><option value="379" style="color: white;">Random 368</option><option value="378" style="color: white;">Random 367</option><option value="377" style="color: white;">Random 366</option><option value="376" style="color: white;">Random 365</option><option value="375" style="color: white;">Random 364</option><option value="374" style="color: white;">Random 363</option><option value="373" style="color: white;">Random 362</option><option value="372" style="color: white;">Random 361</option><option value="371" style="color: white;">Random 360</option><option value="370" style="color: white;">* Random 359</option><option value="369" style="color: white;">Random 358</option><option value="368" style="color: white;">Random 357</option><option value="367" style="color: white;">Random 356</option><option value="366" style="color: white;">Random 355</option><option value="365" style="color: white;">Random 354</option><option value="364" style="color: white;">Random 353</option><option value="363" style="color: white;">Random 352</option><option value="362" style="color: white;">Random 351</option><option value="361" style="color: white;">Random 350</option><option value="360" style="color: white;">Random 349</option><option value="359" style="color: white;">Random 348</option><option value="358" style="color: white;">Random 347</option><option value="357" style="color: white;">Random 346</option><option value="356" style="color: white;">Random 345</option><option value="355" style="color: white;">Random 344</option><option value="354" style="color: white;">Random 343</option><option value="353" style="color: white;">Random 342</option><option value="352" style="color: white;">Random 341</option><option value="351" style="color: white;">Random 340</option><option value="350" style="color: white;">Random 339</option><option value="349" style="color: white;">Random 338</option><option value="348" style="color: white;">Random 337</option><option value="347" style="color: white;">Random 336</option><option value="346" style="color: white;">* Blip 335</option><option value="345" style="color: white;">Blip 334</option><option value="344" style="color: white;">* Blip 333</option><option value="343" style="color: white;">Blip 332</option><option value="342" style="color: white;">Blip 331</option><option value="341" style="color: white;">Blip 330</option><option value="340" style="color: white;">Blip 329</option><option value="339" style="color: white;">Blip 328</option><option value="338" style="color: white;">Blip 327</option><option value="337" style="color: white;">Blip 326</option><option value="336" style="color: white;">Blip 325</option><option value="335" style="color: white;">Blip 324</option><option value="334" style="color: white;">Blip 323</option><option value="333" style="color: white;">Blip 322</option><option value="332" style="color: white;">Blip 321</option><option value="331" style="color: white;">Blip 320</option><option value="330" style="color: white;">Blip 319</option><option value="329" style="color: white;">Blip 318</option><option value="328" style="color: white;">Blip 317</option><option value="327" style="color: white;">Blip 316</option><option value="326" style="color: white;">* Shoot 315</option><option value="325" style="color: white;">Shoot 314</option><option value="324" style="color: white;">Shoot 313</option><option value="323" style="color: white;">Hit 312</option><option value="322" style="color: white;">Hit 311</option><option value="321" style="color: white;">Hit 310</option><option value="320" style="color: white;">Hit 309</option><option value="319" style="color: white;">Hit 308</option><option value="318" style="color: white;">Hit 307</option><option value="317" style="color: white;">Hit 306</option><option value="316" style="color: white;">Hit 305</option><option value="315" style="color: white;">Hit 304</option><option value="314" style="color: white;">Hit 303</option><option value="313" style="color: white;">Hit 302</option><option value="312" style="color: white;">Hit 301</option><option value="311" style="color: white;">Hit 300</option><option value="310" style="color: white;">Hit 299</option><option value="309" style="color: white;">Hit 298</option><option value="308" style="color: white;">Hit 297</option><option value="307" style="color: white;">Hit 296</option><option value="306" style="color: white;">* Blip 295 - Copy 1</option><option value="305" style="color: white;">* Blip 295</option><option value="304" style="color: white;">* Blip 294</option><option value="303" style="color: white;">Blip 293</option><option value="302" style="color: white;">Blip 292</option><option value="301" style="color: white;">Blip 291</option><option value="300" style="color: white;">* Random 290</option><option value="299" style="color: white;">Random 289</option><option value="298" style="color: white;">Random 288</option><option value="297" style="color: white;">Random 287</option><option value="296" style="color: white;">Random 286</option><option value="295" style="color: white;">Random 285</option><option value="294" style="color: white;">Random 284</option><option value="293" style="color: white;">Random 283</option><option value="292" style="color: white;">Random 282</option><option value="291" style="color: white;">Random 281</option><option value="290" style="color: white;">Random 280</option><option value="289" style="color: white;">Random 279</option><option value="288" style="color: white;">Random 278</option><option value="287" style="color: white;">Random 277</option><option value="286" style="color: white;">Shoot 276</option><option value="285" style="color: white;">Shoot 275</option><option value="284" style="color: white;">Shoot 274</option><option value="283" style="color: white;">Shoot 273</option><option value="282" style="color: white;">Shoot 272</option><option value="281" style="color: white;">Shoot 271</option><option value="280" style="color: white;">Shoot 270</option><option value="279" style="color: white;">Shoot 269</option><option value="278" style="color: white;">Shoot 268</option><option value="277" style="color: white;">Explosion 267</option><option value="276" style="color: white;">Hit 266</option><option value="275" style="color: white;">* Hit 265</option><option value="274" style="color: white;">Hit 264</option><option value="273" style="color: white;">Hit 263</option><option value="272" style="color: white;">Hit 262</option><option value="271" style="color: white;">Hit 261</option><option value="270" style="color: white;">Hit 260</option><option value="269" style="color: white;">* Random 259</option><option value="268" style="color: white;">Random 258</option><option value="267" style="color: white;">Random 257</option><option value="266" style="color: white;">Random 256</option><option value="265" style="color: white;">Random 255</option><option value="264" style="color: white;">Random 254</option><option value="263" style="color: white;">Random 253</option><option value="262" style="color: white;">Random 252</option><option value="261" style="color: white;">Random 251</option><option value="260" style="color: white;">Random 250</option><option value="259" style="color: white;">Random 249</option><option value="258" style="color: white;">Random 248</option><option value="257" style="color: white;">Random 247</option><option value="256" style="color: white;">Random 246</option><option value="255" style="color: white;">Random 245</option><option value="254" style="color: white;">Random 244</option><option value="253" style="color: white;">Random 243</option><option value="252" style="color: white;">Blip 242</option><option value="251" style="color: white;">Blip 241</option><option value="250" style="color: white;">Blip 240</option><option value="249" style="color: white;">Blip 239</option><option value="248" style="color: white;">Blip 238</option><option value="247" style="color: white;">Blip 237</option><option value="246" style="color: white;">Blip 236</option><option value="245" style="color: white;">Blip 235</option><option value="244" style="color: white;">Blip 234</option><option value="243" style="color: white;">* Hit 233</option><option value="242" style="color: white;">Hit 232</option><option value="241" style="color: white;">Hit 231</option><option value="240" style="color: white;">Hit 230</option><option value="239" style="color: white;">Hit 229</option><option value="238" style="color: white;">Hit 228</option><option value="237" style="color: white;">Hit 227</option><option value="236" style="color: white;">Hit 226</option><option value="235" style="color: white;">Hit 225</option><option value="234" style="color: white;">Hit 224</option><option value="233" style="color: white;">Hit 223</option><option value="232" style="color: white;">Hit 222</option><option value="231" style="color: white;">Blip 221</option><option value="230" style="color: white;">Blip 220</option><option value="229" style="color: white;">Blip 219</option><option value="228" style="color: white;">Blip 218</option><option value="227" style="color: white;">Blip 217</option><option value="226" style="color: white;">Blip 216</option><option value="225" style="color: white;">Blip 215</option><option value="224" style="color: white;">Blip 214</option><option value="223" style="color: white;">* Blip 213</option><option value="222" style="color: white;">Blip 212</option><option value="221" style="color: white;">Blip 211</option><option value="220" style="color: white;">Blip 210</option><option value="219" style="color: white;">Blip 209</option><option value="218" style="color: white;">Blip 208</option><option value="217" style="color: white;">Blip 207</option><option value="216" style="color: white;">Blip 206</option><option value="215" style="color: white;">Blip 205</option><option value="214" style="color: white;">Blip 204</option><option value="213" style="color: white;">Blip 203</option><option value="212" style="color: white;">Blip 202</option><option value="211" style="color: white;">Blip 201</option><option value="210" style="color: white;">Blip 200</option><option value="209" style="color: white;">Blip 199</option><option value="208" style="color: white;">Blip 198</option><option value="207" style="color: white;">Blip 197</option><option value="206" style="color: white;">Blip 196</option><option value="205" style="color: white;">Blip 195</option><option value="204" style="color: white;">Blip 194</option><option value="203" style="color: white;">* Powerup 193</option><option value="202" style="color: white;">Powerup 192</option><option value="201" style="color: white;">Powerup 191</option><option value="200" style="color: white;">Powerup 190</option><option value="199" style="color: white;">Powerup 189</option><option value="198" style="color: white;">Powerup 188</option><option value="197" style="color: white;">Powerup 187</option><option value="196" style="color: white;">Powerup 186</option><option value="195" style="color: white;">Powerup 185</option><option value="194" style="color: white;">Powerup 184</option><option value="193" style="color: white;">Powerup 183</option><option value="192" style="color: white;">Powerup 182</option><option value="191" style="color: white;">* Blip 181</option><option value="190" style="color: white;">Blip 180</option><option value="189" style="color: white;">Blip 179</option><option value="188" style="color: white;">Pickup 178</option><option value="187" style="color: white;">Pickup 177</option><option value="186" style="color: white;">Blip 176</option><option value="185" style="color: white;">Pickup 175</option><option value="184" style="color: white;">Pickup 174</option><option value="183" style="color: white;">Powerup 173</option><option value="182" style="color: white;">Powerup 172</option><option value="181" style="color: white;">Hit 171</option><option value="180" style="color: white;">Hit 170</option><option value="179" style="color: white;">Hit 169</option><option value="178" style="color: white;">Hit 168</option><option value="177" style="color: white;">Hit 167</option><option value="176" style="color: white;">Hit 166</option><option value="175" style="color: white;">Hit 165</option><option value="174" style="color: white;">* Hit 164</option><option value="173" style="color: white;">Hit 163</option><option value="172" style="color: white;">Hit 162</option><option value="171" style="color: white;">* Hit 161</option><option value="170" style="color: white;">Hit 160</option><option value="169" style="color: white;">Hit 159</option><option value="168" style="color: white;">Hit 158</option><option value="167" style="color: white;">Hit 157</option><option value="166" style="color: white;">* Hit 156</option><option value="165" style="color: white;">Hit 155</option><option value="164" style="color: white;">Hit 154</option><option value="163" style="color: white;">Hit 153</option><option value="162" style="color: white;">Hit 152</option><option value="161" style="color: white;">Hit 151</option><option value="160" style="color: white;">Hit 150</option><option value="159" style="color: white;">Hit 149</option><option value="158" style="color: white;">Blip 148</option><option value="157" style="color: white;">* Blip 147</option><option value="156" style="color: white;">Explosion 146</option><option value="155" style="color: white;">Explosion 145</option><option value="154" style="color: white;">Explosion 144 - Mutation 9</option><option value="153" style="color: white;">Explosion 144 - Mutation 8</option><option value="152" style="color: white;">Explosion 144 - Mutation 7</option><option value="151" style="color: white;">Explosion 144 - Mutation 6</option><option value="150" style="color: white;">Explosion 144 - Mutation 5</option><option value="149" style="color: white;">Explosion 144 - Mutation 4</option><option value="148" style="color: white;">Explosion 144 - Mutation 3</option><option value="147" style="color: white;">Explosion 144 - Mutation 2</option><option value="146" style="color: white;">Explosion 144 - Mutation 1</option><option value="145" style="color: white;">Explosion 144</option><option value="144" style="color: white;">Explosion 143</option><option value="143" style="color: white;">Explosion 142</option><option value="142" style="color: white;">Explosion 141</option><option value="141" style="color: white;">Explosion 140</option><option value="140" style="color: white;">Explosion 139</option><option value="139" style="color: white;">Explosion 138</option><option value="138" style="color: white;">Explosion 137</option><option value="137" style="color: white;">Explosion 136</option><option value="136" style="color: white;">Random 135</option><option value="135" style="color: white;">Random 134</option><option value="134" style="color: white;">Random 133</option><option value="133" style="color: white;">Random 132</option><option value="132" style="color: white;">Random 131</option><option value="131" style="color: white;">Random 130</option><option value="130" style="color: white;">Random 129</option><option value="129" style="color: white;">Random 128</option><option value="128" style="color: white;">Random 127</option><option value="127" style="color: white;">Random 126</option><option value="126" style="color: white;">Random 125</option><option value="125" style="color: white;">Random 124</option><option value="124" style="color: white;">Random 123</option><option value="123" style="color: white;">Random 122</option><option value="122" style="color: white;">Random 121</option><option value="121" style="color: white;">Random 120</option><option value="120" style="color: white;">Random 119</option><option value="119" style="color: white;">Random 118</option><option value="118" style="color: white;">* Random 117</option><option value="117" style="color: white;">Random 116</option><option value="116" style="color: white;">Random 115</option><option value="115" style="color: white;">Random 114</option><option value="114" style="color: white;">Random 113</option><option value="113" style="color: white;">Random 112</option><option value="112" style="color: white;">Random 111</option><option value="111" style="color: white;">Random 110</option><option value="110" style="color: white;">Random 109</option><option value="109" style="color: white;">Random 108</option><option value="108" style="color: white;">Random 107</option><option value="107" style="color: white;">Random 106</option><option value="106" style="color: white;">Random 105</option><option value="105" style="color: white;">Random 104</option><option value="104" style="color: white;">Random 103</option><option value="103" style="color: white;">Random 102</option><option value="102" style="color: white;">Random 101</option><option value="101" style="color: white;">Random 100</option><option value="100" style="color: white;">Random 99</option><option value="99" style="color: white;">Random 98</option><option value="98" style="color: white;">Random 97</option><option value="97" style="color: white;">Random 96</option><option value="96" style="color: white;">Random 95</option><option value="95" style="color: white;">Random 94</option><option value="94" style="color: white;">Random 93</option><option value="93" style="color: white;">Random 92</option><option value="92" style="color: white;">Random 91</option><option value="91" style="color: white;">Random 90</option><option value="90" style="color: white;">Random 89</option><option value="89" style="color: white;">Random 88</option><option value="88" style="color: white;">Random 87</option><option value="87" style="color: white;">Random 86</option><option value="86" style="color: white;">Random 85</option><option value="85" style="color: white;">Random 84</option><option value="84" style="color: white;">Random 83</option><option value="83" style="color: white;">Random 82</option><option value="82" style="color: white;">Random 81</option><option value="81" style="color: white;">Random 80</option><option value="80" style="color: white;">Random 79</option><option value="79" style="color: white;">Random 78</option><option value="78" style="color: white;">Random 77</option><option value="77" style="color: white;">Random 76</option><option value="76" style="color: white;">Random 75</option><option value="75" style="color: white;">Random 74</option><option value="74" style="color: white;">Random 73</option><option value="73" style="color: white;">Random 72</option><option value="72" style="color: white;">Random 71</option><option value="71" style="color: white;">Random 70</option><option value="70" style="color: white;">Random 69</option><option value="69" style="color: white;">Random 68</option><option value="68" style="color: white;">Random 67</option><option value="67" style="color: white;">Random 66</option><option value="66" style="color: white;">Random 65</option><option value="65" style="color: white;">Random 64</option><option value="64" style="color: white;">Random 63</option><option value="63" style="color: white;">Random 62</option><option value="62" style="color: white;">Random 61</option><option value="61" style="color: white;">Random 60</option><option value="60" style="color: white;">Random 59</option><option value="59" style="color: white;">Random 58</option><option value="58" style="color: white;">Random 57</option><option value="57" style="color: white;">Random 56</option><option value="56" style="color: white;">Random 55</option><option value="55" style="color: white;">Random 54</option><option value="54" style="color: white;">Random 53</option><option value="53" style="color: white;">Random 52</option><option value="52" style="color: white;">Random 51</option><option value="51" style="color: white;">Random 50</option><option value="50" style="color: white;">Random 49</option><option value="49" style="color: white;">Random 48</option><option value="48" style="color: white;">Random 47</option><option value="47" style="color: white;">Random 46</option><option value="46" style="color: white;">Random 45</option><option value="45" style="color: white;">Random 44</option><option value="44" style="color: white;">Random 43</option><option value="43" style="color: white;">Random 42</option><option value="42" style="color: white;">Random 41</option><option value="41" style="color: white;">Random 40</option><option value="40" style="color: white;">Random 39</option><option value="39" style="color: white;">Random 38</option><option value="38" style="color: white;">Random 37</option><option value="37" style="color: white;">Random 36</option><option value="36" style="color: white;">Random 35</option><option value="35" style="color: white;">Random 34</option><option value="34" style="color: white;">Random 33</option><option value="33" style="color: white;">Explosion 32</option><option value="32" style="color: white;">Explosion 31</option><option value="31" style="color: white;">Explosion 30</option><option value="30" style="color: white;">Explosion 29</option><option value="29" style="color: white;">Explosion 28</option><option value="28" style="color: white;">Explosion 27</option><option value="27" style="color: white;">Random 26</option><option value="26" style="color: white;">Random 25</option><option value="25" style="color: white;">Random 24</option><option value="24" style="color: white;">Random 23</option><option value="23" style="color: white;">Random 22</option><option value="22" style="color: white;">Random 21</option><option value="21" style="color: white;">Random 20</option><option value="20" style="color: white;">Random 19</option><option value="19" style="color: white;">Random 18</option><option value="18" style="color: white;">Random 17</option><option value="17" style="color: white;">Random 16</option><option value="16" style="color: white;">Random 15</option><option value="15" style="color: white;">Random 14</option><option value="14" style="color: white;">Random 13</option><option value="13" style="color: white;">Random 12</option><option value="12" style="color: white;">Random 11</option><option value="11" style="color: white;">Random 10</option><option value="10" style="color: white;">Random 9</option><option value="9" style="color: white;">Random 8</option><option value="8" style="color: white;">Random 7</option><option value="7" style="color: white;">Random 6</option><option value="6" style="color: white;">Random 5</option><option value="5" style="color: white;">Random 4</option><option value="4" style="color: white;">Random 3</option><option value="3" style="color: white;">Random 2</option><option value="2" style="color: white;">Random 1</option><option value="1" style="color: white;">Random 0</option><option value="0" style="color: white;">Sound Default</option></select>
+</td></tr>
+<tr>
+<td colspan="2">
+<div id="div_settingsTable"><center><table style="text-align:center"><tbody><tr><td style="text-align:right">Name&nbsp;</td><td><input title="Name of sound" class="setting" step="0" id="input_name" oninput="SelectedWasChanged(&#39;name&#39;)"></td><td><button title="Toggle lock all parameters" onclick="ToggleLockAll()">🔒</button></td><td><button title="Sets all unlocked parameters to their default values." onclick="if(ResetAllSettings())PlaySelected()">♻️</button></td><td><button title="Mutate all unlocked parameters" onclick="if(MutateAllSettings())PlaySelected()">🎲</button></td></tr><tr><td style="text-align:right">Volume&nbsp;</td><td><input id="input_volume" class="setting" title="Volume scale (percent)" type="number" step="0.1" oninput="SelectedWasChanged(&#39;volume&#39;)" min="-1000000000" max="1000000000" onfocusout="UpdateSettings()"></td><td><input id="input_lock_volume" class="lock" title="Lock Volume" oninput="SelectedWasChanged(&#39;volume&#39;)" type="checkbox"></td><td><button id="input_reset_volume" class="reset" title="Reset Volume" onclick="ResetSetting(settings[1]);PlaySelected()"></button></td><td><button id="input_mutate_volume" class="rand" title="Mutate Volume" onclick="MutateSetting(settings[1]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Randomness&nbsp;</td><td><input id="input_randomness" class="setting" title="How much to randomize frequency (percent Hz)" type="number" step="0.05" oninput="SelectedWasChanged(&#39;randomness&#39;)" min="-1000000000" max="1000000000" onfocusout="UpdateSettings()"></td><td><input id="input_lock_randomness" class="lock" title="Lock Randomness" oninput="SelectedWasChanged(&#39;randomness&#39;)" type="checkbox"></td><td><button id="input_reset_randomness" class="reset" title="Reset Randomness" onclick="ResetSetting(settings[2]);PlaySelected()"></button></td><td><button id="input_mutate_randomness" class="rand" title="Mutate Randomness" onclick="MutateSetting(settings[2]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Frequency&nbsp;</td><td><input id="input_frequency" class="setting" title="Frequency of sound (Hz)" type="number" step="1" oninput="SelectedWasChanged(&#39;frequency&#39;)" min="-1000000000" max="1000000000" onfocusout="UpdateSettings()"></td><td><input id="input_lock_frequency" class="lock" title="Lock Frequency" oninput="SelectedWasChanged(&#39;frequency&#39;)" type="checkbox"></td><td><button id="input_reset_frequency" class="reset" title="Reset Frequency" onclick="ResetSetting(settings[3]);PlaySelected()"></button></td><td><button id="input_mutate_frequency" class="rand" title="Mutate Frequency" onclick="MutateSetting(settings[3]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Wave Shape&nbsp;</td><td><select id="input_shape" class="setting" title="Shape of the sound wave" oninput="SelectedWasChanged(&#39;shape&#39;)"><option value="0">sin</option><option value="1">triangle</option><option value="2">saw</option><option value="3">tan</option><option value="4">bit noise</option></select></td><td><input id="input_lock_shape" class="lock" title="Lock Wave Shape" oninput="SelectedWasChanged(&#39;shape&#39;)" type="checkbox"></td><td><button id="input_reset_shape" class="reset" title="Reset Wave Shape" onclick="ResetSetting(settings[4]);PlaySelected()"></button></td><td><button id="input_mutate_shape" class="rand" title="Mutate Wave Shape" onclick="MutateSetting(settings[4]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Shape Curve&nbsp;</td><td><input id="input_shapeCurve" class="setting" title="Squarenes of wave (0=square, 1=normal, 2=pointy)" type="number" step="0.1" oninput="SelectedWasChanged(&#39;shapeCurve&#39;)" min="0" max="1000000000" onfocusout="UpdateSettings()"></td><td><input id="input_lock_shapeCurve" class="lock" title="Lock Shape Curve" oninput="SelectedWasChanged(&#39;shapeCurve&#39;)" type="checkbox"></td><td><button id="input_reset_shapeCurve" class="reset" title="Reset Shape Curve" onclick="ResetSetting(settings[5]);PlaySelected()"></button></td><td><button id="input_mutate_shapeCurve" class="rand" title="Mutate Shape Curve" onclick="MutateSetting(settings[5]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Attack&nbsp;</td><td><input id="input_attack" class="setting" title="Attack time, how fast sound starts (seconds)" type="number" step="0.01" oninput="SelectedWasChanged(&#39;attack&#39;)" min="0" max="3" onfocusout="UpdateSettings()"></td><td><input id="input_lock_attack" class="lock" title="Lock Attack" oninput="SelectedWasChanged(&#39;attack&#39;)" type="checkbox"></td><td><button id="input_reset_attack" class="reset" title="Reset Attack" onclick="ResetSetting(settings[6]);PlaySelected()"></button></td><td><button id="input_mutate_attack" class="rand" title="Mutate Attack" onclick="MutateSetting(settings[6]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Decay&nbsp;</td><td><input id="input_decay" class="setting" title="Decay time, how long to reach sustain after attack" type="number" step="0.01" oninput="SelectedWasChanged(&#39;decay&#39;)" min="0" max="1" onfocusout="UpdateSettings()"></td><td><input id="input_lock_decay" class="lock" title="Lock Decay" oninput="SelectedWasChanged(&#39;decay&#39;)" type="checkbox"></td><td><button id="input_reset_decay" class="reset" title="Reset Decay" onclick="ResetSetting(settings[7]);PlaySelected()"></button></td><td><button id="input_mutate_decay" class="rand" title="Mutate Decay" onclick="MutateSetting(settings[7]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Sustain&nbsp;</td><td><input id="input_sustain" class="setting" title="Sustain time, how long sound holds (seconds)" type="number" step="0.01" oninput="SelectedWasChanged(&#39;sustain&#39;)" min="0" max="3" onfocusout="UpdateSettings()"></td><td><input id="input_lock_sustain" class="lock" title="Lock Sustain" oninput="SelectedWasChanged(&#39;sustain&#39;)" type="checkbox"></td><td><button id="input_reset_sustain" class="reset" title="Reset Sustain" onclick="ResetSetting(settings[8]);PlaySelected()"></button></td><td><button id="input_mutate_sustain" class="rand" title="Mutate Sustain" onclick="MutateSetting(settings[8]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Release&nbsp;</td><td><input id="input_release" class="setting" title="Release time, how fast sound fades out (seconds)" type="number" step="0.01" oninput="SelectedWasChanged(&#39;release&#39;)" min="0" max="3" onfocusout="UpdateSettings()"></td><td><input id="input_lock_release" class="lock" title="Lock Release" oninput="SelectedWasChanged(&#39;release&#39;)" type="checkbox"></td><td><button id="input_reset_release" class="reset" title="Reset Release" onclick="ResetSetting(settings[9]);PlaySelected()"></button></td><td><button id="input_mutate_release" class="rand" title="Mutate Release" onclick="MutateSetting(settings[9]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Sustain Volume&nbsp;</td><td><input id="input_sustainVolume" class="setting" title="Volume level for sustain (percent)" type="number" step="0.1" oninput="SelectedWasChanged(&#39;sustainVolume&#39;)" min="-1000000000" max="1000000000" onfocusout="UpdateSettings()"></td><td><input id="input_lock_sustainVolume" class="lock" title="Lock Sustain Volume" oninput="SelectedWasChanged(&#39;sustainVolume&#39;)" type="checkbox"></td><td><button id="input_reset_sustainVolume" class="reset" title="Reset Sustain Volume" onclick="ResetSetting(settings[10]);PlaySelected()"></button></td><td><button id="input_mutate_sustainVolume" class="rand" title="Mutate Sustain Volume" onclick="MutateSetting(settings[10]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Slide&nbsp;</td><td><input id="input_slide" class="setting" title="How much to slide frequency (kHz/s)" type="number" step="0.1" oninput="SelectedWasChanged(&#39;slide&#39;)" min="-1000000000" max="1000000000" onfocusout="UpdateSettings()"></td><td><input id="input_lock_slide" class="lock" title="Lock Slide" oninput="SelectedWasChanged(&#39;slide&#39;)" type="checkbox"></td><td><button id="input_reset_slide" class="reset" title="Reset Slide" onclick="ResetSetting(settings[11]);PlaySelected()"></button></td><td><button id="input_mutate_slide" class="rand" title="Mutate Slide" onclick="MutateSetting(settings[11]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Delta Slide&nbsp;</td><td><input id="input_deltaSlide" class="setting" title="How much to change slide (kHz/s/s)" type="number" step="0.1" oninput="SelectedWasChanged(&#39;deltaSlide&#39;)" min="-1000000000" max="1000000000" onfocusout="UpdateSettings()"></td><td><input id="input_lock_deltaSlide" class="lock" title="Lock Delta Slide" oninput="SelectedWasChanged(&#39;deltaSlide&#39;)" type="checkbox"></td><td><button id="input_reset_deltaSlide" class="reset" title="Reset Delta Slide" onclick="ResetSetting(settings[12]);PlaySelected()"></button></td><td><button id="input_mutate_deltaSlide" class="rand" title="Mutate Delta Slide" onclick="MutateSetting(settings[12]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Noise&nbsp;</td><td><input id="input_noise" class="setting" title="How much random noise to add (percent)" type="number" step="0.1" oninput="SelectedWasChanged(&#39;noise&#39;)" min="-1000000000" max="1000000000" onfocusout="UpdateSettings()"></td><td><input id="input_lock_noise" class="lock" title="Lock Noise" oninput="SelectedWasChanged(&#39;noise&#39;)" type="checkbox"></td><td><button id="input_reset_noise" class="reset" title="Reset Noise" onclick="ResetSetting(settings[13]);PlaySelected()"></button></td><td><button id="input_mutate_noise" class="rand" title="Mutate Noise" onclick="MutateSetting(settings[13]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Pitch Jump&nbsp;</td><td><input id="input_pitchJump" class="setting" title="Frequency of pitch jump (Hz)" type="number" step="50" oninput="SelectedWasChanged(&#39;pitchJump&#39;)" min="-1000000000" max="1000000000" onfocusout="UpdateSettings()"></td><td><input id="input_lock_pitchJump" class="lock" title="Lock Pitch Jump" oninput="SelectedWasChanged(&#39;pitchJump&#39;)" type="checkbox"></td><td><button id="input_reset_pitchJump" class="reset" title="Reset Pitch Jump" onclick="ResetSetting(settings[14]);PlaySelected()"></button></td><td><button id="input_mutate_pitchJump" class="rand" title="Mutate Pitch Jump" onclick="MutateSetting(settings[14]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Pitch Jump Time&nbsp;</td><td><input id="input_pitchJumpTime" class="setting" title="Time of pitch jump (seconds)" type="number" step="0.01" oninput="SelectedWasChanged(&#39;pitchJumpTime&#39;)" min="-1000000000" max="1000000000" onfocusout="UpdateSettings()"></td><td><input id="input_lock_pitchJumpTime" class="lock" title="Lock Pitch Jump Time" oninput="SelectedWasChanged(&#39;pitchJumpTime&#39;)" type="checkbox"></td><td><button id="input_reset_pitchJumpTime" class="reset" title="Reset Pitch Jump Time" onclick="ResetSetting(settings[15]);PlaySelected()"></button></td><td><button id="input_mutate_pitchJumpTime" class="rand" title="Mutate Pitch Jump Time" onclick="MutateSetting(settings[15]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Repeat Time&nbsp;</td><td><input id="input_repeatTime" class="setting" title="Resets some parameters periodically (seconds)" type="number" step="0.01" oninput="SelectedWasChanged(&#39;repeatTime&#39;)" min="-1000000000" max="1000000000" onfocusout="UpdateSettings()"></td><td><input id="input_lock_repeatTime" class="lock" title="Lock Repeat Time" oninput="SelectedWasChanged(&#39;repeatTime&#39;)" type="checkbox"></td><td><button id="input_reset_repeatTime" class="reset" title="Reset Repeat Time" onclick="ResetSetting(settings[16]);PlaySelected()"></button></td><td><button id="input_mutate_repeatTime" class="rand" title="Mutate Repeat Time" onclick="MutateSetting(settings[16]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Modulation&nbsp;</td><td><input id="input_modulation" class="setting" title="Frequency of modulation wave, negative flips phase (Hz)" type="number" step="0.1" oninput="SelectedWasChanged(&#39;modulation&#39;)" min="-1000000000" max="1000000000" onfocusout="UpdateSettings()"></td><td><input id="input_lock_modulation" class="lock" title="Lock Modulation" oninput="SelectedWasChanged(&#39;modulation&#39;)" type="checkbox"></td><td><button id="input_reset_modulation" class="reset" title="Reset Modulation" onclick="ResetSetting(settings[17]);PlaySelected()"></button></td><td><button id="input_mutate_modulation" class="rand" title="Mutate Modulation" onclick="MutateSetting(settings[17]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Bit Crush&nbsp;</td><td><input id="input_bitCrush" class="setting" title="Resamples at a lower frequency in (samples*100)" type="number" step="0.1" oninput="SelectedWasChanged(&#39;bitCrush&#39;)" min="-1000000000" max="1000000000" onfocusout="UpdateSettings()"></td><td><input id="input_lock_bitCrush" class="lock" title="Lock Bit Crush" oninput="SelectedWasChanged(&#39;bitCrush&#39;)" type="checkbox"></td><td><button id="input_reset_bitCrush" class="reset" title="Reset Bit Crush" onclick="ResetSetting(settings[18]);PlaySelected()"></button></td><td><button id="input_mutate_bitCrush" class="rand" title="Mutate Bit Crush" onclick="MutateSetting(settings[18]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Delay&nbsp;</td><td><input id="input_delay" class="setting" title="Overlap sound with itself for reverb and flanger effects (seconds)" type="number" step="0.01" oninput="SelectedWasChanged(&#39;delay&#39;)" min="0" max="1000000000" onfocusout="UpdateSettings()"></td><td><input id="input_lock_delay" class="lock" title="Lock Delay" oninput="SelectedWasChanged(&#39;delay&#39;)" type="checkbox"></td><td><button id="input_reset_delay" class="reset" title="Reset Delay" onclick="ResetSetting(settings[19]);PlaySelected()"></button></td><td><button id="input_mutate_delay" class="rand" title="Mutate Delay" onclick="MutateSetting(settings[19]);PlaySelected()"></button></td></tr><tr><td style="text-align:right">Tremolo&nbsp;</td><td><input id="input_tremolo" class="setting" title="Trembling effect, rate controlled by repeat time (precent)" type="number" step="0.01" oninput="SelectedWasChanged(&#39;tremolo&#39;)" min="0" max="1" onfocusout="UpdateSettings()"></td><td><input id="input_lock_tremolo" class="lock" title="Lock Tremolo" oninput="SelectedWasChanged(&#39;tremolo&#39;)" type="checkbox"></td><td><button id="input_reset_tremolo" class="reset" title="Reset Tremolo" onclick="ResetSetting(settings[20]);PlaySelected()"></button></td><td><button id="input_mutate_tremolo" class="rand" title="Mutate Tremolo" onclick="MutateSetting(settings[20]);PlaySelected()"></button></td></tr></tbody></table></center></div>
+</td>
+</tr>
+<tr><td colspan="3" style="padding:5px">
+<center>
+<button title="Download the selected wave file" onclick="SaveWave()">Save Wav</button>
+<button title="Load sound from zzfx code" onclick="LoadSound()">Load Sound</button>
+<button title="Copy ZzFX code to clipboard" onclick="if(CopyToCliboard(textarea_code.value))eval(textarea_code.value)">Copy Sound</button>
+<button title="Import all sounds from a text file." onclick="Import()">Import</button>
+<button title="Export all sounds to a text file." onclick="Export()">Export</button>
+<button title="Clear non-favorite sounds" onclick="ClearSoundsButton()">Clear</button>
+<button title="Clear all sounds" onclick="ClearSoundsButton(1)">Clear All</button>
+</center>
+</td></tr>
+<tr><td colspan="3" style="padding:5px">
+<center>ZzFX JavaScript (Use this code to play the sound)
+<input type="checkbox" id="input_shortenCode" checked="" onchange="SaveLocalStorage();textarea_code.value=GetCode(GetSelectedSound())">Spread
+<br><textarea title="Code to play the selected sound" id="textarea_code" style="width:90%" readonly=""></textarea>
+</center>
+</td></tr>
+</tbody></table>
+ZzFX © <a href="http://www.frankforce.com/" target="_blank">Frank Force</a> 2019 ☮♥☻␌
+<a hidden="" id="a_downloadLink"></a>
+<input hidden="" id="input_importFile" type="file" accept=".txt">
+<script src="./ZzFX - Zuper Zmall Zound Zynth_files/ZzFX.js.download"></script>
+<script src="./ZzFX - Zuper Zmall Zound Zynth_files/wav.js.download"></script>
+<script>
+
+'use strict'; // strict mode
+let sounds = [];
+let generatedSoundCount = 0;
+let loadedSound;
+let lastPlayedSound;
+
+const SeededRandom=_=>
+(
+    randomSeed^=randomSeed<<13,
+    randomSeed^=randomSeed>>17,
+    randomSeed^=randomSeed<<5,
+    (randomSeed%1e9)/1e9
+)
+let randomSeed = Date.now();
+let loadedSoundSeed = 0;
+
+function Init()
+{
+    BuildSettingsTable();
+    RandomizeLogo();
+    LoadLocalStorage();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// settings
+
+function BuildSetting(step, min, max, name, niceName, help, canMutate=1, type=0)
+{ return {name, step, min, max, niceName, help, type, canMutate}; }
+
+const settings = 
+[
+BuildSetting(0,0,0,'name','Name','Name of sound',0,1),
+BuildSetting(.1,-1e9,1e9,'volume','Volume','Volume scale (percent)',0),
+BuildSetting(.05,-1e9,1e9,'randomness','Randomness','How much to randomize frequency (percent Hz)',0),
+BuildSetting(1,-1e9,1e9,'frequency','Frequency','Frequency of sound (Hz)'),
+BuildSetting(1,0,0,'shape','Wave Shape','Shape of the sound wave',1,2),
+BuildSetting(.1,0,1e9,'shapeCurve','Shape Curve','Squarenes of wave (0=square, 1=normal, 2=pointy)'),
+BuildSetting(.01,0,3,'attack','Attack','Attack time, how fast sound starts (seconds)'),
+BuildSetting(.01,0,1,'decay','Decay','Decay time, how long to reach sustain after attack'),
+BuildSetting(.01,0,3,'sustain','Sustain','Sustain time, how long sound holds (seconds)'),
+BuildSetting(.01,0,3,'release','Release','Release time, how fast sound fades out (seconds)'),
+BuildSetting(.1,-1e9,1e9,'sustainVolume','Sustain Volume','Volume level for sustain (percent)'),
+BuildSetting(.1,-1e9,1e9,'slide','Slide','How much to slide frequency (kHz/s)'),
+BuildSetting(.1,-1e9,1e9,'deltaSlide','Delta Slide','How much to change slide (kHz/s/s)'),
+BuildSetting(.1,-1e9,1e9,'noise','Noise','How much random noise to add (percent)'),
+BuildSetting(50,-1e9,1e9,'pitchJump','Pitch Jump','Frequency of pitch jump (Hz)'),
+BuildSetting(.01,-1e9,1e9,'pitchJumpTime','Pitch Jump Time','Time of pitch jump (seconds)'),
+BuildSetting(.01,-1e9,1e9,'repeatTime','Repeat Time','Resets some parameters periodically (seconds)'),
+BuildSetting(.1,-1e9,1e9,'modulation','Modulation','Frequency of modulation wave, negative flips phase (Hz)'),
+BuildSetting(.1,-1e9,1e9,'bitCrush','Bit Crush','Resamples at a lower frequency in (samples*100)'),
+BuildSetting(.01,0,1e9,'delay','Delay','Overlap sound with itself for reverb and flanger effects (seconds)'),
+BuildSetting(.01,0,1,'tremolo','Tremolo','Trembling effect, rate controlled by repeat time (precent)'),
+]
+
+function BuildSettingsTable()
+{
+    const s = settings[0];
+    let html = '<center><table style=text-align:center>';
+    html += '<tr><td style=text-align:right>' + s.niceName + '&nbsp;</td><td>'
+    html += `<input title='${s.help}' class=setting step=${s.step} id=input_${s.name} oninput=SelectedWasChanged('${s.name}')>`
+    
+    html += '</td><td>';
+    html += '<button title="Toggle lock all parameters" onclick=ToggleLockAll()>🔒</button>'
+    
+    html += '</td><td>';
+    html += '<button title="Sets all unlocked parameters to their default values." onclick=if(ResetAllSettings())PlaySelected()>♻️</button>';
+    
+    html += '</td><td>';
+    html += '<button title="Mutate all unlocked parameters" onclick=if(MutateAllSettings())PlaySelected()>🎲</button>';
+    
+    html += '</td></tr>';
+    
+    for(const i in settings)
+    {
+        const s = settings[i];
+        if (s.name == 'name')
+            continue;
+    
+        html += '<tr>';
+        html += '<td style=text-align:right>';
+        html += s.niceName + '&nbsp;';
+        html += '</td><td>';
+        
+        if (s.type == 0)
+            html += `<input id=input_${s.name} class=setting title='${s.help}' type=number step=${s.step} oninput=SelectedWasChanged('${s.name}') min=${s.min} max=${s.max} onfocusout=UpdateSettings()>`
+        else if (s.type == 2)
+        {
+            html += `<select id=input_${s.name} class=setting title='${s.help}' oninput=SelectedWasChanged('${s.name}')>`;
+            html += `<option value=0>sin</option>`;
+            html += `<option value=1>triangle</option>`;
+            html += `<option value=2>saw</option>`;
+            html += `<option value=3>tan</option>`;
+            html += `<option value=4>bit noise</option>`;
+            html += `</select>`;
+        }
+        
+        html += '</td><td>';
+        html += `<input id=input_lock_${s.name} class=lock title='Lock ${s.niceName}' oninput=SelectedWasChanged('${s.name}') type=checkbox>`;
+        
+        html += '</td><td>';
+        html += `<button id=input_reset_${s.name} class=reset title='Reset ${s.niceName}' onclick=ResetSetting(settings[${i}]);PlaySelected()></button>`;
+        
+        html += '</td><td>';
+        html += `<button id=input_mutate_${s.name} class=rand title='Mutate ${s.niceName}' onclick=MutateSetting(settings[${i}]);PlaySelected()></button>`;
+        
+        html += '</td></tr>';
+    }
+    
+    html += '</table></center>'
+    div_settingsTable.innerHTML = html;
+}
+
+function GetSelectedSound()
+{
+    const index = select_soundList.options[select_soundList.selectedIndex].value;
+    return sounds[index];
+}
+
+function PlaySelected()
+{
+    if (lastPlayedSound)
+    {
+        lastPlayedSound.stop();
+        lastPlayedSound = 0;
+    }
+    
+    const sound = BuildSoundFromSettings();
+    if (ZZFX.volume > 0)
+    {
+        lastPlayedSound = ZZFX.Play(sound);
+        DrawSoundWave(ZZFX.samples, ZZFX.volume, sound);
+    }
+    else
+    {
+        // just build samples without playing
+        const params = ZZFX.SoundToArray(sound);
+        const saveVolume = ZZFX.volume;
+        ZZFX.volume = 1;
+        const samples = ZZFX.BuildSamples(...params);
+        DrawSoundWave(samples, 1, sound);
+        ZZFX.volume = saveVolume;
+    }
+    RandomizeLogo();
+}
+
+function BuildSoundFromSettings()
+{
+    const sound = {};
+    for(const s of settings)
+    {
+        let v = document.getElementById("input_"+s.name).value;
+        if (s.type!=1)
+            v = parseFloat(v) || 0;
+        
+        sound[s.name] = v;
+    }
+
+    return sound;
+}
+
+function UpdateSettings()
+{
+    const v = slider_masterVolume.value;
+    div_masterVolume.innerHTML = 'Master Volume ' + v + '%';
+    ZZFX.volume = v / 100;
+    
+    const sound = GetSelectedSound();
+    if (sound)
+    {
+        // copy settings to selected
+        const option = select_soundList.options[select_soundList.selectedIndex];
+        const index = parseInt(option.value);
+    
+        for(const s of settings)
+        {
+            const element = document.getElementById("input_"+s.name);
+            let v = element.value;
+            if (s.type == 0 && element != document.activeElement)
+            {
+                // sanitize input
+                v = parseFloat(v);
+                if (isNaN(v) || !Number.isFinite(v))
+                    v = 0;
+                else
+                    v = Math.max(Math.min(v,s.max),s.min);
+                element.value = v;
+            }
+            sound[s.name] = v;
+        }
+        
+        option.style.color = sounds[index].favorite? "#0F0" : "white";
+        option.innerHTML = (sound.favorite?'-> ':sound.modified?'* ':'') + sound.name;
+        textarea_code.value = GetCode(sound);
+    }
+    
+    SaveLocalStorage();
+}
+
+function AddPresetSound(presetName='Random')
+{
+    let sound = ZZFX.BuildSound();
+    const R =(a=1,b=0) => b+(a-b)*Math.random();
+    
+    switch (presetName)
+    {
+        case 'Random':
+        {
+            sound = ZZFX.BuildRandomSound();
+            break;
+        }
+        case 'Default':
+        {
+            sound = ZZFX.BuildSound();
+            break;
+        }
+        case 'Pickup':
+        {
+            sound.frequency = R(300,2000);
+            sound.shape = R(3)|0;
+            sound.shapeCurve = R(2);
+            sound.attack = 0;
+            sound.decay = R(.1);
+            sound.sustain = R(.1);
+            sound.sustainVolume = R(.5, 1);
+            sound.release = R(.1,.3);
+            sound.noise =  R()<.8 ? 0 : R(.1);
+            sound.pitchJump = R()<.5 ? 0 : R(200,1000);
+            sound.pitchJumpTime = R(.1);
+            sound.repeatTime = R()<.8 ? 0 : R(.2);
+            sound.bitCrush = R()<.5 ? 0 : R(.1);
+            sound.delay = R()<.7 ? 0 : R(.1);
+            sound.tremolo = R()<.5 ? 0 : R(.2);
+            break;
+        }
+        case 'Powerup':
+        {
+            sound.frequency = R(0,1000);
+            sound.shape = R(3)|0;
+            sound.shapeCurve = R(2);
+            sound.attack = R(.5);
+            sound.decay = R(.1);
+            sound.sustain = R(.5);
+            sound.sustainVolume = R(.5, 1);
+            sound.release = R(.1,1);
+            sound.pitchJump = R(1)**2*1000*R(-1,1);
+            sound.pitchJumpTime = !sound.pitchJump ? 0 : R(.1);
+            sound.delay = R()<.8 ? 0 : R(.2);
+            sound.repeatTime = R(.3);
+            sound.slide = R()<.5 ? 0 : R(-1,1)**3*10;
+            sound.deltaSlide = R()<.5 ? 0 : R(-1,1)**3*10;
+            sound.noise =  R()<.8 ? 0 : R(.2);
+            sound.modulation = R()<.8 ? 0 : R(-.2,.2);
+            sound.bitCrush = R()<.5 ? 0 : R(.1);
+            sound.tremolo = R()<.5 ? 0 : R(.5);
+            break;
+        }
+        case 'Jump':
+        {
+            sound.frequency = R(0,1000);
+            sound.shape = R(3)|0;
+            sound.shapeCurve = R(2);
+            sound.attack = R(.05);
+            sound.sustain = R(.1);
+            sound.sustainVolume = R(.5, 1);
+            sound.release = R(.1,.5);
+            sound.noise =  R()<.8 ? 0 : R(.5);
+            sound.slide = R(-10,10);
+            sound.deltaSlide = R()<.8 ? 0 : R(-5,5);
+            sound.modulation = R()<.8 ? 0 : R(-1,1)**3*10;
+            sound.bitCrush = R()<.5 ? 0 : R(.1);
+            sound.delay = R()<.8 ? 0 : R(.05);
+            sound.decay = R(.1);
+            break;
+        }
+        case 'Shoot':
+        {
+            sound.frequency = R(0,700);
+            sound.shape = R(5)|0;
+            sound.shapeCurve = R(2);
+            sound.attack = R(.03);
+            sound.decay = R(.1);
+            sound.sustain = 0;
+            sound.sustainVolume = R(.5, 1);
+            sound.release = R(.1,.5);
+            sound.delay = R()<.3 ? 0 : R(.2);
+            sound.slide = R()<.5 ? 0 : R(-1,1);
+            sound.deltaSlide = R()<.5 ? 0 : R(-1,1);
+            sound.noise =  R()<.8 ? 0 : R(5);
+            sound.repeatTime = R()<.5 ? 0 : R(.1);
+            sound.modulation = R()<.8 ? 0 : R(-1,1)**3*10;
+            sound.bitCrush = R()<.5 ? 0 : R(.1);
+            sound.tremolo = R()<.5 ? 0 : R(.5);
+            break;
+        }
+        case 'Blip':
+        {
+            sound = ZZFX.BuildRandomSound();
+            sound.attack = R(.05);
+            sound.decay = R(.05);
+            sound.sustain = 0;
+            sound.release = R(.05,.1);
+            sound.bitCrush = R()<.5 ? 0 : R(.3);
+            break;
+        }
+        case 'Hit':
+        {
+            sound.frequency = R(50,500);
+            sound.shape = R(5)|0;
+            sound.shapeCurve = R(3);
+            sound.attack = 0;
+            sound.decay = R(.1);
+            sound.sustain = R()<.5 ? 0 : R(.1);
+            sound.sustainVolume = R(.5, 1);
+            sound.release = R(.1,.5);
+            sound.delay = R()<.3 ? 0 : R(.2);
+            sound.slide = R()<.5 ? 0 : R(-1,1)**3*10;
+            sound.deltaSlide = R()<.5 ? 0 : R(-1,1)**3*10;
+            sound.noise = R(2);
+            sound.modulation = R()<.5 ? 0 : R(-1,1);
+            sound.bitCrush = R(.5);
+            sound.tremolo = R()<.5 ? 0 : R(.3);
+            break;
+        }
+        case 'Explosion':
+        {
+            sound.frequency = R(0,1e3);
+            sound.shape = R(5)|0;
+            sound.shapeCurve = R(5);
+            sound.attack = R()<.5 ? 0 : R(.05);
+            sound.decay = R(.1);
+            sound.sustain = R(.4);
+            sound.sustainVolume = R(.5, 1);
+            sound.release = R(.5,2);
+            sound.slide = R()<.5 ? 0 : R();
+            sound.deltaSlide = R()<.5 ? 0 : R();
+            sound.delay = R()<.5 ? 0 : R(.5);
+            sound.noise = R(1);
+            sound.modulation = R()<.5 ? 0 : R(-1,1);
+            sound.bitCrush = R(1,.1);
+            sound.tremolo = R()<.5 ? 0 : R(.5);
+            break;
+        }
+    }
+    
+    if (!sound.pitchJumpTime || !sound.pitchJump)
+        sound.pitchJumpTime = sound.pitchJump = 0;
+        
+    const length = sound.attack + sound.sustain + sound.delay;
+    if (sound.repeatTime > length)
+        sound.repeatTime = 0;
+        
+    const Fixed = (v,l=2) =>
+    {
+        if (v>10 || v < -10)
+            l = 0;
+        const f = v.toFixed(l);
+        return !parseFloat(f) ? '0': f;
+    }
+     
+    // convert to fixed point
+    sound.frequency = Fixed(sound.frequency,0);
+    sound.shapeCurve = Fixed(sound.shapeCurve);
+    sound.attack = Fixed(sound.attack);
+    sound.sustain = Fixed(sound.sustain);
+    sound.release = Fixed(sound.release);
+    sound.slide = Fixed(sound.slide,1);
+    sound.deltaSlide = Fixed(sound.deltaSlide,1);
+    sound.noise = Fixed(sound.noise,1);
+    sound.pitchJump = Fixed(sound.pitchJump,0);
+    sound.pitchJumpTime = Fixed(sound.pitchJumpTime);
+    sound.repeatTime = Fixed(sound.repeatTime);
+    sound.modulation = Fixed(sound.modulation,1);
+    sound.bitCrush = Fixed(sound.bitCrush,1);
+    sound.delay = Fixed(sound.delay);
+    sound.sustainVolume = Fixed(sound.sustainVolume);
+    sound.decay = Fixed(sound.decay);
+    sound.tremolo = Fixed(sound.tremolo);
+    
+    // replace with locked
+    for(const s of settings)
+        if (IsLocked(s.name))
+            sound[s.name]=document.getElementById('input_'+s.name).value;
+    
+    sound.name = presetName + ' ' + generatedSoundCount++;
+    AddToList(sound);
+    PlaySelected();
+}
+
+function CopySelected(mutate=0)
+{
+    const sound = Object.assign({}, GetSelectedSound());
+    if (!sound.originalName)
+        sound.originalName = sound.name;
+    
+    sound.copyCount = !sound.copyCount ? 1 : sound.copyCount + 1;
+    sound.name = sound.originalName
+        + ` - ${mutate?'Mutation':'Copy'} ` 
+        + sound.copyCount;
+    delete sound.favorite;
+    
+    AddToList(sound);
+    if (mutate)
+    {
+        MutateAllSettings();
+        sound.modified = 0;
+        UpdateSettings();
+    }
+    PlaySelected();
+}
+
+function AddToList(sound)
+{
+    // copy default values if missing
+    const defaultSound = ZZFX.BuildSound();
+    for(const key in defaultSound)
+    {
+        if (key in sound)
+            continue;
+        sound[key] = defaultSound[key];
+    }
+    
+    if (!(parseInt(sound.shape)<=4))
+        sound.shape = 0;
+    
+    const i = sounds.push(sound) - 1;
+    const option = document.createElement('option');
+    option.value = i;
+    option.innerHTML = (sound.favorite?'-> ':sound.modified?'* ':'') + sound.name;
+    select_soundList.add(option, 0);
+    select_soundList.selectedIndex = 0;
+    LoadSelected();
+    UpdateSettings();
+}
+
+function SelectedWasChanged(settingName)
+{
+    const sound = GetSelectedSound();
+    sound.modified = 1;
+    
+    UpdateSettings();
+    if (settingName != 'name')
+        PlaySelected();
+}
+
+function LoadSelected(playOnSelect = false)
+{
+    const sound = GetSelectedSound();
+    for(const s of settings)
+        document.getElementById("input_"+s.name).value = sound[s.name];
+    
+    if (loadedSound != sound)
+        loadedSoundSeed = Date.now();
+    UpdateSettings();
+    if (playOnSelect && loadedSound != sound)
+        PlaySelected();
+    loadedSound = sound;
+}
+
+function FavoriteSelected()
+{
+    let i = select_soundList.selectedIndex;
+    let index = select_soundList.options[i].value;
+    let s = sounds[index];
+    if (!s)
+        return;
+        
+    s.favorite = !s.favorite
+    UpdateSettings();
+    PlaySelected();
+}
+
+function SelectedToTop()
+{
+    const selectedSound = GetSelectedSound();
+    const sound = Object.assign({}, selectedSound);
+    selectedSound.favorite = 0;
+    
+    RemoveSelected();
+    AddToList(sound);
+    PlaySelected();
+}
+
+function RemoveSelected()
+{
+    let i = select_soundList.selectedIndex;
+    let index = select_soundList.options[i].value;
+    
+    if (sounds[index].favorite)
+    {
+        if (!confirm('Are you sure you want remove this favorited sound?'))
+            return;
+    }
+    
+    delete sounds[index];
+    select_soundList.options.remove(i);
+    
+    AddDefaultIfEmpty();
+    i = Math.min(i, select_soundList.length-1);
+    select_soundList.selectedIndex = i;
+    LoadSelected(1);
+}
+
+function IsLocked(name)
+{
+    const lock = document.getElementById("input_lock_"+name);
+    return lock && lock.checked;
+}
+
+function MutateAllSettings()
+{    
+    const sound = GetSelectedSound();
+    if (sound.favorite)
+    {
+        if (!confirm('Are you sure you want mutate this favorite sound?'))
+            return false;
+    }
+    
+    let mutateCount = 0;
+    for(const s of settings)
+        if (s.canMutate && !IsLocked(s.name))
+            ++mutateCount;
+            
+    for(let i=6;i--;)
+    {
+        if (mutateCount)
+        {
+            let mutateIndex = (Math.random()*1e5)%mutateCount|0;
+            for(const s of settings)
+                if (s.canMutate && !IsLocked(s.name) && !mutateIndex--)
+                    MutateSetting(s, 0);
+        }
+    }
+    
+    UpdateSettings();
+    return true;
+}
+
+function MutateSetting(setting, refresh = true)
+{
+    const step = setting.step;
+    const name = setting.name;
+    if (IsLocked(name)) // unlock
+        document.getElementById("input_lock_"+name).checked = 0;
+ 
+    const sound = GetSelectedSound();
+    sound.modified = 1;
+    
+    let v = sound[name];
+    if (setting.type == 2)
+        v = Math.random()*6|0;
+    else
+    {
+        let r = (Math.random())*(refresh?10:2)|0
+        if (refresh)
+            r += 1;
+        if (Math.random() > .5)
+            r *= -1;
+        v += r * step;
+        v = parseFloat(v.toFixed(2));
+    }
+    
+    document.getElementById('input_'+name).value = v;
+    sound[setting.name] = v;
+    
+    if (refresh)
+        UpdateSettings();
+}
+
+function ResetAllSettings()
+{
+    const sound = GetSelectedSound();
+    if (sound.favorite)
+    {
+        if (!confirm('Are you sure you want reset this favorite sound?'))
+            return false;
+    }
+    
+    for(const s of settings)
+        if (!IsLocked(s.name))
+            ResetSetting(s, 0);
+    
+    UpdateSettings();
+    return true;
+}
+
+function ResetSetting(setting, refresh = true)
+{
+    const name = setting.name;
+    if (IsLocked(name)) // unlock
+        document.getElementById("input_lock_"+name).checked = 0;
+ 
+    const sound = GetSelectedSound();
+    const defaultSound = ZZFX.BuildSound();
+    sound.modified = 1;
+    
+    let v = sound[name];
+    if (setting.name in defaultSound)
+        v = defaultSound[setting.name];
+    
+    document.getElementById('input_'+name).value = v;
+    sound[setting.name] = v;
+    
+    if (refresh)
+        UpdateSettings();
+}
+
+function ToggleLockAll()
+{
+    let isLocked = 0;
+    for(const s of settings)
+        isLocked |= IsLocked(s.name);
+        
+    for(const s of settings)
+    {
+        const lock = document.getElementById("input_lock_"+s.name);
+        if (lock)
+            lock.checked = !isLocked;
+    }
+    
+    UpdateSettings();
+    PlaySelected();
+}
+
+function ClearSounds(clearFavorites)
+{
+    canvas_soundWave.width |= 0;
+    select_soundList.selectedIndex=-1;
+    while(select_soundList.options.length>0)
+        select_soundList.options.remove(0);
+    BuildSettingsTable();
+    
+    let oldSounds = sounds;
+    sounds = [];
+    if (!clearFavorites)
+        oldSounds.map(s=>s && s.favorite && AddToList(s));
+    if (clearFavorites)
+        generatedSoundCount = 0;
+}
+
+function ClearSoundsButton(clearFavorites)
+{
+    if (clearFavorites)
+    {
+        if (!confirm('Are you sure you want clear all sounds?\nThis will DELETE your favorites!'))
+            return;
+        slider_masterVolume.value = 30;
+        input_shortenCode.checked = 1;
+    }
+    ClearSounds(clearFavorites);
+    AddDefaultIfEmpty();
+    UpdateSettings();
+    PlaySelected();
+}
+
+function AddDefaultIfEmpty()
+{
+    if (select_soundList.length > 0)
+        return;
+
+    const sound = ZZFX.BuildSound();
+    sound.name = 'Sound Default';
+    AddToList(sound);
+}
+
+function CopyToCliboard(text)
+{
+    if (!navigator.clipboard)
+    {
+        alert('Unable to copy to clipboard.');
+        return false;
+    }
+    navigator.clipboard.writeText(text);
+    return true;
+}
+
+function GetCode(sound)
+{
+    // create code string
+    const parameters = ZZFX.SoundToArray(sound);
+        
+    // remove defaults
+    const shorten = input_shortenCode.checked;
+    const defaults = ZZFX.SoundToArray(ZZFX.BuildSound());
+    let isEnd = 1;
+    for(let i = parameters.length-1; shorten&&i>=0; --i)
+    {
+        if (parameters[i] == defaults[i])
+        {
+            if (isEnd)
+                --parameters.length;
+            else
+                parameters[i] = '';
+        }
+        else
+            isEnd = 0;
+    }
+      
+    // make parameters list
+    let code = '';
+    for(let i = 0; i < parameters.length; ++i)
+    {
+        let p = parameters[i].toString();
+        // remove leading 0
+        if (p.slice(0,2) == '0.')
+            p = p.slice(1);
+        
+        if (settings[i].type == 0)
+        {
+            let e = parseFloat(parameters[i]).toExponential();
+            e = e.replace('+','');
+            
+            if (e.length < p.length)
+                p = e;
+        }
+            
+        code += (i?',':'') + p;
+    }
+    
+    if (!code.length)
+        return `zzfx(${code}); // ${sound.name.trim()}`;
+    else if (shorten)
+        return `zzfx(...[${code}]); // ${sound.name.trim()}`;
+    else
+        return `zzfx(${code}); // ${sound.name.trim()}`;
+}
+
+function LoadSound()
+{    
+    let code = prompt('Enter zzfx code.');
+    if (!code)
+        return;
+        
+    code = code.split('[')[1];
+    if (!code)
+    {
+        alert('Error! Invalid zzfx code.');
+        return;
+    }
+
+    // build sound
+    const paramArray = code.split(',').map(p=>p.length? parseFloat(p) : undefined);
+    const sound = ZZFX.BuildSound(...paramArray);
+    const name = code.split('//')[1];
+    sound.name = name || ('Loaded Sound ' + generatedSoundCount++);
+    sound.name = sound.name.trim();
+    AddToList(sound);
+    PlaySelected();
+}
+
+function SaveWave()
+{    
+    PlaySelected();
+    
+    const sound = BuildSoundFromSettings();
+    a_downloadLink.href = BuildWaveDataUrl(sound);
+    name = sound.name.trim();
+    if (!name.length)
+        name = 'zzfx';
+    a_downloadLink.download = name + ".wav";
+    a_downloadLink.click();
+}
+
+function BuildWaveDataUrl(sound)
+{
+    // build samples with fixed volume
+    const v = ZZFX.volume;
+    ZZFX.volume = .5;
+    const samples = ZZFX.BuildSamples(...ZZFX.SoundToArray(sound));
+    ZZFX.volume = v;
+    
+    const URLObject = webkitURL || URL;
+    return URLObject.createObjectURL(GetWavBlob([samples], zzfxR));
+}
+
+function DrawSoundWave(b, volume, sound)
+{
+    // set up canvas
+    const x = canvas_soundWave.getContext('2d'); 
+    const w = canvas_soundWave.width;
+    const h = canvas_soundWave.height;
+    canvas_soundWave.width |= 0;
+    randomSeed = loadedSoundSeed;
+    const R =()=> SeededRandom();
+    
+    if (!volume)
+        return;
+    
+    // show attack, sustain, release
+    let length = b.length;
+    let X, W;
+    let H=R()*3e3;
+    x.fillStyle=`hsl(${H+45},79%,10%)`;
+    x.fillRect(0,0,w,h);
+    if (!length)
+        return;
+    x.fillStyle=`hsl(${H+=30},79%,10%)`;
+    x.fillRect(X=0,0,W=w*sound.attack * ZZFX.sampleRate/b.length,h);
+    x.fillStyle=`hsl(${H+=30},79%,10%)`;
+    x.fillRect(X+=W,0,W=w*sound.decay * ZZFX.sampleRate/b.length,h);
+    x.fillStyle=`hsl(${H+=30},79%,10%)`;
+    x.fillRect(X+=W,0,W=w*sound.sustain * ZZFX.sampleRate/b.length,h);
+    x.fillStyle=`hsl(${H+=30},79%,10%)`;
+    x.fillRect(X+=W,0,W=w*sound.release * ZZFX.sampleRate/b.length,h);
+    x.strokeStyle=`#FFF`;
+    x.strokeRect(X=0,0,W=w*sound.attack * ZZFX.sampleRate/b.length,h);
+    x.strokeRect(X+=W,0,W=w*sound.decay * ZZFX.sampleRate/b.length,h);
+    x.strokeRect(X+=W,0,W=w*sound.sustain * ZZFX.sampleRate/b.length,h);
+    x.strokeRect(X+=W,0,W=w*sound.release * ZZFX.sampleRate/b.length,h);
+    
+    // draw the wave
+    x.strokeStyle=`hsl(${H+180},${R()*99}%,70%)`;
+    x.beginPath();
+    for(let i=0; i<b.length; i+=10)
+        x.lineTo(w*i/b.length, .8*b[i]*h/2/volume+h/2);
+    x.stroke();
+}
+
+function RandomizeLogo()
+{
+    const R =()=> Math.random();
+    div_logo.style.color=`hsl(${R()*3e3},${50+50*R()}%,${50+50*R()}%)`;
+    div_logo2.style.color=`hsl(${R()*3e3},${50+50*R()}%,${50+50*R()}%)`;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// save & load
+
+function BuildSaveData()
+{
+    const data =
+    {
+        sounds,
+        generatedSoundCount,
+        volume:slider_masterVolume.value
+    }
+    
+    return JSON.stringify(data);
+}
+
+function LoadSaveData(dataJSON)
+{
+    if (!dataJSON)
+    {
+        AddDefaultIfEmpty();
+        return;
+    }
+
+    const data = JSON.parse(dataJSON);
+    if (data.volume)
+        slider_masterVolume.value = data.volume;
+    if (data.generatedSoundCount)
+        generatedSoundCount = data.generatedSoundCount;
+    if (data.sounds)
+        data.sounds.forEach(o=>o&&AddToList(o));
+        
+    AddDefaultIfEmpty();
+    select_soundList.selectedIndex = 0;
+}
+
+function SaveLocalStorage()
+{
+    localStorage.saveData = BuildSaveData();
+}
+
+function LoadLocalStorage()
+{
+    ClearSounds(1);
+    LoadSaveData(localStorage.saveData);
+}
+
+function Export()
+{
+    const fileData = BuildSaveData();
+    a_downloadLink.download = "zzfx_sounds.txt";
+    a_downloadLink.href='data:application/octet-stream;charset=UTF-8,' + encodeURIComponent(fileData);
+    a_downloadLink.click();
+    PlaySelected();
+}
+
+function Import()
+{
+    input_importFile.onchange=e=>LoadFile(e.target.files[0]);
+    input_importFile.click();
+}
+
+function LoadFile(file)
+{
+    input_importFile.onchange=e=>0;
+    input_importFile.value='';
+    
+    if (file.type != "text/plain")
+    {
+        alert('Error! File type mismatch.');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsText(file,'UTF-8');
+    reader.onload=readerEvent=>
+    {
+        const fileData = readerEvent.target.result;
+        LoadSaveData(fileData);
+        PlaySelected();
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// shortcuts
+
+onkeydown =e=>
+{
+    if (e.ctrlKey || e.altKey)
+        return;
+
+    const selected = document.activeElement;
+    if (selected.tagName != 'INPUT' && selected.tagName != 'TEXTAREA')
+    {
+        if (e.keyCode == 32 && selected.tagName != 'BUTTON') // space
+            PlaySelected();
+        if (e.keyCode == 45) // ins
+            AddPresetSound();
+        if (e.keyCode == 46) // del
+            RemoveSelected();
+        if (e.keyCode == 70) // f
+            FavoriteSelected();
+        if (e.keyCode == 67) // c
+            CopySelected();
+        if (e.keyCode == 77) // m
+            CopySelected(1);
+    }
+}
+
+// click on canvas to play sound
+canvas_soundWave.onmousedown =e=> {loadedSound=0;LoadSelected(1);e.preventDefault();}
+
+// drag and drop exported files into the sound list
+select_soundList.addEventListener('dragover', e=>
+{
+    e.stopPropagation();
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+    select_soundList.style.background = '#800';
+});
+select_soundList.addEventListener('dragleave', e=>
+{
+    select_soundList.style.background = '';
+});
+select_soundList.addEventListener('drop', e=>
+{
+    e.stopPropagation();
+    e.preventDefault();
+    LoadFile(e.dataTransfer.files[0]);
+    select_soundList.style.background = '';
+});
+
+Init();
+
+</script>
+</center>
+<a href="https://github.com/KilledByAPixel/ZzFX" target="_blank" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#5AF; color:#222; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+</body></html>

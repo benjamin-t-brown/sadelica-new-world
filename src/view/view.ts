@@ -20,7 +20,25 @@ G_model_actorGetStats
 G_model_statsGetHp
 G_model_statsGetMaxHp
 G_model_getCamera
+G_model_actorGetName
+G_model_actorGetTalkTrigger
+G_model_roomGetSurroundingActorsAt
 */
+
+interface DrawTextParams {
+  font?: string;
+  color?: string;
+  size?: number;
+  align?: 'left' | 'center' | 'right';
+  strokeColor?: string;
+}
+const DEFAULT_TEXT_PARAMS = {
+  font: 'monospace',
+  color: '#fff',
+  size: 14,
+  align: 'center',
+  strokeColor: '',
+};
 
 const G_view_clearScreen = () => {
   const canvas = G_model_getCanvas();
@@ -41,8 +59,13 @@ const G_view_drawSprite = (
 ) => {
   scale = scale || 1;
   ctx = ctx || G_model_getCtx();
-  const [image, sprX, sprY, sprW, sprH] =
+  const spriteObj =
     typeof sprite === 'string' ? G_model_getSprite(sprite) : sprite;
+  if (!spriteObj) {
+    throw new Error(`Cannot find sprite with name: "${sprite}"`);
+  }
+  const [image, sprX, sprY, sprW, sprH] = spriteObj;
+
   ctx.drawImage(
     image,
     sprX,
@@ -68,6 +91,30 @@ const G_view_drawRect = (
   ctx = ctx || G_model_getCtx();
   ctx[stroke ? 'strokeStyle' : 'fillStyle'] = color;
   ctx[stroke ? 'strokeRect' : 'fillRect'](x, y, w, h);
+};
+
+const G_view_drawText = (
+  text: string,
+  x: number,
+  y: number,
+  textParams?: DrawTextParams,
+  ctx?: CanvasRenderingContext2D
+) => {
+  const { font, size, color, align, strokeColor } = {
+    ...DEFAULT_TEXT_PARAMS,
+    ...(textParams || {}),
+  };
+  ctx = ctx || G_model_getCtx();
+  ctx.font = `${size}px ${font}`;
+  ctx.fillStyle = color;
+  ctx.textAlign = align as CanvasTextAlign;
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, x, y);
+  if (strokeColor) {
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = 0.5;
+    ctx.strokeText(text, x, y);
+  }
 };
 
 // const G_view_drawLine = (
@@ -187,6 +234,10 @@ const G_view_renderWorld = (world: World, scale: number) => {
   const camera = G_model_getCamera(world);
   const [cameraX, cameraY, cameraW, cameraH] = camera;
   G_view_drawActor(actor, camera, scale, 0, 0);
+  const surroundingActors = G_model_roomGetSurroundingActorsAt(
+    currentRoom,
+    actor
+  );
 
   for (let i in currentRoom.tiles) {
     const [sprite, , tx, ty] = currentRoom.tiles[i];
@@ -213,6 +264,15 @@ const G_view_renderWorld = (world: World, scale: number) => {
     if (G_model_roomPosIsVisible(currentRoom, tx, ty)) {
       if (actor) {
         G_view_drawActor(actor, camera, scale, 0, 0);
+        if (
+          surroundingActors[0] === actor &&
+          G_model_actorGetTalkTrigger(actor)
+        ) {
+          const textX = x - cameraX * tileSizeScaled + tileSizeScaled / 2;
+          const textY = y - cameraY * tileSizeScaled - 8;
+          console.log('DRAW NAME', G_model_actorGetName(actor), textX, textY);
+          G_view_drawText(G_model_actorGetName(actor), textX, textY);
+        }
       }
     } else if (G_model_roomPosIsExplored(currentRoom, tx, ty)) {
       G_view_setOpacity(0.15);
