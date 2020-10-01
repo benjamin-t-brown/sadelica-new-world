@@ -17,6 +17,7 @@ G_view_renderWorld
 G_view_renderMap
 G_view_renderUi
 G_view_playSound
+G_view_loadSounds
 G_initActors
 */
 
@@ -31,20 +32,23 @@ const G_start = () => {
 };
 
 const main = async () => {
-  await G_model_loadImagesAndSprites([
-    [
-      'packed',
-      'res/packed.png',
-      16,
-      16,
-      2,
-      2,
-      ['terrain2', 'terrain3', 'actors2', 'misc1'],
-    ],
-    ['terrain1', 'res/terrain1.png', 16, 16, 1, 1, ['terrain1']],
-    ['actors1', 'res/actors1.png', 16, 16, 1, 1, ['actors1']],
-    ['map1', 'res/map1.png', 64, 64, 1, 1, ['map1']],
-    ['portrait1', 'res/portrait1.png', 32, 32, 1, 1, ['portrait1']],
+  await Promise.all([
+    G_model_loadImagesAndSprites([
+      [
+        'packed',
+        'res/packed.png',
+        16,
+        16,
+        2,
+        2,
+        ['terrain2', 'terrain3', 'actors2', 'misc1'],
+      ],
+      ['terrain1', 'res/terrain1.png', 16, 16, 1, 1, ['terrain1']],
+      ['actors1', 'res/actors1.png', 16, 16, 1, 1, ['actors1']],
+      ['map1', 'res/map1.png', 64, 64, 1, 1, ['map1']],
+      ['portrait1', 'res/portrait1.png', 32, 32, 1, 1, ['portrait1']],
+    ]),
+    G_view_loadSounds(),
   ]);
 
   G_initActors();

@@ -24,7 +24,6 @@ G_model_actorGetName
 G_model_actorGetTalkTrigger
 G_model_roomGetSurroundingActorsAt
 */
-
 interface DrawTextParams {
   font?: string;
   color?: string;

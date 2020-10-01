@@ -10,6 +10,7 @@ G_model_itemGetName
 G_model_itemGetBaseItem
 G_TERRAIN_SIGHT_BLOCKING_SPRITES
 G_TERRAIN_WALL_SPRITES
+G_TERRAIN_DOOR_SPRITES
 */
 
 // sprite, id, x, y, highlighted
@@ -93,10 +94,7 @@ const G_model_roomSetTileAt = (
   id: number
 ) => {
   const tile = G_model_roomGetTileAt(room, x, y);
-  if (tile) {
-    tile[0] = 'terrain1_' + id;
-    tile[1] = id;
-  }
+  G_model_tileSetId(tile, id);
 };
 
 const G_model_roomAddItemAt = (
@@ -207,6 +205,13 @@ const G_model_tileGetId = (tile: Tile | null) => {
   return tile?.[1] || 0;
 };
 
+const G_model_tileSetId = (tile: Tile | null, id: number) => {
+  if (tile) {
+    tile[0] = 'terrain1_' + id;
+    tile[1] = id;
+  }
+};
+
 const G_model_tileIsPassable = (tile: Tile | null): boolean => {
   return !G_TERRAIN_WALL_SPRITES.includes(G_model_tileGetId(tile));
 };
@@ -216,7 +221,17 @@ const G_model_tileBlocksSight = (tile: Tile | null): boolean => {
 };
 
 const G_model_tileIsDoor = (tile: Tile | null): boolean => {
-  return G_TERRAIN_SIGHT_BLOCKING_SPRITES.includes(G_model_tileGetId(tile));
+  return G_TERRAIN_DOOR_SPRITES.includes(G_model_tileGetId(tile));
+};
+
+const G_model_tileOpenDoor = (tile: Tile | null) => {
+  const id = G_model_tileGetId(tile);
+  G_model_tileSetId(tile, id + 1);
+};
+
+const G_model_tileCloseDoor = (tile: Tile | null) => {
+  const id = G_model_tileGetId(tile);
+  G_model_tileSetId(tile, id - 1);
 };
 
 const G_model_tileIsHighlighted = (tile: Tile | null): boolean => {

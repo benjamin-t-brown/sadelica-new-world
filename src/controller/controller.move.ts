@@ -16,9 +16,12 @@ G_model_worldGetCurrentRoom
 G_model_tileIsPassable
 G_model_addLog
 G_model_setUpdateUiThisRound
+G_model_tileOpenDoor
+G_model_tileIsDoor
 G_controller_playerInputComplete
 G_controller_strikeActor
 G_controller_render
+G_view_playSound
 Direction
 G_FACING_LEFT
 G_FACING_RIGHT
@@ -142,6 +145,11 @@ const getNextPosition = (
   const room = G_model_worldGetCurrentRoom(world);
   if (room) {
     const tile = G_model_roomGetTileAt(room, px, py);
+    if (tile && G_model_tileIsDoor(tile)) {
+      G_model_tileOpenDoor(tile);
+      G_view_playSound('doorOpen');
+      return origPos;
+    }
     if (tile && !G_model_tileIsPassable(tile)) {
       return origPos;
     }

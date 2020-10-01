@@ -33,3 +33,15 @@ const G_CH_ALINEA_BARTOLO_CALDEBURN = G_createCharacterTemplate({
   facing: G_FACING_LEFT,
   talkPortrait: '',
 });
+const G_CH_ALINEA_ALDEBETH_BLACKROSE = G_createCharacterTemplate({
+  spriteIndex: G_CHARACTER_SPRITES.Noble,
+  spriteSheet: 'actors1',
+  name: 'Noble',
+  stats: G_createStats(100),
+  behavior: G_BEHAVIOR_NONE,
+  talkTrigger: 'Alinea_CH_AldebethBlackrose',
+  stepTrigger: '',
+  dropLevel: 0,
+  facing: G_FACING_LEFT,
+  talkPortrait: '',
+});

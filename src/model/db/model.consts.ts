@@ -208,6 +208,7 @@ const G_TERRAIN_GRASS_SPRITES = [
   21,
 ];
 const G_TERRAIN_CAVE_SPRITES = [63, 64, 65, 66, 67];
+const G_TERRAIN_DOOR_SPRITES = [5, 59];
 
 const G_TERRAIN_SPRITES = {
   Grass: 0,
