@@ -379,19 +379,6 @@ const G_DROPS_LVL3 = [
 ];
 const G_CHEST_LVL3 = [G_ITEM_MAGIC_SWORD, [G_ITEM_SCROLL_EVISCERATE, 3]];
 
-// sprite index, spritesheet, Stats, inventory, behavior, talkTrigger, stepTrigger, dropLevel
-type CharacterDefinition = [
-  number,
-  string,
-  string,
-  Stats,
-  Behavior,
-  string,
-  string,
-  number, //dropLevel
-  number //facing
-];
-
 const hp = G_createStats;
 
 // sprite index, lvl, name, Stats, behavior

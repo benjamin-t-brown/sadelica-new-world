@@ -30,6 +30,16 @@ const G_CHARACTER_SPRITES = {
   Chem: 52,
 };
 
+const G_PORTRAIT_SPRITES = {
+  Radmila: 'portrait1_' + 0,
+  Dunns: 'portrait1_' + 3,
+  AldebethBlackrose: 'portrait1_' + 6,
+  Sol: 'portrait1_' + 9,
+  Mullen: 'portrait1_' + 12,
+  Idoreo: 'portrait1_' + 15,
+  Chem: 'portrait1_' + 18,
+};
+
 const G_TERRAIN_WALL_SPRITES = [
   1,
   2,
@@ -180,7 +190,23 @@ const G_TERRAIN_SIGHT_BLOCKING_SPRITES = [
   99,
 ];
 
-const G_TERRAIN_GRASS_SPRITES = [0, 17, 18, 19, 20, 21, 22, 23];
+const G_TERRAIN_GRASS_SPRITES = [
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  17,
+  17,
+  17,
+  18,
+  18,
+  18,
+  19,
+  20,
+  21,
+];
 const G_TERRAIN_CAVE_SPRITES = [63, 64, 65, 66, 67];
 
 const G_TERRAIN_SPRITES = {

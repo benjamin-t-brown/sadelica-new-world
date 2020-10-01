@@ -31,8 +31,8 @@ const G_model_getRightPaneOverlayVisible = () => model_rightPaneOverlayVisible;
 const G_model_getScale = (): number => 2;
 const G_model_setCurrentWorld = (world: World) => (model_world = world);
 const G_model_getCurrentWorld = (): World => model_world as World;
-const G_model_getRoomSize = () => 16 * 4;
-const G_model_getWorldSize = () => 8;
+const G_model_getRoomSize = () => 64;
+const G_model_getWorldSize = () => 4;
 const G_model_getTileSize = () => 16;
 const G_model_getRoomAt = (
   wx: number,

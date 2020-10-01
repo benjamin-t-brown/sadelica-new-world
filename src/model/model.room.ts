@@ -8,6 +8,8 @@ G_model_playerGetActor
 G_model_getCurrentWorld
 G_model_itemGetName
 G_model_itemGetBaseItem
+G_TERRAIN_SIGHT_BLOCKING_SPRITES
+G_TERRAIN_WALL_SPRITES
 */
 
 // sprite, id, x, y, highlighted
@@ -27,8 +29,6 @@ interface Room {
   mod: string;
 }
 
-const WALLS = [3, 4, 5, 6, 9, 10, 11, 12, 13, 14];
-const SIGHT_WALLS = [3, 4, 5, 6, 14];
 const G_TILE_CHEST = 10;
 const G_TILE_GATE = 9;
 const G_TILE_GRASS = 0;
@@ -163,7 +163,7 @@ const G_model_roomGetSurroundingActorsAt = (
   for (let i = -1; i <= 1; i++) {
     for (let j = -1; j <= 1; j++) {
       const act = G_model_roomGetActorAt(room, x + j, y + i);
-      if (act) {
+      if (act && act !== actor) {
         ret = ret.concat([act]);
       }
     }
@@ -208,11 +208,15 @@ const G_model_tileGetId = (tile: Tile | null) => {
 };
 
 const G_model_tileIsPassable = (tile: Tile | null): boolean => {
-  return !WALLS.includes(G_model_tileGetId(tile));
+  return !G_TERRAIN_WALL_SPRITES.includes(G_model_tileGetId(tile));
 };
 
 const G_model_tileBlocksSight = (tile: Tile | null): boolean => {
-  return SIGHT_WALLS.includes(G_model_tileGetId(tile));
+  return G_TERRAIN_SIGHT_BLOCKING_SPRITES.includes(G_model_tileGetId(tile));
+};
+
+const G_model_tileIsDoor = (tile: Tile | null): boolean => {
+  return G_TERRAIN_SIGHT_BLOCKING_SPRITES.includes(G_model_tileGetId(tile));
 };
 
 const G_model_tileIsHighlighted = (tile: Tile | null): boolean => {

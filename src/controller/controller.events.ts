@@ -122,7 +122,7 @@ const G_controller_initEvents = () => {
   };
 
   window.addEventListener('keydown', ev => {
-    console.log('which', ev.which);
+    // console.log('which', ev.which);
     const world = G_model_getCurrentWorld();
     if (G_model_isInputDisabled()) {
       return;

@@ -58,6 +58,15 @@ const G_controller_setVisibility = (chx: number, chy: number, room: Room) => {
         visMap[checkY] === undefined ||
         visMap[checkY][checkX] === undefined
       ) {
+        let e2 = err;
+        if (e2 > -dx) {
+          err -= dy;
+          x1 += sx;
+        }
+        if (e2 < dy) {
+          err += dx;
+          y1 += sy;
+        }
         continue;
       }
       if (visMap[checkY][checkX] === 0 || visibility === 1) {
@@ -94,7 +103,6 @@ const G_controller_setVisibility = (chx: number, chy: number, room: Room) => {
   castRayInBox(7);
   castRayInBox(6);
   castRayInBox(5);
-  // castRayInBox(4);
 
   visMap[chy][chx] = 1;
 

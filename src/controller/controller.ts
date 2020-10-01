@@ -31,7 +31,7 @@ G_ITEM_FINE_SWORD
 G_BEHAVIOR_RAND
 */
 
-const LOOP_MS = 16;
+const LOOP_MS = 32;
 
 const G_controller_playerInputComplete = () => {
   G_model_setInputDisabled(true);

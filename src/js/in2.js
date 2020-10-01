@@ -8,6 +8,7 @@ G_utils_waitMs
 
 const FADED_COLOR = '#9D9D9D';
 const PRESS_ANY_KEY = 'Press any key or click here to continue.';
+const CURRENT_NODE_VAR = 'curIN2n';
 
 // let loaded = false;
 const IS_IN2 = !!window.IN2;
@@ -109,10 +110,9 @@ var core = (window.core = /*eslint-disable-line*/ {
     });
   },
   async defer(func, args) {
-    args = args || [this.get('curIN2n'), this.get('curIN2f')];
+    args = args || [this.get(CURRENT_NODE_VAR), this.get('curIN2f')];
     await func.apply(null, args);
   },
-
   exit() {
     console.log('[standalone] EXIT');
     catcher.setK(() => {});
@@ -147,11 +147,11 @@ var player = (window.player = /*eslint-disable-line*/ {
     return _helper(path.split('.'), this.state);
   },
   set(path, val) {
-    if (path === 'curIN2n') {
-      return this.set('nodes.' + val);
+    if (path === CURRENT_NODE_VAR) {
+      this.set('nodes.' + val);
     }
     if (path === 'curIN2f') {
-      return this.set('files.' + val.replace('.json', ''));
+      this.set('files.' + val.replace('.json', ''));
     }
     val = val === undefined ? true : val;
     let _helper = (keys, obj) => {
@@ -171,6 +171,15 @@ var player = (window.player = /*eslint-disable-line*/ {
     };
 
     _helper(path.split('.'), this.state);
+  },
+  once() {
+    const nodeId = this.get(CURRENT_NODE_VAR);
+    const key = 'once.' + nodeId;
+    if (!this.get(key)) {
+      this.set(key);
+      return true;
+    }
+    return false;
   },
   setIfUnset(path, val) {
     if (this.get(path) === undefined) {

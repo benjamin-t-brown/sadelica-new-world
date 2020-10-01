@@ -112,9 +112,9 @@ const model_loadSpritesheets = (
             spriteHeight
           );
 
-          addRotated(spriteToCanvas(sprite), baseSpriteName, 1);
-          addRotated(spriteToCanvas(sprite), baseSpriteName, 2);
-          addRotated(spriteToCanvas(sprite), baseSpriteName, 3);
+          // addRotated(spriteToCanvas(sprite), baseSpriteName, 1);
+          // addRotated(spriteToCanvas(sprite), baseSpriteName, 2);
+          // addRotated(spriteToCanvas(sprite), baseSpriteName, 3);
           const flipped = createFlippedImg(spriteToCanvas(sprite));
           createSprite(
             `${baseSpriteName}_f`,

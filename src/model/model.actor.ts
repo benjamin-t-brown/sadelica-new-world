@@ -25,7 +25,8 @@ type Actor = [
   number, // 12 equipped item,
   (() => void) | any, // 13 onDeath
   string, // 14 talkTrigger
-  string // 15 stepTrigger
+  string, // 15 stepTrigger
+  string // 16 talkPortrait
 ];
 
 const G_FACING_LEFT = 0;
@@ -36,6 +37,20 @@ const G_ALLEGIANCE_PLAYER = 0;
 const G_ALLEGIANCE_ENEMY = 1;
 
 const G_createStats = (n: number): Stats => [n, n];
+
+// sprite index, spritesheet, Stats, inventory, behavior, talkTrigger, stepTrigger, dropLevel
+type CharacterDefinition = [
+  number,
+  string,
+  string,
+  Stats,
+  Behavior,
+  string,
+  string,
+  number, //dropLevel
+  number, //facing
+  string // talkPortrait
+];
 
 interface ICreateCharacter {
   spriteIndex?: number;
@@ -76,6 +91,7 @@ function G_createCharacterTemplate(
     stepTrigger,
     dropLevel,
     facing,
+    talkPortrait,
   } = { ...CHARACTER_DEFAULTS, ...props };
   return [
     spriteIndex as number,
@@ -87,6 +103,7 @@ function G_createCharacterTemplate(
     stepTrigger as string,
     dropLevel as number,
     facing as number,
+    talkPortrait as string,
   ];
 }
 
@@ -105,6 +122,7 @@ const G_model_createActorFromChTemplate = (
     stepTrigger,
     dropLevel,
     facing,
+    talkPortrait,
   ] = template;
   return [
     actorName,
@@ -123,6 +141,7 @@ const G_model_createActorFromChTemplate = (
     () => {},
     talkTrigger,
     stepTrigger,
+    talkPortrait,
   ];
 };
 
@@ -139,6 +158,10 @@ const G_model_actorGetSprite = (actor: Actor) => {
     (actor[2] + spriteIndexOffset) +
     (facing === G_FACING_LEFT ? '_f' : '')
   );
+};
+
+const G_model_actorGetPortraitSprite = (actor: Actor | null) => {
+  return actor?.[16] || '';
 };
 
 const G_model_actorGetStats = (actor: Actor): Stats => {

@@ -24,6 +24,9 @@ G_ITEM_CLUB
 G_BEHAVIOR_NONE
 G_ITEM_POTION
 G_ACTORS_MAP
+G_TERRAIN_SPRITES
+G_TERRAIN_GRASS_SPRITES
+G_TERRAIN_CAVE_SPRITES
 hp
 G_controller_dropItem
 */
@@ -141,6 +144,7 @@ const G_model_createWorld = (spritePrefix: string): World => {
     0,
     '',
     '',
+    '',
   ];
   const player: Player = {
     wx: 0,
@@ -154,6 +158,11 @@ const G_model_createWorld = (spritePrefix: string): World => {
     226,
     G_model_getRoomSize()
   );
+  // const [worldX, worldY, localX, localY] = G_utils_to4d(
+  //   10,
+  //   10,
+  //   G_model_getRoomSize()
+  // );
   G_model_playerSetWorldPosition(player, worldX, worldY);
   G_model_actorSetPosition(playerActor, localX, localY);
 
@@ -165,9 +174,8 @@ const G_model_createWorld = (spritePrefix: string): World => {
   };
 
   // setup sizes
-  const worldSize = G_model_getWorldSize();
   const roomSize = G_model_getRoomSize();
-  const numRooms = worldSize * worldSize;
+  const numRooms = 16;
 
   // create initial rooms
   for (let i = 0; i < numRooms; i++) {
@@ -204,10 +212,16 @@ const G_model_createWorld = (spritePrefix: string): World => {
     let ctr = 0;
     for (let j = 0; j < data.length; j += 4) {
       const colorKey = `${data[j + 0]}${data[j + 1]}${data[j + 2]}`;
-      const ind = colors[colorKey] || 0;
+      let ind = colors[colorKey] || 0;
       const tx = ctr % pngSize;
       const ty = Math.floor(ctr / pngSize);
       const tInd = to1d(tx, ty, roomSize);
+
+      if (ind === G_TERRAIN_SPRITES.Grass) {
+        ind = G_utils_randInArr(G_TERRAIN_GRASS_SPRITES);
+      } else if (ind === G_TERRAIN_SPRITES.CaveFloor) {
+        ind = G_utils_randInArr(G_TERRAIN_CAVE_SPRITES);
+      }
       tiles[tInd] = ['terrain1_' + ind, ind, tx, ty, false];
       const key = [worldX, worldY, tx, ty].join(',');
       const chTemplate = G_ACTORS_MAP[key];

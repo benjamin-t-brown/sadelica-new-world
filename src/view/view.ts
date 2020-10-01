@@ -245,6 +245,11 @@ const G_view_renderWorld = (world: World, scale: number) => {
     const y = ty * tileSizeScaled - cameraY * tileSizeScaled;
     if (G_model_roomPosIsExplored(currentRoom, tx, ty)) {
       G_view_drawSprite(sprite, x, y, scale);
+      if (!G_model_roomPosIsVisible(currentRoom, tx, ty)) {
+        G_view_setOpacity(0.15);
+        G_view_drawRect(x, y, tileSizeScaled, tileSizeScaled, 'black', false);
+        G_view_setOpacity(1);
+      }
     } else {
       G_view_drawRect(x, y, tileSizeScaled, tileSizeScaled, 'black', true);
     }
@@ -270,14 +275,9 @@ const G_view_renderWorld = (world: World, scale: number) => {
         ) {
           const textX = x - cameraX * tileSizeScaled + tileSizeScaled / 2;
           const textY = y - cameraY * tileSizeScaled - 8;
-          console.log('DRAW NAME', G_model_actorGetName(actor), textX, textY);
           G_view_drawText(G_model_actorGetName(actor), textX, textY);
         }
       }
-    } else if (G_model_roomPosIsExplored(currentRoom, tx, ty)) {
-      G_view_setOpacity(0.15);
-      G_view_drawRect(x, y, tileSizeScaled, tileSizeScaled, 'black', false);
-      G_view_setOpacity(1);
     }
     if (highlighted) {
       G_view_drawRect(x, y, tileSizeScaled, tileSizeScaled, '#ccc', true);
@@ -287,6 +287,16 @@ const G_view_renderWorld = (world: World, scale: number) => {
   for (let i = 0; i < currentRoom.p.length; i++) {
     const particle = currentRoom.p[i];
     G_view_drawParticle(particle, camera, scale, 0, 0);
+  }
+
+  for (let i = 0; i < surroundingActors.length ? 1 : 0; i++) {
+    const actor = surroundingActors[i];
+    const [x, y] = G_model_actorGetPosition(actor);
+    if (G_model_actorGetTalkTrigger(actor)) {
+      const textX = x - cameraX * tileSizeScaled + tileSizeScaled / 2;
+      const textY = y - cameraY * tileSizeScaled - 8;
+      G_view_drawText(G_model_actorGetName(actor), textX, textY);
+    }
   }
 
   // G_view_renderMap(world, 0.5, 0, 0);

@@ -51,11 +51,20 @@ const G_view_cacheItemIconDataUrl = (spriteName: string): string => {
   return ret;
 };
 
-const G_view_cachePortraitIconDataUrl = (spriteName: string): string => {
+const G_view_cachePortraitIconDataUrl = (
+  spriteName: string,
+  spriteSize?: number,
+  scale?: number
+): string => {
+  scale = scale || 1;
+  spriteSize = spriteSize || 16;
   let ret = cachedPortraitIconDataUrls[spriteName];
   if (!ret) {
-    const [canvas, ctx] = G_model_createCanvas(32, 32);
-    G_view_drawSprite(spriteName, 0, 0, 2, ctx);
+    const [canvas, ctx] = G_model_createCanvas(
+      spriteSize * scale,
+      spriteSize * scale
+    );
+    G_view_drawSprite(spriteName, 0, 0, scale, ctx);
     ret = canvas.toDataURL();
     cachedPortraitIconDataUrls[spriteName] = ret;
   }
