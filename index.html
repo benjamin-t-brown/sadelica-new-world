@@ -19,6 +19,15 @@
       align-items: center;
       flex-direction: column;
     }
+    .btn {
+      text-align: center;
+      padding: 8px;
+      border: 2px outset;
+    }
+    .btn-active,
+    .btn:active {
+      border-style: inset;
+    }
     #tgt {
       position: absolute;
       left: 0;
@@ -84,7 +93,7 @@
     }
     .item {
       width: 300px;
-      height: 32px;
+      height: 40px;
       padding: 2px;
       border: 2px outset #9d9d9d;
       background: #656d71;
@@ -165,6 +174,7 @@
     }
   </style>
   <title>Sadelica: NW</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
   <script src="main.js"></script>
   <div class="hrz" style="height: 100%; display: none;">
     <div id="leftPane"></div>
@@ -181,5 +191,6 @@
       <div id="dialog"></div>
     </div>
     <div id="rightPane" class="vrt"></div>
+    <div id="alert"></div>
   </div>
 </html>

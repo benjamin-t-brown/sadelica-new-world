@@ -31,8 +31,8 @@ G_FACING_RIGHT
 const UP = '8';
 const DOWN = '2';
 const LEFT = '4';
-const PAUSE = '5';
 const RIGHT = '6';
+const PAUSE = '5';
 const UP_LEFT = '7';
 const UP_RIGHT = '9';
 const DOWN_LEFT = '1';
@@ -74,24 +74,24 @@ const changeRoomIfOOb = (player: Player): boolean => {
   }
 };
 
-// const blockIfOOb = (actor: Actor) => {
-//   let [px, py] = G_model_actorGetPosition(actor);
-//   const roomSize = G_model_getRoomSize();
-//   if (px < 0) {
-//     px = 0;
-//   }
-//   if (py < 0) {
-//     py = 0;
-//   }
+const blockIfOOb = (actor: Actor) => {
+  let [px, py] = G_model_actorGetPosition(actor);
+  const roomSize = G_model_getRoomSize();
+  if (px < 0) {
+    px = 0;
+  }
+  if (py < 0) {
+    py = 0;
+  }
 
-//   if (px >= roomSize) {
-//     px = roomSize - 1;
-//   }
-//   if (py >= roomSize) {
-//     py = roomSize - 1;
-//   }
-//   G_model_actorSetPosition(actor, px, py);
-// };
+  if (px >= roomSize) {
+    px = roomSize - 1;
+  }
+  if (py >= roomSize) {
+    py = roomSize - 1;
+  }
+  G_model_actorSetPosition(actor, px, py);
+};
 
 const getNextPosition = (
   actor: Actor,
@@ -145,7 +145,11 @@ const getNextPosition = (
   const room = G_model_worldGetCurrentRoom(world);
   if (room) {
     const tile = G_model_roomGetTileAt(room, px, py);
-    if (tile && G_model_tileIsDoor(tile)) {
+    if (
+      tile &&
+      G_model_tileIsDoor(tile) &&
+      G_model_playerGetActor(world.player) === actor
+    ) {
       G_model_tileOpenDoor(tile);
       G_view_playSound('doorOpen');
       return origPos;
@@ -198,7 +202,10 @@ const G_controller_movePlayer = (
 
   const actor = G_model_playerGetActor(player);
   // G_model_addLog(`Move: ${directionToCompass[direction]}`);
-  G_controller_moveActor(actor, direction, world);
+  G_controller_moveActor(actor, direction, world, {
+    intentToAttack: false,
+    isPlayer: true,
+  });
   if (changeRoomIfOOb(player)) {
     G_controller_render(world);
   } else {
@@ -206,12 +213,27 @@ const G_controller_movePlayer = (
   }
 };
 
+interface IMoveArgs {
+  intentToAttack?: boolean;
+  isPlayer?: boolean;
+}
+
+const DEFAULT_MOVE_ARGS = {
+  intentToAttack: false,
+  isPlayer: false,
+};
+
 // returns true if the actor moved or attacked, false if the action could not be done
 const G_controller_moveActor = (
   actor: Actor,
   direction: Direction,
-  world: World
+  world: World,
+  args?: IMoveArgs
 ): boolean => {
+  const { isPlayer, intentToAttack } = {
+    ...(args || {}),
+    ...DEFAULT_MOVE_ARGS,
+  };
   const room = G_model_worldGetCurrentRoom(world);
   let [nextPx, nextPy, origNextPx, origNextPy, moved] = getNextPosition(
     actor,
@@ -219,10 +241,17 @@ const G_controller_moveActor = (
     world
   );
   setFacing(actor, origNextPx, origNextPy);
+  if (!isPlayer) {
+    blockIfOOb(actor);
+  }
   G_model_actorSetPosition(actor, nextPx, nextPy);
   const otherActor = G_model_roomGetActorAt(room, origNextPx, origNextPy);
   const myAllegiance = G_model_actorGetAllegiance(actor);
-  if (otherActor && myAllegiance !== G_model_actorGetAllegiance(otherActor)) {
+  if (
+    intentToAttack &&
+    otherActor &&
+    myAllegiance !== G_model_actorGetAllegiance(otherActor)
+  ) {
     G_controller_strikeActor(actor, otherActor, world);
     return true;
   }

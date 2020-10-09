@@ -4,7 +4,6 @@ G_model_worldGetCurrentRoom
 G_model_actorGetPosition
 G_utils_pointRectCollides
 */
-
 // wx, wy, actor, gold
 // type Player = [number, number, Actor, number];
 interface Player {

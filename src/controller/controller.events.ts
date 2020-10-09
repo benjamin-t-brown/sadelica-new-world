@@ -33,8 +33,9 @@ G_model_setSelectedInventoryItemIndex
 G_model_roomGetSurroundingItemsAt
 G_model_addLog
 G_model_setCutsceneLine
-G_model_roomGetSurroundingActorsAt
+G_model_roomGetInteractableActorsAt
 G_model_actorGetTalkTrigger
+G_model_getAlertProps
 G_view_showTargetingLine
 G_view_hideTargetingLine
 G_view_clearScreen
@@ -122,9 +123,13 @@ const G_controller_initEvents = () => {
   };
 
   window.addEventListener('keydown', ev => {
-    // console.log('which', ev.which);
+    console.log('which', ev.which);
     const world = G_model_getCurrentWorld();
     if (G_model_isInputDisabled()) {
+      return;
+    }
+
+    if (G_model_getAlertProps().visible) {
       return;
     }
 
@@ -164,13 +169,15 @@ const G_controller_initEvents = () => {
         break;
       case key === 32: {
         //space
-        const actors = G_model_roomGetSurroundingActorsAt(room, actor);
+        const actors = G_model_roomGetInteractableActorsAt(room, actor);
         console.log('NEARBY', actors);
-        const act = actors[0] || [];
+        const act = (actors || [])[0];
         if (act) {
-          const talkTriggerName = G_model_actorGetTalkTrigger(act);
-          if (talkTriggerName) {
-            G_controller_playDialog(talkTriggerName, act);
+          const talkTrigger = G_model_actorGetTalkTrigger(act);
+          if (typeof talkTrigger === 'string' && talkTrigger !== '') {
+            G_controller_playDialog(talkTrigger, act);
+          } else if (typeof talkTrigger === 'function') {
+            talkTrigger();
           }
         }
       }

@@ -20,6 +20,7 @@ G_view_setStyle
 G_view_RightPane
 G_view_LeftPane
 G_view_Dialog
+G_view_Alert
 */
 
 // tracks the scroll top so it can be re-applied on re-render
@@ -53,6 +54,7 @@ const G_view_renderUi = () => {
   const rightPane = G_view_getElementById('rightPane') as HTMLElement;
   const leftPane = G_view_getElementById('leftPane') as HTMLElement;
   const dialogWindow = G_view_getElementById('dialog') as HTMLElement;
+  const alertWindow = G_view_getElementById('alert') as HTMLElement;
 
   if (G_model_getIsVictory()) {
     G_view_setStyle(rightPane, { width: '0' });
@@ -61,6 +63,7 @@ const G_view_renderUi = () => {
     G_superfine_patch(leftPane, G_view_LeftPane(world));
     G_superfine_patch(rightPane, G_view_RightPane(world));
     G_superfine_patch(dialogWindow, G_view_Dialog());
+    G_superfine_patch(alertWindow, G_view_Alert());
   }
   G_view_setStyle(document.body.children[0] as HTMLElement, {
     display: 'flex',

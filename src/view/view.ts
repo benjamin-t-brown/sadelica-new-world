@@ -22,7 +22,10 @@ G_model_statsGetMaxHp
 G_model_getCamera
 G_model_actorGetName
 G_model_actorGetTalkTrigger
-G_model_roomGetSurroundingActorsAt
+G_model_roomGetInteractableActorsAt
+G_model_actorGetActorType
+G_ACTOR_TYPE_CHARACTER
+G_ACTOR_TYPE_TRIGGER_VISIBLE
 */
 interface DrawTextParams {
   font?: string;
@@ -36,7 +39,7 @@ const DEFAULT_TEXT_PARAMS = {
   color: '#fff',
   size: 14,
   align: 'center',
-  strokeColor: '',
+  strokeColor: 'black',
 };
 
 const G_view_clearScreen = () => {
@@ -92,6 +95,29 @@ const G_view_drawRect = (
   ctx[stroke ? 'strokeRect' : 'fillRect'](x, y, w, h);
 };
 
+// const G_view_measureText = (
+//   text: string,
+//   textParams?: DrawTextParams,
+//   ctx?: CanvasRenderingContext2D
+// ) => {
+//   const { font, size, color, align, strokeColor } = {
+//     ...DEFAULT_TEXT_PARAMS,
+//     ...(textParams || {}),
+//   };
+//   ctx = ctx || G_model_getCtx();
+//   ctx.textAlign = 'left';
+//   ctx.textBaseline = 'hanging';
+//   size = size || 16;
+//   font = font || 'monospace';
+//   ctx.font = size + 'px ' + font;
+//   var width = ctx.measureText(text).width;
+//   var height = size;
+//   return {
+//     width,
+//     height,
+//   };
+// };
+
 const G_view_drawText = (
   text: string,
   x: number,
@@ -105,15 +131,16 @@ const G_view_drawText = (
   };
   ctx = ctx || G_model_getCtx();
   ctx.font = `${size}px ${font}`;
-  ctx.fillStyle = color;
   ctx.textAlign = align as CanvasTextAlign;
   ctx.textBaseline = 'middle';
-  ctx.fillText(text, x, y);
   if (strokeColor) {
     ctx.strokeStyle = strokeColor;
-    ctx.lineWidth = 0.5;
+    ctx.lineWidth = 4;
     ctx.strokeText(text, x, y);
   }
+
+  ctx.fillStyle = color;
+  ctx.fillText(text, x, y);
 };
 
 // const G_view_drawLine = (
@@ -232,27 +259,31 @@ const G_view_renderWorld = (world: World, scale: number) => {
   const actor = G_model_playerGetActor(player);
   const camera = G_model_getCamera(world);
   const [cameraX, cameraY, cameraW, cameraH] = camera;
-  G_view_drawActor(actor, camera, scale, 0, 0);
-  const surroundingActors = G_model_roomGetSurroundingActorsAt(
+  const surroundingActors = G_model_roomGetInteractableActorsAt(
     currentRoom,
     actor
   );
 
-  for (let i in currentRoom.tiles) {
-    const [sprite, , tx, ty] = currentRoom.tiles[i];
-    const x = tx * tileSizeScaled - cameraX * tileSizeScaled;
-    const y = ty * tileSizeScaled - cameraY * tileSizeScaled;
-    if (G_model_roomPosIsExplored(currentRoom, tx, ty)) {
-      G_view_drawSprite(sprite, x, y, scale);
-      if (!G_model_roomPosIsVisible(currentRoom, tx, ty)) {
-        G_view_setOpacity(0.15);
-        G_view_drawRect(x, y, tileSizeScaled, tileSizeScaled, 'black', false);
-        G_view_setOpacity(1);
+  for (let i = 0; i < cameraH; i++) {
+    for (let j = 0; j < cameraW; j++) {
+      const tileX = cameraX + j;
+      const tileY = cameraY + i;
+      const [sprite, , tx, ty] = currentRoom.tiles[tileY * 64 + tileX];
+      const x = tx * tileSizeScaled - cameraX * tileSizeScaled;
+      const y = ty * tileSizeScaled - cameraY * tileSizeScaled;
+      if (G_model_roomPosIsExplored(currentRoom, tx, ty)) {
+        G_view_drawSprite(sprite, x, y, scale);
+        if (!G_model_roomPosIsVisible(currentRoom, tx, ty)) {
+          G_view_setOpacity(0.15);
+          G_view_drawRect(x, y, tileSizeScaled, tileSizeScaled, 'black', false);
+          G_view_setOpacity(1);
+        }
+      } else {
+        G_view_drawRect(x, y, tileSizeScaled, tileSizeScaled, 'black', true);
       }
-    } else {
-      G_view_drawRect(x, y, tileSizeScaled, tileSizeScaled, 'black', true);
     }
   }
+
   for (let i in currentRoom.items) {
     const [itemObj, x, y] = currentRoom.items[i];
     const item = G_model_itemGetBaseItem(itemObj);
@@ -260,24 +291,26 @@ const G_view_renderWorld = (world: World, scale: number) => {
       G_view_drawItem(item, camera, x, y, scale, 0, 0);
     }
   }
-  for (let i in currentRoom.tiles) {
-    const [, , tx, ty, highlighted] = currentRoom.tiles[i];
-    const actor = G_model_roomGetActorAt(currentRoom, tx, ty);
-    const x = tx * tileSizeScaled;
-    const y = ty * tileSizeScaled;
-    if (G_model_roomPosIsVisible(currentRoom, tx, ty)) {
-      if (actor) {
+  for (let i in currentRoom.actors) {
+    const actor = currentRoom.actors[i];
+    const [tx, ty] = G_model_actorGetPosition(actor);
+    if (G_model_roomPosIsExplored(currentRoom, tx, ty)) {
+      if (
+        G_model_actorGetActorType(actor) !== G_ACTOR_TYPE_CHARACTER ||
+        G_model_roomPosIsVisible(currentRoom, tx, ty)
+      ) {
         G_view_drawActor(actor, camera, scale, 0, 0);
-        if (
-          surroundingActors[0] === actor &&
-          G_model_actorGetTalkTrigger(actor)
-        ) {
-          const textX = x - cameraX * tileSizeScaled + tileSizeScaled / 2;
-          const textY = y - cameraY * tileSizeScaled - 8;
-          G_view_drawText(G_model_actorGetName(actor), textX, textY);
-        }
       }
     }
+  }
+
+  // player actor
+  G_view_drawActor(actor, camera, scale, 0, 0);
+
+  for (let i in currentRoom.tiles) {
+    const [, , tx, ty, highlighted] = currentRoom.tiles[i];
+    const x = tx * tileSizeScaled;
+    const y = ty * tileSizeScaled;
     if (highlighted) {
       G_view_drawRect(x, y, tileSizeScaled, tileSizeScaled, '#ccc', true);
     }
@@ -290,11 +323,16 @@ const G_view_renderWorld = (world: World, scale: number) => {
 
   for (let i = 0; i < surroundingActors.length ? 1 : 0; i++) {
     const actor = surroundingActors[i];
-    const [x, y] = G_model_actorGetPosition(actor);
-    if (G_model_actorGetTalkTrigger(actor)) {
+    const [tx, ty] = G_model_actorGetPosition(actor);
+    const x = tx * tileSizeScaled;
+    const y = ty * tileSizeScaled;
+    const actorName = G_model_actorGetName(actor);
+    if (G_model_actorGetTalkTrigger(actor) || actorName) {
       const textX = x - cameraX * tileSizeScaled + tileSizeScaled / 2;
       const textY = y - cameraY * tileSizeScaled - 8;
-      G_view_drawText(G_model_actorGetName(actor), textX, textY);
+      G_view_drawText(actorName, textX, textY, {
+        color: i === 0 ? '#F7E26B' : 'white',
+      });
     }
   }
 

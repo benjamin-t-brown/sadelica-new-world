@@ -70,3 +70,13 @@ const G_view_cachePortraitIconDataUrl = (
   }
   return ret;
 };
+
+function G_view_fireEvent(el: any, type: string) {
+  if (el.fireEvent) {
+    el.fireEvent('on' + type);
+  } else {
+    var evObj = document.createEvent('Events');
+    evObj.initEvent(type, true, false);
+    el.dispatchEvent(evObj);
+  }
+}

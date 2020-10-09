@@ -4,8 +4,15 @@ type ItemStats = {
   onAcq?: () => boolean; // return true to keep item, false to discard
 };
 
-// sprite_index, name, stats, sellAmount
-type Item = [number, string, ItemStats, number];
+type EquipState = 0 | 1 | 2 | 3 | 4;
+const G_EQUIP_STATE_NONE = 0;
+const G_EQUIP_STATE_SWORD = 1;
+const G_EQUIP_STATE_KNIFE = 2;
+const G_EQUIP_STATE_SPEAR = 3;
+const G_EQUIP_STATE_BOW = 4;
+
+// sprite_index 0, name 1, stats 2, sellAmount 3, equip_state 4
+type Item = [number, string, ItemStats, number, EquipState | undefined];
 type ItemWithAmount = [Item, number];
 type GenericItem = Item | ItemWithAmount;
 
@@ -90,4 +97,9 @@ const G_model_itemGetDamage = (item: Item, user: Actor): DmgMinMax => {
   } else {
     return [0, 0];
   }
+};
+
+const G_model_itemGetEquipState = (itemObj: GenericItem): EquipState => {
+  const item = G_model_itemGetBaseItem(itemObj);
+  return item[4] || G_EQUIP_STATE_NONE;
 };

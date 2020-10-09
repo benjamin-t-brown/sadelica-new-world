@@ -1,11 +1,18 @@
 /*
 global
-G_BEHAVIOR_NONE
 G_model_itemGetBaseItem
 G_model_itemGetName
 G_model_itemGetAmount
 G_model_itemModifyAmount
 G_model_itemGetDamage
+G_model_itemGetEquipState
+G_BEHAVIOR_NONE
+G_EQUIP_STATE_NONE
+G_EQUIP_STATE_SWORD
+G_EQUIP_STATE_KNIFE
+G_EQUIP_STATE_SPEAR
+G_EQUIP_STATE_BOW
+G_CHARACTER_SPRITES
 */
 
 // name, sprite, id, x, y, stats, inventory, facing direction (0 = left, 1 = right), behavior, shouldUpdateThisRound, attacking, dropLvl, onDeath
@@ -24,9 +31,10 @@ type Actor = [
   number, // 11 drop lvl
   number, // 12 equipped item,
   (() => void) | any, // 13 onDeath
-  string, // 14 talkTrigger
-  string, // 15 stepTrigger
-  string // 16 talkPortrait
+  string | (() => void), // 14 talkTrigger
+  string | (() => void), // 15 stepTrigger
+  string, // 16 talkPortrait
+  ActorType // 17 actorType
 ];
 
 const G_FACING_LEFT = 0;
@@ -36,76 +44,13 @@ type Allegiance = 0 | 1;
 const G_ALLEGIANCE_PLAYER = 0;
 const G_ALLEGIANCE_ENEMY = 1;
 
+type ActorType = 0 | 1 | 2 | 3;
+const G_ACTOR_TYPE_CHARACTER = 0;
+const G_ACTOR_TYPE_BARREL = 1;
+const G_ACTOR_TYPE_TRIGGER = 2;
+const G_ACTOR_TYPE_TRIGGER_VISIBLE = 3;
+
 const G_createStats = (n: number): Stats => [n, n];
-
-// sprite index, spritesheet, Stats, inventory, behavior, talkTrigger, stepTrigger, dropLevel
-type CharacterDefinition = [
-  number,
-  string,
-  string,
-  Stats,
-  Behavior,
-  string,
-  string,
-  number, //dropLevel
-  number, //facing
-  string // talkPortrait
-];
-
-interface ICreateCharacter {
-  spriteIndex?: number;
-  spriteSheet?: string;
-  name: string;
-  stats?: Stats;
-  behavior?: Behavior;
-  talkTrigger?: string;
-  talkPortrait?: string;
-  stepTrigger?: string;
-  dropLevel?: number;
-  facing?: number;
-}
-
-const CHARACTER_DEFAULTS: ICreateCharacter = {
-  spriteIndex: 0,
-  spriteSheet: 'actors1',
-  name: 'Actor',
-  stats: G_createStats(100),
-  behavior: G_BEHAVIOR_NONE,
-  talkTrigger: '',
-  talkPortrait: '',
-  stepTrigger: '',
-  dropLevel: 0,
-  facing: G_FACING_RIGHT,
-};
-
-function G_createCharacterTemplate(
-  props: ICreateCharacter
-): CharacterDefinition {
-  const {
-    spriteIndex,
-    spriteSheet,
-    name,
-    stats,
-    behavior,
-    talkTrigger,
-    stepTrigger,
-    dropLevel,
-    facing,
-    talkPortrait,
-  } = { ...CHARACTER_DEFAULTS, ...props };
-  return [
-    spriteIndex as number,
-    spriteSheet as string,
-    name,
-    stats as Stats,
-    behavior as Behavior,
-    talkTrigger as string,
-    stepTrigger as string,
-    dropLevel as number,
-    facing as number,
-    talkPortrait as string,
-  ];
-}
 
 const G_model_createActorFromChTemplate = (
   x: number,
@@ -123,6 +68,7 @@ const G_model_createActorFromChTemplate = (
     dropLevel,
     facing,
     talkPortrait,
+    actorType,
   ] = template;
   return [
     actorName,
@@ -142,6 +88,7 @@ const G_model_createActorFromChTemplate = (
     talkTrigger,
     stepTrigger,
     talkPortrait,
+    actorType,
   ];
 };
 
@@ -150,12 +97,33 @@ const G_model_actorGetName = (actor: Actor) => {
 };
 
 const G_model_actorGetSprite = (actor: Actor) => {
+  const BASE_SPRITE_INDEX_TO_EQUIP_STATE = {
+    0: {
+      [G_EQUIP_STATE_NONE]: G_CHARACTER_SPRITES.PlayerUnequipped,
+      [G_EQUIP_STATE_SWORD]: G_CHARACTER_SPRITES.Player,
+      [G_EQUIP_STATE_KNIFE]: G_CHARACTER_SPRITES.PlayerKnife,
+      [G_EQUIP_STATE_SPEAR]: G_CHARACTER_SPRITES.PlayerSpear,
+      [G_EQUIP_STATE_BOW]: G_CHARACTER_SPRITES.PlayerBow,
+    },
+  };
+
+  let spriteIndex = actor[2];
+  const spriteMapping = BASE_SPRITE_INDEX_TO_EQUIP_STATE[spriteIndex];
+  if (spriteMapping) {
+    const item = G_model_actorGetEquippedItem(actor);
+    if (item) {
+      spriteIndex = spriteMapping[G_model_itemGetEquipState(item)];
+    } else {
+      spriteIndex = spriteMapping[G_EQUIP_STATE_NONE];
+    }
+  }
+
   const facing = actor[7];
   const spriteIndexOffset = actor[10] ? 1 : 0;
   return (
     actor[1] +
     '_' +
-    (actor[2] + spriteIndexOffset) +
+    (spriteIndex + spriteIndexOffset) +
     (facing === G_FACING_LEFT ? '_f' : '')
   );
 };
@@ -319,6 +287,8 @@ const G_model_actorGetDamage = (actor: Actor): DmgMinMax => {
   return [min, max];
 };
 
-const G_model_actorGetTalkTrigger = (actor: Actor): string => {
+const G_model_actorGetTalkTrigger = (actor: Actor): string | (() => void) => {
   return actor[14] || '';
 };
+
+const G_model_actorGetActorType = (actor: Actor): ActorType => actor[17];

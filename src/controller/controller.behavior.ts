@@ -1,7 +1,8 @@
 /*
 global
 G_controller_moveActor
-G_utils_randInRage
+G_utils_randInRange
+G_utils_randInArr
 G_model_actorGetPosition
 G_model_playerGetActor
 UP
@@ -25,7 +26,13 @@ type BehaviorUpdateFunc = (actor: Actor, world: World) => void;
 
 const Behaviors: BehaviorUpdateFunc[] = [
   (actor: Actor, world: World) => {}, // none
-  // (actor: Actor, world: World) => {}, // boss
+  // rand
+  (actor: Actor, world: World) => {
+    const dir = String(G_utils_randInRange(0, 10)) as Direction;
+    G_controller_moveActor(actor, dir, world, {
+      intentToAttack: false,
+    });
+  },
   // (actor: Actor, world: World) => {}, // attack
   // (actor: Actor, world: World) => {}, // shoot
   // rand

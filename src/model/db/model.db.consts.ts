@@ -1,3 +1,5 @@
+const G_ACTORS_SPRITE_SHEET = 'actors1';
+
 const G_CHARACTER_SPRITES = {
   Player: 0,
   SmallBandit: 2,
@@ -28,6 +30,12 @@ const G_CHARACTER_SPRITES = {
   Sol: 48,
   Mullen: 50,
   Chem: 52,
+  Bartolo: 54,
+  AldebethBlackrose: 56,
+  PlayerUnequipped: 58,
+  PlayerKnife: 60,
+  PlayerSpear: 62,
+  PlayerBow: 64,
 };
 
 const G_PORTRAIT_SPRITES = {
@@ -38,6 +46,7 @@ const G_PORTRAIT_SPRITES = {
   Mullen: 'portrait1_' + 12,
   Idoreo: 'portrait1_' + 15,
   Chem: 'portrait1_' + 18,
+  Sign: 'portrait1_' + 21,
 };
 
 const G_TERRAIN_WALL_SPRITES = [
@@ -51,6 +60,7 @@ const G_TERRAIN_WALL_SPRITES = [
   9,
   12,
   14,
+  15,
   16,
   24,
   25,
@@ -207,7 +217,7 @@ const G_TERRAIN_GRASS_SPRITES = [
   20,
   21,
 ];
-const G_TERRAIN_CAVE_SPRITES = [63, 64, 65, 66, 67];
+const G_TERRAIN_CAVE_SPRITES = [63, 63, 63, 63, 63, 64, 64, 65, 65, 66, 67];
 const G_TERRAIN_DOOR_SPRITES = [5, 59];
 
 const G_TERRAIN_SPRITES = {

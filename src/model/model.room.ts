@@ -169,6 +169,23 @@ const G_model_roomGetSurroundingActorsAt = (
   return ret;
 };
 
+const G_model_roomGetInteractableActorsAt = (room: Room, actor: Actor) => {
+  const actors = G_model_roomGetSurroundingActorsAt(room, actor);
+  const [x, y] = G_model_actorGetPosition(actor);
+  [
+    [-2, 0],
+    [2, 0],
+    [0, -2],
+    [0, 2],
+  ].forEach(([xOff, yOff]) => {
+    const act = G_model_roomGetActorAt(room, x + xOff, y + yOff);
+    if (act && act !== actor) {
+      actors.push(act);
+    }
+  });
+  return actors;
+};
+
 const G_model_roomPosIsVisible = (
   room: Room,
   x: number,

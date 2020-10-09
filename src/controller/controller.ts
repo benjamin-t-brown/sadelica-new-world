@@ -101,8 +101,8 @@ const G_controller_updateWorld = () => {
       const behavior = G_model_actorGetBehavior(act);
       const behaviorFunc = G_controller_getBehaviorUpdateFunc(behavior);
       behaviorFunc(act, world);
-      setTimeout(G_controller_updateWorld, 1);
-      return;
+      // setTimeout(G_controller_updateWorld, 0);
+      // return;
     } else {
       G_model_actorRoundReset(act);
     }

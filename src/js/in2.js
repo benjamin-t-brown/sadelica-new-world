@@ -125,6 +125,7 @@ var player = (window.player = /*eslint-disable-line*/ {
     //curIN2n
     //curIN2f
     //lasIN2f
+    coins: 100,
   },
   init() {
     this.state = {};
@@ -185,6 +186,18 @@ var player = (window.player = /*eslint-disable-line*/ {
     if (this.get(path) === undefined) {
       this.set(path, val);
     }
+  },
+  async modifyCoins(v) {
+    let coins = player.get('coins') || 0;
+    coins += v;
+    if (coins < 0) {
+      coins = 0;
+    }
+    player.set('coins', coins);
+    await core.say(v > 0 ? `Gained ${v} coins.` : `Lost ${-v} coins.`);
+  },
+  hasSpokenTo(fileName) {
+    return player.get('files.' + fileName);
   },
 });
 

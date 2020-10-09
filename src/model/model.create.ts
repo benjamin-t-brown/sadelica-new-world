@@ -19,15 +19,18 @@ G_utils_to4d
 G_SPAWN_LVL1
 G_SPAWN_LVL2
 G_SPAWN_LVL3
-G_ITEM_KNIFE
-G_ITEM_CLUB
+G_ITEM_RUSTY_KNIFE
+G_ITEM_RUSTY_SWORD
+G_ITEM_RUSTY_BOW
+G_ITEM_RUSTY_SPEAR
+G_ITEM_POTION_HEALTH
 G_BEHAVIOR_NONE
 G_ITEM_POTION
 G_ACTORS_MAP
 G_TERRAIN_SPRITES
 G_TERRAIN_GRASS_SPRITES
 G_TERRAIN_CAVE_SPRITES
-hp
+G_createStats
 G_controller_dropItem
 */
 
@@ -122,13 +125,16 @@ const G_model_createWorld = (spritePrefix: string): World => {
     0, // spriteId
     0, // x
     0, // y
-    hp(100),
+    G_createStats(100),
     [
-      G_ITEM_KNIFE,
+      G_ITEM_RUSTY_KNIFE,
+      G_ITEM_RUSTY_SWORD,
+      G_ITEM_RUSTY_BOW,
+      G_ITEM_RUSTY_SPEAR,
       // G_ITEM_SWORD,
       // G_ITEM_MAGIC_SWORD,
       // [G_ITEM_ARROW, 10],
-      [G_ITEM_POTION, 3],
+      [G_ITEM_POTION_HEALTH, 3],
       // G_ITEM_SCROLL_FLAME,
       // G_ITEM_BOW,
       // G_ITEM_SCROLL_FIREBALL,
@@ -145,6 +151,7 @@ const G_model_createWorld = (spritePrefix: string): World => {
     '',
     '',
     '',
+    0,
   ];
   const player: Player = {
     wx: 0,
@@ -224,11 +231,13 @@ const G_model_createWorld = (spritePrefix: string): World => {
       }
       tiles[tInd] = ['terrain1_' + ind, ind, tx, ty, false];
       const key = [worldX, worldY, tx, ty].join(',');
-      const chTemplate = G_ACTORS_MAP[key];
+      const chTemplates = G_ACTORS_MAP[key];
       // console.log('check key', chTemplate, key);
-      if (chTemplate) {
-        const act = G_model_createActorFromChTemplate(tx, ty, chTemplate);
-        actors.push(act);
+      if (chTemplates) {
+        chTemplates.forEach((chTemplate: CharacterDefinition) => {
+          const act = G_model_createActorFromChTemplate(tx, ty, chTemplate);
+          actors.push(act);
+        });
       }
       ctr++;
     }

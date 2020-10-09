@@ -21,6 +21,20 @@ let model_dialogLines: { text: string; color?: string; cb?: () => void }[] = [];
 let model_leftPaneOverlayVisible = false;
 let model_rightPaneOverlayVisible = false;
 
+interface AlertProps {
+  visible: boolean;
+  text: string;
+  portrait: string;
+  title: string;
+  cb?: () => void;
+}
+let model_alertProps: AlertProps = {
+  visible: false,
+  text: '',
+  title: 'ALERT',
+  portrait: '',
+};
+
 const G_model_setLeftPaneOverlayVisible = (v: boolean) =>
   (model_leftPaneOverlayVisible = v);
 const G_model_getLeftPaneOverlayVisible = () => model_leftPaneOverlayVisible;
@@ -126,3 +140,5 @@ const G_model_setDialogActor = (v: Actor | null) => {
   model_dialogActor = v;
 };
 const G_model_getDialogActor = () => model_dialogActor;
+const G_model_getAlertProps = (): AlertProps => model_alertProps;
+const G_model_setAlertProps = (v: AlertProps) => (model_alertProps = v);

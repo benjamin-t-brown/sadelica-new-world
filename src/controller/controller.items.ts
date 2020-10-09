@@ -37,18 +37,18 @@ const G_controller_dropItem = (
   room: Room,
   isChest?: boolean
 ) => {
-  let drops: (Item | (number | Item)[])[];
-  if (dropLvl === 1) {
-    drops = isChest ? G_CHEST_LVL1 : G_DROPS_LVL1;
-  } else if (dropLvl === 2) {
-    drops = isChest ? G_CHEST_LVL2 : G_DROPS_LVL2;
-  } else if (dropLvl === 3) {
-    drops = isChest ? G_CHEST_LVL3 : G_DROPS_LVL3;
-  } else {
-    return;
-  }
-  const drop = G_utils_randInArr(drops);
-  G_model_roomAddItemAt(room, drop, x, y);
+  // let drops: (Item | (number | Item)[])[];
+  // if (dropLvl === 1) {
+  //   drops = isChest ? G_CHEST_LVL1 : G_DROPS_LVL1;
+  // } else if (dropLvl === 2) {
+  //   drops = isChest ? G_CHEST_LVL2 : G_DROPS_LVL2;
+  // } else if (dropLvl === 3) {
+  //   drops = isChest ? G_CHEST_LVL3 : G_DROPS_LVL3;
+  // } else {
+  //   return;
+  // }
+  // const drop = G_utils_randInArr(drops);
+  // G_model_roomAddItemAt(room, drop, x, y);
 };
 
 const G_controller_dropItemActor = (actor: Actor, room: Room) => {
@@ -74,6 +74,7 @@ const G_controller_equipItem = async (i: number, user: Actor) => {
   G_view_playSound('eqp');
   G_model_actorSetEquippedItem(user, i);
   G_view_renderUi();
+  G_controller_render(G_model_getCurrentWorld());
 };
 
 const G_controller_acquireItem = (

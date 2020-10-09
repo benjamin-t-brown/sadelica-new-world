@@ -26,6 +26,16 @@ const actorsArray = map.layers[1].objects;
 const TILE_SIZE = 16;
 const ROOM_SIZE = 64;
 
+const assignFunc = `
+  const assignActor = (k, v) => {
+    if (G_ACTORS_MAP[k]) {
+      G_ACTORS_MAP[k].push(v);
+    } else {
+      G_ACTORS_MAP[k] = [v];
+    }
+  }
+`;
+
 fs.writeFileSync(
   __dirname + '/../src/js/actors.js',
   actorsArray.reduce((file, { name, x, y }) => {
@@ -35,10 +45,11 @@ fs.writeFileSync(
     const yWorld = Math.floor(yGlobal / ROOM_SIZE);
     const xLocal = xGlobal % ROOM_SIZE;
     const yLocal = (yGlobal % ROOM_SIZE) - 1;
-    return `${file}\n  G_ACTORS_MAP['${[xWorld, yWorld, xLocal, yLocal].join(
+    return `${file}\n  assignActor('${[xWorld, yWorld, xLocal, yLocal].join(
       ','
-    )}'] = ${name};`;
-  }, 'const G_ACTORS_MAP = {};\nconst G_initActors = () => {') + '\n};\n'
+    )}', ${name});`;
+  }, 'const G_ACTORS_MAP = {};\nconst G_initActors = () => {' + assignFunc) +
+    '\n};\n'
 );
 
 console.log('wrote', __dirname + '/../js/actors.js');

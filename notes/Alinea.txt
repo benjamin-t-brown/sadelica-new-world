@@ -37,7 +37,7 @@ Idoreo (Merchantry) - Has an agreement with Lord Abivola, pays extra so that cer
 
 Sol (Island) - Sol watches for new people coming into the port and determines people who are "noteworthy" to Chorus.  If you do any quests in Alinea he will approach you and warn you that the island is more than it seems, and that there are those who would rather see the people here removed.  He insinuates that you can aid in this cause and that someone will approach you later.
 
-Lord Bartolo Caldeburn (Nobility) - A man waiting for the road to get unblocked so he can head north to Boromark.  Dislikes Elvyosa for not letting him book passage.  Arrogant, impatient, but if you are nice to him you get a small amount of Nobility renown.
+Lord Bartolo Caldeburn (Nobility) - A man waiting for the road to get unblocked so he can head north to Boromak.  Dislikes Elvyosa for not letting him book passage.  Arrogant, impatient, but if you are nice to him you get a small amount of Nobility renown.
 
 Igmund (Villager) - Is fed up with Bartolo Caldeburn's arrogance.  He asks you to go outside, grab a rock, and throw it at Bartolo.  If you do this, you are thrown out of the tavern and Gruff won't let you back inside to heal.  Igmund tells you that you can use his house to sleep/heal.  If you search his house, you discover that he has a cache of money beneath a rock outside that he has stolen from Abivola's cachiers.  You can take this, but Abivola will request it back if you tell him that Igmund stole from him (for Renown).
 
