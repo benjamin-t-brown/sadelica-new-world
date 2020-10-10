@@ -25,6 +25,7 @@ interface AlertProps {
   visible: boolean;
   text: string;
   portrait: string;
+  isSmallPortrait: boolean;
   title: string;
   cb?: () => void;
 }
@@ -33,6 +34,7 @@ let model_alertProps: AlertProps = {
   text: '',
   title: 'ALERT',
   portrait: '',
+  isSmallPortrait: false,
 };
 
 const G_model_setLeftPaneOverlayVisible = (v: boolean) =>

@@ -127,18 +127,20 @@ function G_createSignTemplate(props: ICreateSign): CharacterDefinition {
 interface ICreateItem {
   name: string;
   spriteIndex: number;
+  dscr: string;
   meta?: object;
   sellAmount?: number;
   equipState?: EquipState;
 }
 
 const G_createItem = (props: ICreateItem): Item => {
-  const { name, spriteIndex, meta, sellAmount, equipState } = props;
+  const { name, spriteIndex, meta, sellAmount, equipState, dscr } = props;
   return [
     spriteIndex,
     name,
     meta || {},
     sellAmount || 0,
     equipState || G_EQUIP_STATE_NONE,
+    dscr,
   ];
 };

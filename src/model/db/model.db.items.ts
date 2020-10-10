@@ -114,6 +114,7 @@ const G_ITEM_GOLD_SM = G_createItem({
     onAcq: onGetRandomGold(1, 5),
   },
   sellAmount: 1,
+  dscr: '',
 });
 
 const G_ITEM_GOLD_MD = G_createItem({
@@ -123,6 +124,7 @@ const G_ITEM_GOLD_MD = G_createItem({
     onAcq: onGetRandomGold(1, 5),
   },
   sellAmount: 1,
+  dscr: '',
 });
 
 const G_ITEM_GOLD_LG = G_createItem({
@@ -132,6 +134,7 @@ const G_ITEM_GOLD_LG = G_createItem({
     onAcq: onGetRandomGold(5, 10),
   },
   sellAmount: 1,
+  dscr: '',
 });
 
 const G_ITEM_RUSTY_KNIFE = G_createItem({
@@ -142,6 +145,8 @@ const G_ITEM_RUSTY_KNIFE = G_createItem({
   },
   sellAmount: 1,
   equipState: G_EQUIP_STATE_KNIFE,
+  dscr:
+    'A small knife that might be useful for cutting mooring lines, but not much else.',
 });
 
 const G_ITEM_RUSTY_SWORD = G_createItem({
@@ -152,6 +157,8 @@ const G_ITEM_RUSTY_SWORD = G_createItem({
   },
   sellAmount: 1,
   equipState: G_EQUIP_STATE_SWORD,
+  dscr:
+    'This sword is rusting around the hilt and rather uncomfortable to hold.',
 });
 
 const G_ITEM_RUSTY_SPEAR = G_createItem({
@@ -162,6 +169,8 @@ const G_ITEM_RUSTY_SPEAR = G_createItem({
   },
   sellAmount: 1,
   equipState: G_EQUIP_STATE_SPEAR,
+  dscr:
+    'A hunk of metal is attached at the end of this spear.  It is not sharp, but with enough force it could be considered deadly.',
 });
 
 const G_ITEM_RUSTY_BOW = G_createItem({
@@ -181,6 +190,8 @@ const G_ITEM_RUSTY_BOW = G_createItem({
   },
   sellAmount: 1,
   equipState: G_EQUIP_STATE_BOW,
+  dscr:
+    'Somehow this wooden bow appears to be rusting around the handle.  It must contain iron flakes or something.',
 });
 
 const G_ITEM_WOOD_TIP_ARROW = G_createItem({
@@ -198,6 +209,7 @@ const G_ITEM_WOOD_TIP_ARROW = G_createItem({
     },
   },
   sellAmount: 1,
+  dscr: 'Wooden arrows are the standard projectile for most bows.',
 });
 
 const G_ITEM_SCROLL_FLAME = G_createItem({
@@ -215,6 +227,7 @@ const G_ITEM_SCROLL_FLAME = G_createItem({
     },
   },
   sellAmount: 50,
+  dscr: 'A scroll capable of invoking a fireball at a targeted location.',
 });
 
 const G_ITEM_POTION_HEALTH = G_createItem({
@@ -230,4 +243,21 @@ const G_ITEM_POTION_HEALTH = G_createItem({
     },
   },
   sellAmount: 50,
+  dscr: 'This potion miraculously heals you immediately upon imbibing.',
+});
+
+const G_ITEM_POTION_USS = G_createItem({
+  name: 'Potion: Unbelievable Sort Of Strength',
+  spriteIndex: 9,
+  meta: {
+    onUse: async (user: Actor) => {
+      G_model_statsModifyHp(
+        G_model_actorGetStats(user),
+        G_utils_randInRange(100, 100)
+      );
+      return true;
+    },
+  },
+  sellAmount: 500,
+  dscr: 'This potion is an unbelievable potion of strength.',
 });

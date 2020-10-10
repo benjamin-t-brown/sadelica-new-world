@@ -11,13 +11,17 @@ G_model_itemGetBaseItem
 G_model_itemGetOnUse
 G_model_itemGetAmount
 G_model_itemGetSellAmount
+G_model_itemGetDescription
 G_model_itemInvokeOnAcquire
+G_model_itemGetSprite
+G_model_itemGetDamage
 G_model_actorSetEquippedItem
 G_model_addLog
 G_model_playerModifyGold
 G_model_playerGetActor
 G_model_actorSubtractFromInventory
 G_model_setSelectedInventoryItemIndex
+G_controller_showAlert
 G_controller_render
 G_view_renderUi
 G_view_playSound
@@ -56,6 +60,16 @@ const G_controller_dropItemActor = (actor: Actor, room: Room) => {
   G_controller_dropItem(room.lvl, x, y, room);
 };
 
+const G_controller_dropItemOnGround = (item: Item, user: Actor, room: Room) => {
+  G_view_playSound('drop');
+  G_model_actorSubtractFromInventory(user, item);
+  const [x, y] = G_model_actorGetPosition(user);
+  G_model_roomAddItemAt(room, item, x, y);
+
+  G_controller_render(G_model_getCurrentWorld());
+  G_view_renderUi();
+};
+
 const G_controller_useItem = async (item: Item, user: Actor) => {
   // const baseItem = G_model_itemGetBaseItem(item);
   // const itemName = G_model_itemGetName(baseItem);
@@ -73,6 +87,13 @@ const G_controller_useItem = async (item: Item, user: Actor) => {
 const G_controller_equipItem = async (i: number, user: Actor) => {
   G_view_playSound('eqp');
   G_model_actorSetEquippedItem(user, i);
+  G_view_renderUi();
+  G_controller_render(G_model_getCurrentWorld());
+};
+
+const G_controller_unequipItem = async (user: Actor) => {
+  G_view_playSound('eqp');
+  G_model_actorSetEquippedItem(user, -1);
   G_view_renderUi();
   G_controller_render(G_model_getCurrentWorld());
 };
@@ -106,4 +127,25 @@ const G_controller_sellItem = (item: GenericItem, player: Player) => {
   const actor = G_model_playerGetActor(player);
   G_model_actorSubtractFromInventory(actor, item);
   G_view_renderUi();
+};
+
+const G_controller_examineItem = (item: GenericItem, player: Player) => {
+  let text = G_model_itemGetDescription(item);
+
+  const [min, max] = G_model_itemGetDamage(
+    item,
+    G_model_playerGetActor(player)
+  );
+
+  if (min > 0 && max > 0) {
+    text = `Damage: ${min}-${max}\n` + text;
+  }
+
+  G_controller_showAlert({
+    text,
+    portrait: G_model_itemGetSprite(item),
+    isSmallPortrait: true,
+    title: 'EXAMINE ' + G_model_itemGetName(item),
+    soundName: 'alertMinor',
+  });
 };

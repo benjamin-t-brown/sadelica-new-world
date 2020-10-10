@@ -111,6 +111,19 @@ const G_CH_ALINEA_GUARD_CAPTAIN_MULLEN = G_createCharacterTemplate({
   talkPortrait: G_PORTRAIT_SPRITES.Mullen,
 });
 
+const G_CH_ALINEA_ELVYOSA = G_createCharacterTemplate({
+  spriteIndex: G_CHARACTER_SPRITES.Elvyosa,
+  spriteSheet: G_ACTORS_SPRITE_SHEET,
+  name: 'Ship Captain',
+  stats: G_createStats(250),
+  behavior: G_BEHAVIOR_NONE,
+  talkTrigger: 'Alinea_CH_Elvyosa',
+  stepTrigger: '',
+  dropLevel: 0,
+  facing: G_FACING_RIGHT,
+  talkPortrait: '',
+});
+
 // Alinea_CH_GuardCaptainMullen
 
 const G_CH_ALINEA_SIGN_REALM_EMBASSY = G_createSignTemplate({
@@ -123,7 +136,7 @@ const G_CH_ALINEA_SIGN_DOCKS = G_createSignTemplate({
   text: `WELCOME TO ALINEA!
 On arrival, please report to Dockmaster Claire for a permit and warehouse options.
 (At the bottom of the sign is a hastily-written note.)
-"Guys... Be sure to tie your mooring lines tightly!  We don't need any more fiascos like last week."`,
+"ATTENTION WORKERS... Be sure to tie your mooring lines tightly!  Idoreo doesn't need any more fiascos like last week."`,
   spriteIndex: G_CHARACTER_SPRITES.SignPost,
 });
 const G_CH_ALINEA_SIGN_WAREHOUSE1 = G_createSignTemplate({

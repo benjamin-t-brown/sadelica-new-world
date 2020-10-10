@@ -68,4 +68,13 @@ const G_initActors = () => {
   assignActor('1,3,7,3', G_CH_ALINEA_GUARD);
   assignActor('1,3,36,29', G_CH_ALINEA_GUARD);
   assignActor('1,3,8,36', G_CH_ALINEA_GUARD_CAPTAIN_MULLEN);
+  assignActor('1,3,43,39', G_CH_BARREL);
+  assignActor('1,3,44,39', G_CH_BARREL);
+  assignActor('1,3,45,39', G_CH_BARREL);
+  assignActor('1,3,46,39', G_CH_BARREL);
+  assignActor('1,3,45,43', G_CH_CRATE);
+  assignActor('1,3,40,35', G_CH_CRATE);
+  assignActor('1,3,51,38', G_CH_CRATE);
+  assignActor('1,3,43,42', G_CH_CRATE);
+  assignActor('1,3,44,42', G_CH_ALINEA_ELVYOSA);
 };

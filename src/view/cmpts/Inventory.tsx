@@ -10,18 +10,30 @@ G_model_actorGetEquippedItem
 G_model_getSelectedInventoryItemIndex
 G_model_actorSetEquippedItem
 G_model_getCurrentWorld
+G_model_worldGetCurrentRoom
 G_model_itemIsUsable
 G_model_setSelectedInventoryItemIndex
 G_model_itemCanBeEquipped
 G_model_getDialogVisible
+G_model_getCurrentPlayer
 G_controller_equipItem
+G_controller_unequipItem
 G_controller_useItem
+G_controller_dropItemOnGround
+G_controller_examineItem
 G_utils_cycleItemInArr
 G_view_renderUi
 G_view_cacheItemIconDataUrl
+G_view_Select
 */
 
 let inventoryScrollTop = 0;
+
+const MENU_VALUE_USE = 'use';
+const MENU_VALUE_DROP = 'drop';
+const MENU_VALUE_EXAMINE = 'examine';
+const MENU_VALUE_EQUIP = 'equip';
+const MENU_VALUE_UNEQUIP = 'unequip';
 
 const InventoryItem = (item: GenericItem | null, i: number, actor: Actor) => {
   if (!item) {
@@ -53,33 +65,65 @@ const InventoryItem = (item: GenericItem | null, i: number, actor: Actor) => {
       G_view_renderUi();
     };
   };
-  const menuElems: SuperfineElement[] = [];
+  const menuElems: IOptionProps[] = [];
+
+  menuElems.push({
+    value: '',
+    label: '',
+  });
 
   if (G_model_itemIsUsable(item)) {
-    menuElems.push(
-      <div
-        className="menu-item"
-        onclick={async () => {
-          G_model_setSelectedInventoryItemIndex(i);
-          G_controller_useItem(baseItem, actor);
-        }}
-      >
-        USE
-      </div>
-    );
+    menuElems.push({
+      value: MENU_VALUE_USE,
+      label: 'Use',
+    });
   }
   if (G_model_itemCanBeEquipped(item) && !isEquipped) {
-    menuElems.push(
-      <div
-        className="menu-item"
-        onclick={async () => {
-          G_controller_equipItem(i, actor);
-        }}
-      >
-        EQP
-      </div>
-    );
+    menuElems.push({
+      value: MENU_VALUE_EQUIP,
+      label: 'Equip',
+    });
+  } else if (isEquipped) {
+    menuElems.push({
+      value: MENU_VALUE_UNEQUIP,
+      label: 'Unequip',
+    });
   }
+
+  menuElems.push({
+    value: MENU_VALUE_EXAMINE,
+    label: 'Examine',
+  });
+
+  menuElems.push({
+    value: MENU_VALUE_DROP,
+    label: 'Drop',
+  });
+
+  const handleMenuAction = (value: string) => {
+    switch (value) {
+      case MENU_VALUE_USE:
+        G_model_setSelectedInventoryItemIndex(i);
+        G_controller_useItem(baseItem, actor);
+        break;
+      case MENU_VALUE_EQUIP:
+        G_controller_equipItem(i, actor);
+        break;
+      case MENU_VALUE_UNEQUIP:
+        G_controller_unequipItem(actor);
+        break;
+      case MENU_VALUE_EXAMINE:
+        G_controller_examineItem(item, G_model_getCurrentPlayer());
+        break;
+      case MENU_VALUE_DROP:
+        G_controller_dropItemOnGround(
+          baseItem,
+          actor,
+          G_model_worldGetCurrentRoom(G_model_getCurrentWorld())
+        );
+        break;
+    }
+  };
 
   return (
     <div
@@ -98,12 +142,43 @@ const InventoryItem = (item: GenericItem | null, i: number, actor: Actor) => {
           dn
         </div>
       </div>
-      <div style={{ margin: '5px', width: '20px' }}>{`${i + 1}. `}</div>
-      <div className="vrt menu-item-ctr">{menuElems}</div>
-      <img style={{ margin: '2px' }} src={url}></img>
-      <div style={{ color: isEquipped ? '#9ef' : 'unset' }}>{`${itemName} ${
-        amount > 1 ? '(' + amount + ')' : ''
-      }`}</div>
+      <div style={{ width: '20px' }}>{`${i + 1}. `}</div>
+      <div
+        onclick={ev => {
+          if (G_model_itemIsUsable(item)) {
+            handleMenuAction(MENU_VALUE_USE);
+          } else if (G_model_itemCanBeEquipped(item) && !isEquipped) {
+            handleMenuAction(MENU_VALUE_EQUIP);
+          } else if (isEquipped) {
+            handleMenuAction(MENU_VALUE_UNEQUIP);
+          }
+        }}
+        className="hrz-between"
+        style={{
+          width: '240px',
+        }}
+      >
+        <div
+          className="hrz"
+          style={{
+            width: '212px',
+            'justify-content': 'flex-start',
+          }}
+        >
+          <img style={{ 'margin-right': '2px' }} src={url}></img>
+          <div style={{ color: isEquipped ? '#9ef' : 'unset' }}>{`${itemName} ${
+            amount > 1 ? '(' + amount + ')' : ''
+          }`}</div>
+        </div>
+        <div className="vrt menu-item-ctr">
+          {G_view_Select({
+            className: 'sel',
+            value: 0,
+            items: menuElems,
+            onChange: handleMenuAction,
+          })}
+        </div>
+      </div>
     </div>
   );
 };

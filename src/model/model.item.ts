@@ -11,15 +11,17 @@ const G_EQUIP_STATE_KNIFE = 2;
 const G_EQUIP_STATE_SPEAR = 3;
 const G_EQUIP_STATE_BOW = 4;
 
-// sprite_index 0, name 1, stats 2, sellAmount 3, equip_state 4
-type Item = [number, string, ItemStats, number, EquipState | undefined];
+// sprite_index 0, name 1, stats 2, sellAmount 3, equip_state 4, description 5
+type Item = [number, string, ItemStats, number, EquipState | undefined, string];
 type ItemWithAmount = [Item, number];
 type GenericItem = Item | ItemWithAmount;
 
-const G_model_itemGetName = (item: Item): string => {
+const G_model_itemGetName = (itemObj: GenericItem): string => {
+  const item = G_model_itemGetBaseItem(itemObj);
   return item[1];
 };
-const G_model_itemGetSprite = (item: Item): string => {
+const G_model_itemGetSprite = (itemObj: GenericItem): string => {
+  const item = G_model_itemGetBaseItem(itemObj);
   return 'misc1_' + item[0];
 };
 
@@ -90,7 +92,11 @@ const G_model_itemCanBeEquipped = (itemObj: GenericItem): boolean => {
   return !!meta.getDmg;
 };
 
-const G_model_itemGetDamage = (item: Item, user: Actor): DmgMinMax => {
+const G_model_itemGetDamage = (
+  itemObj: GenericItem,
+  user: Actor
+): DmgMinMax => {
+  const item = G_model_itemGetBaseItem(itemObj);
   const meta = item[2];
   if (meta.getDmg) {
     return meta.getDmg(user);
@@ -102,4 +108,9 @@ const G_model_itemGetDamage = (item: Item, user: Actor): DmgMinMax => {
 const G_model_itemGetEquipState = (itemObj: GenericItem): EquipState => {
   const item = G_model_itemGetBaseItem(itemObj);
   return item[4] || G_EQUIP_STATE_NONE;
+};
+
+const G_model_itemGetDescription = (itemObj: GenericItem): string => {
+  const item = G_model_itemGetBaseItem(itemObj);
+  return item[5];
 };

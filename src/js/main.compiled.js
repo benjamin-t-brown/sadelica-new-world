@@ -159,10 +159,10 @@
     return player.state;
   };
 
-  files[`Alinea_CH_Idoreo.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Idoreo.json');
+  files[`Alinea_CH_SpyRigby.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_SpyRigby.json');
     // next_file
-    scope.FdbAF = () => {
+    scope.Hg9db = () => {
       player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
       let key = `NONE`;
       let func = files[key];
@@ -174,51 +174,7 @@
     };
 
     if (id === undefined) {
-      scope.FdbAF();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_SirLavolanChevel.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_SirLavolanChevel.json');
-    // next_file
-    scope.r7TWk = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    if (id === undefined) {
-      scope.r7TWk();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_RadmilaOmvaire.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_RadmilaOmvaire.json');
-    // next_file
-    scope.KxZH3 = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    if (id === undefined) {
-      scope.KxZH3();
+      scope.Hg9db();
     } else if (id) {
       scope[id]();
     }
@@ -247,10 +203,10 @@
     return player.state;
   };
 
-  files[`Alinea_CH_Gruff.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Gruff.json');
+  files[`Alinea_CH_RadmilaOmvaire.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_RadmilaOmvaire.json');
     // next_file
-    scope.f1zni = () => {
+    scope.KxZH3 = () => {
       player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
       let key = `NONE`;
       let func = files[key];
@@ -262,17 +218,17 @@
     };
 
     if (id === undefined) {
-      scope.f1zni();
+      scope.KxZH3();
     } else if (id) {
       scope[id]();
     }
     return player.state;
   };
 
-  files[`Alinea_CH_Elvyosa.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Elvyosa.json');
+  files[`Alinea_CH_SchovanAbivola.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_SchovanAbivola.json');
     // next_file
-    scope.m8Gsl = () => {
+    scope.OhVgn = () => {
       player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
       let key = `NONE`;
       let func = files[key];
@@ -284,17 +240,17 @@
     };
 
     if (id === undefined) {
-      scope.m8Gsl();
+      scope.OhVgn();
     } else if (id) {
       scope[id]();
     }
     return player.state;
   };
 
-  files[`Alinea_CH_DunnsMurose.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_DunnsMurose.json');
+  files[`Alinea_CH_Idoreo.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Idoreo.json');
     // next_file
-    scope.YDiFN = () => {
+    scope.FdbAF = () => {
       player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
       let key = `NONE`;
       let func = files[key];
@@ -306,7 +262,7 @@
     };
 
     if (id === undefined) {
-      scope.YDiFN();
+      scope.FdbAF();
     } else if (id) {
       scope[id]();
     }
@@ -399,6 +355,218 @@
 
     if (id === undefined) {
       scope.G2sLG();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
+  files[`Alinea_CH_Elvyosa.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Elvyosa.json');
+    // switch
+    scope.L5gDe = () => {
+      player.set(CURRENT_NODE_VAR, 'L5gDe');
+      if (player.once()) scope.E85Sb();
+      else if (true) scope.GhQWY();
+    };
+    // text
+    scope.E85Sb = () => {
+      player.set(CURRENT_NODE_VAR, 'E85Sb');
+      let text = `A burly woman lounges beside a pile of crates haphazardly strewn about the nearby docks.  If her headband and tattoos weren't enough to indicate a sailor, then her bare feet and cocky attitude all but shout the observation. `;
+      core.say(text, scope.LBTy3);
+    };
+
+    // text
+    scope.LBTy3 = () => {
+      player.set(CURRENT_NODE_VAR, 'LBTy3');
+      let text = `"Aye, what have we got here?  New in town are ye, Lark?"`;
+      core.say(text, scope.BU4pY);
+    };
+
+    // choice
+    scope.BU4pY = () => {
+      player.set(CURRENT_NODE_VAR, 'BU4pY');
+      let text = ``;
+      core.choose(text, 'BU4pY', [
+        {
+          t: `Who are you?`,
+          cb: scope.QKSpq,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Yep, I'm a Lark.  Got any advice for me?`,
+          cb: scope.AWzg9,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Honest work sounds good, what do you need me to do?`,
+          cb: scope.mAmXO,
+          c: () => {
+            return player.get('nodes.gr5so');
+          },
+        },
+        {
+          t: `You own these ships?!  There's a lot of them.`,
+          cb: scope.fh6tT,
+          c: () => {
+            return player.get('nodes.QKSpq');
+          },
+        },
+        {
+          t: `Nevermind.`,
+          cb: scope.m8Gsl,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+
+    // text
+    scope.QKSpq = () => {
+      player.set(CURRENT_NODE_VAR, 'QKSpq');
+      let text = `"Elvyosa.  Captain Elvyosa.  Or at least everyone calls me that.  Not really sure what a Captain means to me to be honest.  Of course I own most of the ships in Alinea right now, so it kinda makes sense."`;
+      core.say(text, scope.BU4pY);
+    };
+
+    // text
+    scope.AWzg9 = () => {
+      player.set(CURRENT_NODE_VAR, 'AWzg9');
+      let text = `"You mean 'free' advice?  Not much.  Maybe a pittance.  Something like 'stay out of trouble'."`;
+      core.say(text, scope.VSCcR);
+    };
+
+    // text
+    scope.VSCcR = () => {
+      player.set(CURRENT_NODE_VAR, 'VSCcR');
+      let text = `She guffaws loudly and startles a nearby dockworker who nearly drops the crates he's carrying.`;
+      core.say(text, scope.gr5so);
+    };
+
+    // text
+    scope.gr5so = () => {
+      player.set(CURRENT_NODE_VAR, 'gr5so');
+      let text = `"But maybe you get something more substantial if you provide some good, honest work."`;
+      core.say(text, scope.BU4pY);
+    };
+
+    // text
+    scope.mAmXO = () => {
+      player.set(CURRENT_NODE_VAR, 'mAmXO');
+      let text = `She indicates a set of four barrels lined up behind you.`;
+      core.say(text, scope.heM6D);
+    };
+
+    // text
+    scope.heM6D = () => {
+      player.set(CURRENT_NODE_VAR, 'heM6D');
+      let text = `"Old Scopy bought those from me, but didn't want to pay somebody to come pick 'em up.  Seems to think I would do it for him.  I don't want to piss him off, he's a good fella, but I don't want to exert myself either.  So it'd be nice if somebody could push those bad boys over to his loading tarp.  Over to the east, across the wall."`;
+      core.say(text, scope.Lfg1w);
+    };
+
+    // choice
+    scope.Lfg1w = () => {
+      player.set(CURRENT_NODE_VAR, 'Lfg1w');
+      let text = ``;
+      core.choose(text, 'Lfg1w', [
+        {
+          t: `You'll pay for this work right.`,
+          cb: scope.gFytl,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Well... I don't want to exert myself either.`,
+          cb: scope.r1iZR,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `I'll consider it.`,
+          cb: scope.DIrSS,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `No thanks.`,
+          cb: scope.Ux0VL,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+
+    // text
+    scope.gFytl = () => {
+      player.set(CURRENT_NODE_VAR, 'gFytl');
+      let text = `"'Course I will.  How's 100 gp sound, and of course some brownie points from yours truly.  I make great brownies too."`;
+      core.say(text, scope.Lfg1w);
+    };
+
+    // text
+    scope.r1iZR = () => {
+      player.set(CURRENT_NODE_VAR, 'r1iZR');
+      let text = `"Then don't do it.  I'll find some other sucker.  Or maybe you find some other sucker.  Either way, if it gets done without me havin' to do anything, I'll pay you."`;
+      core.say(text, scope.Lfg1w);
+    };
+
+    // text
+    scope.DIrSS = () => {
+      player.set(CURRENT_NODE_VAR, 'DIrSS');
+      let text = `"Good.  But consider quickly, 'cuz those barrels shoulda been out of here an hour ago."`;
+      core.say(text, scope.BU4pY);
+    };
+
+    // text
+    scope.Ux0VL = () => {
+      player.set(CURRENT_NODE_VAR, 'Ux0VL');
+      let text = `"Your loss.  Offer's still on the table though if you come back."`;
+      core.say(text, scope.BU4pY);
+    };
+
+    // text
+    scope.fh6tT = () => {
+      player.set(CURRENT_NODE_VAR, 'fh6tT');
+      let text = `"Yer not impressed by much, are ya?  I've seen Realm patrols triple the size of my little water caravan.  And everyone on the Mainland makes fun of how small their ships are.  That's not even to speak of the Blackrose fleet.  Never seen it myself, I've heard their ships could black out the water for miles around."`;
+      core.say(text, scope.nozmi);
+    };
+
+    // text
+    scope.nozmi = () => {
+      player.set(CURRENT_NODE_VAR, 'nozmi');
+      let text = `"But I suppose it's not nothin'.  I'm a trader.  Make my way around Sadelica getting the best of whoever I can."`;
+      core.say(text, scope.BU4pY);
+    };
+
+    // next_file
+    scope.m8Gsl = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    // text
+    scope.GhQWY = () => {
+      player.set(CURRENT_NODE_VAR, 'GhQWY');
+      let text = `"Gotta favor to ask me or something?"`;
+      core.say(text, scope.BU4pY);
+    };
+
+    if (id === undefined) {
+      scope.L5gDe();
     } else if (id) {
       scope[id]();
     }
@@ -814,10 +982,10 @@
     return player.state;
   };
 
-  files[`Alinea_CH_SchovanAbivola.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_SchovanAbivola.json');
+  files[`Alinea_CH_SirLavolanChevel.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_SirLavolanChevel.json');
     // next_file
-    scope.OhVgn = () => {
+    scope.r7TWk = () => {
       player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
       let key = `NONE`;
       let func = files[key];
@@ -829,17 +997,17 @@
     };
 
     if (id === undefined) {
-      scope.OhVgn();
+      scope.r7TWk();
     } else if (id) {
       scope[id]();
     }
     return player.state;
   };
 
-  files[`Alinea_CH_SpyRigby.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_SpyRigby.json');
+  files[`Alinea_CH_Gruff.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Gruff.json');
     // next_file
-    scope.Hg9db = () => {
+    scope.f1zni = () => {
       player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
       let key = `NONE`;
       let func = files[key];
@@ -851,207 +1019,7 @@
     };
 
     if (id === undefined) {
-      scope.Hg9db();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_BartenderRus.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_BartenderRus.json');
-    // switch
-    scope.y9gCB = () => {
-      player.set(CURRENT_NODE_VAR, 'y9gCB');
-      if (player.once()) scope.gUtER();
-      else if (true) scope.mfEJp();
-    };
-    // text
-    scope.gUtER = () => {
-      player.set(CURRENT_NODE_VAR, 'gUtER');
-      let text = `The bartender of this tavern is a stout man with an amicable face.  "Good day to you!  Can I get you a drink?"`;
-      core.say(text, scope.sZNhw);
-    };
-
-    // choice
-    scope.sZNhw = () => {
-      player.set(CURRENT_NODE_VAR, 'sZNhw');
-      let text = ``;
-      core.choose(text, 'sZNhw', [
-        {
-          t: `A drink sounds nice.`,
-          cb: scope.HyJzb,
-          c: () => {
-            return true;
-          },
-        },
-        {
-          t: `You mentioned someone named "Idoreo" who has sponsored this tavern?`,
-          cb: scope.FpViJ,
-          c: () => {
-            return (
-              player.get('nodes.WtgxM') &&
-              !player.hasSpokenTo('Alinea_CH_Idoreo')
-            );
-          },
-        },
-        {
-          t: `Idoreo sponsors this tavern?`,
-          cb: scope.MMdxN,
-          c: () => {
-            return (
-              player.get('nodes.WtgxM') &&
-              player.hasSpokenTo('Alinea_CH_Idoreo')
-            );
-          },
-        },
-        {
-          t: `Nevermind.`,
-          cb: scope.MBMNa,
-          c: () => {
-            return true;
-          },
-        },
-      ]);
-    };
-
-    // pass_fail
-    scope.HyJzb = () => {
-      player.set(CURRENT_NODE_VAR, 'HyJzb');
-      const condition = (() => {
-        return player.get('coins') > 10;
-      })();
-      if (condition) {
-        player.set(CURRENT_NODE_VAR, 'U4b6O');
-        let text = ``;
-        core.say(text, scope.u06Bp);
-      }
-      if (!condition) {
-        player.set(CURRENT_NODE_VAR, 'WfDHF');
-        let text = ``;
-        core.say(text, scope.Orm12);
-      }
-    };
-    // text
-    scope.u06Bp = () => {
-      player.set(CURRENT_NODE_VAR, 'u06Bp');
-      let text = `"Plum wine or ale?"`;
-      core.say(text, scope.n3c1E);
-    };
-
-    // choice
-    scope.n3c1E = () => {
-      player.set(CURRENT_NODE_VAR, 'n3c1E');
-      let text = ``;
-      core.choose(text, 'n3c1E', [
-        {
-          t: `Plum wine sounds super 'del'. (What the hip kids are calling 'delicious' nowadays.)`,
-          cb: scope.EoQtT,
-          c: () => {
-            return true;
-          },
-        },
-        {
-          t: `Ale would be great.`,
-          cb: scope.h7hIn,
-          c: () => {
-            return true;
-          },
-        },
-        {
-          t: `Actually... maybe not.`,
-          cb: scope.sZNhw,
-          c: () => {
-            return true;
-          },
-        },
-      ]);
-    };
-
-    // action
-    scope.EoQtT = async () => {
-      player.set(CURRENT_NODE_VAR, 'EoQtT');
-      await player.modifyCoins(-6);
-      scope.ICNcg();
-    };
-
-    // text
-    scope.ICNcg = () => {
-      player.set(CURRENT_NODE_VAR, 'ICNcg');
-      let text = `After an odd glance with a raised eyebrow, he grabs a bottle from beneath the counter and skillfully pours you each a goblet of succulent plum wine.  Having just stepped off a trans-oceanic ship, it tastes heavenly.`;
-      core.say(text, scope.WtgxM);
-    };
-
-    // text
-    scope.WtgxM = () => {
-      player.set(CURRENT_NODE_VAR, 'WtgxM');
-      let text = `The bartender grins.  "That's a good stock isn't it?  You've got Idoreo to thank for that.  Loves the sweeter side of the drinks, so he offered to sponsor the tavern if I provided it."`;
-      core.say(text, scope.sZNhw);
-    };
-
-    // action
-    scope.h7hIn = async () => {
-      player.set(CURRENT_NODE_VAR, 'h7hIn');
-      await player.modifyCoins(-6);
-      scope.xMq8B();
-    };
-
-    // text
-    scope.xMq8B = () => {
-      player.set(CURRENT_NODE_VAR, 'xMq8B');
-      let text = `He leaves the counter for a moment and comes back with an old barrel, heaving it onto the counter.  "Sorry, most people don't ask for this, so I don't keep it front."  He pours a few mugs and pushes them across the bar at you.`;
-      core.say(text, scope.AATnJ);
-    };
-
-    // text
-    scope.AATnJ = () => {
-      player.set(CURRENT_NODE_VAR, 'AATnJ');
-      let text = `The ale is... okay.  Even after your long journey across the ocean, it still tastes kind of bland.  It's plenty strong though.`;
-      core.say(text, scope.sZNhw);
-    };
-
-    // text
-    scope.Orm12 = () => {
-      player.set(CURRENT_NODE_VAR, 'Orm12');
-      let text = `You don't have enough money to waste on small luxuries like tavern drinks.`;
-      core.say(text, scope.sZNhw);
-    };
-
-    // text
-    scope.FpViJ = () => {
-      player.set(CURRENT_NODE_VAR, 'FpViJ');
-      let text = `"Idoreo is the merchant who owns of most of the warehouses in Alinea.  He charges for storage space and since Alinea is a port town, he's got himself a pretty valuable business.  He's well-known around here."`;
-      core.say(text, scope.MMdxN);
-    };
-
-    // text
-    scope.MMdxN = () => {
-      player.set(CURRENT_NODE_VAR, 'MMdxN');
-      let text = `"He sponsors this tavern.  Like I said, he's kinda got a sweet tooth.  As long as I stock up on good, plum wine, then he's happy, I'm happy, and we're all happy."`;
-      core.say(text, scope.sZNhw);
-    };
-
-    // next_file
-    scope.MBMNa = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    // text
-    scope.mfEJp = () => {
-      player.set(CURRENT_NODE_VAR, 'mfEJp');
-      let text = `"Here for a drink?"`;
-      core.say(text, scope.sZNhw);
-    };
-
-    if (id === undefined) {
-      scope.y9gCB();
+      scope.f1zni();
     } else if (id) {
       scope[id]();
     }
@@ -1074,6 +1042,28 @@
 
     if (id === undefined) {
       scope.bUbbt();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
+  files[`Alinea_CH_DunnsMurose.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_DunnsMurose.json');
+    // next_file
+    scope.YDiFN = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    if (id === undefined) {
+      scope.YDiFN();
     } else if (id) {
       scope[id]();
     }
@@ -1335,6 +1325,206 @@
     return player.state;
   };
 
+  files[`Alinea_CH_BartenderRus.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_BartenderRus.json');
+    // switch
+    scope.y9gCB = () => {
+      player.set(CURRENT_NODE_VAR, 'y9gCB');
+      if (player.once()) scope.gUtER();
+      else if (true) scope.mfEJp();
+    };
+    // text
+    scope.gUtER = () => {
+      player.set(CURRENT_NODE_VAR, 'gUtER');
+      let text = `The bartender of this tavern is a stout man with an amicable face.  "Good day to you!  Can I get you a drink?"`;
+      core.say(text, scope.sZNhw);
+    };
+
+    // choice
+    scope.sZNhw = () => {
+      player.set(CURRENT_NODE_VAR, 'sZNhw');
+      let text = ``;
+      core.choose(text, 'sZNhw', [
+        {
+          t: `A drink sounds nice.`,
+          cb: scope.HyJzb,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `You mentioned someone named "Idoreo"?`,
+          cb: scope.FpViJ,
+          c: () => {
+            return (
+              player.get('nodes.WtgxM') &&
+              !player.hasSpokenTo('Alinea_CH_Idoreo')
+            );
+          },
+        },
+        {
+          t: `Idoreo sponsors this tavern?`,
+          cb: scope.MMdxN,
+          c: () => {
+            return (
+              player.get('nodes.WtgxM') &&
+              player.hasSpokenTo('Alinea_CH_Idoreo')
+            );
+          },
+        },
+        {
+          t: `Nevermind.`,
+          cb: scope.MBMNa,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+
+    // pass_fail
+    scope.HyJzb = () => {
+      player.set(CURRENT_NODE_VAR, 'HyJzb');
+      const condition = (() => {
+        return player.get('coins') > 10;
+      })();
+      if (condition) {
+        player.set(CURRENT_NODE_VAR, 'U4b6O');
+        let text = ``;
+        core.say(text, scope.u06Bp);
+      }
+      if (!condition) {
+        player.set(CURRENT_NODE_VAR, 'WfDHF');
+        let text = ``;
+        core.say(text, scope.Orm12);
+      }
+    };
+    // text
+    scope.u06Bp = () => {
+      player.set(CURRENT_NODE_VAR, 'u06Bp');
+      let text = `"Plum wine or ale?"`;
+      core.say(text, scope.n3c1E);
+    };
+
+    // choice
+    scope.n3c1E = () => {
+      player.set(CURRENT_NODE_VAR, 'n3c1E');
+      let text = ``;
+      core.choose(text, 'n3c1E', [
+        {
+          t: `Plum wine sounds super 'del'. (What the hip kids are calling 'delicious' nowadays.)`,
+          cb: scope.EoQtT,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Ale would be great.`,
+          cb: scope.h7hIn,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Actually... maybe not.`,
+          cb: scope.sZNhw,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+
+    // action
+    scope.EoQtT = async () => {
+      player.set(CURRENT_NODE_VAR, 'EoQtT');
+      await player.modifyCoins(-6);
+      scope.ICNcg();
+    };
+
+    // text
+    scope.ICNcg = () => {
+      player.set(CURRENT_NODE_VAR, 'ICNcg');
+      let text = `After an odd glance, he grabs a bottle from beneath the counter and skillfully pours you each a goblet of succulent plum wine.  Having just stepped off a trans-oceanic ship, it tastes heavenly.`;
+      core.say(text, scope.WtgxM);
+    };
+
+    // text
+    scope.WtgxM = () => {
+      player.set(CURRENT_NODE_VAR, 'WtgxM');
+      let text = `The bartender grins.  "That's a good stock isn't it?  You've got Idoreo to thank for that.  Loves the sweeter side of the drinks, so he sponsors the tavern, so long as I provide it."`;
+      core.say(text, scope.sZNhw);
+    };
+
+    // action
+    scope.h7hIn = async () => {
+      player.set(CURRENT_NODE_VAR, 'h7hIn');
+      await player.modifyCoins(-6);
+      scope.xMq8B();
+    };
+
+    // text
+    scope.xMq8B = () => {
+      player.set(CURRENT_NODE_VAR, 'xMq8B');
+      let text = `He leaves the counter for a moment and comes back with an old barrel, heaving it onto the counter.  "Sorry, most people don't ask for this, so I don't keep it front."  He pours a few mugs and pushes them across the bar at you.`;
+      core.say(text, scope.AATnJ);
+    };
+
+    // text
+    scope.AATnJ = () => {
+      player.set(CURRENT_NODE_VAR, 'AATnJ');
+      let text = `The ale is... okay.  Even after your long journey across the ocean, it still tastes kind of bland.  It's plenty strong though.`;
+      core.say(text, scope.sZNhw);
+    };
+
+    // text
+    scope.Orm12 = () => {
+      player.set(CURRENT_NODE_VAR, 'Orm12');
+      let text = `You don't have enough money to waste on small luxuries like tavern drinks!`;
+      core.say(text, scope.sZNhw);
+    };
+
+    // text
+    scope.FpViJ = () => {
+      player.set(CURRENT_NODE_VAR, 'FpViJ');
+      let text = `"Idoreo is the merchant who owns of most of the warehouses in Alinea.  He charges for storage space and since Alinea is a port town, he's got himself a pretty valuable business.  He's well-known around here.  One might even say well-liked."`;
+      core.say(text, scope.MMdxN);
+    };
+
+    // text
+    scope.MMdxN = () => {
+      player.set(CURRENT_NODE_VAR, 'MMdxN');
+      let text = `"He sponsors this tavern.  Half the beds in the rooms are feather mattresses because of his generosity.  Like I said, he's kinda got a sweet tooth.  As long as I stock up on good, plum wine, then he's happy, I'm happy, and we're all happy."`;
+      core.say(text, scope.sZNhw);
+    };
+
+    // next_file
+    scope.MBMNa = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    // text
+    scope.mfEJp = () => {
+      player.set(CURRENT_NODE_VAR, 'mfEJp');
+      let text = `"Here for a drink?"`;
+      core.say(text, scope.sZNhw);
+    };
+
+    if (id === undefined) {
+      scope.y9gCB();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
   files[`Alinea_CH_GuardCaptainMullen.json`] = id => {
     player.set(CURRENT_FILE_VAR, 'Alinea_CH_GuardCaptainMullen.json');
     // action
@@ -1352,7 +1542,14 @@
     // text
     scope.iBk1i = () => {
       player.set(CURRENT_NODE_VAR, 'iBk1i');
-      let text = `The man sitting behind the desk in this office appears to be a Realm Captain.  Though he has removed his helmet - the plumes of which indicate an officer's rank - the green sash across his chainmail is adorned with various medals, and there are far more of them than on any of the guards you've seen in Alinea thus far.  He glances up as you approach him, and his lips twitch into a tiny smile.  You distinctly hear the word "Lark" muttered under his breath.`;
+      let text = `The man sitting in this office appears to be a Realm Captain.  Though he has removed his helmet - the plumes of which indicate an officer's rank - the green sash across his chainmail is adorned with various medals, and there are far more of them than on any of the guards you've seen in Alinea thus far.`;
+      core.say(text, scope.YiPwY);
+    };
+
+    // text
+    scope.YiPwY = () => {
+      player.set(CURRENT_NODE_VAR, 'YiPwY');
+      let text = `He glances up as you approach him, and his lips twitch into a tiny smile.  You distinctly hear the word "Lark" muttered under his breath.`;
       core.say(text, scope.Z0oAJ);
     };
 
@@ -1363,7 +1560,7 @@
       core.choose(text, 'Z0oAJ', [
         {
           t: `Who might you be?`,
-          cb: scope.SmeNH,
+          cb: scope.gOm7y,
           c: () => {
             return true;
           },
@@ -1397,13 +1594,6 @@
           },
         },
       ]);
-    };
-
-    // text
-    scope.SmeNH = () => {
-      player.set(CURRENT_NODE_VAR, 'SmeNH');
-      let text = `A small pause and grimace indicate he was ready for the question, but certainly not eager to answer it hastily.`;
-      core.say(text, scope.gOm7y);
     };
 
     // text

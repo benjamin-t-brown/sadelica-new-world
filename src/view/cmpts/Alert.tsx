@@ -27,12 +27,17 @@ const G_view_Alert = (): SuperfineElement => {
   const text = props.text.split('\n');
   let portraitSprite = props.portrait;
 
+  let background = '#CCC';
   let scale = 2;
   let spriteSize = 32;
   if (!portraitSprite) {
     portraitSprite = 'actors1_0';
     scale = 3;
     spriteSize = 16;
+  } else if (props.isSmallPortrait) {
+    scale = 3;
+    spriteSize = 16;
+    background = '#656D71';
   }
   let url = G_view_cachePortraitIconDataUrl(portraitSprite, spriteSize, scale);
 
@@ -86,7 +91,7 @@ const G_view_Alert = (): SuperfineElement => {
           >
             <img
               style={{
-                background: '#CCCCCC',
+                background,
                 'margin-left': '16px',
                 'margin-top': '16px',
               }}
