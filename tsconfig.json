@@ -1,9 +1,20 @@
 {
   "compilerOptions": {
     "baseUrl": "./src/",
-    "target": "ES2017",
-    "outFile": "main.js",
+    "paths": {
+      "preact": [
+        "node_modules/preact/"
+      ]
+    },
+    "target": "ES2020",
+    "module": "es2020",
+    "moduleResolution": "node",
+    // "outFile": "./main.js",
+    "noEmit": true,
     "allowJs": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": false,
     "lib": [
       "dom",
       "ES2017"
@@ -15,11 +26,14 @@
     "noImplicitAny": false,
     "experimentalDecorators": true,
     "jsx": "react",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "esModuleInterop": true,
+    "pretty": true,
   },
-  "exclude": [
-    "node_modules"
-  ],
+  "references": [],
   "include": [
-    "./src"
+    "src/**/*",
+    "test/**/*"
   ]
 }

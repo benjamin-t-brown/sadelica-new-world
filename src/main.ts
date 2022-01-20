@@ -1,60 +1,157 @@
-/*
-global
-G_controller_initEvents
-G_controller_render
-G_controllerPlayCutscene
-G_model_getCanvas
-G_model_getImage
-G_model_getCtx
-G_model_getCanvas
-G_model_getSprite
-G_model_loadImagesAndSprites
-G_model_createWorld
-G_model_setCurrentWorld
-G_model_setInputDisabled
-G_view_clearScreen
-G_view_renderWorld
-G_view_renderMap
-G_view_renderUi
-G_view_playSound
-G_view_loadSounds
-G_initActors
-*/
+import { initHooks } from 'view/hooks';
+import { colors } from 'view/style';
+import { mountUi } from 'view/ui';
+import {
+  renderUi,
+  setBottomButtons,
+  setGameSelectedCharacter,
+  showDialog,
+  showGame,
+  showModal,
+} from 'controller/ui-actions';
+import { BottomBarButtonType } from 'model/app-state';
+import { Character, createCharacter } from 'model/character';
+import { setCurrentPlayer } from 'model/generics';
+import { core } from 'in2';
 
-const G_start = () => {
-  G_model_setInputDisabled(false);
-  const world = G_model_createWorld('map1');
-  G_model_setCurrentWorld(world);
-  console.log('world', world);
-  G_controller_render(world);
-  // G_view_playSound('start');
-  G_view_renderUi();
+const elem = document.documentElement;
+
+function openFullscreen() {
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if ((elem as any).webkitRequestFullscreen) {
+    /* Safari */
+    (elem as any).webkitRequestFullscreen();
+  } else if ((elem as any).msRequestFullscreen) {
+    /* IE11 */
+    (elem as any).msRequestFullscreen();
+  }
+}
+
+/* Close fullscreen */
+function closeFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if ((document as any).webkitExitFullscreen) {
+    /* Safari */
+    (document as any).webkitExitFullscreen();
+  } else if ((document as any).msExitFullscreen) {
+    /* IE11 */
+    (document as any).msExitFullscreen();
+  }
+}
+
+export const main = async (): Promise<void> => {
+  console.time('load');
+
+  mountUi();
+
+  initHooks();
+  core.init();
+
+  const loading = document.getElementById('page-loading');
+  if (loading) {
+    loading.remove();
+  }
+
+  await new Promise<void>(resolve => {
+    const touchSomething = () => {
+      window.removeEventListener('keydown', touchSomething);
+      window.removeEventListener('mousedown', touchSomething);
+      resolve();
+    };
+    window.addEventListener('keydown', touchSomething);
+    window.addEventListener('mousedown', touchSomething);
+
+    const pressAnyKey = document.getElementById('page-press-any-key');
+    if (pressAnyKey) {
+      pressAnyKey.style.display = 'flex';
+    }
+  });
+
+  const pressAnyKey = document.getElementById('page-press-any-key');
+  if (pressAnyKey) {
+    pressAnyKey.remove();
+  }
+
+  const ch1: Character = createCharacter('Elmindretta');
+  ch1.inventory = [
+    {
+      name: 'Knife',
+    },
+    {
+      name: 'Sword',
+    },
+    {
+      name: 'Ruby Gem',
+      stackable: true,
+    },
+    {
+      name: 'Ruby Gem',
+      stackable: true,
+    },
+    {
+      name: 'Ruby Gem',
+      stackable: true,
+    },
+    {
+      name: 'Ruby Gem',
+      stackable: true,
+    },
+    {
+      name: 'Ruby Gem',
+      stackable: true,
+    },
+    {
+      name: 'Ruby Gem',
+      stackable: true,
+    },
+  ];
+
+  const ch2: Character = createCharacter('Jose');
+  ch2.inventory = [
+    {
+      name: 'Knife',
+    },
+  ];
+  const ch3: Character = createCharacter('Goodwin-James-McElroy');
+  ch3.inventory = [
+    {
+      name: 'Sword',
+    },
+  ];
+  setCurrentPlayer({
+    name: 'Player Name',
+    party: [ch1, ch2, ch3],
+    leader: ch1,
+  });
+  setGameSelectedCharacter(ch1);
+
+  showGame();
+
+  showDialog('Alinea_CH_DockmasterClaire');
+
+  // showModal({
+  //   title: 'CHOOSE',
+  //   text: 'You have come to a fork in the road.  <br/><br/>Do you go forward or backwards?',
+  //   headerText: 'Fork in the road',
+  //   onConfirm: () => {
+  //     console.log('You chose to go forwards.');
+  //   },
+  //   onCancel: () => {
+  //     console.log('You chose to go backwards.');
+  //   },
+  // });
+  // renderUi();
+  // setTimeout(() => {
+  // }, 100);
 };
 
-const main = async () => {
-  await Promise.all([
-    G_model_loadImagesAndSprites([
-      [
-        'packed',
-        'res/packed.png',
-        16,
-        16,
-        2,
-        2,
-        ['terrain2', 'terrain3', 'actors2', 'misc1'],
-      ],
-      ['terrain1', 'res/terrain1.png', 16, 16, 1, 1, ['terrain1']],
-      ['actors1', 'res/actors1.png', 16, 16, 1, 1, ['actors1']],
-      ['map1', 'res/map1.png', 64, 64, 1, 1, ['map1']],
-      ['portrait1', 'res/portrait1.png', 32, 32, 1, 1, ['portrait1']],
-    ]),
-    G_view_loadSounds(),
-  ]);
-
-  G_initActors();
-  G_controller_initEvents();
-  G_start();
-  //G_view_renderMap(world, 1);
-};
-
-window.addEventListener('load', main);
+window.addEventListener('load', () => {
+  (window as any).DEVELOPMENT = true;
+  const loading = document.getElementById('page-loading');
+  if (loading) {
+    loading.style.color = colors.LIGHTBLUE;
+  }
+  main();
+});

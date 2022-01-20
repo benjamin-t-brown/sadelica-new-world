@@ -3,22 +3,21 @@ parser: '@typescript-eslint/parser'
 extends:
   - 'plugin:prettier/recommended'
   - 'eslint:recommended'
+  - 'plugin:@typescript-eslint/eslint-recommended'
+  - 'plugin:@typescript-eslint/recommended'
+  - 'preact'
 
 plugins:
   - 'babel'
   - 'prettier'
+  - '@typescript-eslint'
 
 env:
   browser: true
   node: true
-  mocha: true
   es6: true
 
-globals:
-  io: readonly
-  '^G_': writeable
-
-ignorePatterns: 
+ignorePatterns:
   - main.js
 
 rules:
@@ -33,8 +32,30 @@ rules:
   no-console: 0
   no-case-declarations: 0
   no-fallthrough: 0
+  indent: 0
+  func-style: 0
+  react/jsx-index-props: 0
+  react/self-closing-comp: 0
+  react/jsx-indent-props: 0
+  react/jsx-no-bind: 0
+  react/display-name: 0
+  react/jsx-boolean-value: 0
+  brace-style: 0
+  comma-dangle: 0
   no-sparse-arrays: 0
-  no-unused-vars:
-    - 1
-    - vars: 'local'
-      varsIgnorePattern: '^G_'
+  arrow-body-style: 0
+  no-unused-vars: 0
+  no-else-return: 0
+  radix: 0
+  object-shorthand: 0
+  no-lonely-if: 0
+  prefer-arrow-callback: 0
+  prefer-template: 0
+  camelcase: 0
+  '@typescript-eslint/no-empty-function': 0
+  '@typescript-eslint/no-explicit-any': 0
+  '@typescript-eslint/no-var-requires': 0
+  '@typescript-eslint/explicit-module-boundary-types': 0
+  '@typescript-eslint/ban-types': 0
+  '@typescript-eslint/no-this-alias': 0
+  '@typescript-eslint/no-unused-vars': 1
