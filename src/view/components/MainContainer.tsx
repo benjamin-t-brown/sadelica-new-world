@@ -2,17 +2,20 @@
 import {
   appReducer,
   getUiInterface,
+  resetBottomBarButtons,
   setUiInterface,
   UIInterface,
 } from 'controller/ui-actions';
 import { AppSection, createAppState } from 'model/app-state';
 import { h } from 'preact';
-import { useReducer, useState } from 'preact/hooks';
+import { useEffect, useReducer, useState } from 'preact/hooks';
 import { colors, style } from 'view/style';
 import BottomBar from './BottomBar';
 import DialogSection from './DialogSection';
 import GameSection from './GameSection';
+import InGameMenuSection from './InGameMenuSection';
 import ModalSection from './ModalSection';
+import StoreSection from './StoreSection';
 
 const CenterContent = style('div', {
   display: 'flex',
@@ -48,6 +51,12 @@ const renderSection = (section: AppSection) => {
     case AppSection.DIALOG: {
       return <DialogSection key={section} />;
     }
+    case AppSection.GAME_MENU: {
+      return <InGameMenuSection key={section} />;
+    }
+    case AppSection.STORE: {
+      return <StoreSection key={section} />;
+    }
     default: {
       return <div></div>;
     }
@@ -65,6 +74,10 @@ const MainContainer = () => {
     dispatch,
   } as UIInterface);
   getUiInterface().appState = appState;
+
+  useEffect(() => {
+    resetBottomBarButtons();
+  });
 
   console.log('render app', appState);
 

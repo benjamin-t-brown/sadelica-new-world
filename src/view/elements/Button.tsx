@@ -1,6 +1,6 @@
 /* @jsx h */
 import { pxToPctHeight, pxToPctWidth } from 'model/screen';
-import { colors, style } from 'view/style';
+import { colors, keyframes, style } from 'view/style';
 
 interface IButtonProps {
   color?: string;
@@ -9,11 +9,29 @@ interface IButtonProps {
   width?: number;
 }
 
+const borderPulse = keyframes({
+  '0%': {
+    borderWidth: '0.5rem',
+  },
+  '50%': {
+    borderWidth: '0.4rem',
+  },
+  '100%': {
+    borderWidth: '0.5rem',
+  },
+});
+
 export const Button = style('div', (props: IButtonProps) => {
   return {
     userSelect: 'none',
-    border: '1px solid ' + colors.WHITE,
-    backgroundColor: props.color ?? colors.DARKBLUE,
+    border: '0.25rem solid ' + colors.BLACK,
+    borderStyle: props.highlighted ? 'double' : 'solid',
+    borderWidth: props.highlighted ? '0.5rem' : '0.25rem',
+    animation: props.highlighted
+      ? borderPulse + ' 1s linear infinite'
+      : 'unset',
+    backgroundColor: colors.WHITE,
+    color: colors.BLACK,
     cursor: 'pointer',
     display: 'flex',
     justifyContent: 'center',
@@ -21,6 +39,7 @@ export const Button = style('div', (props: IButtonProps) => {
     height: pxToPctHeight(36),
     width: props.width ?? 'unset',
     maxWidth: props.maxWidth ?? 'unset',
+    boxSizing: 'border-box',
     borderRadius: '0.5rem',
     '&:hover': {
       filter: 'brightness(120%)',
@@ -35,7 +54,8 @@ export const SmallSquareButton = style('div', (props: IButtonProps) => {
   return {
     userSelect: 'none',
     border: '1px solid ' + (props.highlighted ? colors.YELLOW : colors.WHITE),
-    backgroundColor: props.color ?? colors.DARKBLUE,
+    backgroundColor: props.color ?? colors.BLACK,
+    color: colors.WHITE,
     textAlign: 'center',
     cursor: 'pointer',
     display: 'flex',
@@ -59,8 +79,9 @@ export const TextButton = style('div', (props: IButtonProps) => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    color: props.color ?? colors.YELLOW,
+    color: props.color ?? (props.highlighted ? colors.CYAN : colors.BLACK),
     textDecoration: props.highlighted ? 'underline' : 'unset',
+    fontStyle: props.highlighted ? 'italic' : '',
     maxWidth: props.maxWidth ?? 'unset',
     '&:hover': {
       filter: 'brightness(120%)',

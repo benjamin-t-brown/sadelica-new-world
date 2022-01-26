@@ -1,7 +1,12 @@
-import { Character } from './character';
+import { Actor } from './actor';
 
 export interface Player {
   name: string;
-  party: Character[];
-  leader: Character;
+  party: Actor[];
+  leader: Actor;
+  money: number;
+  worldX: number;
+  worldY: number;
 }
+
+// export const playerGetLeader =

@@ -1,15 +1,15 @@
 /* @jsx h */
 import { h } from 'preact';
-import { Item } from 'model/item';
-import { SmallSquareButton, TextButton } from 'view/elements/Button';
 import { colors, keyframes, style } from 'view/style';
-import { DESIGN_HEIGHT, pxToPctHeight, pxToPctWidth } from 'model/screen';
-import VerticalMenu from 'view/elements/VerticalMenu';
-import { Character } from 'model/character';
+import { pxToPctHeight } from 'model/screen';
 import { Scrollbars } from 'preact-custom-scrollbars';
 import { getUiInterface } from 'controller/ui-actions';
 import { useEffect, useState } from 'preact/hooks';
 import { useCallback } from 'lib/preact-hooks';
+import { core } from 'in2';
+import { useKeyboardEventListener } from 'view/hooks';
+import { AppSection } from 'model/app-state';
+import SpriteDiv from 'view/elements/SpriteDiv';
 
 const Root = style('div', {
   position: 'absolute',
@@ -17,8 +17,14 @@ const Root = style('div', {
   left: '0',
   width: '100%',
   height: '100%',
-  background: colors.DARKBROWN,
+  background: colors.DARKGREY,
 });
+
+const isDialogActive = () => {
+  return (
+    getUiInterface().appState.sections.slice(-1)?.[0] === AppSection.DIALOG
+  );
+};
 
 const PortraitContainer = style('div', {
   height: '128px',
@@ -30,13 +36,16 @@ const PortraitContainer = style('div', {
 const PortraitDecorator = style('div', {
   height: '100%',
   width: 'calc(50% - 64px)',
-  background: colors.BLACK,
+  background: colors.GREY,
 });
 const Portrait = style('div', {
   width: '128px',
   height: '128px',
   boxSizing: 'border-box',
   border: '1px solid ' + colors.WHITE,
+  display: 'flex',
+  justifyContent: 'center',
+  overflow: 'hidden',
 });
 
 const NameLabelContainer = style('div', {
@@ -45,10 +54,11 @@ const NameLabelContainer = style('div', {
   borderTop: '1px solid ' + colors.WHITE,
   borderBottom: '1px solid ' + colors.WHITE,
   display: 'flex',
+  color: colors.CYAN,
   justifyContent: 'center',
   alignItems: 'center',
   fontSize: '1.2rem',
-  background: colors.DARKPURPLE,
+  background: colors.BLACK,
 });
 
 const fadeIn = keyframes({
@@ -65,6 +75,7 @@ const TextContainer = style('div', {
   width: '100%',
   boxSizing: 'border-box',
   fontSize: '0.8rem',
+  fontFamily: 'NewYork',
 });
 const DialogLine = style('p', {
   width: '100%',
@@ -76,11 +87,11 @@ const DialogLine = style('p', {
 });
 const DialogChoice = style('p', {
   width: '100%',
-  color: colors.CYAN,
+  color: colors.WHITE,
   padding: '2.5%',
   boxSizing: 'border-box',
   margin: '1 0',
-  background: colors.DARKCYAN,
+  background: colors.DARKGREY_ALT,
   animation: fadeIn + ' 0.05s linear',
 });
 const renderLineSpans = (line: string) => {
@@ -109,7 +120,7 @@ const renderLineSpans = (line: string) => {
       lines.push(
         <span
           style={{
-            color: colors.GREY,
+            color: colors.LIGHTGREY,
           }}
         >
           {lineSplitByQuotes[i]}
@@ -117,7 +128,6 @@ const renderLineSpans = (line: string) => {
       );
     }
   }
-  // console.log('renderLineSPans', lineSplitByQuotes, lines);
   return lines;
 };
 
@@ -153,14 +163,14 @@ const DialogSection = () => {
       elem2.style.transition = 'unset';
       elem2.style.opacity = '0';
       setTimeout(() => {
-        (elem2 as any).style.transition = 'opacity 0.1s linear';
+        (elem2 as any).style.transition = 'opacity 0.0s linear';
       }, 1);
     }
   }, []);
 
   const handleDialogChoiceClick = useCallback(
     (ind: number) => {
-      if (active) {
+      if (active && ind < dialogState.choices.length) {
         setDisableScroll(true);
         hideTapToContinue();
         setChoiceClicked(ind);
@@ -177,12 +187,11 @@ const DialogSection = () => {
         }, 100);
       }
     },
-    [hideTapToContinue, active, setActive]
+    [hideTapToContinue, active, setActive, dialogState.choices.length]
   );
 
   const handleDialogContinueClick = useCallback(() => {
     if (active && dialogState.waitingForContinue) {
-      console.log('handle continue click');
       hideTapToContinue();
       setActive(false);
       setTimeout(() => {
@@ -197,14 +206,37 @@ const DialogSection = () => {
     }
   }, [hideTapToContinue, active, setActive, dialogState.waitingForContinue]);
 
+  useKeyboardEventListener(
+    ev => {
+      if (!isDialogActive()) {
+        return;
+      }
+
+      const keyAsNumber = Number(ev.key);
+
+      if (ev.key === 'Enter') {
+        ev.preventDefault();
+        handleDialogContinueClick();
+      } else if (!isNaN(keyAsNumber) && keyAsNumber >= 1 && keyAsNumber <= 9) {
+        handleDialogChoiceClick(keyAsNumber - 1);
+      }
+    },
+    [handleDialogChoiceClick, handleDialogContinueClick]
+  );
+
   return (
     <Root id="dialog">
       <PortraitContainer>
         <PortraitDecorator></PortraitDecorator>
-        <Portrait></Portrait>
+        <Portrait>
+          <SpriteDiv
+            sprite={dialogState.portraitSprite ?? ''}
+            scale={1}
+          ></SpriteDiv>
+        </Portrait>
         <PortraitDecorator></PortraitDecorator>
       </PortraitContainer>
-      <NameLabelContainer>Name Label</NameLabelContainer>
+      <NameLabelContainer>{dialogState.actorName}</NameLabelContainer>
       <TextContainer onClick={handleDialogContinueClick}>
         <Scrollbars width="100%" height="100%" id="scrollbars">
           {dialogState.lines.map((lineObj, i) => {
@@ -225,7 +257,12 @@ const DialogSection = () => {
                 onClick={handleDialogChoiceClick.bind(null, i)}
                 key={'choice' + i}
                 style={{
-                  color: i === choiceClicked ? colors.YELLOW : undefined,
+                  color:
+                    i === choiceClicked
+                      ? colors.YELLOW
+                      : core.hasPickedChoice(lineObj.id)
+                      ? colors.GREY
+                      : colors.CYAN,
                 }}
               >
                 {lineObj.line}
@@ -237,6 +274,7 @@ const DialogSection = () => {
             style={{
               textAlign: 'center',
               visibility: active ? 'unset' : 'invisible',
+              fontFamily: 'Chicago',
               // color: active ? colors.CYAN : colors.GREY,
             }}
           >

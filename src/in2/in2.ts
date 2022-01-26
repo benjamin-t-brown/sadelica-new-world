@@ -47,6 +47,10 @@ export const core = (windowWithIn2.core = /*eslint-disable-line*/ {
     return scope?.[id ?? '']?.isChoice;
   },
 
+  hasPickedChoice(id?: string) {
+    return player.get('nodes')?.[id ?? ''];
+  },
+
   async say(
     text: string | string[],
     cb: () => void,
@@ -129,7 +133,6 @@ export const core = (windowWithIn2.core = /*eslint-disable-line*/ {
     console.log('[standalone] EXIT');
 
     hideSection(AppSection.DIALOG);
-    resetBottomBarButtons();
   },
 });
 

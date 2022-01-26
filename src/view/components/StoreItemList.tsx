@@ -6,11 +6,12 @@ import { colors, style } from 'view/style';
 import { pxToPctWidth } from 'model/screen';
 import VerticalMenu from 'view/elements/VerticalMenu';
 import { Actor } from 'model/actor';
+import { StoreItem } from 'model/app-state';
 
 const InventoryItemContainer = style('div', {
   position: 'relative',
   width: '100%',
-  height: '16.6%',
+  height: '10.6%',
   background: colors.WHITE,
   color: colors.BLACK,
   boxSizing: 'border-box',
@@ -26,8 +27,8 @@ const InventoryItemActions = style('div', {
   alignItems: 'center',
   height: '50%',
 });
-const InventoryItem = (props: { value: ItemWithCount }) => {
-  const itemWithCount = props.value;
+const StoreItemRow = (props: { value: StoreItem }) => {
+  const storeItem = props.value;
   const textButtonStyle = {
     marginRight: '2.5%',
     color: colors.GREY,
@@ -35,12 +36,13 @@ const InventoryItem = (props: { value: ItemWithCount }) => {
   return (
     <InventoryItemContainer>
       <InventoryItemName>
-        {itemWithCount.item.name}{' '}
-        {itemWithCount.count > 1 ? `(${itemWithCount.count})` : ''}
+        {storeItem.itemName}{' '}
+        {storeItem.quantity > 1 ? `(${storeItem.quantity})` : ''}
       </InventoryItemName>
       <InventoryItemActions>
-        <TextButton style={textButtonStyle}>Up</TextButton>
-        <TextButton style={textButtonStyle}>Dn</TextButton>
+        <div style={{ ...textButtonStyle, color: colors.DARKYELLOW }}>
+          ☼{storeItem.price}
+        </div>
         <TextButton style={textButtonStyle}>Exam.</TextButton>
       </InventoryItemActions>
       <Button
@@ -52,34 +54,14 @@ const InventoryItem = (props: { value: ItemWithCount }) => {
           height: 'calc(100% - 8px)',
         }}
       >
-        Use
+        Buy
       </Button>
     </InventoryItemContainer>
   );
 };
 
-const stackItems = (items: Item[]) => {
-  return items.reduce((items, item) => {
-    const existingItem = items.find(a => a.item.name === item.name);
-    if (existingItem && item.stackable) {
-      existingItem.count++;
-    } else {
-      items.push({
-        item,
-        count: 0,
-      });
-    }
-    return items;
-  }, [] as ItemWithCount[]);
-};
-
-interface ItemWithCount {
-  item: Item;
-  count: number;
-}
-
-const InventoryList = (props: { ch: Actor }) => {
-  const backpack = stackItems(props.ch.inventory);
+const StoreItemList = (props: { items: StoreItem[] }) => {
+  const backpack = props.items;
   return backpack.length === 0 ? (
     <div
       style={{
@@ -90,23 +72,23 @@ const InventoryList = (props: { ch: Actor }) => {
         boxSizing: 'border-box',
       }}
     >
-      This character has no items.
+      No items.
     </div>
   ) : (
     <VerticalMenu
       width="100%"
       height="100%"
-      onItemClick={itemWithCount => {
-        console.log('clicked item', itemWithCount.item);
+      onItemClick={storeItem => {
+        console.log('clicked item', storeItem.itemName);
       }}
-      items={backpack.map(itemWithCount => {
+      items={backpack.map(storeItem => {
         return {
-          Cmpt: InventoryItem,
-          value: itemWithCount,
+          Cmpt: StoreItemRow,
+          value: storeItem,
         };
       })}
     />
   );
 };
 
-export default InventoryList;
+export default StoreItemList;

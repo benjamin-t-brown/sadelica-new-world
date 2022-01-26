@@ -7,12 +7,24 @@ import {
   BottomBarButtonType,
   AppStateDialog,
   AppStateDialogLine,
+  StoreItem,
+  AppStateStore,
+  AppStateGame,
 } from 'model/app-state';
-import { Character } from 'model/character';
-import { Player } from 'model/player';
 import { colors } from 'view/style';
 import { executeDialog } from 'in2';
-import { getCurrentPlayer } from 'model/generics';
+import {
+  getCamera,
+  getCurrentPlayer,
+  getCurrentWorld,
+  setCurrentWorld,
+} from 'model/generics';
+import { Actor } from 'model/actor';
+import { createWorld, worldGetCurrentRoom } from 'model/world';
+import { getIfExists as getActorTemplate } from 'db/actors';
+import { getSprite, Sprite } from 'model/canvas';
+import { extractActorSpriteFromScreen } from 'view/draw';
+import { roomGetActorAt, roomGetActorByName } from 'model/room';
 
 export interface UIInterface {
   appState: AppState;
@@ -22,7 +34,8 @@ export interface UIInterface {
 
 export let uiInterface: UIInterface | null = null;
 export const getUiInterface = () => uiInterface as UIInterface;
-export const setUiInterface = (iFace: any) => (uiInterface = iFace);
+export const setUiInterface = (iFace: any) =>
+  (uiInterface = (window as any).uiInterface = iFace);
 
 export interface ReducerAction<T> {
   action: string;
@@ -51,6 +64,12 @@ const resolvers: { [key: string]: MutationFunction } = {
     );
     newState.sections = sections;
   },
+  setGameSection: (newState: AppState, payload: Partial<AppStateGame>) => {
+    newState.game = {
+      ...newState.game,
+      ...payload,
+    };
+  },
   setBottomButtons: (
     newState: AppState,
     payload: { buttons: BottomBarButton[] }
@@ -65,7 +84,7 @@ const resolvers: { [key: string]: MutationFunction } = {
   },
   setGameSelectedCharacter: (
     newState: AppState,
-    payload: { ch: Character | null }
+    payload: { ch: Actor | null }
   ) => {
     newState.game.selectedCh = payload.ch;
   },
@@ -78,6 +97,12 @@ const resolvers: { [key: string]: MutationFunction } = {
   setDialogSection: (newState: AppState, payload: Partial<AppStateDialog>) => {
     newState.dialog = {
       ...newState.dialog,
+      ...payload,
+    };
+  },
+  setStoreSection: (newState: AppState, payload: Partial<AppStateStore>) => {
+    newState.store = {
+      ...newState.store,
       ...payload,
     };
   },
@@ -135,6 +160,29 @@ export const hideSections = () => {
 };
 
 export const setBottomButtons = (buttons: BottomBarButton[]) => {
+  const uiInterface = getUiInterface();
+  const currentActiveButtons = uiInterface.appState.bottomBar.buttons;
+
+  let shouldUpdate = false;
+
+  if (buttons.length !== currentActiveButtons.length) {
+    shouldUpdate = true;
+  }
+
+  if (!shouldUpdate) {
+    for (let i = 0; i < buttons.length; i++) {
+      const currentButtonType = buttons[i].type;
+      if (currentButtonType !== currentActiveButtons?.[i]?.type) {
+        shouldUpdate = true;
+        break;
+      }
+    }
+  }
+
+  if (!shouldUpdate) {
+    return;
+  }
+
   getUiInterface().dispatch({
     action: 'setBottomButtons',
     payload: {
@@ -144,31 +192,37 @@ export const setBottomButtons = (buttons: BottomBarButton[]) => {
 };
 
 export const resetBottomBarButtons = () => {
-  setBottomButtons([
-    {
-      type: BottomBarButtonType.INTERACT,
-    },
-    {
-      type: BottomBarButtonType.LOOK,
-    },
-    {
-      type: BottomBarButtonType.LOCK_PICK,
-    },
-    {
-      type: BottomBarButtonType.PICK_UP,
-    },
-    {
-      type: BottomBarButtonType.STEAL,
-    },
-    {
-      type: BottomBarButtonType.MENU,
-    },
-  ]);
+  const uiInterface = getUiInterface();
+  if (
+    uiInterface.appState.sections.length === 1 &&
+    uiInterface.appState.sections.includes(AppSection.GAME) &&
+    uiInterface.appState.game.inventoryState !== InventoryState.FULL
+  ) {
+    setBottomButtons([
+      {
+        type: BottomBarButtonType.INTERACT,
+      },
+      {
+        type: BottomBarButtonType.LOOK,
+      },
+      {
+        type: BottomBarButtonType.CAST,
+      },
+      {
+        type: BottomBarButtonType.PICK_UP,
+      },
+      {
+        type: BottomBarButtonType.STEAL,
+      },
+      {
+        type: BottomBarButtonType.MENU,
+      },
+    ]);
+  }
 };
 
 export const showGame = () => {
   showSection(AppSection.GAME);
-  resetBottomBarButtons();
 };
 export const setGameInventoryState = (inventoryState: InventoryState) => {
   getUiInterface().dispatch({
@@ -179,11 +233,9 @@ export const setGameInventoryState = (inventoryState: InventoryState) => {
   });
   if (inventoryState === InventoryState.FULL) {
     setBottomButtons([]);
-  } else {
-    resetBottomBarButtons();
   }
 };
-export const setGameSelectedCharacter = (ch: Character | null) => {
+export const setGameSelectedCharacter = (ch: Actor | null) => {
   getUiInterface().dispatch({
     action: 'setGameSelectedCharacter',
     payload: {
@@ -207,19 +259,65 @@ export const showModal = (args: Partial<AppStateModal>) => {
   showSection(AppSection.MODAL);
 };
 
-export const showDialog = (dialogName: string) => {
+export const showDialog = (dialogName: string, actorName?: string) => {
   showSection(AppSection.DIALOG);
+
+  const world = getCurrentWorld();
+  let portraitSprite: Sprite | null = null;
+  let borderSprite: Sprite | null = null;
+
+  if (actorName) {
+    const template = getActorTemplate(actorName);
+    if (template?.talkPortrait) {
+      portraitSprite = getSprite(template.talkPortrait);
+    } else {
+      const actor = roomGetActorByName(worldGetCurrentRoom(world), actorName);
+      if (actor) {
+        const camera = getCamera(world);
+        portraitSprite = extractActorSpriteFromScreen(actor, camera);
+      }
+    }
+
+    if (template?.talkBorder) {
+      borderSprite = getSprite(template.talkBorder);
+    }
+  }
+
   getUiInterface().dispatch({
     action: 'setDialogSection',
     payload: {
       lines: [],
       choices: [],
+      actorName: actorName ?? '',
+      portraitSprite,
+      borderSprite,
       waitingForChoice: false,
       waitingForContinue: false,
     },
   });
   setBottomButtons([]);
   executeDialog(dialogName);
+};
+
+export const showInGameMenu = () => {
+  showSection(AppSection.GAME_MENU);
+  setBottomButtons([]);
+};
+
+export const showStore = (args: { storeName: string; items: StoreItem[] }) => {
+  showSection(AppSection.STORE);
+  getUiInterface().dispatch({
+    action: 'setStoreSection',
+    payload: {
+      name: args.storeName,
+      items: args.items,
+    } as Partial<AppStateStore>,
+  });
+  setBottomButtons([
+    {
+      type: BottomBarButtonType.MENU,
+    },
+  ]);
 };
 
 export const addDialogLine = (args: {
@@ -309,5 +407,30 @@ export const addDialogChoices = (args: {
     } as Partial<AppStateDialog>,
   };
 
+  uiInterface.dispatch(action);
+};
+
+export const loadWorld = (worldName: string) => {
+  const uiInterface = getUiInterface();
+  setCurrentWorld(createWorld('alinea'));
+
+  const action = {
+    action: 'setGameSection',
+    payload: {
+      worldName,
+    },
+  };
+  uiInterface.dispatch(action);
+};
+
+export const setInteractables = (actors: Actor[]) => {
+  const uiInterface = getUiInterface();
+
+  const action = {
+    action: 'setGameSection',
+    payload: {
+      interactables: actors,
+    },
+  };
   uiInterface.dispatch(action);
 };

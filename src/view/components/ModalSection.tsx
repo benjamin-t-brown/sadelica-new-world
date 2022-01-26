@@ -1,45 +1,15 @@
 /* @jsx h */
-import {
-  getUiInterface,
-  hideSection,
-  resetBottomBarButtons,
-} from 'controller/ui-actions';
+import { getUiInterface, hideSection } from 'controller/ui-actions';
 import { AppSection } from 'model/app-state';
 import { pxToPctHeight } from 'model/screen';
 import { h, Fragment } from 'preact';
 import { useCallback, useState } from 'preact/hooks';
 import { Button } from 'view/elements/Button';
+import { useKeyboardEventListener } from 'view/hooks';
 import { colors, style } from 'view/style';
-
-const Root = style('div', {
-  position: 'absolute',
-  left: '0',
-  top: '0',
-  width: '100%',
-  height: '100%',
-  background: 'rgba(0, 0, 0, 0.5)',
-  display: 'flex',
-  justifyContent: 'center',
-  flexDirection: 'column',
-  alignItems: 'center',
-  boxSizing: 'border-box',
-  zIndex: '1',
-});
-
-const Title = style('div', {
-  width: '100%',
-  borderTop: '2px solid ' + colors.GREY,
-  borderLeft: '2px solid ' + colors.GREY,
-  borderRight: '2px solid ' + colors.GREY,
-  textTransform: 'uppercase',
-  textAlign: 'center',
-  height: pxToPctHeight(23),
-  background: colors.DARKPURPLE,
-  boxSizing: 'border-box',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-});
+import ModalWindow from 'view/elements/ModalWindow';
+import SpriteDiv from 'view/elements/SpriteDiv';
+import { getScale } from 'model/generics';
 
 const Header = style('div', {
   width: '100%',
@@ -50,7 +20,7 @@ const Header = style('div', {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  background: colors.DARKBROWN,
+  background: colors.DARKGREY,
   boxSizing: 'border-box',
 });
 
@@ -83,6 +53,7 @@ const Text = style('p', {
   background: colors.DARKGREY,
   fontSize: '0.8rem',
   boxSizing: 'border-box',
+  fontFamily: 'NewYork',
 });
 
 const Buttons = style('div', {
@@ -92,7 +63,7 @@ const Buttons = style('div', {
   borderBottom: '2px solid ' + colors.GREY,
   borderLeft: '2px solid ' + colors.GREY,
   borderRight: '2px solid ' + colors.GREY,
-  background: colors.DARKBROWN,
+  background: colors.DARKGREY,
   display: 'flex',
   justifyContent: 'flex-end',
   alignItems: 'center',
@@ -104,6 +75,7 @@ const ModalSection = () => {
   const modalState = appState.modal;
   const [active, setActive] = useState(true);
   const { text, title, headerText, sprite, onConfirm, onCancel } = modalState;
+  const [selectedInd, setSelectedInd] = useState(0);
 
   const handleConfirm = useCallback(() => {
     if (active) {
@@ -113,7 +85,6 @@ const ModalSection = () => {
           onConfirm();
         }
         hideSection(AppSection.MODAL);
-        resetBottomBarButtons();
       }, 75);
     }
   }, [onConfirm, active]);
@@ -126,10 +97,25 @@ const ModalSection = () => {
           onCancel();
         }
         hideSection(AppSection.MODAL);
-        resetBottomBarButtons();
       }, 75);
     }
   }, [onCancel, active]);
+
+  useKeyboardEventListener(
+    ev => {
+      if (ev.key === 'Tab') {
+        ev.preventDefault();
+        setSelectedInd((selectedInd + 1) % 2);
+      } else if (ev.key === 'Enter') {
+        if (selectedInd === 1 && onCancel) {
+          handleCancel();
+        } else {
+          handleConfirm();
+        }
+      }
+    },
+    [selectedInd, onConfirm, onCancel, handleConfirm]
+  );
 
   const buttonStyle = {
     height: 'calc(100% - 16px)',
@@ -139,17 +125,18 @@ const ModalSection = () => {
   };
 
   return (
-    <Root>
-      <Title>{title}</Title>
+    <ModalWindow title={title}>
       <Header>
         <HeaderPictureContainer>
-          <HeaderPicture></HeaderPicture>
+          <HeaderPicture>
+            <SpriteDiv sprite={modalState.sprite ?? ''} scale={2}></SpriteDiv>
+          </HeaderPicture>
         </HeaderPictureContainer>
         <HeaderTextContainer>{headerText}</HeaderTextContainer>
       </Header>
       <Text
         dangerouslySetInnerHTML={{
-          __html: text,
+          __html: text.replace(/\n/g, '<br><br>'),
         }}
       />
       <Buttons>
@@ -159,6 +146,7 @@ const ModalSection = () => {
               onClick={handleConfirm}
               color={colors.DARKBLUE}
               style={buttonStyle}
+              highlighted={selectedInd === 0}
             >
               OK
             </Button>
@@ -166,6 +154,7 @@ const ModalSection = () => {
               onClick={handleCancel}
               color={colors.DARKBLUE}
               style={buttonStyle}
+              highlighted={selectedInd === 1}
             >
               Cancel
             </Button>
@@ -175,12 +164,13 @@ const ModalSection = () => {
             onClick={handleConfirm}
             color={colors.DARKBLUE}
             style={buttonStyle}
+            highlighted={true}
           >
             OK
           </Button>
         )}
       </Buttons>
-    </Root>
+    </ModalWindow>
   );
 };
 

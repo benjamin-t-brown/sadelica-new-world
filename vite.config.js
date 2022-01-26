@@ -1,11 +1,13 @@
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import { viteCommonjs } from '@originjs/vite-plugin-commonjs'
 
 export default defineConfig((...args) => {
   let rootPath = '../';
 
   const config = {
     plugins: [
+      viteCommonjs(),
       tsconfigPaths({
         projects: [rootPath + 'tsconfig.vite.json'],
       }),

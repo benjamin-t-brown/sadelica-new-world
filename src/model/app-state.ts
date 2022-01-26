@@ -1,4 +1,6 @@
-import { Character } from './character';
+import { stringify } from 'querystring';
+import { Actor } from './actor';
+import { Sprite } from './canvas';
 
 export interface AppState {
   loading: boolean;
@@ -7,14 +9,15 @@ export interface AppState {
   modal: AppStateModal;
   game: AppStateGame;
   dialog: AppStateDialog;
+  store: AppStateStore;
 }
 
 export enum BottomBarButtonType {
   INTERACT = 'INTERACT',
   LOOK = 'LOOK',
-  LOCK_PICK = 'LOCK PICK',
   PICK_UP = 'PICK UP',
   STEAL = 'STEAL',
+  CAST = 'CAST',
   MENU = 'MENU',
 }
 
@@ -51,7 +54,9 @@ export enum InventoryState {
 }
 export interface AppStateGame {
   inventoryState: InventoryState;
-  selectedCh: Character | null;
+  selectedCh: Actor | null;
+  worldName: string;
+  interactables: Actor[];
 }
 
 export interface AppStateDialogLine {
@@ -63,10 +68,24 @@ export interface AppStateDialog {
   id: string;
   lines: AppStateDialogLine[];
   choices: AppStateDialogLine[];
+  actorName: string;
+  portraitSprite: Sprite | null;
+  borderSprite: Sprite | null;
   waitingForChoice: boolean;
   waitingForContinue: boolean;
   onChoice: (v: number) => void;
   onContinue: () => void;
+}
+
+export interface StoreItem {
+  itemName: string;
+  quantity: number;
+  price: number;
+}
+export interface AppStateStore {
+  name: string;
+  sprite: string;
+  items: StoreItem[];
 }
 
 export const createAppState = (): AppState => {
@@ -87,16 +106,26 @@ export const createAppState = (): AppState => {
     },
     game: {
       inventoryState: InventoryState.BARE,
+      worldName: '',
       selectedCh: null,
+      interactables: [],
     },
     dialog: {
       id: '',
       lines: [],
       choices: [],
+      actorName: '',
+      portraitSprite: null,
+      borderSprite: null,
       waitingForChoice: false,
       waitingForContinue: false,
       onChoice: () => void 0,
       onContinue: () => void 0,
+    },
+    store: {
+      name: '',
+      sprite: '',
+      items: [],
     },
   };
 };

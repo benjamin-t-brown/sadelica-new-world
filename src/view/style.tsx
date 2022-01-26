@@ -3,13 +3,13 @@ import picostyle, { Styles, keyframes as k } from 'picostyle';
 const ps = picostyle(h as any);
 
 export const colors = {
-  BLACK: '#111',
-  WHITE: '#F8F8F8',
+  BLACK: '#000000',
+  WHITE: '#FFF',
   LIGHTGREY: '#BCB7C5',
-  GREY: '#999',
-  DARKGREY: '#2E3740',
-  DARKGREY_ALT: '#5A5353',
-  BGGREY: '#333',
+  GREY: '#909090',
+  DARKGREY: '#494949',
+  DARKGREY_ALT: '#606060',
+  BGGREY: '#727272',
   RED: '#BE2633',
   LIGHTRED: '#E1534A',
   DARKRED: '#5E3643',

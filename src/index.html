@@ -6,7 +6,7 @@
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     />
     <style>
-      html{
+      html {
         font-size: 20px;
       }
       @media only screen and (max-width: 380px) {
@@ -22,7 +22,7 @@
       body {
         margin: 0;
         overflow: hidden;
-        background: #333;
+        background: #000;
         color: #eee;
         user-select: none;
       }
@@ -34,6 +34,10 @@
       @font-face {
         font-family: Chicago;
         src: url(fonts/Chicago.ttf);
+      }
+      @font-face {
+        font-family: NewYork;
+        src: url(fonts/NewYork.ttf);
       }
       body {
         font-family: Chicago;
@@ -112,6 +116,7 @@
         align-items: center;
         flex-direction: column;
         color: #ffce00;
+        font-family: NewYork;
       }
 
       #page-loading {
@@ -166,6 +171,10 @@
       <div>Tap to start</div>
     </div>
     <script src="https://unpkg.com/jszip@3.1.5/dist/jszip.min.js"></script>
+    <script>
+      // maps exported from Tiled as js expect that this global variable exists (for some reason)
+      window.TileMaps = {};
+    </script>
     <script type="module" src="./main.ts"></script>
   </body>
 </html>

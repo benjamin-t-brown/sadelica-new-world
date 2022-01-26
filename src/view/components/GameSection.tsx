@@ -5,15 +5,20 @@ import {
   setGameSelectedCharacter,
 } from 'controller/ui-actions';
 import { InventoryState } from 'model/app-state';
-import { Character } from 'model/character';
-import { getCurrentPlayer } from 'model/generics';
+import { Actor } from 'model/actor';
+import { getCurrentPlayer, getCurrentWorld, getScale } from 'model/generics';
 import { Player } from 'model/player';
 import { pxToPctHeight, pxToPctWidth } from 'model/screen';
 import { h } from 'preact';
-import { useCallback } from 'preact/hooks';
+import { useCallback, useEffect, useState } from 'preact/hooks';
 import { SmallSquareButton, Button } from 'view/elements/Button';
 import { colors, style } from 'view/style';
 import InventoryList from './InventoryList';
+import { getCanvas } from 'model/canvas';
+import { renderCurrentWorldState } from 'controller/update';
+import TileOverlay from 'view/elements/TileOverlay';
+import { getTileSize } from 'model/tile';
+import { interactWithNearby } from 'controller/interact';
 
 const Root = style('div', {
   width: '100%',
@@ -22,14 +27,14 @@ const Root = style('div', {
 
 const CharacterSelectRow = style('div', {
   height: pxToPctHeight(30),
-  background: colors.BLACK,
+  background: colors.GREY,
   display: 'flex',
 });
 const CharacterSelect = (props: IGameSubSectionProps) => {
   const { player, selectedCh } = props;
 
   const handleChButtonClick = useCallback(
-    (ch: Character) => {
+    (ch: Actor) => {
       if (selectedCh !== ch) {
         setGameSelectedCharacter(ch);
       }
@@ -57,9 +62,10 @@ const CharacterSelect = (props: IGameSubSectionProps) => {
   );
 };
 
-const CharacterNameInfo = style('div', {
+const CharacterNameInfoContainer = style('div', {
   height: pxToPctHeight(28),
-  background: colors.DARKBLUE,
+  background: colors.WHITE,
+  color: colors.BLACK,
   display: 'flex',
   alignItems: 'center',
   padding: '0px 2px',
@@ -79,6 +85,15 @@ const ChInfoStat = style('span', (props: { color: string }) => {
     fontSize: '0.8rem',
   };
 });
+const CharacterNameInfo = (props: { ch?: Actor | null }) => {
+  return (
+    <CharacterNameInfoContainer>
+      <CharacterName>{props.ch?.name ?? ''}</CharacterName>
+      <ChInfoStat color={colors.RED}>HP 100</ChInfoStat>
+      <ChInfoStat color={colors.DARKBLUE}>MP 45</ChInfoStat>
+    </CharacterNameInfoContainer>
+  );
+};
 
 const InventoryStateButton = style('div', (props: { isClose: boolean }) => {
   return {
@@ -87,14 +102,14 @@ const InventoryStateButton = style('div', (props: { isClose: boolean }) => {
     top: '0px',
     width: pxToPctWidth(56),
     height: pxToPctHeight(56),
-    margin: '1px',
     border: '1px solid ' + colors.WHITE,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     cursor: 'pointer',
     userSelect: 'none',
-    background: props.isClose ? colors.RED : colors.GREEN,
+    background: colors.BLACK,
+    boxSizing: 'border-box',
     '&:hover': {
       filter: 'brightness(120%)',
     },
@@ -110,13 +125,14 @@ const CanvasContainer = style('div', {
   alignItems: 'center',
   overflow: 'hidden',
   height: pxToPctHeight(391),
-  background: 'url(bg.tmp.png)',
+  // background: 'url(bg.tmp.png)',
   backgroundPosition: 'center',
   backgroundSize: 'contain',
+  position: 'relative',
 });
 
 interface IGameSubSectionProps {
-  selectedCh: Character | null;
+  selectedCh: Actor | null;
   player: Player | null;
 }
 
@@ -129,14 +145,11 @@ const BareSubSection = (props: IGameSubSectionProps) => {
   return (
     <BareSectionRoot>
       <CharacterSelect {...props} />
-      <CharacterNameInfo>
-        <CharacterName>{selectedCh?.name ?? ''}</CharacterName>
-        <ChInfoStat color={colors.RED}>HP 100</ChInfoStat>
-        <ChInfoStat color={colors.LIGHTBLUE}>MP 45</ChInfoStat>
-      </CharacterNameInfo>
+      <CharacterNameInfo ch={selectedCh} />
     </BareSectionRoot>
   );
 };
+
 const FullSectionRoot = style('div', {
   width: '100%',
   background: colors.BLACK,
@@ -151,7 +164,7 @@ const StatsArea = style('div', {
 const StatusArea = style('div', {
   width: '100%',
   height: pxToPctHeight(53),
-  background: colors.DARKBROWN,
+  background: colors.DARKGREY,
   margin: '1px 0px',
 });
 const StatsSubArea = style('div', {
@@ -159,7 +172,7 @@ const StatsSubArea = style('div', {
   height: '100%',
 });
 const Stat = style('div', {
-  color: colors.LIGHTGREY,
+  color: colors.WHITE,
   padding: '4px',
 });
 const InventoryArea = style('div', {
@@ -168,17 +181,12 @@ const InventoryArea = style('div', {
   background: colors.DARKGREY_ALT,
   overflowY: 'auto',
 });
-
 const FullSubSection = (props: IGameSubSectionProps) => {
   const { selectedCh } = props;
   return (
     <FullSectionRoot>
       <CharacterSelect {...props} />
-      <CharacterNameInfo>
-        <CharacterName>{selectedCh?.name ?? ''}</CharacterName>
-        <ChInfoStat color={colors.RED}>HP 100</ChInfoStat>
-        <ChInfoStat color={colors.LIGHTBLUE}>MP 45</ChInfoStat>
-      </CharacterNameInfo>
+      <CharacterNameInfo ch={selectedCh} />
       <StatsArea>
         <StatsSubArea>
           <Stat>Dmg: 0</Stat>
@@ -224,11 +232,20 @@ const FullSubSection = (props: IGameSubSectionProps) => {
   );
 };
 
+const Interactable = style('div', () => ({
+  width: '100%',
+  height: '100%',
+  position: 'relative',
+  // border: '1px solid ' + colors.WHITE,
+  pointerEvents: 'all',
+}));
+
 const GameSection = () => {
   const appState = getUiInterface().appState;
   const gameState = appState.game;
   const inventoryState = gameState.inventoryState;
   const player = getCurrentPlayer();
+  const [tileOverlaysVisible, setTileOverlaysVisible] = useState(false);
 
   const handleInventoryStateButtonClick = useCallback(() => {
     if (inventoryState === InventoryState.BARE) {
@@ -256,6 +273,20 @@ const GameSection = () => {
     }
   })(gameState.inventoryState);
 
+  const handleInteractableClick = useCallback((act: Actor) => {
+    interactWithNearby(act);
+  }, []);
+
+  useEffect(() => {
+    // load canvas to canvas module
+    getCanvas();
+
+    // renders the world state on the canvas
+    renderCurrentWorldState(getCurrentWorld());
+
+    setTileOverlaysVisible(true);
+  }, []);
+
   return (
     <Root id="game-section">
       {subSection}
@@ -271,7 +302,68 @@ const GameSection = () => {
         }}
       >
         <canvas id="main-canvas" width={640} height={768}></canvas>
+        <div
+          style={{
+            width: '640px',
+            height: '768px',
+            position: 'absolute',
+            left: '0',
+            top: '0',
+            pointerEvents: 'none',
+          }}
+        >
+          {tileOverlaysVisible
+            ? gameState.interactables.map((act, i) => {
+                return (
+                  <TileOverlay key={act.name + i} x={act.x} y={act.y}>
+                    <Interactable
+                      onClick={handleInteractableClick.bind(null, act)}
+                    >
+                      <div
+                        style={{
+                          pointerEvents: 'none',
+                          textAlign: 'center',
+                          position: 'absolute',
+                          top: (-getTileSize() * getScale()) / 2,
+                          left: `calc(-100% - ${
+                            getTileSize() * getScale()
+                          }px / 2)`,
+                          width: '400%',
+                        }}
+                      >
+                        {act.name}
+                      </div>
+                    </Interactable>
+                  </TileOverlay>
+                );
+              })
+            : null}
+        </div>
       </CanvasContainer>
+      {/* <CanvasContainer
+        style={{
+          position: 'absolute',
+          top: 'calc(6.35% + 5.83333%)',
+        }}
+      >
+        <div
+          style={{
+            width: '640px',
+            height: '768px',
+            position: 'absolute',
+            left: '0',
+            top: '0',
+          }}
+        >
+          {tileOverlaysVisible ? (
+            <TileOverlay
+              id="tile-overlay"
+              x={getCurrentPlayer().leader.x}
+              y={getCurrentPlayer().leader.y}
+            ></TileOverlay>
+          ) : null}
+        </div>
+      </CanvasContainer> */}
     </Root>
   );
 };
