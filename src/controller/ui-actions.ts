@@ -259,46 +259,6 @@ export const showModal = (args: Partial<AppStateModal>) => {
   showSection(AppSection.MODAL);
 };
 
-export const showDialog = (dialogName: string, actorName?: string) => {
-  showSection(AppSection.DIALOG);
-
-  const world = getCurrentWorld();
-  let portraitSprite: Sprite | null = null;
-  let borderSprite: Sprite | null = null;
-
-  if (actorName) {
-    const template = getActorTemplate(actorName);
-    if (template?.talkPortrait) {
-      portraitSprite = getSprite(template.talkPortrait);
-    } else {
-      const actor = roomGetActorByName(worldGetCurrentRoom(world), actorName);
-      if (actor) {
-        const camera = getCamera(world);
-        portraitSprite = extractActorSpriteFromScreen(actor, camera);
-      }
-    }
-
-    if (template?.talkBorder) {
-      borderSprite = getSprite(template.talkBorder);
-    }
-  }
-
-  getUiInterface().dispatch({
-    action: 'setDialogSection',
-    payload: {
-      lines: [],
-      choices: [],
-      actorName: actorName ?? '',
-      portraitSprite,
-      borderSprite,
-      waitingForChoice: false,
-      waitingForContinue: false,
-    },
-  });
-  setBottomButtons([]);
-  executeDialog(dialogName);
-};
-
 export const showInGameMenu = () => {
   showSection(AppSection.GAME_MENU);
   setBottomButtons([]);
@@ -318,6 +278,56 @@ export const showStore = (args: { storeName: string; items: StoreItem[] }) => {
       type: BottomBarButtonType.MENU,
     },
   ]);
+};
+
+export const showDialog = (dialogName: string, actorName?: string) => {
+  showSection(AppSection.DIALOG);
+
+  const world = getCurrentWorld();
+  let portraitSprite: Sprite | null = null;
+  let borderSprite: Sprite | null = null;
+  let scale = 1;
+
+  if (actorName) {
+    const template = getActorTemplate(actorName);
+    if (template) {
+      actorName = template.name ?? actorName;
+      console.log('SHOW DIALOG', template, actorName);
+      if (template?.talkPortrait) {
+        console.log('USE TALK PORTRAIT');
+        portraitSprite = getSprite(template.talkPortrait);
+
+        scale = 4;
+      } else {
+        console.log('GET ACTOR BY NAME');
+        const actor = roomGetActorByName(worldGetCurrentRoom(world), actorName);
+        if (actor) {
+          const camera = getCamera(world);
+          portraitSprite = extractActorSpriteFromScreen(actor, camera);
+        }
+      }
+
+      if (template?.talkBorder) {
+        borderSprite = getSprite(template.talkBorder);
+      }
+    }
+  }
+
+  getUiInterface().dispatch({
+    action: 'setDialogSection',
+    payload: {
+      lines: [],
+      choices: [],
+      actorName: actorName ?? '',
+      portraitSprite,
+      portraitScale: scale,
+      borderSprite,
+      waitingForChoice: false,
+      waitingForContinue: false,
+    },
+  });
+  setBottomButtons([]);
+  executeDialog(dialogName);
 };
 
 export const addDialogLine = (args: {

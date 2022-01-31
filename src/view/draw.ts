@@ -17,6 +17,7 @@ import { roomPosIsExplored, roomPosIsVisible } from 'model/room';
 import { getTileSize } from 'model/tile';
 import { getWorldSize, World } from 'model/world';
 import { Rect } from 'utils';
+import { Animation } from 'model/animation';
 
 export interface DrawTextParams {
   font?: string;
@@ -83,6 +84,20 @@ export const extractActorSpriteFromScreen = (
   return ret;
 };
 
+export const drawRect = (
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  color: string,
+  stroke?: boolean,
+  ctx?: CanvasRenderingContext2D
+) => {
+  ctx = ctx || getCtx();
+  ctx[stroke ? 'strokeStyle' : 'fillStyle'] = color;
+  ctx[stroke ? 'strokeRect' : 'fillRect'](x, y, w, h);
+};
+
 export const drawSprite = (
   sprite: string | Sprite,
   x: number,
@@ -111,42 +126,41 @@ export const drawSprite = (
   );
 };
 
-export const drawRect = (
+export const drawAnimation = (
+  anim: Animation,
   x: number,
   y: number,
-  w: number,
-  h: number,
-  color: string,
-  stroke?: boolean,
+  scale?: number,
   ctx?: CanvasRenderingContext2D
-) => {
+): void => {
+  scale = scale || 1;
   ctx = ctx || getCtx();
-  ctx[stroke ? 'strokeStyle' : 'fillStyle'] = color;
-  ctx[stroke ? 'strokeRect' : 'fillRect'](x, y, w, h);
+  anim.update();
+  const sprite = anim.getSprite();
+  if (!sprite) {
+    console.error(anim);
+    throw new Error(`Cannot draw animation that did not provide a sprite.`);
+  }
+  try {
+    ctx.fillStyle = 'black';
+    ctx.strokeStyle = 'black';
+    const [image, sprX, sprY, sprW, sprH] =
+      typeof sprite === 'string' ? getSprite(sprite) : sprite;
+    ctx.drawImage(
+      image,
+      sprX,
+      sprY,
+      sprW,
+      sprH,
+      Math.floor(x),
+      Math.floor(y),
+      sprW * scale,
+      sprH * scale
+    );
+  } catch (e) {
+    throw new Error(`Error attempting to draw animation sprite: "${sprite}"`);
+  }
 };
-
-// const measureText = (
-//   text: string,
-//   textParams?: DrawTextParams,
-//   ctx?: CanvasRenderingContext2D
-// ) => {
-//   const { font, size, color, align, strokeColor } = {
-//     ...DEFAULT_TEXT_PARAMS,
-//     ...(textParams || {}),
-//   };
-//   ctx = ctx || getCtx();
-//   ctx.textAlign = 'left';
-//   ctx.textBaseline = 'hanging';
-//   size = size || 16;
-//   font = font || 'monospace';
-//   ctx.font = size + 'px ' + font;
-//   var width = ctx.measureText(text).width;
-//   var height = size;
-//   return {
-//     width,
-//     height,
-//   };
-// };
 
 export const drawText = (
   text: string,

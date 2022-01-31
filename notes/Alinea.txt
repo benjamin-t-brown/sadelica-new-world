@@ -23,7 +23,7 @@ Spy Rigby (Realm) - Spy Rigby reports that the Blackrose estate has some plans b
 
 Lord Schovan Abivola (Nobility) - A minor noble, but the owner of most warehouses inside Alinea.  Seeks to increase taxes on storage space, but is currently stopped by Claire.  Will give you a quest to clear out the northern road of bandits because he doesn't want to pay the Blackrose estate, who he thinks placed them there on purpose.  Is afraid of overstepping his bounds with Realm and speaks of the Terraveil, and, if you have enough Renown with nobility, will tell you of Boom Powder, and that if the slightest hint of fire hits it, the powder explodes.
 
-Lady Aldebeth Blackrose (Nobility) - A major noble of the Blackrose family.  Provides a mercenary guard force that is hired out by the Merchantry sometimes.  Has a camp beside the town that's ready to provide services.  Get mads if you provide combat services for anybody except the Realm.  Place to buy weapons+armor.  Blackrose is insulted that Abivola won't give them fair prices for storage.  They will give you a contract to defeat a monster that has taken up residence.  This monster happens to be a group of Golems in a nearby cave guarding a Realm weapons cache.  If you find the lever to unlock the door (Igmund will tell you about this lever if you throw a rock at Bartolo Caldeburn).  You can take the cache, tell Blackrose about it for Renown, or tell Realm about it for Renown.
+Lady Aldebeth Blackrose (Nobility) - A major noble of the Blackrose family.  Provides a mercenary guard force that is hired out by the Merchantry sometimes.  Has a camp beside the town that's ready to provide services.  Gets mad if you provide combat services for anybody except the Realm.  Place to buy weapons+armor.  Blackrose is insulted that Abivola won't give them fair prices for storage.  They will give you a contract to defeat a monster that has taken up residence.  This monster happens to be a group of Golems in a nearby cave guarding a Realm weapons cache.  If you find the lever to unlock the door (Igmund will tell you about this lever if you throw a rock at Bartolo Caldeburn).  You can take the cache, tell Blackrose about it for Renown, or tell Realm about it for Renown.
 
 Sir Lavolan (Nobility: Blackrose) - Resides in Aldebeth's camp.  The guy you can go to to report things to because Aldebeth does not deal with 'trifling matters'.
 
@@ -37,13 +37,13 @@ Idoreo (Merchantry) - Has an agreement with Lord Abivola, pays extra so that cer
 
 Sol (Island) - Sol watches for new people coming into the port and determines people who are "noteworthy" to Chorus.  If you do any quests in Alinea he will approach you and warn you that the island is more than it seems, and that there are those who would rather see the people here removed.  He insinuates that you can aid in this cause and that someone will approach you later.
 
-Lord Bartolo Caldeburn (Nobility) - A man waiting for the road to get unblocked so he can head north to Boromak.  Dislikes Elvyosa for not letting him book passage.  Arrogant, impatient, but if you are nice to him you get a small amount of Nobility renown.
+Lord Barto Caldeburn (Nobility) - A man waiting for the road to get unblocked so he can head north to Boromak.  Dislikes Elvyosa for not letting him book passage.  Arrogant, impatient, but if you are nice to him you get a small amount of Nobility renown.
 
 Igmund (Villager) - Is fed up with Bartolo Caldeburn's arrogance.  He asks you to go outside, grab a rock, and throw it at Bartolo.  If you do this, you are thrown out of the tavern and Gruff won't let you back inside to heal.  Igmund tells you that you can use his house to sleep/heal.  If you search his house, you discover that he has a cache of money beneath a rock outside that he has stolen from Abivola's cachiers.  You can take this, but Abivola will request it back if you tell him that Igmund stole from him (for Renown).
 
 Gruff (Villager) - Bartender at the tavern.
 
-Bandits: The bandits blocking the northern road are the remains of a merchant family that has been caused bankruptcy due to the Guildimarch estate.  They are bitter and resentful towards nobility, and their leader, Edwin Killroy, is a strong fighter.  If you ransack their may be more than people say.
+Bandits: The bandits blocking the northern road are the remains of a merchant family that has been caused bankruptcy due to the Guildimarch estate.  They are bitter and resentful towards nobility, and their leader, Edwin Killroy, is a strong fighter.  If you ransack it there may be more than people say.
 
 Cave: There's a small cave nearby that holds a weapons cache/bunker that has apparently been set aside by Captain Mullen in case of Blackrose Uprising where he could hold out until some of the Terraveil arrive.  This cave is guarded by a group of malfunctioning Realm Golems.
 

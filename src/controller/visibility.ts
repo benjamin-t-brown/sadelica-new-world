@@ -1,28 +1,11 @@
-import { getRoomSize, Room, roomGetTileAt } from 'model/room';
+import {
+  createEmptyVisMap,
+  getRoomSize,
+  Room,
+  roomGetTileAt,
+  setExploredMap,
+} from 'model/room';
 import { tileBlocksSight } from 'model/tile';
-
-export const createEmptyVisMap = (dimensions: number[]): number[][] => {
-  const array: number[][] = [];
-  for (let i = 0; i < dimensions[0]; ++i) {
-    array.push(
-      dimensions.length === 1
-        ? 0
-        : (createEmptyVisMap(dimensions.slice(1)) as any)
-    );
-  }
-  return array;
-};
-
-export const setExploredMap = (
-  origExploredMap: number[][],
-  visMap: number[][]
-) => {
-  for (let i = 0; i < visMap.length; i++) {
-    for (let j = 0; j < visMap[0].length; j++) {
-      origExploredMap[i][j] = origExploredMap[i][j] || visMap[i][j];
-    }
-  }
-};
 
 export const setVisibility = (chx: number, chy: number, room: Room) => {
   const roomSize = getRoomSize();

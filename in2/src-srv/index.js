@@ -308,3 +308,21 @@ http_server.get('images', (obj, resp) => {
     http_server.reply(resp, ret);
   });
 });
+
+// rename a file
+http_server.post('rename', (obj, resp) => {
+  fs.readdir(`${DIST_DIR}/assets/img/`, (err, dirs) => {
+    const ret = {
+      err: err,
+      data: null,
+    };
+    ret.data = dirs
+      .filter(dir => {
+        return dir.slice(-3) === 'png';
+      })
+      .map(dir => {
+        return 'assets/img/' + dir;
+      });
+    http_server.reply(resp, ret);
+  });
+});

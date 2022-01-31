@@ -1,5 +1,6 @@
+import { addRenderFunction, removeRenderFunction } from 'controller/loop';
 import { getUiInterface } from 'controller/ui-actions';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useReducer, useState } from 'preact/hooks';
 
 let hooksInitialized = false;
 
@@ -62,3 +63,23 @@ export interface IUseConfirmModalArgs {
   body?: string;
   danger?: boolean;
 }
+
+export const useRenderLoop = (
+  name: string,
+  cb?: () => void,
+  captures?: any[]
+) => {
+  const [, dispatch] = useReducer(oldState => {
+    return !oldState;
+  }, false);
+  const render = () => {
+    dispatch('');
+  };
+  useEffect(() => {
+    addRenderFunction(name, cb || render);
+    return () => {
+      removeRenderFunction(name);
+    };
+  }, captures ?? []);
+  return render;
+};

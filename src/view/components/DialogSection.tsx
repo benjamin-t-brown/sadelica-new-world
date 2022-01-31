@@ -7,7 +7,7 @@ import { getUiInterface } from 'controller/ui-actions';
 import { useEffect, useState } from 'preact/hooks';
 import { useCallback } from 'lib/preact-hooks';
 import { core } from 'in2';
-import { useKeyboardEventListener } from 'view/hooks';
+import { useKeyboardEventListener, useRenderLoop } from 'view/hooks';
 import { AppSection } from 'model/app-state';
 import SpriteDiv from 'view/elements/SpriteDiv';
 
@@ -224,6 +224,21 @@ const DialogSection = () => {
     [handleDialogChoiceClick, handleDialogContinueClick]
   );
 
+  useRenderLoop(
+    'portrait-cadence',
+    () => {
+      // const { audio } = this.subtitleSound;
+      // const cadence = this.cadence;
+      // const i = cadence.getAnimIndex(audio.currentTime);
+      // const sprites = this.getCadenceSprites();
+      // display.drawSprite(sprites[i], this.renderX, this.renderY, {
+      //   centered: true,
+      //   scale: this.scale,
+      // });
+    },
+    []
+  );
+
   return (
     <Root id="dialog">
       <PortraitContainer>
@@ -231,7 +246,7 @@ const DialogSection = () => {
         <Portrait>
           <SpriteDiv
             sprite={dialogState.portraitSprite ?? ''}
-            scale={1}
+            scale={dialogState.portraitScale}
           ></SpriteDiv>
         </Portrait>
         <PortraitDecorator></PortraitDecorator>

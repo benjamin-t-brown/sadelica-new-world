@@ -48,28 +48,6 @@
     return player.state;
   };
 
-  files[`Alinea_CH_Sol.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Sol.json');
-    // next_file
-    scope.tG08a = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    if (id === undefined) {
-      scope.tG08a();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
   files[`Alinea_CH_SpyRigby.json`] = id => {
     player.set(CURRENT_FILE_VAR, 'Alinea_CH_SpyRigby.json');
     // next_file
@@ -202,6 +180,205 @@
     return player.state;
   };
 
+  files[`Alinea_CH_GuardCaptainMullen.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_GuardCaptainMullen.json');
+    // next_file
+    scope.F3tbm = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    if (id === undefined) {
+      scope.F3tbm();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
+  files[`Alinea_CH_Gruff.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Gruff.json');
+    // next_file
+    scope.f1zni = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    if (id === undefined) {
+      scope.f1zni();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
+  files[`Alinea_CH_Sol.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Sol.json');
+    // next_file
+    scope.tG08a = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    if (id === undefined) {
+      scope.tG08a();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
+  files[`Alinea_CH_Elvyosa.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Elvyosa.json');
+    // next_file
+    scope.m8Gsl = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    if (id === undefined) {
+      scope.m8Gsl();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
+  files[`Alinea_CH_AldebethBlackrose.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_AldebethBlackrose.json');
+    // switch
+    scope.xn4GD = () => {
+      player.set(CURRENT_NODE_VAR, 'xn4GD');
+      if (player.once()) scope.Ck2ff();
+      else if (true) scope.sBfVM();
+    };
+    // text
+    scope.Ck2ff = () => {
+      player.set(CURRENT_NODE_VAR, 'Ck2ff');
+      let text = `The leader of the mercenary company occupying these red tents is obviously the woman standing in front of you. Elegant and aristocratic, her exquisite silk dress is slashed with the the white and red of what is very clearly the Blackrose crest, her hair cascades down her back in a bevy of intricate curls, and a fashionable high-neck collar accentuates her ample bosom.  `;
+      core.say(text, scope.niNF7, 'Ck2ff', 'niNF7');
+    };
+
+    // choice
+    scope.niNF7 = function () {
+      player.set(CURRENT_NODE_VAR, 'niNF7');
+      let text = ``;
+      core.choose(text, 'niNF7', [
+        {
+          t: `Who are you?`,
+          id: 'R3DD4',
+          cb: scope.R3DD4,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Blackrose LEGION!?  How many of you are there?`,
+          id: 'ceRC2',
+          cb: scope.ceRC2,
+          c: () => {
+            return player.get('nodes.R3DD4');
+          },
+        },
+        {
+          t: `Nevermind.`,
+          id: 'QUeaf',
+          cb: scope.QUeaf,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+    scope['niNF7'].isChoice = true;
+
+    // text
+    scope.R3DD4 = () => {
+      player.set(CURRENT_NODE_VAR, 'R3DD4');
+      let text = `She raises a thinly-painted eyebrow.  "I am Lady Aldebeth Blackrose.  I lead this contingent of the great Blackrose legion."`;
+      core.say(text, scope.niNF7, 'R3DD4', 'niNF7');
+    };
+
+    // text
+    scope.ceRC2 = () => {
+      player.set(CURRENT_NODE_VAR, 'ceRC2');
+      let text = `Her lips curl into a slight smile.  "We are indeed, a great military force, renowned, and dare I say "feared" throughout Sadelica.  You should contain your awe better, it is unbecoming for any person to show such raw emotion in mundane moments such as this."`;
+      core.say(text, scope.niNF7, 'ceRC2', 'niNF7');
+    };
+
+    // next_file
+    scope.QUeaf = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    // text
+    scope.sBfVM = () => {
+      player.set(CURRENT_NODE_VAR, 'sBfVM');
+      let text = `"Ah yes.  You.  What is it you want this time?"`;
+      core.say(text, scope.niNF7, 'sBfVM', 'niNF7');
+    };
+
+    if (id === undefined) {
+      scope.xn4GD();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
+  files[`Alinea_CH_DunnsMurose.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_DunnsMurose.json');
+    // next_file
+    scope.YDiFN = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    if (id === undefined) {
+      scope.YDiFN();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
   files[`Alinea_CH_SirLavolanChevel.json`] = id => {
     player.set(CURRENT_FILE_VAR, 'Alinea_CH_SirLavolanChevel.json');
     // next_file
@@ -218,6 +395,28 @@
 
     if (id === undefined) {
       scope.r7TWk();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
+  files[`Alinea_CH_Chem.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Chem.json');
+    // next_file
+    scope.RLgZd = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    if (id === undefined) {
+      scope.RLgZd();
     } else if (id) {
       scope[id]();
     }
@@ -314,50 +513,6 @@
 
     if (id === undefined) {
       scope.G2sLG();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_Gruff.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Gruff.json');
-    // next_file
-    scope.f1zni = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    if (id === undefined) {
-      scope.f1zni();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_DunnsMurose.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_DunnsMurose.json');
-    // next_file
-    scope.YDiFN = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    if (id === undefined) {
-      scope.YDiFN();
     } else if (id) {
       scope[id]();
     }
@@ -581,161 +736,6 @@
 
     if (id === undefined) {
       scope.enWMm();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_AldebethBlackrose.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_AldebethBlackrose.json');
-    // switch
-    scope.xn4GD = () => {
-      player.set(CURRENT_NODE_VAR, 'xn4GD');
-      if (player.once()) scope.Ck2ff();
-      else if (true) scope.sBfVM();
-    };
-    // text
-    scope.Ck2ff = () => {
-      player.set(CURRENT_NODE_VAR, 'Ck2ff');
-      let text = `The leader of the mercenary company occupying these red tents is obviously the elegant and aristocratic woman standing in front of you.  Her exquisite silk dress is slashed with the the white and red of what is very clearly the Blackrose crest, her hair cascades down her back in a bevy of intricate curls, and a fashionable high-neck collar accentuates her ample bosom.  `;
-      core.say(text, scope.niNF7, 'Ck2ff', 'niNF7');
-    };
-
-    // choice
-    scope.niNF7 = function () {
-      player.set(CURRENT_NODE_VAR, 'niNF7');
-      let text = ``;
-      core.choose(text, 'niNF7', [
-        {
-          t: `Who are you?`,
-          id: 'R3DD4',
-          cb: scope.R3DD4,
-          c: () => {
-            return true;
-          },
-        },
-        {
-          t: `Blackrose LEGION!?  How many of you are there?`,
-          id: 'ceRC2',
-          cb: scope.ceRC2,
-          c: () => {
-            return player.get('nodes.BSReu');
-          },
-        },
-        {
-          t: `Nevermind.`,
-          id: 'QUeaf',
-          cb: scope.QUeaf,
-          c: () => {
-            return true;
-          },
-        },
-      ]);
-    };
-    scope['niNF7'].isChoice = true;
-
-    // text
-    scope.R3DD4 = () => {
-      player.set(CURRENT_NODE_VAR, 'R3DD4');
-      let text = `She raises a thinly-painted eyebrow.  "I am Lady Aldebeth Blackrose.  I lead this contingent of the great Blackrose legion."`;
-      core.say(text, scope.niNF7, 'R3DD4', 'niNF7');
-    };
-
-    // text
-    scope.ceRC2 = () => {
-      player.set(CURRENT_NODE_VAR, 'ceRC2');
-      let text = `Her lips curl into a slight smile.  "We are indeed, a great military force, renowned, and dare I say "feared" throughout Sadelica.  You should contain your awe better, it is unbecoming for any person to show such raw emotion in mundane moments such as this."`;
-      core.say(text, scope.niNF7, 'ceRC2', 'niNF7');
-    };
-
-    // next_file
-    scope.QUeaf = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    // text
-    scope.sBfVM = () => {
-      player.set(CURRENT_NODE_VAR, 'sBfVM');
-      let text = `"Ah yes.  You.  What is it you want this time?"`;
-      core.say(text, scope.niNF7, 'sBfVM', 'niNF7');
-    };
-
-    if (id === undefined) {
-      scope.xn4GD();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_Chem.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Chem.json');
-    // next_file
-    scope.RLgZd = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    if (id === undefined) {
-      scope.RLgZd();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_Elvyosa.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Elvyosa.json');
-    // next_file
-    scope.m8Gsl = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    if (id === undefined) {
-      scope.m8Gsl();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_GuardCaptainMullen.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_GuardCaptainMullen.json');
-    // next_file
-    scope.F3tbm = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    if (id === undefined) {
-      scope.F3tbm();
     } else if (id) {
       scope[id]();
     }

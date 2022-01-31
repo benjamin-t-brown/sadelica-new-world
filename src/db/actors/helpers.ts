@@ -13,6 +13,7 @@ export const createSignTemplate = (args: {
 }) => {
   return {
     spriteIndex: CHARACTER_SPRITES.Sign,
+    templateName: '',
     ...args,
     name: 'Sign',
     type: ActorType.TRIGGER_VISIBLE,
@@ -25,7 +26,7 @@ export const createSignTemplate = (args: {
     talkTrigger: () => {
       showModal({
         text: args.text,
-        sprite: PORTRAIT_SPRITES.Sign,
+        sprite: 'img/actors1_41',
         title: 'EXAMINE',
         headerText: 'Sign',
         // soundName: 'alertMinor',

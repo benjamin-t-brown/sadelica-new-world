@@ -1,33 +1,51 @@
-A vast ocean separates the island of Sadelica from the Mainland.  It is rumored to be a rich land, a place of possibility and wealth.  But also, it is a place of danger.  Strange beasts roam the untamed wilderness, terrible storms engulf the sky at a moment's notice, and a chaotic magic permeates the land, a force that can boil a man where he stands, rend flesh to pieces, flatten bones to dust. But it is also a force that can stop tidal waves, heal mortal wounds, and stop time.  It is this magic that has attracted the most curious scholars, the most opportunistic nobles, and greediest of merchants.  They seek a selfish goal: to understand and control this magic.  Their ambitions have driven a mad rush of immigrants and adventurers to Sadelica, people seeking the opportunity for a better life, however risky it might be.
+A vast ocean separates the island of Sadelica from the Mainland.  It is rumored to be a rich land, a place of possibility and wealth.  But also, it is a place of danger.  Strange beasts roam the untamed wilderness, terrible storms engulf the sky at a moment's notice, and a chaotic magic permeates the land. It is a powerfully destructive one,it can boil a man where he stands, rend flesh to pieces, flatten bones to dust. But it is also a force that can perform miracles.  It can heal mortal wounds, strengthen weak men, and dissipate terrible storms.  It is this magic that has attracted the most curious scholars, the most opportunistic nobles, and greediest of merchants.  They all seek a selfish goal: to understand and control this magic.  Their ambitions have driven a mad rush of immigrants and adventurers to Sadelica, people risking the opportunity for a better life in this untamed, magical land. 
 
-The six of you, however, had no choice in the matter.  Arrested, bound, and gagged, you were all but kidnapped and thrown onto a ship bound for Sadelica.  You have no indication of who did this to you, or why.  Whatever hopes and dreams you had for the Mainland are gone now.  Any new ones will reside on Sadelica.
+You, however, had no choice in the matter. One day you were going about your daily life on the main land, when you were suddenly abducted by a gang of hooded figures. Arrested, bound, and gagged, you were all but kidnapped and thrown onto a ship.  After it left harbor, it became apparent immediately that your abductors did not join you on this ship, instead paying for your passage, and for the Captain to leave immediately. The ship is The Errant Gallows, a relatively small cargo ship, and the Captain is a man who goes by the name "Argow".
 
-You stand aboard The Errant Gallows, a relatively small cargo ship whose hold is filled to bursting with large crates of - ostensibly - food and supplies.  The majesty of Sadelica splays out before you, the sun just setting behind the massive mountain in the center.  Some say that mountain is a dormant volcano.  Some even say it's the source of the strange magic in the land.
+The journey has been long and harrowing.  Rough seas, spoiled provisions, and rampant sickness have made the discontent among the deckhands almost palpable.  Likely because he needs something to point at, Captain Argow has taken it upon himself to blame your group for the difficulties.  Every chance has gotten to disparage you for merely existing, he his taken it.  His dour attitude has only gotten worse over the journey. This is perhaps the reason why he outright refuses to speak of your circumstances - why you are aboard his ship and who paid him to keep you there.  His dark looks and ominous mutterings about your party and your ill luck have made your travel most unpleasant.  It is not only him though. The whole crew looks at you askance, jumping at so much as a word muttered in their general direction.
 
-The journey has been long and harrowing.  Rough seas, spoiled provisions, and rampant sickness have made the relief among the deckhands almost palpable.  The Captain of this vessel, a grump who goes by Argow, has taken it upon himself to blame your group for the difficulties.  His dour attitude has only gotten worse over the journey, perhaps the reason why he outright refuses to speak of your circumstances - why you are aboard his ship and who paid him to keep you there.  His dark looks and ominous mutterings about your party and your ill luck have made your travel most unpleasant.  It is not only him though. The whole crew looks at you askance, jumping at so much as a word muttered in their general direction.
+You look out the bow of the ship and the majesty of Sadelica splays out before you.  The sun is just setting behind the massive mountain in the center; it casts a looming shadow on ocean.  Some say that mountain is a dormant volcano, one that explodes after enough people have settled on it.  Some even say it's the source of the strange magic in the land.  Nobody seems to know for sure, though. The ship hastens towards a the port of Alinea, a strong tail-wind ushering you eagerly onward.
 
-The ship hastens towards a the port of Alinea, a strong tail-wind ushering you away from the ocean behind you.  After a matter of minutes, you float beside an empty dock, watching the mooring lines tumble overboard and the gangplank rattle into place.  Abruptly, Captain Argow shivvies you towards it and boots you off his ship.
+A few minutes later the ship is setting anchor in the dock, deckhands tying mooring lines to poles and yelling obscenities at each other.  The gangplank rattles into place and abruptly Captain Argow is behind you. With great gusto he shivvies you towards it, pushing you across and off his ship.
 
 "That'll be the last time I take the likes of ye for a chip of coppa'."
 
-- (choose flavor)
-
 - (choose response)
 
-Alinea is not the largest town nor its port the grandest, but the plethora of large warehouses lining the coast indicate a distinct purpose for the place.  In an untamed land like Sadelica, there is need for hubs like Alinea to house provisions for those who venture further into the less-settled wilderness.  Caravans of wagons wait outside these warehouses, merchants haggling profusely with clipboard-wielding men and woman.  Dockworkers are scattered everywhere, pulling heavy carts, registering vessels, tying knots, and carrying messages.  Crewmen unload massive crates and barrels from their ships' holds.
+"Oi," Captain Argow yells.  He heaves a sack over the side of the ship.  As it hits the dock it clanks and chinks like metal.  "I was told to give ya that when we arrived.  I'll be damned if a piece of yer heritage stays aboard."
 
-"Oi," Captain Argow yells.  He heaves a sack over the side of the ship.  As it hits the dock it clanks and chinks like there's metal inside.  "I was told to give ya that when we arrived.  I'll be damned if a piece of yer heritage stays aboard."
-
-"And I'm supposed to tell you somethin'."  He glances at each of you.  "Who here speaks for your party?"
-
-- (choose character)
-
-Argow nods.  "It's a number.  9.  You find it and tell 'em 'Dancing Thieves'."
+"And I'm supposed to tell you somethin'.  It's a number.  9.  Probably means somethin' 'round here."
 
 - (choose explanation)
 
-The Captain shrugs.  "Dunno.  Don't care.  Now off with you.  Yer not gettin' back on my ship, so you best be gone."  He glances at the sack he threw overboard, shivers, and turns away.
+The Captain shrugs. "Dunno.  Don't care. Not really my problem, is it?  Now off with you.  Yer not gettin' back on my ship, so you best be gone."  He glances at the sack he threw overboard, shivers, and walks off.
 
-- (Journal entry: "When you arrived in Alinea, you were given a sack of weapons and told "301.  Find it and tell them 'Dancing Thieves.'"  Perhaps it's the number of a building...)
+You turn towards the town where you've docked: Alinea.  It is not the largest town nor its port the grandest you've seen, but the plethora of large warehouses lining the coast indicate a distinct purpose for the place.  In an untamed land like Sadelica, there is need for hubs like Alinea to house provisions for those who venture further into the less-settled wilderness.  Caravans of wagons wait outside these warehouses, merchants haggling profusely with clipboard-wielding men and woman.  Dockworkers are scattered everywhere, pulling heavy carts, registering vessels, tying knots, and carrying messages.   There are a few other ships in port as well, vessels about the size of Argow's. Crewmen unload massive crates and barrels from their ships' holds, placing them in marked-off areas around the docks.  The whole enterprise seems oddly formal, oddly rehearsed.  
+
+This is why you were abducted?  To be in this town?
+
+- (Journal entry: "When you arrived in Alinea, you were given a sack of weapons and told a number: "9".  Perhaps it's the number of a building...)
 
 
+---
+
+Realm Cache - There is a cache of weapons/supplies that Lieutenant Mullen (Realm) has set aside in the case of a Blackrose uprising.  He has stocked away some fairly powerful items there so that he can hold up in the cave where the cache is for a long time. The Blackrose estate gets wind of this and asks the Player to gain access to this cache and either destroy it or take it.
+  - The player breaks into the vault, loots it/destroys the supplies, then returns to the Blackrose estate.  +Nobility -Realm (Spy Rigby knows you did this)
+    - This case also happens if Spy Rigby catches the Player doing this
+  - The player breaks into the vault, loots a little of it, destroys rest, but instead lies and tells Spy Rigby and Blackrose that they didn't do it.  +Island
+  - The player informs Spy Rigby that the Blackroses know of the vault's location and want to destroy it. +Realm -Nobility (Blackrose sees added security and suspect you)
+  - The player isn't told about the vault, finds it, kills the guards and loots it, gets caught by Spy Rigby. -Realm (minor) + Nobility (minor)
+
+Stuffy Nobleman - A man named Igmund (Villager) doesn't like Lord Barto Caldeburn and wants the Player to throw a rock at him.
+  - The Player throws a rock at the nobleman, damages him, and gets kicked out of the bar. Igmund offers his house as a place to rest. -Nobility -Merchantry +Island (this just sows chaos)
+  - The Player convinces Scopey not to go through with the plan. (no gains or losses)
+  - The Player tells Barto that Scopey doesn't like him.  Barto doesn't care.  The Bartender hears this and talks Scopey out of doing it. +Merchantry
+
+Illegal Magic Items - 
+
+Lone Hunter 
+  A lone hunter named Tanig Rault (Villager) is hunting in the forest north of Alinea.  He seeks to kill a Gorbath that has been spotted in the area.  A Gorbath is a big furry bear-like creature with 3 legs.  It's nest is somewhere around.  He asks the Player to find where it is and return to him.
+  - The Player finds the Gorbath lair and returns to Tanig.  Tanig asks to join the party and he and the Player take down the Gorbath.  Tanig has a limited-use beast slayer that helps a lot here.  Tanig joins the Player's party.
+  - The Player finds the Gorbath lair and kills the Gorbath.  This is a REALLY TOUGH fight, but if it does happen... Tanig is mad that the Player took his hunt and leaves.  However he gives the player the Beast Slayer he has because he doesn't need it anymore.
+
+Bandit Camp

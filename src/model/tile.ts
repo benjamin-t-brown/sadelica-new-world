@@ -19,7 +19,7 @@ export const tileGetId = (tile: Tile | null) => {
 
 export const tileSetId = (tile: Tile | null, id: number) => {
   if (tile) {
-    tile[0] = 'terrain1_' + id;
+    tile[0] = 'img/terrain1_' + id;
     tile[1] = id;
   }
 };

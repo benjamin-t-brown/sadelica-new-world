@@ -18,6 +18,7 @@ export enum Facing {
 export interface Actor {
   type: ActorType;
   name: string;
+  templateName: string;
   spriteIndex: number;
   spriteSheet: string;
   id: string;
@@ -54,6 +55,7 @@ export interface Actor {
 
 export interface ActorDefinition {
   name?: string;
+  templateName: string;
   text?: string;
   spriteIndex?: number;
   spriteSheet?: string;
@@ -94,8 +96,9 @@ export const createActor = (name?: string) => {
   const ch: Actor = {
     type: ActorType.CHARACTER,
     name: name ?? '',
+    templateName: '',
     spriteIndex: 0,
-    spriteSheet: 'actors1',
+    spriteSheet: 'img/actors1',
     id: '',
     x: 0,
     y: 0,
@@ -120,7 +123,7 @@ export const createActorFromTemplate = (template: ActorDefinition) => {
   const actor = createActor(template.name);
   actor.name = template.name ?? '';
   actor.spriteIndex = template.spriteIndex ?? 0;
-  actor.spriteSheet = template.spriteSheet ?? 'actors1';
+  actor.spriteSheet = template.spriteSheet ?? 'img/actors1';
   if (template.stats) {
     actor.stats = template.stats;
   }
@@ -148,6 +151,7 @@ export const createActorFromTemplate = (template: ActorDefinition) => {
   actor.portrait = template.talkPortrait ?? undefined;
   actor.type = template.type ?? ActorType.CHARACTER;
   actor.allegiance = template.allegiance ?? Allegiance.NEUTRAL;
+  actor.templateName = template.templateName;
 
   return actor;
 };

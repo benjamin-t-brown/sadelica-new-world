@@ -13,8 +13,11 @@ export type Sprite = [
 type SpriteCollection = Record<string, Sprite>;
 
 let canvas: HTMLCanvasElement | null = null;
-let images: ImageCollection | null = null;
-let sprites: SpriteCollection | null = null;
+const images: ImageCollection | null = ((window as any).images = {});
+const sprites: SpriteCollection | null = ((window as any).sprites = {});
+const cadenceSprites: Record<string, [string, string, string]> = ((
+  window as any
+).cadenceSprites = {});
 
 const createRotatedImg = (
   inputCanvas: HTMLCanvasElement
@@ -158,8 +161,29 @@ export const loadImagesAndSprites = async (localImages: any[]) => {
     )
   );
 
-  images = imageMap;
-  sprites = spriteMap;
+  Object.assign(images, imageMap);
+  Object.assign(sprites, spriteMap);
+
+  return { imageMap, spriteMap };
+};
+
+export const addCadence = function (
+  name: string,
+  spriteName1: string,
+  spriteName2: string,
+  spriteName3: string
+) {
+  cadenceSprites[name] = [spriteName1, spriteName2, spriteName3];
+};
+
+export const getCadence = function (name: string) {
+  const sprites = cadenceSprites[name];
+  if (sprites) {
+    return sprites as [string, string, string];
+  } else {
+    console.error('Could not get cadence sprites for:', name);
+    return null;
+  }
 };
 
 export const createCanvas = (

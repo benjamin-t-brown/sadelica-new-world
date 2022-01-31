@@ -32,12 +32,9 @@ export default defineConfig((...args) => {
         usePolling: true,
       },
       proxy: {
-        // proxies iframe requests to the concurrently-running http-server (DUMB that I have to do this)
-        // Why can't I just directly load the stuff from here?
-        '^/iframes/.*': 'http://localhost:8080/',
         // This prevents the dev server from serving the 'res' version of these scripts since
         // it shares the same directory structure as the src version
-        '^/rpgscript/.*': 'http://localhost:8080/src/',
+        '^/img/.*': 'http://localhost:8080/src/',
       },
     },
   };

@@ -129,7 +129,7 @@ const ModalSection = () => {
       <Header>
         <HeaderPictureContainer>
           <HeaderPicture>
-            <SpriteDiv sprite={modalState.sprite ?? ''} scale={2}></SpriteDiv>
+            <SpriteDiv sprite={modalState.sprite ?? ''} scale={4}></SpriteDiv>
           </HeaderPicture>
         </HeaderPictureContainer>
         <HeaderTextContainer>{headerText}</HeaderTextContainer>

@@ -9,22 +9,24 @@ import { createSignTemplate } from './helpers';
 
 export const init = (exp: Record<string, ActorDefinition>) => {
   exp.CH_ALINEA_DOCKMASTER_CLAIRE = {
+    name: 'Dock Master',
+    templateName: '',
     spriteIndex: CHARACTER_SPRITES.Dockmaster,
     spriteSheet: ACTORS_SPRITE_SHEET,
-    name: 'Dock Master',
     stats: createStats(100),
     behavior: Behavior.NONE,
     talkTrigger: 'Alinea_CH_DockmasterClaire',
     stepTrigger: '',
     dropLevel: 0,
     facing: Facing.RIGHT,
-    talkPortrait: '',
+    talkPortrait: PORTRAIT_SPRITES.Radmila,
   };
 
   exp.CH_ALINEA_BARTOLO_CALDEBURN = {
     spriteIndex: CHARACTER_SPRITES.Bartolo,
     spriteSheet: ACTORS_SPRITE_SHEET,
     name: 'Noble',
+    templateName: '',
     stats: createStats(100),
     behavior: Behavior.NONE,
     talkTrigger: 'Alinea_CH_BartoloCaldeburn',
@@ -37,6 +39,7 @@ export const init = (exp: Record<string, ActorDefinition>) => {
     spriteIndex: CHARACTER_SPRITES.AldebethBlackrose,
     spriteSheet: ACTORS_SPRITE_SHEET,
     name: 'Noble',
+    templateName: '',
     stats: createStats(100),
     behavior: Behavior.NONE,
     talkTrigger: 'Alinea_CH_AldebethBlackrose',
@@ -49,6 +52,7 @@ export const init = (exp: Record<string, ActorDefinition>) => {
     spriteIndex: CHARACTER_SPRITES.Sol,
     spriteSheet: ACTORS_SPRITE_SHEET,
     name: 'Strange Man',
+    templateName: '',
     stats: createStats(100),
     behavior: Behavior.NONE,
     talkTrigger: 'Alinea_CH_Sol',
@@ -61,6 +65,7 @@ export const init = (exp: Record<string, ActorDefinition>) => {
     spriteIndex: CHARACTER_SPRITES.Townsman1,
     spriteSheet: ACTORS_SPRITE_SHEET,
     name: 'Bartender',
+    templateName: '',
     stats: createStats(100),
     behavior: Behavior.NONE,
     talkTrigger: 'Alinea_CH_BartenderRus',
@@ -74,6 +79,7 @@ export const init = (exp: Record<string, ActorDefinition>) => {
     spriteIndex: CHARACTER_SPRITES.GuardRealm,
     spriteSheet: ACTORS_SPRITE_SHEET,
     name: 'Guard',
+    templateName: '',
     stats: createStats(250),
     behavior: Behavior.RAND,
     talkTrigger: '',
@@ -87,6 +93,7 @@ export const init = (exp: Record<string, ActorDefinition>) => {
     spriteIndex: CHARACTER_SPRITES.GuardRealm,
     spriteSheet: ACTORS_SPRITE_SHEET,
     name: 'Guard',
+    templateName: '',
     stats: createStats(250),
     behavior: Behavior.NONE,
     talkTrigger: '',
@@ -100,6 +107,7 @@ export const init = (exp: Record<string, ActorDefinition>) => {
     spriteIndex: CHARACTER_SPRITES.Mullen,
     spriteSheet: ACTORS_SPRITE_SHEET,
     name: 'Realm Captain',
+    templateName: '',
     stats: createStats(250),
     behavior: Behavior.NONE,
     talkTrigger: 'Alinea_CH_GuardCaptainMullen',
@@ -113,6 +121,7 @@ export const init = (exp: Record<string, ActorDefinition>) => {
     spriteIndex: CHARACTER_SPRITES.Elvyosa,
     spriteSheet: ACTORS_SPRITE_SHEET,
     name: 'Ship Captain',
+    templateName: '',
     stats: createStats(250),
     behavior: Behavior.NONE,
     talkTrigger: 'Alinea_CH_Elvyosa',
@@ -131,10 +140,7 @@ export const init = (exp: Record<string, ActorDefinition>) => {
     text: 'THE STONE BARREL\n Sweets and Craft Ale',
   });
   exp.CH_ALINEA_SIGN_DOCKS = createSignTemplate({
-    text: `WELCOME TO ALINEA!
-  On arrival, please report to Dockmaster Claire for a permit and warehouse options.
-  (At the bottom of the sign is a hastily-written note.)
-  "ATTENTION WORKERS... Be sure to tie your mooring lines tightly!  The Captain doesn't need any more fiascos like last week."`,
+    text: `Captains: Report to the dockmaster on duty for permits and warehouse allocation.`,
     spriteIndex: CHARACTER_SPRITES.SignPost,
   });
   exp.CH_ALINEA_SIGN_WAREHOUSE1 = createSignTemplate({

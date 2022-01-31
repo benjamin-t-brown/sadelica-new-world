@@ -1,4 +1,3 @@
-import { createEmptyVisMap } from 'controller/visibility';
 import { Actor, actorGetPosition } from './actor';
 import { getCurrentPlayer } from './generics';
 import { Item } from './item';
@@ -205,5 +204,28 @@ export const setHighlightedTiles = (
 export const unsetHighlightedTiles = (room: Room) => {
   for (let i = 0; i < room.tiles.length; i++) {
     tileSetHighlighted(room.tiles[i], false);
+  }
+};
+
+export const createEmptyVisMap = (dimensions: number[]): number[][] => {
+  const array: number[][] = [];
+  for (let i = 0; i < dimensions[0]; ++i) {
+    array.push(
+      dimensions.length === 1
+        ? 0
+        : (createEmptyVisMap(dimensions.slice(1)) as any)
+    );
+  }
+  return array;
+};
+
+export const setExploredMap = (
+  origExploredMap: number[][],
+  visMap: number[][]
+) => {
+  for (let i = 0; i < visMap.length; i++) {
+    for (let j = 0; j < visMap[0].length; j++) {
+      origExploredMap[i][j] = origExploredMap[i][j] || visMap[i][j];
+    }
   }
 };

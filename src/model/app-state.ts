@@ -70,6 +70,7 @@ export interface AppStateDialog {
   choices: AppStateDialogLine[];
   actorName: string;
   portraitSprite: Sprite | null;
+  portraitScale: number;
   borderSprite: Sprite | null;
   waitingForChoice: boolean;
   waitingForContinue: boolean;
@@ -116,6 +117,7 @@ export const createAppState = (): AppState => {
       choices: [],
       actorName: '',
       portraitSprite: null,
+      portraitScale: 1,
       borderSprite: null,
       waitingForChoice: false,
       waitingForContinue: false,

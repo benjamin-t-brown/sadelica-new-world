@@ -1,4 +1,5 @@
-export const ACTORS_SPRITE_SHEET = 'actors1';
+export const ACTORS_SPRITE_SHEET = 'img/actors1';
+export const PLAYERS_SPRITE_SHEET = 'img/players1';
 
 export const CHARACTER_SPRITES = {
   Player: 0,
@@ -38,15 +39,21 @@ export const CHARACTER_SPRITES = {
   PlayerBow: 64,
 };
 
+export const PLAYER_SPRITES = {
+  Player1: 0,
+  Player2: 10,
+  Player3: 20,
+  Player4: 30,
+};
+
 export const PORTRAIT_SPRITES = {
-  Radmila: 'portrait1_' + 0,
-  Dunns: 'portrait1_' + 3,
-  AldebethBlackrose: 'portrait1_' + 6,
-  Sol: 'portrait1_' + 9,
-  Mullen: 'portrait1_' + 12,
-  Idoreo: 'portrait1_' + 15,
-  Chem: 'portrait1_' + 18,
-  Sign: 'portrait1_' + 21,
+  Radmila: 'img/portrait1_' + 0,
+  Dunns: 'img/portrait1_' + 6,
+  AldebethBlackrose: 'img/portrait1_' + 12,
+  Sol: 'img/portrait1_' + 18,
+  Mullen: 'img/portrait1_' + 24,
+  Idoreo: 'img/portrait1_' + 30,
+  Chem: 'img/portrait1_' + 36,
 };
 
 export const TERRAIN_WALL_SPRITES = [

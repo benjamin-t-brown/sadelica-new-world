@@ -6,6 +6,9 @@
   "engines": {
     "node": ">=10"
   },
+  "resolutions": {
+    "node-fetch": "2.6.7"
+  },
   "scripts": {
     "start": "yarn watch",
     "start:dist": "http-server ./dist -o index.html -g -p 8081",
@@ -55,7 +58,7 @@
   "browserslist": "> 0.25%, not dead",
   "dependencies": {
     "picostyle": "^2.2.0",
-    "preact": "^10.5.7",
+    "preact": "10.5.7",
     "preact-custom-scrollbars": "^4.0.4"
   }
 }

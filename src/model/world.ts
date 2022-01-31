@@ -1,4 +1,4 @@
-import { createEmptyVisMap } from 'controller/visibility';
+import { createEmptyVisMap } from 'model/room';
 import {
   TERRAIN_CAVE_SPRITES,
   TERRAIN_GRASS_SPRITES,
@@ -245,7 +245,7 @@ export const createWorld = (mapName: string): World => {
       } else if (ind === TERRAIN_SPRITES.CaveFloor) {
         ind = randInArr(TERRAIN_CAVE_SPRITES);
       }
-      tiles[tInd] = ['terrain1_' + ind, ind, tx, ty, false];
+      tiles[tInd] = ['img/terrain1_' + ind, ind, tx, ty, false];
       ctr++;
     }
   }

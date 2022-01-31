@@ -27,6 +27,9 @@ import { to4d } from 'utils';
 import { getRoomSize } from 'model/room';
 import { createWorld } from 'model/world';
 import { initEvents } from 'controller/input';
+import { runMainLoop } from 'controller/loop';
+import { loadRes } from 'controller/res-loader';
+import { PLAYERS_SPRITE_SHEET } from 'db/sprite-mapping';
 
 const elem = document.documentElement;
 
@@ -64,25 +67,28 @@ export const main = async (): Promise<void> => {
   initDb();
   initEvents();
   core.init();
+  runMainLoop();
 
-  await Promise.all([
-    loadImagesAndSprites([
-      [
-        'packed',
-        'packed.png',
-        16,
-        16,
-        2,
-        2,
-        ['terrain2', 'terrain3', 'actors2', 'misc1'],
-      ],
-      ['terrain1', 'terrain1.png', 16, 16, 1, 1, ['terrain1']],
-      ['actors1', 'actors1.png', 16, 16, 1, 1, ['actors1']],
-      ['map1', 'map1.png', 64, 64, 1, 1, ['map1']],
-      ['portrait1', 'portrait1.png', 32, 32, 1, 1, ['portrait1']],
-    ]),
-    // G_view_loadSounds(),
-  ]);
+  // await Promise.all([
+  //   loadImagesAndSprites([
+  //     [
+  //       'packed',
+  //       'img/packed.png',
+  //       16,
+  //       16,
+  //       2,
+  //       2,
+  //       ['terrain2', 'terrain3', 'actors2', 'misc1'],
+  //     ],
+  //     ['terrain1', 'img/terrain1.png', 16, 16, 1, 1, ['terrain1']],
+  //     ['actors1', 'img/actors1.png', 16, 16, 1, 1, ['actors1']],
+  //     // ['map1', 'img/map1.png', 64, 64, 1, 1, ['map1']],
+  //     ['portrait1', 'img/portrait1.png', 32, 32, 1, 1, ['portrait1']],
+  //   ]),
+  //   // G_view_loadSounds(),
+  // ]);
+
+  await loadRes();
 
   const loading = document.getElementById('page-loading');
   if (loading) {
@@ -110,6 +116,8 @@ export const main = async (): Promise<void> => {
   }
 
   const ch1 = createActor('Elmindretta');
+  ch1.spriteSheet = PLAYERS_SPRITE_SHEET;
+  ch1.spriteIndex = 10;
   ch1.inventory = [
     createItem({
       name: 'Knife',

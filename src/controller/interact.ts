@@ -13,7 +13,7 @@ export const interactWithNearby = (actor?: Actor) => {
   if (act) {
     const talkTrigger = act.talkTrigger;
     if (typeof talkTrigger === 'string' && talkTrigger !== '') {
-      showDialog(talkTrigger, act.name);
+      showDialog(talkTrigger, act.templateName ?? act.name);
     } else if (typeof talkTrigger === 'function') {
       talkTrigger();
     }

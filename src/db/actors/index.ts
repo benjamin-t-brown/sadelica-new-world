@@ -15,4 +15,8 @@ export const getIfExists = (name: string) => {
 export const init = () => {
   initGeneral(exp);
   initAlinea(exp);
+
+  for (const i in exp) {
+    exp[i].templateName = i;
+  }
 };

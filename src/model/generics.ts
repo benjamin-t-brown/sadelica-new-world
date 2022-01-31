@@ -4,6 +4,12 @@ import { Player } from './player';
 import { getRoomSize } from './room';
 import { World } from './world';
 
+import { RES_PATH } from '../env';
+
+export const getResPath = () => {
+  return RES_PATH;
+};
+
 let currentPlayer: Player | null = null;
 export const getCurrentPlayer = (): Player => currentPlayer as Player;
 export const setCurrentPlayer = (p: Player): void => {
@@ -48,3 +54,9 @@ export const setScale = (s: number) => (scale = s);
 let inputDisabled = false;
 export const isInputDisabled = () => inputDisabled;
 export const setInputDisabled = (b: boolean) => (inputDisabled = b);
+
+let now = 0;
+export const getNow = (): number => now;
+export const setNow = (n: number): void => {
+  now = n;
+};
