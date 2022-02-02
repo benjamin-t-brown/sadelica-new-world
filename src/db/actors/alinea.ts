@@ -22,14 +22,14 @@ export const init = (exp: Record<string, ActorDefinition>) => {
     talkPortrait: PORTRAIT_SPRITES.Radmila,
   };
 
-  exp.CH_ALINEA_BARTOLO_CALDEBURN = {
-    spriteIndex: CHARACTER_SPRITES.Bartolo,
+  exp.CH_ALINEA_BARTO_CALDEBURN = {
+    spriteIndex: CHARACTER_SPRITES.Barto,
     spriteSheet: ACTORS_SPRITE_SHEET,
     name: 'Noble',
     templateName: '',
     stats: createStats(100),
     behavior: Behavior.NONE,
-    talkTrigger: 'Alinea_CH_BartoloCaldeburn',
+    talkTrigger: 'Alinea_CH_BartoCaldeburn',
     stepTrigger: '',
     dropLevel: 0,
     facing: Facing.LEFT,

@@ -1,3 +1,5 @@
+import TextNodeInputDialog from './text-node-input-dialog';
+
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ConfirmDialog = require('./confirm-dialog');
@@ -32,24 +34,52 @@ let show = function () {
   core.disable();
 };
 
-exports.show_confirm = function (text, on_confirm, on_cancel) {
+const exp = {};
+
+exp.show_confirm = function (text, on_confirm, on_cancel) {
   show();
   ReactDOM.render(
     React.createElement(ConfirmDialog, {
       text: text,
       on_confirm: on_confirm || function () {},
       on_cancel: on_cancel || function () {},
-      hide: exports.hide,
+      hide: exp.hide,
     }),
     document.getElementById('dialog')
   );
 };
 
-exports.set_shift_req = function (v) {
+exp.show_confirm_outer = function (text, on_confirm, on_cancel) {
+  const id = 'confirm-outer';
+  const div = document.createElement('div');
+  Object.assign(div.style, {
+    position: 'fixed',
+    left: '0',
+    top: '0',
+    width: '100%',
+    height: '100%',
+    background: 'rgba(0, 0, 0, 0.5)',
+  });
+  div.id = id;
+  document.body.appendChild(div);
+  ReactDOM.render(
+    React.createElement(ConfirmDialog, {
+      text: text,
+      on_confirm: on_confirm || function () {},
+      on_cancel: on_cancel || function () {},
+      hide: () => {
+        div.remove();
+      },
+    }),
+    div
+  );
+};
+
+exp.set_shift_req = function (v) {
   require_shift = v;
 };
 
-exports.show_input = function (node_or_default_text, on_confirm, on_cancel) {
+exp.show_input = function (node_or_default_text, on_confirm, on_cancel) {
   show();
   let node = null;
   let default_text = null;
@@ -65,14 +95,27 @@ exports.show_input = function (node_or_default_text, on_confirm, on_cancel) {
       on_confirm: on_confirm || function () {},
       on_cancel: on_cancel || function () {},
       whiteSpace: require_shift,
-      hide: exports.hide,
+      hide: exp.hide,
     }),
     document.getElementById('dialog')
   );
 };
 
+exp.showTextNodeInput = function ({ node, onConfirm, onCancel }) {
+  show();
+  ReactDOM.render(
+    <TextNodeInputDialog
+      node={node}
+      onCancel={onCancel}
+      onConfirm={onConfirm}
+      hide={exp.hide}
+    />,
+    document.getElementById('dialog')
+  );
+};
+
 // options - array of strings that show the options in the select
-exports.show_input_with_select = function (
+exp.show_input_with_select = function (
   options,
   default_value,
   on_confirm,
@@ -85,38 +128,40 @@ exports.show_input_with_select = function (
       default_value: default_value,
       on_confirm: on_confirm || function () {},
       on_cancel: on_cancel || function () {},
-      hide: exports.hide,
+      hide: exp.hide,
     }),
     document.getElementById('dialog')
   );
 };
 
-exports.show_notification = function (text, on_confirm) {
+exp.show_notification = function (text, on_confirm) {
   show();
   ReactDOM.render(
     React.createElement(NotificationDialog, {
       text: text,
       on_confirm: on_confirm || function () {},
-      hide: exports.hide,
+      hide: exp.hide,
     }),
     document.getElementById('dialog')
   );
 };
 
-exports.hide = function () {
+exp.hide = function () {
   is_visible = false;
   window.removeEventListener('keydown', on_key_down);
   ReactDOM.unmountComponentAtNode(document.getElementById('dialog'));
   core.enable();
 };
 
-exports.is_visible = function () {
+exp.is_visible = function () {
   return is_visible;
 };
 
-exports.show_loading = function () {
+exp.show_loading = function () {
   show();
   ReactDOM.render(<LoadingDialog />, document.getElementById('dialog'));
 };
 
-exports.hide_loading = exports.hide;
+exp.hide_loading = exp.hide;
+
+export default exp;

@@ -3,6 +3,7 @@ import expose from 'expose';
 import Board from 'board';
 import FileBrowser from 'file-browser';
 import PlayerArea from 'player-area';
+import Notifications from 'notifications';
 import injectSheet from 'react-jss';
 
 window.expose = expose;
@@ -71,6 +72,7 @@ class MainContainer extends expose.Component {
         </div>
         <PlayerArea />
         <StatusBar />
+        <Notifications />
       </>
     );
   }

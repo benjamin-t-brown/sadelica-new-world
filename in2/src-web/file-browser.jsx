@@ -1,8 +1,10 @@
+import dialog from 'dialog';
+import { notify } from './notifications';
+
 const React = require('react');
 const css = require('css');
 const utils = require('utils');
 const expose = require('expose');
-const dialog = require('dialog');
 const core = require('core-in2');
 
 //This file represents the file browser on the right side of the screen.
@@ -14,7 +16,7 @@ const core = require('core-in2');
 // 5.) Delete a file by clicking the red 'x' on the right at DEL GET /file/<filename>
 // 6.) Uses LocalStorage to remember the last file you had open
 
-module.exports = class FileBrowser extends expose.Component {
+class FileBrowser extends expose.Component {
   constructor(props) {
     super(props);
     this.expose('file-browser');
@@ -490,7 +492,7 @@ module.exports = class FileBrowser extends expose.Component {
             );
           }}
         >
-          Player State
+          State
         </div>
         <div
           className="confirm-button confirm-button-player"
@@ -512,7 +514,7 @@ module.exports = class FileBrowser extends expose.Component {
             );
           }}
         >
-          Save Data
+          Saved Data
         </div>
       </div>,
       <div
@@ -553,12 +555,13 @@ module.exports = class FileBrowser extends expose.Component {
                 </>
               );
             } else {
-              dialog.show_notification(
-                <>
-                  <div>Export successful!</div>
-                  <div style={{ marginTop: '0.5rem' }}>{resp.data.msg}</div>
-                </>
-              );
+              notify('Export successful!', 'confirm');
+              // dialog.show_notification(
+              //   <>
+              //     <div>Export successful!</div>
+              //     <div style={{ marginTop: '0.5rem' }}>{resp.data.msg}</div>
+              //   </>
+              // );
             }
           }}
         >
@@ -596,4 +599,6 @@ module.exports = class FileBrowser extends expose.Component {
       )
     );
   }
-};
+}
+
+export default FileBrowser;

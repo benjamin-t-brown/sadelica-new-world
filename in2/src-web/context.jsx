@@ -120,7 +120,7 @@ exp.show_context_menu = function (board, elem) {
         const added_node = this.addNode(
           parent,
           'choice_conditional',
-          'VAR_test === 1'
+          'player.once()'
         );
         this.addNode(added_node, 'choice_text');
       }.bind(board);
@@ -139,7 +139,7 @@ exp.show_context_menu = function (board, elem) {
         this.enterLinkMode(parent);
       }.bind(board);
       cbs.createSwitchConditionalNode = function (parent) {
-        this.addNode(parent, 'switch_conditional', `VAR_test === 1`);
+        this.addNode(parent, 'switch_conditional', `player.once()`);
       }.bind(board);
     } else {
       cbs.linkNode = function (parent) {

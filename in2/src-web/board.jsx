@@ -13,7 +13,7 @@ const BOARD_SIZE_PIXELS = 6400;
 export const getNodeId = () => {
   let id;
   do {
-    id = utils.random_id(5);
+    id = utils.random_id(9);
   } while (document.getElementById(id));
   return id;
 };
@@ -292,18 +292,38 @@ class Board extends expose.Component {
             this.setNodeContent(file_node, content);
             file_node.rel = null;
             this.buildDiagram();
+            this.renderAtOffset();
+            this.getPlumb().setZoom(this.zoom);
             this.saveFile();
           },
           () => {
             dialog.set_shift_req(false);
           }
         );
+      } else if (file_node.type === 'text') {
+        dialog.set_shift_req(true);
+        dialog.showTextNodeInput({
+          node: file_node,
+          onConfirm: content => {
+            this.setNodeContent(file_node, content);
+            file_node.rel = null;
+            this.buildDiagram();
+            this.renderAtOffset();
+            this.getPlumb().setZoom(this.zoom);
+            this.saveFile();
+          },
+          onCancel: () => {
+            dialog.set_shift_req(false);
+          },
+        });
       } else {
         dialog.set_shift_req(false);
         dialog.show_input(file_node, content => {
           this.setNodeContent(file_node, content);
           file_node.rel = null;
           this.buildDiagram();
+          this.renderAtOffset();
+          this.getPlumb().setZoom(this.zoom);
           this.saveFile();
         });
       }
@@ -611,7 +631,7 @@ class Board extends expose.Component {
       const file = this.file;
       if (file !== null) {
         utils.post('/file/' + file.name, file, () => {
-          console.log('Succesfully saved.');
+          console.log('Successfully saved.');
         });
       }
     }, 500);
@@ -695,6 +715,8 @@ class Board extends expose.Component {
   setNodeContent(node, content) {
     node.content = content;
     document.getElementById(node.id).children[1].innerHTML = content;
+    this.renderAtOffset();
+    this.getPlumb().setZoom(this.zoom);
   }
 
   getChildren(node) {
@@ -800,6 +822,8 @@ class Board extends expose.Component {
     this.file.links.push(link);
     this.saveFile();
     this.buildDiagram();
+    this.renderAtOffset();
+    this.getPlumb().setZoom(this.zoom);
   }
 
   addNode(parent, type, defaultText) {
@@ -848,6 +872,8 @@ class Board extends expose.Component {
     });
     this.saveFile();
     this.buildDiagram();
+    this.renderAtOffset();
+    this.getPlumb().setZoom(this.zoom);
     return node;
   }
 
@@ -855,7 +881,7 @@ class Board extends expose.Component {
     let node = this.addNode(
       parent,
       'pass_fail',
-      'Math.random() > 0.5 ? true : false'
+      'player.once() ? true : false'
     );
     let idPass = getNodeId();
     let idFail = getNodeId();
@@ -886,6 +912,8 @@ class Board extends expose.Component {
     });
     this.saveFile();
     this.buildDiagram();
+    this.renderAtOffset();
+    this.getPlumb().setZoom(this.zoom);
     return node;
   }
 
@@ -898,6 +926,8 @@ class Board extends expose.Component {
       dialog.show_confirm('Are you sure you wish to delete this link?', () => {
         this.file.links.splice(ind, 1);
         this.buildDiagram();
+        this.renderAtOffset();
+        this.getPlumb().setZoom(this.zoom);
       });
     } else {
       console.error(
@@ -928,6 +958,8 @@ class Board extends expose.Component {
       });
 
       this.buildDiagram();
+      this.renderAtOffset();
+      this.getPlumb().setZoom(this.zoom);
     };
 
     if (node.type === 'pass_fail' || node.type === 'switch') {

@@ -36,6 +36,8 @@ module.exports = {
       '/standalone': 'http://localhost:8899',
       '/res': 'http://localhost:8899',
       '/export': 'http://localhost:8899',
+      '/voice': 'http://localhost:8899',
+      '/open': 'http://localhost:8899',
     },
   },
 };

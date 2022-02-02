@@ -42,8 +42,7 @@ module.exports = {
   },
   random_id: function (len) {
     let text = '';
-    const possible =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghigklmnopqrstufwxyz1234567890';
+    const possible = 'abcdefghigklmnopqrstufwxyz1234567890';
     for (let i = 0; i < len; i++) {
       text += possible.charAt(
         Math.floor(

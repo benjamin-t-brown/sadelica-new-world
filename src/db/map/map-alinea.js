@@ -45,7 +45,7 @@
                  "gid":130,
                  "height":16,
                  "id":23,
-                 "name":"CH_ALINEA_BARTOLO_CALDEBURN",
+                 "name":"CH_ALINEA_BARTO_CALDEBURN",
                  "rotation":0,
                  "type":"",
                  "visible":true,

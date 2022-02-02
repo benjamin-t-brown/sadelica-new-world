@@ -16,8 +16,8 @@ exports.getSaveData = () => {
   return JSON.parse(localStorage.getItem(LOCAL_STORAGE_SAVE_STATE_KEY) || '{}');
 };
 
-const _console_log = (text, onClick) => {
-  expose.get_state('player-area').add_line(text || '', onClick);
+const _console_log = (text, onClick, color) => {
+  expose.get_state('player-area').add_line(text || '', onClick, color);
 };
 
 class KeyCatcher {
@@ -90,6 +90,10 @@ exports._core = {
           }
         });
     }
+  },
+
+  hasPickedChoice(id) {
+    return exports.player().get('nodes')?.[id || ''];
   },
 
   isChoiceNode(id) {
@@ -165,10 +169,13 @@ exports._core = {
         }
         let ctr = 1;
         actual_choices.forEach((choice, i) => {
-          _console_log('  ' + ctr + '.) ' + choice.t, () => {
-            console.log('ON CHOOSE ', i);
-            onChoose(i + 1);
-          });
+          _console_log(
+            '  ' + ctr + '.) ' + choice.t,
+            () => {
+              onChoose(i + 1);
+            },
+            exports._core.hasPickedChoice(choice.id) ? '#1b839b' : undefined
+          );
           ctr++;
         });
         _console_log('---------');
@@ -178,7 +185,7 @@ exports._core = {
             last_choose_nodes_selected.push(choice.t);
             this.catcher.setKeypressEvent(() => {});
             _console_log();
-            _console_log(choice.t);
+            _console_log(choice.t, undefined, '#666');
             _console_log();
             if (this.origCore) {
               this.origCore.onChoose();
@@ -201,7 +208,7 @@ exports._core = {
                   last_choose_nodes_selected.push(choice.t);
                   this.catcher.setKeypressEvent(() => {});
                   _console_log();
-                  _console_log(choice.t);
+                  _console_log(choice.t, undefined, '#999');
                   _console_log();
                   if (this.origCore) {
                     this.origCore.onChoose();

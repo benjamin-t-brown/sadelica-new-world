@@ -52,6 +52,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-dom-factories": "^1.0.2",
+    "react-dropzone": "^11.5.3",
     "react-jss": "^10.3.0",
     "recompose": "^0.30.0"
   },
@@ -63,12 +64,14 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.4",
+    "@jsplumb/browser-ui": "^5.3.9",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
     "babel-plugin-module-resolver": "^3.2.0",
     "chai": "^4.2.0",
     "concurrently": "^4.1.1",
     "cross-env": "^5.2.0",
+    "elliptic": ">=6.5.3",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^6.4.0",
     "eslint-config-react-app": "^4.0.1",
@@ -86,7 +89,6 @@
     "uglifycss": "0.0.29",
     "webpack": "^4.31.0",
     "webpack-cli": "^3.3.2",
-    "webpack-dev-server": "^3.7.2",
-    "elliptic": ">=6.5.3"
+    "webpack-dev-server": "^3.7.2"
   }
 }

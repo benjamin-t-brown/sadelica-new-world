@@ -1,6 +1,6 @@
 const http_server = require('./http-server');
 const fs = require('fs');
-const exec = require('child_process').exec;
+const { exec, spawn } = require('child_process');
 const argv = require('minimist')(process.argv.slice(2));
 const path = require('path');
 
@@ -17,11 +17,14 @@ const execAsync = async command => {
   });
 };
 
-const DIST_DIR = __dirname + '/../dist/';
-const SAVE_DIR = __dirname + '/../save/';
-const COMPILER_DIR = __dirname + '/../src-compile/';
-const COMPILER_OUT = __dirname + '/../src-compile/out';
+const DIST_DIR = path.resolve(__dirname + '/../dist/');
+const SAVE_DIR = path.resolve(__dirname + '/../save/');
+const COMPILER_DIR = path.resolve(__dirname + '/../src-compile/');
+const COMPILER_OUT = path.resolve(__dirname + '/../src-compile/out');
 const EXPORT_DIR = path.resolve(__dirname + '/../../src/in2/');
+
+// Windows path because it's invoked with cmd.exe /C <AUDACITY_PATH>
+const AUDACITY_PATH = 'C:/Program Files/Audacity/Audacity.exe';
 
 let config;
 try {
@@ -190,10 +193,25 @@ http_server.del('file', (obj, resp) => {
   });
 });
 
+const markVoiceExistsForFile = async file => {
+  await Promise.all(
+    file.nodes.map(node => {
+      return new Promise(resolve => {
+        const fileName = file.name.slice(0, -5);
+        const dir = `${SAVE_DIR}/voice/${fileName}/${node.id}.wav`;
+        fs.exists(dir, exists => {
+          node.voice = exists;
+          resolve();
+        });
+      });
+    })
+  );
+};
+
 // Get file contents or get list of all files
 http_server.get('file', (obj, resp) => {
   if (obj.event_args[0]) {
-    fs.readFile(SAVE_DIR + '/' + obj.event_args[0], (err, data) => {
+    fs.readFile(SAVE_DIR + '/' + obj.event_args[0], async (err, data) => {
       let ret_data;
       try {
         ret_data = JSON.parse(data.toString());
@@ -203,6 +221,7 @@ http_server.get('file', (obj, resp) => {
         }
         ret_data = null;
       }
+      await markVoiceExistsForFile(ret_data);
       http_server.reply(resp, {
         err: err,
         data: ret_data,
@@ -309,20 +328,138 @@ http_server.get('images', (obj, resp) => {
   });
 });
 
-// rename a file
-http_server.post('rename', (obj, resp) => {
-  fs.readdir(`${DIST_DIR}/assets/img/`, (err, dirs) => {
-    const ret = {
-      err: err,
-      data: null,
-    };
-    ret.data = dirs
-      .filter(dir => {
-        return dir.slice(-3) === 'png';
-      })
-      .map(dir => {
-        return 'assets/img/' + dir;
+http_server.get('voice', async (obj, resp) => {
+  const fileName = obj.event_args[0];
+  const nodeId = obj.event_args[1];
+  const head = 'data:audio/wav;base64,';
+  try {
+    const dir = `${SAVE_DIR}/voice/${fileName}/${nodeId}.wav`;
+    if (fs.existsSync(dir)) {
+      const file = fs.readFileSync(dir).toString('base64');
+
+      http_server.reply(resp, {
+        err: null,
+        data: {
+          file: head + file,
+          exists: false,
+        },
       });
-    http_server.reply(resp, ret);
+    } else {
+      throw new Error('File does not exist.');
+    }
+  } catch (e) {
+    console.log('Failed to get voice.', e);
+    http_server.reply(resp, {
+      err: null,
+      data: {
+        file: null,
+        exists: false,
+      },
+    });
+  }
+});
+
+http_server.del('voice', async (obj, resp) => {
+  const fileName = obj.event_args[0];
+  const nodeId = obj.event_args[1];
+  try {
+    const dir = `${SAVE_DIR}/voice/${fileName}/${nodeId}.wav`;
+    if (fs.existsSync(dir)) {
+      fs.unlinkSync(dir);
+
+      http_server.reply(resp, {
+        err: null,
+        data: {
+          success: true,
+        },
+      });
+    } else {
+      throw new Error('File does not exist.');
+    }
+  } catch (e) {
+    console.log('Failed to get voice.', e);
+    http_server.reply(resp, {
+      err: null,
+      data: {
+        file: null,
+        exists: false,
+      },
+    });
+  }
+});
+
+http_server.post('voice', async (obj, resp, data) => {
+  const { fileName, id, url } = data;
+
+  console.log('got voice upload', fileName, id, url.slice(0, 100));
+  const head = 'data:audio/wav;base64,';
+
+  const dir = `${SAVE_DIR}/voice/${fileName}`;
+  await execAsync(`mkdir -p ${dir}`);
+
+  console.log('writing...', `${dir}/${id}.wav`);
+  try {
+    fs.writeFileSync(
+      `${dir}/${id}.wav`,
+      Buffer.from(url.slice(head.length), 'base64')
+    );
+
+    http_server.reply(resp, {
+      err: null,
+      data: {
+        success: true,
+      },
+    });
+  } catch (e) {
+    http_server.reply(resp, {
+      err: 'Failed to write voice file: ' + e,
+      data: null,
+    });
+  }
+});
+
+http_server.get('open', (obj, resp) => {
+  const openType = obj.event_args[0];
+  const fileName = obj.event_args[1];
+  const nodeId = obj.event_args[2];
+  const dir = `${SAVE_DIR}/voice/${fileName}`;
+  if (fileName && nodeId) {
+    if (openType === 'explorer') {
+      const cmdArgs = [
+        '/C',
+        `cd ${dir.replace('/mnt/c', 'C:')} & explorer.exe .`,
+      ];
+      console.log('SPAWN', cmdArgs);
+
+      const out = fs.openSync('./out.log', 'a');
+      const err = fs.openSync('./out.log', 'a');
+      const child = spawn('cmd.exe', cmdArgs, {
+        detached: true,
+        stdio: ['ignore', out, err],
+      });
+      child.unref();
+    } else if (openType === 'audacity') {
+      const cmdArgs = [
+        '/C',
+        AUDACITY_PATH,
+        dir.replace('/mnt/c', 'C:') + `/${nodeId}.wav`,
+      ];
+      console.log('SPAWN', cmdArgs);
+
+      const out = fs.openSync('./out.log', 'a');
+      const err = fs.openSync('./out.log', 'a');
+      const child = spawn('cmd.exe', cmdArgs, {
+        detached: true,
+        stdio: ['ignore', out, err],
+      });
+      child.unref();
+    }
+  }
+
+  http_server.reply(resp, {
+    err: null,
+    data: {
+      success: true,
+    },
   });
 });

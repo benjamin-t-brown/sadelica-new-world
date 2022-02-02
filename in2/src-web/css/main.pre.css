@@ -448,7 +448,8 @@ body {
 }
 
 .confirm-button:hover {
-  background-color: rgb(50%, 50%, 50%);
+  /* background-color: rgb(50%, 50%, 50%); */
+  filter: brightness(80%);
 }
 
 .confirm-button-secondary {
@@ -466,11 +467,13 @@ body {
 }
 
 .confirm-button-secondary:hover {
-  background-color: rgb(50%, 50%, 50%);
+  /* background-color: rgb(50%, 50%, 50%); */
+  filter: brightness(80%);
 }
 
 .confirm-button-secondary:active {
-  background-color: rgb(25%, 25%, 25%);
+  /* background-color: rgb(25%, 25%, 25%); */
+  filter: brightness(120%);
 }
 
 .confirm-button-player {
@@ -479,10 +482,12 @@ body {
   width: 100%;
 }
 .confirm-button-player:hover {
-  background-color: rgb(50%, 50%, 50%);
+  /* background-color: rgb(50%, 50%, 50%); */
+  filter: brightness(80%);
 }
 .confirm-button-player:active {
-  background-color: rgb(25%, 25%, 25%);
+  /* background-color: rgb(25%, 25%, 25%); */
+  filter: brightness(120%);
 }
 
 .confirm-button-export {
@@ -491,10 +496,12 @@ body {
   width: 100%;
 }
 .confirm-button-export:hover {
-  background-color: rgb(50%, 50%, 50%);
+  filter: brightness(80%);
+  /* background-color: rgb(50%, 50%, 50%); */
 }
 .confirm-button-export:active {
-  background-color: rgb(25%, 25%, 25%);
+  filter: brightness(120%);
+  /* background-color: rgb(25%, 25%, 25%); */
 }
 
 .cancel-button {
@@ -511,7 +518,8 @@ body {
 }
 
 .cancel-button:hover {
-  background-color: rgb(50%, 50%, 50%);
+  /* background-color: rgb(50%, 50%, 50%); */
+  filter: brightness(80%);
 }
 
 @keyframes fade-in {
@@ -552,4 +560,21 @@ body {
 }
 .choice-in2:active {
   filter: brightness(120%);
+}
+
+button:disabled {
+  cursor: default;
+  background: gray;
+  pointer-events: none;
+}
+
+.link {
+  cursor: pointer;
+  text-decoration: underline;
+}
+.link:hover {
+  filter: brightness(120%)
+}
+.link:active {
+  color: yellow;
 }

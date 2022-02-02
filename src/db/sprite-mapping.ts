@@ -31,7 +31,7 @@ export const CHARACTER_SPRITES = {
   Sol: 48,
   Mullen: 50,
   Chem: 52,
-  Bartolo: 54,
+  Barto: 54,
   AldebethBlackrose: 56,
   PlayerUnequipped: 58,
   PlayerKnife: 60,

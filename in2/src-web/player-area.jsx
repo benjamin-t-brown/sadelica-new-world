@@ -27,16 +27,22 @@ module.exports = class PlayerArea extends expose.Component {
       });
     };
 
-    this.add_line = (line, onClick) => {
+    this.add_line = (line, onClick, color) => {
       const arr = this.state.text;
-      console.log('add line', line);
+
+      console.log('add line', line, onClick, color);
       if (onClick) {
         const id = utils.random_id(10);
         this.choiceClicks[id] = onClick;
-        console.log('push choice', line, id);
         arr.push({
           text: line,
           id,
+          color,
+        });
+      } else if (color) {
+        arr.push({
+          text: line,
+          color,
         });
       } else {
         arr.push(line);
@@ -53,8 +59,14 @@ module.exports = class PlayerArea extends expose.Component {
     };
 
     this.remove_choice_clicks = () => {
+      const self = this;
       $('.choice-in2').map(function () {
         this.onclick = '';
+        self.state.text.forEach(t => {
+          if (typeof t === 'object') {
+            t.id = undefined;
+          }
+        });
       });
     };
 
@@ -269,13 +281,26 @@ module.exports = class PlayerArea extends expose.Component {
                     return prev + '<br/>' + curr.replace(/\n/g, '<br/>');
                   }
                 } else if (typeof curr === 'object') {
-                  const { text, id } = curr;
-                  const html =
-                    '<br/>' +
-                    `<span class="choice-in2" id="${id}" onclick="on_choice_click('${id}')">${text.replace(
-                      /\n/g,
-                      '<br/>'
-                    )}</span>`;
+                  const { text, id, color } = curr;
+
+                  let html = '';
+
+                  if (!id) {
+                    console.log('render line with color', color, curr);
+                    html =
+                      `<br/><span style="color:${color};">` +
+                      text.replace(/\n/g, '<br/>') +
+                      '</span>';
+                  } else {
+                    html =
+                      '<br/>' +
+                      `<span class="choice-in2" id="${id}" style="color:${
+                        color || ''
+                      };" onclick="on_choice_click('${id}')">${text.replace(
+                        /\n/g,
+                        '<br/>'
+                      )}</span>`;
+                  }
                   return prev + html;
                 }
               }, '') + '<br/> &nbsp <br/>',

@@ -12,6 +12,28 @@
   const LAST_FILE_VAR = 'lasIN2f';
   player.set('scope', scope);
 
+  files[`Alinea_CH_Sol.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Sol.json');
+    // next_file
+    scope.tG08a = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    if (id === undefined) {
+      scope.tG08a();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
   files[`main.json`] = id => {
     player.set(CURRENT_FILE_VAR, 'main.json');
     if (player.get('test') === undefined) player.set('test', 'value');
@@ -48,10 +70,10 @@
     return player.state;
   };
 
-  files[`Alinea_CH_SpyRigby.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_SpyRigby.json');
+  files[`Alinea_CH_Igmund.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Igmund.json');
     // next_file
-    scope.Hg9db = () => {
+    scope.iPi3f = () => {
       player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
       let key = `NONE`;
       let func = files[key];
@@ -63,51 +85,7 @@
     };
 
     if (id === undefined) {
-      scope.Hg9db();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_SchovanAbivola.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_SchovanAbivola.json');
-    // next_file
-    scope.OhVgn = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    if (id === undefined) {
-      scope.OhVgn();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_Scopey.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Scopey.json');
-    // next_file
-    scope.bUbbt = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    if (id === undefined) {
-      scope.bUbbt();
+      scope.iPi3f();
     } else if (id) {
       scope[id]();
     }
@@ -136,10 +114,10 @@
     return player.state;
   };
 
-  files[`Alinea_CH_Igmund.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Igmund.json');
+  files[`Alinea_CH_Scopey.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Scopey.json');
     // next_file
-    scope.iPi3f = () => {
+    scope.bUbbt = () => {
       player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
       let key = `NONE`;
       let func = files[key];
@@ -151,17 +129,17 @@
     };
 
     if (id === undefined) {
-      scope.iPi3f();
+      scope.bUbbt();
     } else if (id) {
       scope[id]();
     }
     return player.state;
   };
 
-  files[`Alinea_CH_Idoreo.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Idoreo.json');
+  files[`Alinea_CH_SchovanAbivola.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_SchovanAbivola.json');
     // next_file
-    scope.FdbAF = () => {
+    scope.OhVgn = () => {
       player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
       let key = `NONE`;
       let func = files[key];
@@ -173,184 +151,7 @@
     };
 
     if (id === undefined) {
-      scope.FdbAF();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_GuardCaptainMullen.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_GuardCaptainMullen.json');
-    // next_file
-    scope.F3tbm = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    if (id === undefined) {
-      scope.F3tbm();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_Gruff.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Gruff.json');
-    // next_file
-    scope.f1zni = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    if (id === undefined) {
-      scope.f1zni();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_Sol.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Sol.json');
-    // next_file
-    scope.tG08a = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    if (id === undefined) {
-      scope.tG08a();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_Elvyosa.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Elvyosa.json');
-    // next_file
-    scope.m8Gsl = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    if (id === undefined) {
-      scope.m8Gsl();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-
-  files[`Alinea_CH_AldebethBlackrose.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_AldebethBlackrose.json');
-    // switch
-    scope.xn4GD = () => {
-      player.set(CURRENT_NODE_VAR, 'xn4GD');
-      if (player.once()) scope.Ck2ff();
-      else if (true) scope.sBfVM();
-    };
-    // text
-    scope.Ck2ff = () => {
-      player.set(CURRENT_NODE_VAR, 'Ck2ff');
-      let text = `The leader of the mercenary company occupying these red tents is obviously the woman standing in front of you. Elegant and aristocratic, her exquisite silk dress is slashed with the the white and red of what is very clearly the Blackrose crest, her hair cascades down her back in a bevy of intricate curls, and a fashionable high-neck collar accentuates her ample bosom.  `;
-      core.say(text, scope.niNF7, 'Ck2ff', 'niNF7');
-    };
-
-    // choice
-    scope.niNF7 = function () {
-      player.set(CURRENT_NODE_VAR, 'niNF7');
-      let text = ``;
-      core.choose(text, 'niNF7', [
-        {
-          t: `Who are you?`,
-          id: 'R3DD4',
-          cb: scope.R3DD4,
-          c: () => {
-            return true;
-          },
-        },
-        {
-          t: `Blackrose LEGION!?  How many of you are there?`,
-          id: 'ceRC2',
-          cb: scope.ceRC2,
-          c: () => {
-            return player.get('nodes.R3DD4');
-          },
-        },
-        {
-          t: `Nevermind.`,
-          id: 'QUeaf',
-          cb: scope.QUeaf,
-          c: () => {
-            return true;
-          },
-        },
-      ]);
-    };
-    scope['niNF7'].isChoice = true;
-
-    // text
-    scope.R3DD4 = () => {
-      player.set(CURRENT_NODE_VAR, 'R3DD4');
-      let text = `She raises a thinly-painted eyebrow.  "I am Lady Aldebeth Blackrose.  I lead this contingent of the great Blackrose legion."`;
-      core.say(text, scope.niNF7, 'R3DD4', 'niNF7');
-    };
-
-    // text
-    scope.ceRC2 = () => {
-      player.set(CURRENT_NODE_VAR, 'ceRC2');
-      let text = `Her lips curl into a slight smile.  "We are indeed, a great military force, renowned, and dare I say "feared" throughout Sadelica.  You should contain your awe better, it is unbecoming for any person to show such raw emotion in mundane moments such as this."`;
-      core.say(text, scope.niNF7, 'ceRC2', 'niNF7');
-    };
-
-    // next_file
-    scope.QUeaf = () => {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      let key = `NONE`;
-      let func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-
-    // text
-    scope.sBfVM = () => {
-      player.set(CURRENT_NODE_VAR, 'sBfVM');
-      let text = `"Ah yes.  You.  What is it you want this time?"`;
-      core.say(text, scope.niNF7, 'sBfVM', 'niNF7');
-    };
-
-    if (id === undefined) {
-      scope.xn4GD();
+      scope.OhVgn();
     } else if (id) {
       scope[id]();
     }
@@ -379,6 +180,407 @@
     return player.state;
   };
 
+  files[`Alinea_CH_Idoreo.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Idoreo.json');
+    // next_file
+    scope.FdbAF = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    if (id === undefined) {
+      scope.FdbAF();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
+  files[`Alinea_CH_Elvyosa.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Elvyosa.json');
+    // next_file
+    scope.m8Gsl = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    if (id === undefined) {
+      scope.m8Gsl();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
+  files[`Alinea_CH_GuardCaptainMullen.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_GuardCaptainMullen.json');
+    // switch
+    scope.z81hnfzb9 = () => {
+      player.set(CURRENT_NODE_VAR, 'z81hnfzb9');
+      if (player.once()) scope.t92didcb6();
+      else if (true) scope.fp58pmg2f();
+    };
+    // text
+    scope.t92didcb6 = () => {
+      player.set(CURRENT_NODE_VAR, 't92didcb6');
+      let text = `A young man man sits behind a large wooden desk here.  He wars a sash of green across his chest and a name plate on his desk says 'Guard Captain Mullen'. Below it is a small metal plaque 'in Realm service for 3 years'.  He pours over a complete mess of files, glancing quickly from one to the other, and doesn't seem to notice you as you approach.  Finally, after an uncomfortable silence he looks up at you.`;
+      core.say(text, scope.mxamfpggq, 't92didcb6', 'mxamfpggq');
+    };
+
+    // text
+    scope.mxamfpggq = () => {
+      player.set(CURRENT_NODE_VAR, 'mxamfpggq');
+      let text = `"Hmm, neither of the Nobility nor Merchantry.  A welcome respite.  What can I do for you?"`;
+      core.say(text, scope.z30r19u3z, 'mxamfpggq', 'z30r19u3z');
+    };
+
+    // choice
+    scope.z30r19u3z = function () {
+      player.set(CURRENT_NODE_VAR, 'z30r19u3z');
+      let text = ``;
+      core.choose(text, 'z30r19u3z', [
+        {
+          t: `Who are you?`,
+          id: 'pwnhx499l',
+          cb: scope.pwnhx499l,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `I've got some questions.`,
+          id: 'c4nwxzoao',
+          cb: scope.c4nwxzoao,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Nevermind.`,
+          id: 'F3tbm',
+          cb: scope.F3tbm,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+    scope['z30r19u3z'].isChoice = true;
+
+    // text
+    scope.pwnhx499l = () => {
+      player.set(CURRENT_NODE_VAR, 'pwnhx499l');
+      let text = `"Mullen.  Captain Mullen.  I am in command of the Realm forces in Alinea."  He gestures to the nameplate on his desk.`;
+      core.say(text, scope.z30r19u3z, 'pwnhx499l', 'z30r19u3z');
+    };
+
+    // text
+    scope.c4nwxzoao = () => {
+      player.set(CURRENT_NODE_VAR, 'c4nwxzoao');
+      let text = `"Ask whatever you'd like."`;
+      core.say(text, scope.drkwr4h0c, 'c4nwxzoao', 'drkwr4h0c');
+    };
+
+    // choice
+    scope.drkwr4h0c = function () {
+      player.set(CURRENT_NODE_VAR, 'drkwr4h0c');
+      let text = ``;
+      core.choose(text, 'drkwr4h0c', [
+        {
+          t: `The Realm? What is that, exactly?`,
+          id: 'my1gp7aea',
+          cb: scope.my1gp7aea,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `What can you tell me of the Nobility?`,
+          id: 'mm89mf437',
+          cb: scope.mm89mf437,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `It's hard to explain, but I'm looking for something, and all I have is a number: '9'.  Know anything?`,
+          id: 'ugxg25kzf',
+          cb: scope.ugxg25kzf,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Is there anything I can do for the Realm?`,
+          id: 'lplgcudfx',
+          cb: scope.lplgcudfx,
+          c: () => {
+            return player.once();
+          },
+        },
+        {
+          t: `Nevermind, I'll be going now.`,
+          id: 'F3tbm',
+          cb: scope.F3tbm,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+    scope['drkwr4h0c'].isChoice = true;
+
+    // pass_fail
+    scope.my1gp7aea = () => {
+      player.set(CURRENT_NODE_VAR, 'my1gp7aea');
+      const condition = (() => {
+        return player.once();
+      })();
+      if (condition) {
+        player.set(CURRENT_NODE_VAR, 'c6464px3u');
+        let text = ``;
+        core.say(text, scope.e0yuydu5n);
+      }
+      if (!condition) {
+        player.set(CURRENT_NODE_VAR, 'f24zyyz3n');
+        let text = ``;
+        core.say(text, scope.e4sbugei2);
+      }
+    };
+    // text
+    scope.e0yuydu5n = () => {
+      player.set(CURRENT_NODE_VAR, 'e0yuydu5n');
+      let text = `He tilts his head to the side, confused, then his eyes widen as if seeing you for the first time.`;
+      core.say(text, scope.b9cc0nfn5, 'e0yuydu5n', 'b9cc0nfn5');
+    };
+
+    // text
+    scope.b9cc0nfn5 = () => {
+      player.set(CURRENT_NODE_VAR, 'b9cc0nfn5');
+      let text = `"Ah, Yes.  A Lark.  Not to worry, I can explain. The Realm is the military force of the Mainland here on Sadelica.  King Treyborn has declared the island as part of the Mainland Empire, but in truth, he does not provide us enough resources to truly enforce that decree."  `;
+      core.say(text, scope.e3adktxgc, 'b9cc0nfn5', 'e3adktxgc');
+    };
+
+    // choice
+    scope.e3adktxgc = function () {
+      player.set(CURRENT_NODE_VAR, 'e3adktxgc');
+      let text = ``;
+      core.choose(text, 'e3adktxgc', [
+        {
+          t: `So the Realm is the government here?`,
+          id: 'ky7xr01hi',
+          cb: scope.ky7xr01hi,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `What can you tell me about the Order of Magi?`,
+          id: 'fi0gf7g8m',
+          cb: scope.fi0gf7g8m,
+          c: () => {
+            return player.get('nodes.od3u5s592');
+          },
+        },
+        {
+          t: `Let's speak of something else.`,
+          id: 'xlru47a9p',
+          cb: scope.xlru47a9p,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+    scope['e3adktxgc'].isChoice = true;
+
+    // text
+    scope.ky7xr01hi = () => {
+      player.set(CURRENT_NODE_VAR, 'ky7xr01hi');
+      let text = `"Basically, yes.  But the fact of the matter is, we don't have all that much sway here on Sadelica.  Certain Nobles and Merchants have occupied the island with much more more agency than us.  And that's not even mentioning the Order of Magi..."`;
+      core.say(text, scope.od3u5s592, 'ky7xr01hi', 'od3u5s592');
+    };
+
+    // text
+    scope.od3u5s592 = () => {
+      player.set(CURRENT_NODE_VAR, 'od3u5s592');
+      let text = `He gives a sheepish grin.  "Quite frankly, calling ourselves part of the Mainland Empire would do a disservice to its might and power.  Instead we call ourselves 'The Realm' and we try to keep the peace around here."`;
+      core.say(text, scope.e3adktxgc, 'od3u5s592', 'e3adktxgc');
+    };
+
+    // text
+    scope.fi0gf7g8m = () => {
+      player.set(CURRENT_NODE_VAR, 'fi0gf7g8m');
+      let text = `He purses his lips.  "A group which believes that Sadelica is their salvation.  They experiment with the magic here, and often cause critical problems for us.  I'd rather not speak of them.  They give me a headache."`;
+      core.say(text, scope.e3adktxgc, 'fi0gf7g8m', 'e3adktxgc');
+    };
+
+    // text
+    scope.xlru47a9p = () => {
+      player.set(CURRENT_NODE_VAR, 'xlru47a9p');
+      let text = `"Indeed."`;
+      core.say(text, scope.drkwr4h0c, 'xlru47a9p', 'drkwr4h0c');
+    };
+
+    // text
+    scope.e4sbugei2 = () => {
+      player.set(CURRENT_NODE_VAR, 'e4sbugei2');
+      let text = `"The Realm is the military force of the Mainland here on Sadelica.  The King has declared the island as part of the Mainland Empire, but in truth, he does not provide us enough resources to truly enforce that decree."`;
+      core.say(text, scope.e3adktxgc, 'e4sbugei2', 'e3adktxgc');
+    };
+
+    // text
+    scope.mm89mf437 = () => {
+      player.set(CURRENT_NODE_VAR, 'mm89mf437');
+      let text = `"There are quite a few nobles from the Mainland Empire who have staked their claims on Sadelica.  Some have more power than others, but of course gossip travels.  They all talk to each other.  They all know who's who and what's what."`;
+      core.say(text, scope.drkwr4h0c, 'mm89mf437', 'drkwr4h0c');
+    };
+
+    // text
+    scope.ugxg25kzf = () => {
+      player.set(CURRENT_NODE_VAR, 'ugxg25kzf');
+      let text = `"The number 9 huh?  Well, there are eight warehouses in Alinea, all owned by various members of the Merchantry or the Nobility.  There's actually a ninth though, but it's under disrepair and unavailable for use.  Maybe that's what you seek?"`;
+      core.say(text, scope.iq5nw00dg, 'ugxg25kzf', 'iq5nw00dg');
+    };
+
+    // choice
+    scope.iq5nw00dg = function () {
+      player.set(CURRENT_NODE_VAR, 'iq5nw00dg');
+      let text = ``;
+      core.choose(text, 'iq5nw00dg', [
+        {
+          t: `What can you tell me about these warehouses?`,
+          id: 'gx1ehcd1o',
+          cb: scope.gx1ehcd1o,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `There's a 9th warehouse in Alinea?`,
+          id: 'dw8pkpyst',
+          cb: scope.dw8pkpyst,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Is there any way for me to get inside?`,
+          id: 'f3ucg04ey',
+          cb: scope.f3ucg04ey,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Let's speak of something else.`,
+          id: 'y2f6s4el1',
+          cb: scope.y2f6s4el1,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+    scope['iq5nw00dg'].isChoice = true;
+
+    // text
+    scope.gx1ehcd1o = () => {
+      player.set(CURRENT_NODE_VAR, 'gx1ehcd1o');
+      let text = `"Well, Alinea is a port, right?  It's quite useful to own a warehouse here.  Ships come in, sell there wares to merchants and those merchants store the goods in a warehouse.  Traders come along and take these goods to all other parts of Sadelica.  All the warehouses here are owned by a member of the Merchantry."`;
+      core.say(text, scope.iq5nw00dg, 'gx1ehcd1o', 'iq5nw00dg');
+    };
+
+    // text
+    scope.dw8pkpyst = () => {
+      player.set(CURRENT_NODE_VAR, 'dw8pkpyst');
+      let text = `"Yes.  It's on the far east of town.  Locked though.  Nobody really knows who owns it.  Nobody's been over there for quite a long time."`;
+      core.say(text, scope.iq5nw00dg, 'dw8pkpyst', 'iq5nw00dg');
+    };
+
+    // text
+    scope.f3ucg04ey = () => {
+      player.set(CURRENT_NODE_VAR, 'f3ucg04ey');
+      let text = `"I doubt it.  That warehouse hasn't been used in a long time.  I'm sure if the Merchantry found out who owns it, they'd buy it straight away."`;
+      core.say(text, scope.iq5nw00dg, 'f3ucg04ey', 'iq5nw00dg');
+    };
+
+    // text
+    scope.y2f6s4el1 = () => {
+      player.set(CURRENT_NODE_VAR, 'y2f6s4el1');
+      let text = `"Indeed."`;
+      core.say(text, scope.drkwr4h0c, 'y2f6s4el1', 'drkwr4h0c');
+    };
+
+    // text
+    scope.lplgcudfx = () => {
+      player.set(CURRENT_NODE_VAR, 'lplgcudfx');
+      let text = `Captain Mullen's eyes light up.  "There is actually! 
+ I'm sure you've heard of the situation with the bandits we have here.  I'd like that rectified."`;
+      core.say(text, scope.drkwr4h0c, 'lplgcudfx', 'drkwr4h0c');
+    };
+
+    // next_file
+    scope.F3tbm = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    // text
+    scope.fp58pmg2f = () => {
+      player.set(CURRENT_NODE_VAR, 'fp58pmg2f');
+      let text = `"Hello again."`;
+      core.say(text, scope.z30r19u3z, 'fp58pmg2f', 'z30r19u3z');
+    };
+
+    if (id === undefined) {
+      scope.z81hnfzb9();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
+  files[`Alinea_CH_Gruff.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Gruff.json');
+    // next_file
+    scope.f1zni = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    if (id === undefined) {
+      scope.f1zni();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
   files[`Alinea_CH_SirLavolanChevel.json`] = id => {
     player.set(CURRENT_FILE_VAR, 'Alinea_CH_SirLavolanChevel.json');
     // next_file
@@ -395,6 +597,28 @@
 
     if (id === undefined) {
       scope.r7TWk();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
+  files[`Alinea_CH_SpyRigby.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_SpyRigby.json');
+    // next_file
+    scope.Hg9db = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `NONE`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    if (id === undefined) {
+      scope.Hg9db();
     } else if (id) {
       scope[id]();
     }
@@ -519,8 +743,8 @@
     return player.state;
   };
 
-  files[`Alinea_CH_BartoloCaldeburn.json`] = id => {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_BartoloCaldeburn.json');
+  files[`Alinea_CH_BartoCaldeburn.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_BartoCaldeburn.json');
     // switch
     scope.enWMm = () => {
       player.set(CURRENT_NODE_VAR, 'enWMm');
@@ -530,15 +754,16 @@
     // text
     scope.mqogS = () => {
       player.set(CURRENT_NODE_VAR, 'mqogS');
-      let text = `A nobleman sits here, his clothes notably more gaudy and pretentious than anyone else around.  A deep blue lace lines every possible edge of his silk coat, and auburn trousers glint with a distracting sheen.  He clasps a large glass of plum wine and idly taps a finger on the rough wood of the table.  He ignores the other patrons in the room as his gaze passes imperiously by them to rest upon you.`;
-      core.say(text, scope.dY7sz, 'mqogS', 'dY7sz');
+      let text = `A plump nobleman sits here, easily recognizable by his gaudy attire: a deep blue lace lines every possible seam of his silk coat, and his auburn trousers glint with a startling sheen.  A grumpy scowl adorns his face as he clasps a large glass of plum wine and idly taps a finger on the rough wood of the table.  He tries to ignore you as you approach, but when it becomes clear you want to talk, he narrows his eyes and raises a pointed eyebrow.
+`;
+      core.say(text, scope.lkfobaa3s, 'mqogS', 'lkfobaa3s');
     };
 
     // text
-    scope.dY7sz = () => {
-      player.set(CURRENT_NODE_VAR, 'dY7sz');
-      let text = `"And what have we here?  Another rabble come to further dissuade me from this pit of a town?"`;
-      core.say(text, scope.ku2iV, 'dY7sz', 'ku2iV');
+    scope.lkfobaa3s = () => {
+      player.set(CURRENT_NODE_VAR, 'lkfobaa3s');
+      let text = `"What do *you* want?"`;
+      core.say(text, scope.ku2iV, 'lkfobaa3s', 'ku2iV');
     };
 
     // choice
@@ -555,23 +780,15 @@
           },
         },
         {
-          t: `Don't like Alinea much?`,
-          id: 'zkasm',
-          cb: scope.zkasm,
+          t: `You mentioned that there are bandits up north?`,
+          id: 'wEid3',
+          cb: scope.wEid3,
           c: () => {
-            return true;
+            return player.get('nodes.KLPVt');
           },
         },
         {
-          t: `You work for Lord Guildimarche?  Who is that?`,
-          id: 'ecss2',
-          cb: scope.ecss2,
-          c: () => {
-            return player.get('nodes.ASqD8');
-          },
-        },
-        {
-          t: `What is someone as 'esteemed' as you doing here?`,
+          t: `What is such an 'esteemed' nobleman doing in a town like this?`,
           id: 'KLPVt',
           cb: scope.KLPVt,
           c: () => {
@@ -579,19 +796,11 @@
           },
         },
         {
-          t: `Idle threats?  Are you always this distasteful?`,
-          id: 'DRtxf',
-          cb: scope.DRtxf,
+          t: `I'm looking for something.  All I know is the number "9".  Any ideas?`,
+          id: 'Np8TQ',
+          cb: scope.Np8TQ,
           c: () => {
-            return player.get('nodes.OfySb');
-          },
-        },
-        {
-          t: `There are bandits to the north?`,
-          id: 'wEid3',
-          cb: scope.wEid3,
-          c: () => {
-            return player.get('nodes.KLPVt');
+            return true;
           },
         },
         {
@@ -642,77 +851,284 @@
     scope.tE4LF = () => {
       player.set(CURRENT_NODE_VAR, 'tE4LF');
       let text = `"Yes well... They are renowned on the Mainland for their luxury.  I suppose simpletons such as yourselves would not understand.  Suffice to say that I am important.  Very important.  You should certainly not underestimate that fact.  These days I lend my assistance to Lord Guildimarche and his grand estate."`;
-      core.say(text, scope.ku2iV, 'tE4LF', 'ku2iV');
+      core.say(text, scope.y0ide, 'tE4LF', 'y0ide');
+    };
+
+    // choice
+    scope.y0ide = function () {
+      player.set(CURRENT_NODE_VAR, 'y0ide');
+      let text = ``;
+      core.choose(text, 'y0ide', [
+        {
+          t: `You work for Lord Guildimarche?  Who is that?`,
+          id: 'cezeE',
+          cb: scope.cezeE,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Actually, let's talk about something else.`,
+          id: 'hSAyw',
+          cb: scope.hSAyw,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+    scope['y0ide'].isChoice = true;
+
+    // text
+    scope.cezeE = () => {
+      player.set(CURRENT_NODE_VAR, 'cezeE');
+      let text = `His face contorts into an aghast expression. "I do not 'work for' Lord Guildimarche, as you so uncouthly put it.  We are of the noble persuasion, we do favors for each other.  We lend aid!  It just so happens that the Guildimarche estate has quite the pull on Sadelica.  Piss poor towns like Alinea are of the few places not under Guildimarche jurisdiction.  Perhaps *you* would not know of such things, but support for such a strong house tends to bear fruit."`;
+      core.say(text, scope.pf1yk, 'cezeE', 'pf1yk');
+    };
+
+    // choice
+    scope.pf1yk = function () {
+      player.set(CURRENT_NODE_VAR, 'pf1yk');
+      let text = ``;
+      core.choose(text, 'pf1yk', [
+        {
+          t: `Sorry, I didn't realize that was such a touchy subject...`,
+          id: 'eZ8YM',
+          cb: scope.eZ8YM,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Don't like Alinea much?`,
+          id: 'zkasm',
+          cb: scope.zkasm,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Actually, let's talk about something else.`,
+          id: 'hSAyw',
+          cb: scope.hSAyw,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+    scope['pf1yk'].isChoice = true;
+
+    // text
+    scope.eZ8YM = () => {
+      player.set(CURRENT_NODE_VAR, 'eZ8YM');
+      let text = `"I would advise you to watch your tongue from now on.  A Lark should know their place."`;
+      core.say(text, scope.pf1yk, 'eZ8YM', 'pf1yk');
     };
 
     // text
     scope.zkasm = () => {
       player.set(CURRENT_NODE_VAR, 'zkasm');
-      let text = `"Certainly not!  The people here no nothing of luxury.  They they think only in singles." He taps his glass. "A mere single selection of wine, a single bed, a single tavern...  How can a man visit this town with anything but disappointment?"`;
-      core.say(text, scope.gIcZc, 'zkasm', 'gIcZc');
+      let text = `"Certainly not!  The people here no nothing of luxury.  They they think only in singles." He taps his glass. "A mere single selection of wine, a single bed, a single tavern...  How can a man visit this town with anything but disappointment?"  He makes a shooing gesture at you.  "The only thing I can say for sure that it has is plenty of Larks."  `;
+      core.say(text, scope.pf1yk, 'zkasm', 'pf1yk');
     };
 
     // text
-    scope.gIcZc = () => {
-      player.set(CURRENT_NODE_VAR, 'gIcZc');
-      let text = `"The only thing I can say for sure that it has is plenty of Larks."  He makes a shooing gesture at you.`;
-      core.say(text, scope.ku2iV, 'gIcZc', 'ku2iV');
-    };
-
-    // text
-    scope.ecss2 = () => {
-      player.set(CURRENT_NODE_VAR, 'ecss2');
-      let text = `Lord Cladeburn's face contorts into an aghast expression.`;
-      core.say(text, scope.GM0EE, 'ecss2', 'GM0EE');
-    };
-
-    // text
-    scope.GM0EE = () => {
-      player.set(CURRENT_NODE_VAR, 'GM0EE');
-      let text = `"I do not 'work for' Lord Guildimarche, as you so uncouthly put it.  We are of the noble persuasion, we do favors for each other.  We lend aid!"  `;
-      core.say(text, scope.ViWA8, 'GM0EE', 'ViWA8');
-    };
-
-    // text
-    scope.ViWA8 = () => {
-      player.set(CURRENT_NODE_VAR, 'ViWA8');
-      let text = `"It just so happens that the Guildimarche estate has quite the pull on Sadelica.  Save for Alinea and perhaps the Magi Tower, go most anywhere on this accursed island and you'll find some establishment associated with that name.  This is not a coincidence.  Perhaps *you* would not know of such things, but support for such a strong house tends to bear fruit."`;
-      core.say(text, scope.ku2iV, 'ViWA8', 'ku2iV');
-    };
-
-    // text
-    scope.KLPVt = () => {
-      player.set(CURRENT_NODE_VAR, 'KLPVt');
-      let text = `"I am waiting for the Bandits currently occupying the northern bridge to be dealt with.  Then I can safety return to a place of at least relative sanity."`;
-      core.say(text, scope.OfySb, 'KLPVt', 'OfySb');
-    };
-
-    // text
-    scope.OfySb = () => {
-      player.set(CURRENT_NODE_VAR, 'OfySb');
-      let text = `"And might I advise you to watch your tone, or you might find your tongue in a ditch somewhere."`;
-      core.say(text, scope.CfFBg, 'OfySb', 'CfFBg');
-    };
-
-    // text
-    scope.CfFBg = () => {
-      player.set(CURRENT_NODE_VAR, 'CfFBg');
-      let text = `He takes a small sip from his drink, and you notice a wickedly curved blade on a hilt at his hip.`;
-      core.say(text, scope.ku2iV, 'CfFBg', 'ku2iV');
-    };
-
-    // text
-    scope.DRtxf = () => {
-      player.set(CURRENT_NODE_VAR, 'DRtxf');
-      let text = `"Like most reasonable people, I do not suffer fools."`;
-      core.say(text, scope.ku2iV, 'DRtxf', 'ku2iV');
+    scope.hSAyw = () => {
+      player.set(CURRENT_NODE_VAR, 'hSAyw');
+      let text = `"What do you want?"`;
+      core.say(text, scope.ku2iV, 'hSAyw', 'ku2iV');
     };
 
     // text
     scope.wEid3 = () => {
       player.set(CURRENT_NODE_VAR, 'wEid3');
-      let text = `"Yes there are, and they have been quite the nuisance.  I'm simply waiting for them to be dealt with.  It is only a matter of time."`;
-      core.say(text, scope.ku2iV, 'wEid3', 'ku2iV');
+      let text = `"Yes, there are bandits blocking the north bridge.  It's the only road that gives access north, so it's quite inconvenient for me, as I have urgent business in the town of Remmet.  I'm simply waiting for them to be dealt with.  It is only a matter of time."`;
+      core.say(text, scope.fzsAh, 'wEid3', 'fzsAh');
+    };
+
+    // choice
+    scope.fzsAh = function () {
+      player.set(CURRENT_NODE_VAR, 'fzsAh');
+      let text = ``;
+      core.choose(text, 'fzsAh', [
+        {
+          t: `Who is dealing with these bandits?`,
+          id: 'uRL1R',
+          cb: scope.uRL1R,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Why are they blocking the road?  Are the bandits making any demands?`,
+          id: 'hXfrd',
+          cb: scope.hXfrd,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `I see, let's talk about something else.`,
+          id: 'N90qN',
+          cb: scope.N90qN,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+    scope['fzsAh'].isChoice = true;
+
+    // text
+    scope.uRL1R = () => {
+      player.set(CURRENT_NODE_VAR, 'uRL1R');
+      let text = `"The Realm, of course!  This is their town, so the bandits are their problem."`;
+      core.say(text, scope.RuDt4, 'uRL1R', 'RuDt4');
+    };
+
+    // choice
+    scope.RuDt4 = function () {
+      player.set(CURRENT_NODE_VAR, 'RuDt4');
+      let text = ``;
+      core.choose(text, 'RuDt4', [
+        {
+          t: `What can you tell me about the Realm?`,
+          id: 'FGQA3',
+          cb: scope.FGQA3,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Let's talk about something else.`,
+          id: 'ku2iV',
+          cb: scope.ku2iV,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+    scope['RuDt4'].isChoice = true;
+
+    // text
+    scope.FGQA3 = () => {
+      player.set(CURRENT_NODE_VAR, 'FGQA3');
+      let text = `"This is why I dislike talking to Larks...  I simply have no desire to be your encyclopedia.  Go bother Captain Mullen if you want to know more about the Realm and these bandits."`;
+      core.say(text, scope.ItN9L, 'FGQA3', 'ItN9L');
+    };
+
+    // next_file
+    scope.ItN9L = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = ``;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    // text
+    scope.hXfrd = () => {
+      player.set(CURRENT_NODE_VAR, 'hXfrd');
+      let text = `"I have no idea, but why should that matter?  The Realm just needs to send in a contingent of guards and sweep them off the road."`;
+      core.say(text, scope.RuDt4, 'hXfrd', 'RuDt4');
+    };
+
+    // text
+    scope.N90qN = () => {
+      player.set(CURRENT_NODE_VAR, 'N90qN');
+      let text = `"What do you want."`;
+      core.say(text, scope.ku2iV, 'N90qN', 'ku2iV');
+    };
+
+    // text
+    scope.KLPVt = () => {
+      player.set(CURRENT_NODE_VAR, 'KLPVt');
+      let text = `He raises an eyebrow.  "I am waiting for the bandits blocking the northern bridge to be dealt with.  Then I can safety return to a place of at least relative sanity." He takes a small sip from his drink, and you notice a wickedly curved blade on a hilt at his hip.  "And might I advise you to watch your tone, or you might find your tongue in a ditch somewhere." `;
+      core.say(text, scope.i7rtr, 'KLPVt', 'i7rtr');
+    };
+
+    // choice
+    scope.i7rtr = function () {
+      player.set(CURRENT_NODE_VAR, 'i7rtr');
+      let text = ``;
+      core.choose(text, 'i7rtr', [
+        {
+          t: `Idle threats?  Is the nobility of Sadelica always this distasteful?`,
+          id: 'DRtxf',
+          cb: scope.DRtxf,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `There are bandits in the north?`,
+          id: 'wEid3',
+          cb: scope.wEid3,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Let's talk about something else.`,
+          id: 'N90qN',
+          cb: scope.N90qN,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+    scope['i7rtr'].isChoice = true;
+
+    // text
+    scope.DRtxf = () => {
+      player.set(CURRENT_NODE_VAR, 'DRtxf');
+      let text = `"Like most reasonable people, I do not suffer fools."`;
+      core.say(text, scope.i7rtr, 'DRtxf', 'i7rtr');
+    };
+
+    // text
+    scope.Np8TQ = () => {
+      player.set(CURRENT_NODE_VAR, 'Np8TQ');
+      let text = `"No, I have no idea what that means.  Go bother somebody else."`;
+      core.say(text, scope.limpcw236, 'Np8TQ', 'limpcw236');
+    };
+
+    // choice
+    scope.limpcw236 = function () {
+      player.set(CURRENT_NODE_VAR, 'limpcw236');
+      let text = ``;
+      core.choose(text, 'limpcw236', [
+        {
+          t: `Are you sure you don't know anything?  I could really use some help...`,
+          id: 'p2tifagu6',
+          cb: scope.p2tifagu6,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Okay, let's talk about something else.`,
+          id: 'N90qN',
+          cb: scope.N90qN,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+    scope['limpcw236'].isChoice = true;
+
+    // text
+    scope.p2tifagu6 = () => {
+      player.set(CURRENT_NODE_VAR, 'p2tifagu6');
+      let text = `"Yes I am sure.  Even if I did know something about a statement as vague as 'the number 8', I likely would not tell you anything.  You're a nobody and hardly worth speaking to."`;
+      core.say(text, scope.limpcw236, 'p2tifagu6', 'limpcw236');
     };
 
     // next_file
@@ -730,12 +1146,101 @@
     // text
     scope.SwzEw = () => {
       player.set(CURRENT_NODE_VAR, 'SwzEw');
-      let text = `"Back again I see..."`;
+      let text = `"The Lark is back again I see..."`;
       core.say(text, scope.ku2iV, 'SwzEw', 'ku2iV');
     };
 
     if (id === undefined) {
       scope.enWMm();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+
+  files[`Alinea_CH_AldebethBlackrose.json`] = id => {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_AldebethBlackrose.json');
+    // switch
+    scope.xn4GD = () => {
+      player.set(CURRENT_NODE_VAR, 'xn4GD');
+      if (player.once()) scope.Ck2ff();
+      else if (true) scope.sBfVM();
+    };
+    // text
+    scope.Ck2ff = () => {
+      player.set(CURRENT_NODE_VAR, 'Ck2ff');
+      let text = `The leader of the mercenary company occupying these red tents is obviously the woman standing in front of you. Elegant and aristocratic, her exquisite silk dress is slashed with the the white and red of what is very clearly the Blackrose crest, her hair cascades down her back in a bevy of intricate curls, and a fashionable high-neck collar accentuates her ample bosom.  `;
+      core.say(text, scope.niNF7, 'Ck2ff', 'niNF7');
+    };
+
+    // choice
+    scope.niNF7 = function () {
+      player.set(CURRENT_NODE_VAR, 'niNF7');
+      let text = ``;
+      core.choose(text, 'niNF7', [
+        {
+          t: `Who are you?`,
+          id: 'R3DD4',
+          cb: scope.R3DD4,
+          c: () => {
+            return true;
+          },
+        },
+        {
+          t: `Blackrose LEGION!?  How many of you are there?`,
+          id: 'ceRC2',
+          cb: scope.ceRC2,
+          c: () => {
+            return player.get('nodes.R3DD4');
+          },
+        },
+        {
+          t: `Nevermind.`,
+          id: 'QUeaf',
+          cb: scope.QUeaf,
+          c: () => {
+            return true;
+          },
+        },
+      ]);
+    };
+    scope['niNF7'].isChoice = true;
+
+    // text
+    scope.R3DD4 = () => {
+      player.set(CURRENT_NODE_VAR, 'R3DD4');
+      let text = `She raises a thinly-painted eyebrow.  "I am Lady Aldebeth Blackrose.  I lead this contingent of the great Blackrose legion."`;
+      core.say(text, scope.niNF7, 'R3DD4', 'niNF7');
+    };
+
+    // text
+    scope.ceRC2 = () => {
+      player.set(CURRENT_NODE_VAR, 'ceRC2');
+      let text = `Her lips curl into a slight smile.  "We are indeed, a great military force, renowned, and dare I say "feared" throughout Sadelica.  You should contain your awe better, it is unbecoming for any person to show such raw emotion in mundane moments such as this."`;
+      core.say(text, scope.niNF7, 'ceRC2', 'niNF7');
+    };
+
+    // next_file
+    scope.QUeaf = () => {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      let key = `none`;
+      let func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+
+    // text
+    scope.sBfVM = () => {
+      player.set(CURRENT_NODE_VAR, 'sBfVM');
+      let text = `"Ah yes.  You.  What is it you want this time?"`;
+      core.say(text, scope.niNF7, 'sBfVM', 'niNF7');
+    };
+
+    if (id === undefined) {
+      scope.xn4GD();
     } else if (id) {
       scope[id]();
     }

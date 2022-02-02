@@ -269,7 +269,7 @@
  </layer>
  <objectgroup id="2" name="Object Layer 1">
   <object id="6" name="CH_ALINEA_DOCKMASTER_CLAIRE" gid="130" x="1408" y="3536" width="16" height="16"/>
-  <object id="23" name="CH_ALINEA_BARTOLO_CALDEBURN" gid="130" x="1200" y="3456" width="16" height="16"/>
+  <object id="23" name="CH_ALINEA_BARTO_CALDEBURN" gid="130" x="1200" y="3456" width="16" height="16"/>
   <object id="24" name="CH_BARREL" gid="134" x="1568" y="3392" width="16" height="16"/>
   <object id="26" name="CH_BARREL" gid="134" x="1568" y="3408" width="16" height="16"/>
   <object id="31" name="CH_BARREL" gid="134" x="1584" y="3392" width="16" height="16"/>

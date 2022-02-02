@@ -17,7 +17,7 @@ module.exports = {
     FG_NEUTRAL: '#555555',
     CHOICE_TEXT: '#4d2600',
     CONFIRM: '#005500',
-    CANCEL: '#440000',
+    CANCEL: '#6e1515',
     CONDITIONAL: '#99004d',
     ACTION: '#4e8861',
     SWITCH: '#aa4545',
