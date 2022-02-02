@@ -30,7 +30,7 @@ module.exports = class PlayerArea extends expose.Component {
     this.add_line = (line, onClick, color) => {
       const arr = this.state.text;
 
-      console.log('add line', line, onClick, color);
+      // console.log('add line', line, onClick, color);
       if (onClick) {
         const id = utils.random_id(10);
         this.choiceClicks[id] = onClick;
@@ -286,7 +286,6 @@ module.exports = class PlayerArea extends expose.Component {
                   let html = '';
 
                   if (!id) {
-                    console.log('render line with color', color, curr);
                     html =
                       `<br/><span style="color:${color};">` +
                       text.replace(/\n/g, '<br/>') +
@@ -303,7 +302,7 @@ module.exports = class PlayerArea extends expose.Component {
                   }
                   return prev + html;
                 }
-              }, '') + '<br/> &nbsp <br/>',
+              }, '') + '<br/> &nbsp <br/><br/><br/><br/><br/><br/>',
           },
           style: {
             width: '90%',

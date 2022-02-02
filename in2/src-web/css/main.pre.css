@@ -554,6 +554,7 @@ body {
 .choice-in2 {
   cursor: pointer;
   color: cyan;
+  line-height: 1.5rem;
 }
 .choice-in2:hover {
   filter: brightness(80%);

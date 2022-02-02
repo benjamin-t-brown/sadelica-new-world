@@ -69,9 +69,9 @@ exports._core = {
     disable_next_say_wait = false;
     last_choose_node_id = null;
     last_choose_nodes_selected = [];
-    if (this.origCore) {
-      await this.origCore.init(canvasId);
-    }
+    // if (this.origCore) {
+    //   await this.origCore.init(canvasId);
+    // }
   },
 
   centerAtActiveNode() {
@@ -152,6 +152,8 @@ exports._core = {
         }
         _console_log();
         _console_log('---------');
+
+        exports._player.dontTriggerOnce = true;
         const actual_choices = choices.filter(choice => {
           if (choice.c()) {
             return true;
@@ -159,6 +161,7 @@ exports._core = {
             return false;
           }
         });
+        exports._player.dontTriggerOnce = false;
         if (last_choose_node_id === node_id) {
           // actual_choices = actual_choices.filter( ( choice ) => {
           // 	return last_choose_nodes_selected.indexOf( choice.t ) === -1;
@@ -182,6 +185,8 @@ exports._core = {
         const onChoose = async key => {
           const choice = actual_choices[key - 1];
           if (choice) {
+            // invoke once if it hasn't been invoked
+            choice.c();
             last_choose_nodes_selected.push(choice.t);
             this.catcher.setKeypressEvent(() => {});
             _console_log();
@@ -197,30 +202,30 @@ exports._core = {
         };
         this.currentCatcherEvent = onChoose;
         this.catcher.setKeypressEvent(this.currentCatcherEvent);
-        if (this.origCore) {
-          this.origCore.choose(
-            text,
-            node_id,
-            choices.map(choice => {
-              return {
-                ...choice,
-                cb: async () => {
-                  last_choose_nodes_selected.push(choice.t);
-                  this.catcher.setKeypressEvent(() => {});
-                  _console_log();
-                  _console_log(choice.t, undefined, '#999');
-                  _console_log();
-                  if (this.origCore) {
-                    this.origCore.onChoose();
-                  }
-                  await choice.cb();
-                  disable_next_say_wait = false;
-                  resolve();
-                },
-              };
-            })
-          );
-        }
+        // if (this.origCore) {
+        //   this.origCore.choose(
+        //     text,
+        //     node_id,
+        //     choices.map(choice => {
+        //       return {
+        //         ...choice,
+        //         cb: async () => {
+        //           last_choose_nodes_selected.push(choice.t);
+        //           this.catcher.setKeypressEvent(() => {});
+        //           _console_log();
+        //           _console_log(choice.t, undefined, '#999');
+        //           _console_log();
+        //           if (this.origCore) {
+        //             this.origCore.onChoose();
+        //           }
+        //           await choice.cb();
+        //           disable_next_say_wait = false;
+        //           resolve();
+        //         },
+        //       };
+        //     })
+        //   );
+        // }
       } catch (e) {
         console.error('reject');
         reject(e);
@@ -239,15 +244,16 @@ exports._core = {
 
   exit() {
     this.catcher.setKeypressEvent(function () {});
-    if (this.origCore) {
-      this.origCore.exit();
-    } // console.log('BYE!');
+    // if (this.origCore) {
+    //   this.origCore.exit();
+    // } // console.log('BYE!');
   },
 };
 
 exports._player = {
   state: exports.getSaveData(),
   name: 'default',
+  dontTriggerOnce: false,
   init() {
     this.state = exports.getSaveData();
   },
@@ -305,7 +311,9 @@ exports._player = {
     const nodeId = this.get('curIN2n');
     const key = 'once.' + nodeId;
     if (!this.get(key)) {
-      this.set(key);
+      if (!this.dontTriggerOnce) {
+        this.set(key);
+      }
       return true;
     }
     return false;
@@ -340,20 +348,16 @@ function evalInContext(js, context) {
 }
 
 const postfix = `
-window.core = window.core.origCore || window.core;
-window._core.origCore = window.core;
-window.player = {...player, ...window._player};
-window.core = {...core, origCore: core, ...window._core};
+window.core = window?.core?.origCore || window.core;
+// window._core.origCore = window.core;
+window.player = {...window._player};
+window.core = {...window._core};
 `;
 
 let standalone = '';
 exports.runFile = async function (file) {
   _console_log('Success!');
   _console_log('');
-  if (!standalone) {
-    standalone = (await utils.get('/standalone/')).data;
-    eval(standalone);
-  }
   console.log('Now evaluating...');
   window._core = exports._core;
   window._player = exports._player;

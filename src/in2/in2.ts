@@ -95,9 +95,12 @@ export const core = (windowWithIn2.core = /*eslint-disable-line*/ {
       }
       const actualChoices = choices
         .filter(choice => {
+          player.dontTriggerOnce = true;
           if (choice.c()) {
+            player.dontTriggerOnce = false;
             return true;
           } else {
+            player.dontTriggerOnce = false;
             return false;
           }
         })
@@ -143,6 +146,7 @@ const player = (windowWithIn2.player = /*eslint-disable-line*/ {
     //lasIN2f
     coins: 100,
   },
+  dontTriggerOnce: false,
   init() {
     this.state = {};
   },
@@ -193,7 +197,9 @@ const player = (windowWithIn2.player = /*eslint-disable-line*/ {
     const nodeId = this.get(CURRENT_NODE_VAR);
     const key = 'once.' + nodeId;
     if (!this.get(key)) {
-      this.set(key);
+      if (!this.dontTriggerOnce) {
+        this.set(key);
+      }
       return true;
     }
     return false;

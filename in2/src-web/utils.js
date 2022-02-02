@@ -237,6 +237,7 @@ module.exports = {
       top: -1 * (offsetY * scale),
       bottom: offsetY * scale,
     };
+
     for (let styleName in newStyle) {
       elem.style[styleName] = newStyle[styleName];
     }

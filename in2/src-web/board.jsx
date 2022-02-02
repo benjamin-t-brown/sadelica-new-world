@@ -240,6 +240,8 @@ class Board extends expose.Component {
         );
         this.linkNodeRef.rel = selectedNode.id;
         this.buildDiagram();
+        this.renderAtOffset();
+        this.getPlumb().setZoom(this.zoom);
         this.exitLinkMode();
       } else if (utils.is_shift() || utils.is_ctrl()) {
         let ind = this.dragSet.indexOf(selectedNode.id);
@@ -275,6 +277,8 @@ class Board extends expose.Component {
           content => {
             this.setNodeContent(file_node, content);
             this.buildDiagram();
+            this.renderAtOffset();
+            this.getPlumb().setZoom(this.zoom);
             this.saveFile();
           }
         );
@@ -334,10 +338,11 @@ class Board extends expose.Component {
     };
 
     this.onNodeMouseOver = window.on_node_mouseover = elem => {
-      const node = this.getNode(elem.id);
-      expose.set_state('status-bar', {
-        hoverText: `Double click to edit '${node.type}' node.`,
-      });
+      // perf issue it think?
+      // const node = this.getNode(elem.id);
+      // expose.set_state('status-bar', {
+      //   hoverText: `Double click to edit '${node.type}' node.`,
+      // });
     };
 
     this.onNodeMouseOut = window.on_node_mouseout = () => {
@@ -548,6 +553,8 @@ class Board extends expose.Component {
         this.dragSet = [];
         this.plumb.clearDragSelection();
         this.buildDiagram();
+        this.renderAtOffset();
+        this.getPlumb().setZoom(this.zoom);
         newNodes.forEach(node => {
           this.plumb.addToDragSelection(node.id);
           this.dragSet.push(node.id);
@@ -574,6 +581,8 @@ class Board extends expose.Component {
     };
     state.buildDiagram = () => {
       this.buildDiagram();
+      this.renderAtOffset();
+      this.getPlumb().setZoom(this.zoom);
     };
 
     utils.set_on_copy(() => {
@@ -597,8 +606,14 @@ class Board extends expose.Component {
 
   componentDidMount() {
     jsPlumb.ready(() => {
+      window.plumb = this.plumb = jsPlumb.getInstance({
+        PaintStyle: { strokeWidth: 1 },
+        Anchors: [['TopRight']],
+        Container: this.diagram.current,
+      });
       this.buildDiagram();
       this.renderAtOffset();
+      this.getPlumb().setZoom(this.zoom);
     });
     window.addEventListener('mousemove', this.onMouseMove);
     window.addEventListener('mouseup', this.onMouseUp);
@@ -622,6 +637,7 @@ class Board extends expose.Component {
     jsPlumb.ready(() => {
       this.buildDiagram();
       this.renderAtOffset();
+      this.getPlumb().setZoom(this.zoom);
     });
   }
 
@@ -644,23 +660,29 @@ class Board extends expose.Component {
         return prev + this.getNodeHTML(curr);
       }, '');
       this.plumb && this.plumb.reset();
+      // DONT MOVE THIS, IT FIXES THE DRAG OFFSET PROBLEMS
       window.plumb = this.plumb = jsPlumb.getInstance({
         PaintStyle: { strokeWidth: 1 },
         Anchors: [['TopRight']],
         Container: this.diagram.current,
       });
       const diagram = this.diagram.current;
+      // diagram.innerHTML = '';
       diagram.innerHTML = html;
-      this.plumb.draggable(
-        file.nodes.map(node => {
-          return node.id;
-        }),
-        {
-          containment: true,
-        }
-      );
-      this.plumb.batch(() => {
-        file.links.forEach(this.connectLink);
+      setTimeout(() => {
+        this.plumb.draggable(
+          file.nodes.map(node => {
+            return node.id;
+          }),
+          {
+            containment: true,
+          }
+        );
+        this.plumb.setSuspendDrawing(true);
+        this.plumb.batch(() => {
+          file.links.forEach(this.connectLink);
+        });
+        this.plumb.setSuspendDrawing(false, true);
       });
     }
   }
@@ -926,8 +948,10 @@ class Board extends expose.Component {
       dialog.show_confirm('Are you sure you wish to delete this link?', () => {
         this.file.links.splice(ind, 1);
         this.buildDiagram();
-        this.renderAtOffset();
-        this.getPlumb().setZoom(this.zoom);
+        setTimeout(() => {
+          this.renderAtOffset();
+          this.getPlumb().setZoom(this.zoom);
+        });
       });
     } else {
       console.error(

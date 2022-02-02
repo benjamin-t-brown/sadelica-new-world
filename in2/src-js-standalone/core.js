@@ -83,9 +83,12 @@ var core = (window.core = /*eslint-disable-line*/ {
       }
       const actualChoices = choices
         .filter(choice => {
+          player.dontTriggerOnce = true;
           if (choice.c()) {
+            player.dontTriggerOnce = false;
             return true;
           } else {
+            player.dontTriggerOnce = false;
             return false;
           }
         })
@@ -120,7 +123,9 @@ var core = (window.core = /*eslint-disable-line*/ {
     const nodeId = this.get('curIN2n');
     const key = 'once.' + nodeId;
     if (!this.get(key)) {
-      this.set(key);
+      if (!this.dontTriggerOnce) {
+        this.set(key);
+      }
       return true;
     }
     return false;
