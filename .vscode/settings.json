@@ -2,5 +2,14 @@
   "cSpell.words": [
     "Dropzone",
     "interactables"
-  ]
+  ],
+  "files.associations": {
+    "*.js": "javascript",
+    "*.jsx": "javascriptreact",
+    "*.ts": "typescript",
+    "*.tsx": "typescriptreact",
+    "*.graphqls": "graphql",
+    "string": "cpp",
+    "sstream": "cpp"
+  }
 }

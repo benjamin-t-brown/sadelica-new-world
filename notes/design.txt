@@ -1,0 +1,92 @@
+COMBAT & COMBAT STATS
+
+Magic
+  - done by holding on to a "wand" in which you can embed stones called Lapis, kinda like materia.
+
+Lapis are different colors and each are like an "ingredient" to give you magic.
+Red Lapis gives Fire, Blue gives Water etc, should probably be more creative here but it serves for now.
+
+Note: Healing spells should be limited.  Characters should auto full heal after battles.
+
+A wand has different amounts of slots.  Lapis can be put into the wand to give different spells, like a recipe.
+Not every combination is a spell.  Spell books contain these combinations
+  - Red + Red + Red gives lvl 3 fire spell
+  - Blue + Blue + Blue gives lvl 3 water spell
+  - Red + Blue + Black grants gravity spell
+  - Red + Red + White = 3x3 Fireball
+  - White + White = haste all
+
+Wands require mana to use.  Basic spells do not cost mana? (always want the player to be able to do *something*)
+  - Another way to do this is to let players meditate for SP up to a certain value
+
+Characters become more effective with wands by:
+  - Increasing/changing combinations of Lapis
+  - Increasing their mana to be able to use more spells.
+  - Increasing Knowledge to equip better wands
+  - Increasing Inundation with a color of Lapis to make it do more damage
+
+Inundation
+  - a Character can increase their inundation level with a specific "color" of Lapis through use of an
+  Inundation Stone.  This consumes the Lapis and the Stone, but gives the player +1 inundation level with
+  that color. Inundation levels increase the damage dealt by using that color of damage.
+
+Armors
+  - Characters wearing armor are given armor types.  If a character has an armor type, that character
+  takes bonus damage from weapons that deal bonus damage to that type (like AoE2)
+    - Light armor
+    - Heavy armor
+    - No armor
+    - Shield armor (neither light/nor heavy/nor none)
+    - AoE (so that bashing weapons can deal bonus AoE)
+    - Phys armor (from melee)
+    - Pierce armor (from arrows)
+    - Poison armor
+    
+    # enemy armor
+    - Beast armor
+    - Magical armor
+    - Fiend armor
+    - Island armor
+    - Fire armor
+    - Water armor
+
+Melee Weapons: edged, slashing, bashing
+  - Edged weapons do bonus damage to light-armor
+  - Slashing weapons do bonus damage to large enemies
+  - Bashing weapons do more damage in an area
+
+Melee weapon abilities:
+  Every character wielding a melee weapon has access to all of these abilities.  On use, these go on cooldown.
+  - Throw - throw an item from your inventory
+  - Sweep - deal damage to all units around you.
+  - Lunge - deal damage to unit in front of ch, and the ch behind it in a line.
+  - Leap - teleport move to target location
+  - Skull crack - hit unit to cause dumbfound
+  - Guard - Allows unit to guard in place and use reaction to hit units that come into range.
+
+Characters become more effective with melee weapons by:
+  - Finding better weapons and equipping them
+  - Increasing Strength to equip better weapons & do more damage
+  - Increasing skill in Melee Weapons
+  - Finding a trainer to focus in Edged/Slashing/Bashing.  This makes one of your weapon abilities more effective,
+    (lower cooldown, more damage, more area)
+
+Ranged Weapons: Bow
+  Every character wielding a bow can fire arrows with different types of effects.  Once used, arrows become 'depleted'
+  until next battle.  A character can gather and maintain arrows that they can put in their quiver.  Quivers can
+  be upgraded.
+  - Slow arrow - makes target have less starting AP
+  - Poison arrow - makes target poisoned
+  - Heal arrow - heals target
+  - Silver arrow - silences target
+  - Bomb arrow - deals damage in an area
+  - Shield arrow - puts a shield on the ground that prevents zones from spawning
+  - Purify arrow - removes a zone from the target tile
+
+Arrows can be combined with Power Stones to make Super arrows, more effective versions of previous ones.
+
+Characters become more effective with bow weapons by:
+  - Finding and using better bows
+  - Finding and using better arrow types
+  - Increasing skill in Ranged Weapons
+  - Finding a practice range to hone your skill.

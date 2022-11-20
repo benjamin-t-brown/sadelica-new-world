@@ -1,0 +1,5 @@
+C:/progs/sadelica-new-world/cpp/build/CMakeFiles/rebuild_cache.dir
+C:/progs/sadelica-new-world/cpp/build/CMakeFiles/edit_cache.dir
+C:/progs/sadelica-new-world/cpp/build/src/CMakeFiles/rebuild_cache.dir
+C:/progs/sadelica-new-world/cpp/build/src/CMakeFiles/edit_cache.dir
+C:/progs/sadelica-new-world/cpp/build/src/CMakeFiles/SNW.dir

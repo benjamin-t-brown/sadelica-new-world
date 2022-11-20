@@ -1,0 +1,1 @@
+nodemon build.js --ext .cpp,.h

@@ -19,7 +19,7 @@
     "test": "jest --coverage test",
     "test:watch": "jest --watch",
     "clean": "rm -rf .build && rm -rf dist && rm -rf *.map main.js",
-    "tsc": "tsc --project tsconfig.prod.json",
+    "tsc": "tsc --project tsconfig.json",
     "vite": "concurrently -n 1,2 \"vite serve src --config ./vite.config.js --host\" \"http-server -c-1\"",
     "vite:build": "vite build src --config ./vite.config.js && node scripts/build-vite.js src"
   },
