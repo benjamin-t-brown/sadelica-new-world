@@ -10,6 +10,21 @@
     "*.tsx": "typescriptreact",
     "*.graphqls": "graphql",
     "string": "cpp",
-    "sstream": "cpp"
-  }
+    "sstream": "cpp",
+    "memory": "cpp",
+    "functional": "cpp",
+    "iostream": "cpp",
+    "algorithm": "cpp",
+    "vector": "cpp",
+    "stack": "cpp"
+  },
+  "cmake.configureOnOpen": true,
+  "cmake.sourceDirectory": "${workspaceFolder}/.",
+  "C_Cpp.codeAnalysis.clangTidy.checks.disabled": [
+    "clang-diagnostic-error",
+    "clang-diagnostic-error",
+    "cppcoreguidelines-pro-type-vararg",
+    "bugprone-easily-swappable-parameters",
+    "clang-diagnostic-error"
+  ]
 }

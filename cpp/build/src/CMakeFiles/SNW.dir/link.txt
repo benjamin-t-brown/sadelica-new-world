@@ -1,3 +1,0 @@
-C:\progs\msys2\mingw64\bin\cmake.exe -E rm -f CMakeFiles\SNW.dir/objects.a
-C:\progs\msys2\mingw64\bin\ar.exe qc CMakeFiles\SNW.dir/objects.a @CMakeFiles\SNW.dir\objects1.rsp
-C:\progs\msys2\mingw64\bin\g++.exe -std=c++17 -g -Wall -Wextra -Wno-unused-parameter -Wl,--whole-archive CMakeFiles\SNW.dir/objects.a -Wl,--no-whole-archive -o ..\..\SNW.exe -Wl,--out-implib,..\..\libSNW.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\SNW.dir\linklibs.rsp
