@@ -1,6 +1,43 @@
-COMBAT & COMBAT STATS
+# COMBAT & COMBAT STATS
 
-Magic
+## Combat Stats
+Base Stats increase as you level up.
+
+Local Hp - Your hit points per battle
+Max Hp - Your total hitpoint pool.  Healing you pulls from this pool.
+Basic Str/Mag/Range Damage Mult
+
+Training Stats must have points put into them
+
+Strength - increases melee damage
+Knowledge - increases mag
+Focus - increases bow accuracy
+Mana - increases mana
+Speed - increases AP per battle
+Armor Proficiency - Allows you to wear better armor
+Constitution - gives you bonus hp
+
+## Armors
+  - Characters wearing armor are given armor types.  If a character has an armor type, that character
+  takes bonus damage from weapons that deal bonus damage to that type (like AoE2)
+    - Light armor
+    - Heavy armor
+    - No armor
+    - Shield armor (neither light/nor heavy/nor none)
+    - AoE (so that bashing weapons can deal bonus AoE)
+    - Phys armor (from melee)
+    - Pierce armor (from arrows)
+    - Poison armor
+    
+    # enemy armor
+    - Beast armor
+    - Magical armor
+    - Fiend armor
+    - Island armor
+    - Fire armor
+    - Water armor
+
+## Magic
   - done by holding on to a "wand" in which you can embed stones called Lapis, kinda like materia.
 
 Lapis are different colors and each are like an "ingredient" to give you magic.
@@ -25,32 +62,12 @@ Characters become more effective with wands by:
   - Increasing Knowledge to equip better wands
   - Increasing Inundation with a color of Lapis to make it do more damage
 
-Inundation
+### Inundation
   - a Character can increase their inundation level with a specific "color" of Lapis through use of an
   Inundation Stone.  This consumes the Lapis and the Stone, but gives the player +1 inundation level with
   that color. Inundation levels increase the damage dealt by using that color of damage.
 
-Armors
-  - Characters wearing armor are given armor types.  If a character has an armor type, that character
-  takes bonus damage from weapons that deal bonus damage to that type (like AoE2)
-    - Light armor
-    - Heavy armor
-    - No armor
-    - Shield armor (neither light/nor heavy/nor none)
-    - AoE (so that bashing weapons can deal bonus AoE)
-    - Phys armor (from melee)
-    - Pierce armor (from arrows)
-    - Poison armor
-    
-    # enemy armor
-    - Beast armor
-    - Magical armor
-    - Fiend armor
-    - Island armor
-    - Fire armor
-    - Water armor
-
-Melee Weapons: edged, slashing, bashing
+## Melee Weapons: edged, slashing, bashing
   - Edged weapons do bonus damage to light-armor
   - Slashing weapons do bonus damage to large enemies
   - Bashing weapons do more damage in an area
@@ -71,7 +88,7 @@ Characters become more effective with melee weapons by:
   - Finding a trainer to focus in Edged/Slashing/Bashing.  This makes one of your weapon abilities more effective,
     (lower cooldown, more damage, more area)
 
-Ranged Weapons: Bow
+## Ranged Weapons: Bow
   Every character wielding a bow can fire arrows with different types of effects.  Once used, arrows become 'depleted'
   until next battle.  A character can gather and maintain arrows that they can put in their quiver.  Quivers can
   be upgraded.
@@ -84,9 +101,37 @@ Ranged Weapons: Bow
   - Purify arrow - removes a zone from the target tile
 
 Arrows can be combined with Power Stones to make Super arrows, more effective versions of previous ones.
+Bows are inaccurate the further away you shoot, up to a max dist.  Focus decreases this
 
 Characters become more effective with bow weapons by:
   - Finding and using better bows
   - Finding and using better arrow types
-  - Increasing skill in Ranged Weapons
+  - Increasing Focus to make bows more accurate
   - Finding a practice range to hone your skill.
+
+# CIVIL FEATS
+
+Traits that work like Kotor feats
+
+Stealing - 1-3, allows you to grab more stuff from somebody
+Bartering - increase trade value of junk? increase trade value of actually trading?
+Lockpicking - 1-3, works like Avernum Lockpicking
+Alertness - prevents you from getting surprised by events
+Intimidation  1-3, Allows you to do more damage to lower level enemies
+Luck - 1-3, increases base hit chance, increases chance of crits
+Silver Tongue - Allows you to gain special dialog choices to skip stuff
+Empathetic - Allows you to know the outcome of dialog choices
+Distracting - Lets allies do more damage to enemies adjacent to you
+Fleet-Footed - Your first movement after taking damage costs no HP
+Adrenaline - Getting a kill gives you more AP next turn
+Vendetta - When an adjacent ally takes damage, gain bonus damage on next attack
+Keen - allows you to see invisible walls
+Beefy - reduces damage you take by a flat amount
+
+Skill Specific Traits, received from quests or from exploring
+Accurate Shot - more bow damage
+Exceptional Strength - more melee damage
+Overcharged - more magic damage
+Efficient - spells cost less mana
+
+
