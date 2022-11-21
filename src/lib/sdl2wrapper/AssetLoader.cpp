@@ -115,7 +115,7 @@ int getLineFromStream(std::istream& is) {
 
 void loadSpriteAssetsFromFile(const std::string& path) {
   Logger(DEBUG) << "Loading sprite assets from file " << (PREFIX + path)
-                << std::endl;
+                << Logger::endl;
   try {
     FILE* file = fopen((PREFIX + path).c_str(), "r");
     char str[TEXT_LEN];
@@ -164,13 +164,13 @@ void loadSpriteAssetsFromFile(const std::string& path) {
     }
     fclose(file);
   } catch (std::exception& e) {
-    Logger(ERROR) << "Failed to parse sprite list: " << e.what() << std::endl;
+    Logger(ERROR) << "Failed to parse sprite list: " << e.what() << Logger::endl;
   }
 }
 
 void loadAnimationAssetsFromFile(const std::string& path) {
   Logger(DEBUG) << "Loading anim assets from file  " << (PREFIX + path)
-                << std::endl;
+                << Logger::endl;
   try {
     std::string animName = "";
     std::string line;
@@ -210,8 +210,8 @@ void loadAnimationAssetsFromFile(const std::string& path) {
               frames = std::stoi(strFrames);
             } catch (std::exception& e) {
               Logger(ERROR) << "Failed to load anim sprite for: " << animName
-                            << std::endl;
-              Logger(ERROR) << " FROM: '" << line << "'" << std::endl;
+                            << Logger::endl;
+              Logger(ERROR) << " FROM: '" << line << "'" << Logger::endl;
             }
             anim.addSprite(strName, frames);
           }
@@ -220,13 +220,13 @@ void loadAnimationAssetsFromFile(const std::string& path) {
     }
     fclose(file);
   } catch (std::exception& e) {
-    Logger(ERROR) << "Failed to parse anim list: " << e.what() << std::endl;
+    Logger(ERROR) << "Failed to parse anim list: " << e.what() << Logger::endl;
   }
 }
 
 void loadSoundAssetsFromFile(const std::string& path) {
   Logger(DEBUG) << "Loading sound assets from file " << (PREFIX + path)
-                << std::endl;
+                << Logger::endl;
   FILE* file = fopen((PREFIX + path).c_str(), "r");
   char str[TEXT_LEN];
 
@@ -251,7 +251,7 @@ void loadSoundAssetsFromFile(const std::string& path) {
     fclose(file);
   } catch (std::exception& e) {
     Logger(ERROR) << "Failed to parse sound/music list: " << e.what()
-                  << std::endl;
+                  << Logger::endl;
   }
 }
 

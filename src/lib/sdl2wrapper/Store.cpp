@@ -3,6 +3,11 @@
 #include "Window.h"
 #include <algorithm>
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
+
 namespace SDL2Wrapper {
 
 unsigned int Store::numSoundChunks = 2;
@@ -23,7 +28,7 @@ std::unordered_map<std::string, std::unique_ptr<Mix_Music, SDL_Deleter>>
     Store::musics;
 
 void throwError(const std::string& errorMessage) {
-  Logger(ERROR) << errorMessage << std::endl;
+  Logger(ERROR) << errorMessage << Logger::endl;
   throw std::string(errorMessage);
 }
 
@@ -56,7 +61,7 @@ void Store::createTexture(const std::string& name, const std::string& path) {
     if (tex == nullptr) {
       Logger(WARN) << "[SDL2Wrapper] WARNING Tried to create texture image "
                       "without creating a screen."
-                   << std::endl;
+                   << Logger::endl;
       return;
     }
     textures[name] =
@@ -101,7 +106,7 @@ void Store::createSprite(const std::string& name, SDL_Texture* tex) {
     sprites[name] = std::make_unique<Sprite>(name, 0, 0, width, height, tex);
   } else {
     Logger(WARN) << "[SDL2Wrapper] WARNING Sprite with name '" << name
-                 << "' already exists. '" << name << "'" << std::endl;
+                 << "' already exists. '" << name << "'" << Logger::endl;
   }
 }
 
@@ -117,7 +122,7 @@ void Store::createSprite(const std::string& name,
     sprites[name] = std::make_unique<Sprite>(name, x, y, w, h, tex);
   } else {
     Logger(WARN) << "[SDL2Wrapper] WARNING Sprite with name '" << name
-                 << "' already exists. '" << name << "'" << std::endl;
+                 << "' already exists. '" << name << "'" << Logger::endl;
   }
 }
 
@@ -129,7 +134,7 @@ AnimationDefinition& Store::createAnimationDefinition(const std::string& name,
     Logger(WARN) << "[SDL2Wrapper] WARNING Cannot create new anim, it already "
                     "exists: '" +
                         name + "'"
-                 << std::endl;
+                 << Logger::endl;
   }
   return *anims[name];
 }
@@ -141,7 +146,7 @@ void Store::createSound(const std::string& name, const std::string& path) {
            "disabled "
            "exists: '" +
                name + "'"
-        << std::endl;
+        << Logger::endl;
     return;
   }
 
@@ -157,7 +162,7 @@ void Store::createSound(const std::string& name, const std::string& path) {
     } else {
       Logger(WARN) << "[SDL2Wrapper] WARNING Sound with name '" << name
                    << "' already exists. chunkName='" << innerSoundName << "'"
-                   << std::endl;
+                   << Logger::endl;
     }
   }
 
@@ -178,12 +183,12 @@ void Store::createMusic(const std::string& name, const std::string& path) {
     }
   } else {
     Logger(WARN) << "[SDL2Wrapper] WARNING Music with name '" << name
-                 << "' already exists. '" << name << "'" << std::endl;
+                 << "' already exists. '" << name << "'" << Logger::endl;
   }
 }
 
 void Store::logSprites() {
-  Logger(DEBUG) << "[SDL2Wrapper] Sprites:" << std::endl;
+  Logger(DEBUG) << "[SDL2Wrapper] Sprites:" << Logger::endl;
   std::vector<std::string> localSprites;
   localSprites.reserve(sprites.size());
   std::transform(sprites.begin(),
@@ -192,11 +197,11 @@ void Store::logSprites() {
                  [](const auto& p) -> std::string { return p.first; });
   std::sort(localSprites.begin(), localSprites.end());
   for (auto& it : localSprites) {
-    Logger(DEBUG) << " " << it << std::endl;
+    Logger(DEBUG) << " " << it << Logger::endl;
   }
 }
 void Store::logAnimationDefinitions() {
-  Logger(DEBUG) << "[SDL2Wrapper] AnimationDefinitions:" << std::endl;
+  Logger(DEBUG) << "[SDL2Wrapper] AnimationDefinitions:" << Logger::endl;
   std::vector<std::string> localAnims;
   localAnims.reserve(anims.size());
   std::transform(anims.begin(),
@@ -205,14 +210,14 @@ void Store::logAnimationDefinitions() {
                  [](const auto& p) -> std::string { return p.first; });
   std::sort(localAnims.begin(), localAnims.end());
   for (auto& it : localAnims) {
-    Logger(DEBUG) << " " << it << std::endl;
+    Logger(DEBUG) << " " << it << Logger::endl;
   }
 }
 
 void Store::logFonts() {
-  Logger(DEBUG) << "[SDL2Wrapper] Fonts:" << std::endl;
+  Logger(DEBUG) << "[SDL2Wrapper] Fonts:" << Logger::endl;
   for (auto& it : fonts) {
-    Logger(DEBUG) << " " << it.first << std::endl;
+    Logger(DEBUG) << " " << it.first << Logger::endl;
   }
 }
 

@@ -1,4 +1,5 @@
 #include "Timer.h"
+#include "Window.h"
 
 namespace SDL2Wrapper {
 Timer::Timer(const Window& windowA, int maxTimeMs)

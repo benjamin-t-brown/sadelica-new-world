@@ -5,4 +5,5 @@ build/
 SNW.exe
 CMakeCache.txt
 CMakeFiles/
-C
+*.o
+*.gch

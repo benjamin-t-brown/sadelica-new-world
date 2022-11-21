@@ -3,15 +3,14 @@
     {
       "name": "Win32",
       "includePath": [
-        ".",
         "${workspaceFolder}\\src\\**"
       ],
-      "defines": ["_DEBUG", "UNICODE", "_UNICODE", "__LITTLE_ENDIAN__", "SDL_SCANF_FORMAT_STRING _Scanf_format_string_impl_"],
-      "compilerPath": "C:\\progs\\msys2\\mingw64\\bin\\g++",
-      "cStandard": "gnu17",
-      "cppStandard": "gnu++17",
-      // "intelliSenseMode": "linux-gcc-x64",
-      "compilerArgs": ["-Wall", "-Wextra", "-std=c++"]
+      "defines": ["_DEBUG", "UNICODE", "_UNICODE", "__LITTLE_ENDIAN__"],
+      "cStandard": "c17",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "windows-gcc-x64",
+      "compilerArgs": ["-Wall", "-Wextra", "-std=c++"],
+      "compilerPath": "C:\\msys64\\mingw64\\bin\\g++.exe"
     }
   ],
   "version": 4

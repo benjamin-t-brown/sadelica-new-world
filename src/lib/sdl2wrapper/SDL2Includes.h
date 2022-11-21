@@ -1,9 +1,17 @@
 #pragma once
 
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
-#include "SDL2/SDL_mixer.h"
-#include "SDL2/SDL_ttf.h"
+// #include "SDL2/SDL.h"
+// #include "SDL2/SDL_image.h"
+// #include "SDL2/SDL_mixer.h"
+// #include "SDL2/SDL_ttf.h"
+
+struct SDL_Window;
+struct SDL_Renderer;
+struct SDL_Texture;
+typedef struct _TTF_Font TTF_Font;
+struct Mix_Chunk;
+typedef struct _Mix_Music Mix_Music;
+typedef struct _SDL_Joystick SDL_Joystick;
 
 namespace SDL2Wrapper {
 struct SDL_Deleter {

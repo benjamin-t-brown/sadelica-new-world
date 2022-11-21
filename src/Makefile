@@ -1,8 +1,8 @@
 CODE=\
-Main.cpp\
 ui/Ui.cpp\
 ui/components/TalkCmpt.cpp\
-ui/components/InGameCmpt.cpp
+ui/components/InGameCmpt.cpp\
+Main.cpp
 
 LIB_CODE=\
 lib/imgui/imgui_draw.cpp\
@@ -21,6 +21,7 @@ lib/sdl2wrapper/Sound.cpp\
 lib/sdl2wrapper/Sprite.cpp\
 lib/sdl2wrapper/Store.cpp\
 lib/sdl2wrapper/Timer.cpp\
+lib/sdl2wrapper/Logger.cpp\
 lib/sdl2wrapper/Window.cpp
 
 OBJECTS=$(CODE:.cpp=.o)
@@ -55,7 +56,7 @@ endif
 FLAGS=-g -Wall -std=c++17 -I.
 
 .PHONY: $(EXE)
-$(EXE): precompiled.h.gch $(OBJECTS) $(LIB_OBJECTS)
+$(EXE): precompiled.h.gch $(LIB_OBJECTS) $(OBJECTS) 
 	g++ $(FLAGS) $(OBJECTS) $(LIB_OBJECTS) -o $(EXE) $(LIBS)
 
 precompiled.h.gch:

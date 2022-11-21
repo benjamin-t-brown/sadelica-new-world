@@ -1,17 +1,27 @@
 #pragma once
 
-#include "SDL2/SDL.h"
-
 #include <functional>
-#include <iostream>
 #include <map>
 #include <memory>
 #include <stack>
+#include <string>
+
+#include <SDL2/SDL.h>
 
 namespace SDL2Wrapper {
 
 class Window;
-class EventRoute;
+class EventRoute {
+public:
+  std::function<void(int, int)> onmousedown;
+  std::function<void(int, int)> onmouseup;
+  std::function<void(int, int)> onmousemove;
+  std::function<void(const std::string&)> onkeydown;
+  std::function<void(const std::string&)> onkeyup;
+  std::function<void(const std::string&)> onkeypress;
+
+  EventRoute();
+};
 
 class Events {
 private:
@@ -20,6 +30,7 @@ private:
   std::map<std::string, bool> keys;
   bool shouldPushRoute;
   bool shouldPopRoute;
+  std::function<void(SDL_Event)> cb;
 
 public:
   bool isMouseDown;
@@ -48,6 +59,9 @@ public:
   void mousemove(int x, int y);
   void keydown(int key);
   void keyup(int key);
+
+  void handleEvent(SDL_Event e);
+  void setEventHandler(std::function<void(SDL_Event)> cbA);
 
   void update();
 };

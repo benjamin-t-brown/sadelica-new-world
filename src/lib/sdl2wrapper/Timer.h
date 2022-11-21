@@ -1,10 +1,12 @@
 #pragma once
 
-#include "Window.h"
+#include <functional>
 
 namespace SDL2Wrapper {
+class Window;
 
 class Timer {
+
 protected:
   const Window& window;
   bool removeFlag;
@@ -25,7 +27,7 @@ class FuncTimer : public Timer {
 
 public:
   FuncTimer(const Window& windowA, int maxFrames, std::function<void()> cbA);
-  void remove();
+  void remove() override;
 };
 
 class BoolTimer : public Timer {
@@ -33,7 +35,7 @@ class BoolTimer : public Timer {
 
 public:
   BoolTimer(const Window& windowA, int maxFrames, bool& refA);
-  void remove();
+  void remove() override;
 };
 
 } // namespace SDL2Wrapper

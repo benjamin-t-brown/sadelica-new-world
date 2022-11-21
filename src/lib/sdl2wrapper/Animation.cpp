@@ -52,18 +52,18 @@ const std::string Animation::getCurrentSpriteName() const {
     } else {
 #ifdef __EMSCRIPTEN__
       Logger(WARN) << "Invalid spriteName=" << spriteName << " in anim=" << name
-                   << std::endl;
+                   << Logger::endl;
       return "invisible";
 #else
       Logger(ERROR) << "Cannot get current sprite name from anim=" << name
-                    << " spriteName=" << spriteName << std::endl;
+                    << " spriteName=" << spriteName << Logger::endl;
       throw std::string("Animation error.");
 #endif
     }
   } else {
     Logger(WARN) << "Cannot get current sprite name because spriteIndex is out "
                     "of bounds: "
-                 << spriteIndex << " (animation=" << name << ")" << std::endl;
+                 << spriteIndex << " (animation=" << name << ")" << Logger::endl;
     return sprites[0].first;
   }
 }
@@ -77,7 +77,7 @@ void Animation::addSprite(const std::string& spriteName,
                           const unsigned int ms) {
   if (!Store::spriteExists(spriteName)) {
     Logger(WARN) << "Cannot add sprite to anim.  Invalid spriteName="
-                 << spriteName << " in anim=" << name << std::endl;
+                 << spriteName << " in anim=" << name << Logger::endl;
     return;
   }
   totalDuration += ms;

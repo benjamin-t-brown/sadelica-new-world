@@ -1,6 +1,9 @@
 #include "SDL2Includes.h"
 
-#include <iostream>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 
 namespace SDL2Wrapper {
 void SDL_Deleter::operator()(SDL_Window* p) const {
@@ -28,7 +31,8 @@ void SDL_Deleter::operator()(Mix_Music* p) const {
     Mix_FreeMusic(p);
 }
 void SDL_Deleter::operator()(SDL_Joystick* p) const {
-  if (p != nullptr)
-    SDL_JoystickClose(p);
+  // This segfaults for some reason on machines without a joystick attached
+  // if (p != nullptr && p != NULL)
+  //   SDL_JoystickClose(p);
 }
 } // namespace SDL2Wrapper

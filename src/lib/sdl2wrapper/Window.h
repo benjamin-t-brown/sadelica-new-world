@@ -1,17 +1,19 @@
 #pragma once
 
-#include <functional>
-#include <memory>
-#include <map>
-#include <deque>
-#include <utility>
-#include <string>
+// #include <deque>
+// #include <functional>
+// #include <map>
+// #include <memory>
+// #include <string>
+// #include <utility>
 
 #include "SDL2Includes.h"
 
 #include "Animation.h"
 #include "Events.h"
-#include "Sprite.h"
+// #include "Sprite.h"
+
+#include <SDL2/SDL.h>
 
 namespace SDL2Wrapper {
 
@@ -35,8 +37,8 @@ class Window {
   void createWindow(const std::string& title,
                     const int w,
                     const int h,
-                    const int xPos = SDL_WINDOWPOS_UNDEFINED,
-                    const int yPos = SDL_WINDOWPOS_UNDEFINED);
+                    const int xPos,
+                    const int yPos);
 
   std::string currentFontName;
   int currentFontSize;

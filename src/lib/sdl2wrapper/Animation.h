@@ -13,7 +13,7 @@ class Animation {
 public:
   std::string name;
   unsigned int totalDuration;
-  Uint64 timestampStart;
+  uint64_t timestampStart;
   unsigned int spriteIndex;
   bool loop;
   std::vector<std::pair<std::string, int>> sprites;

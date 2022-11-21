@@ -2,6 +2,7 @@
 #include "../Ui.h"
 #include <algorithm>
 #include <string>
+#include <sstream>
 
 constexpr double IN_GAME_CMPT_HEADER_HEIGHT_PCT_VERT = .1;
 constexpr double IN_GAME_CMPT_PARTY_MEMBER_STATS_HEIGHT_PCT_VERT = .175;

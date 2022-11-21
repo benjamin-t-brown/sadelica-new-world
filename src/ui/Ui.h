@@ -1,7 +1,7 @@
 #pragma once
 
-#include "lib/imgui/imgui.h"
-#include "lib/sdl2wrapper/SDL2Wrapper.h"
+#include "../lib/imgui/imgui.h"
+#include "../lib/sdl2wrapper/Window.h"
 #include <string>
 
 using namespace ImGui;

@@ -1,7 +1,14 @@
 #include "Ui.h"
 
+#include <sstream>
+
+#include "../lib/sdl2wrapper/Logger.h"
+#include "../lib/sdl2wrapper/Store.h"
 #include "components/InGameCmpt.h"
 #include "components/TalkCmpt.h"
+
+using SDL2Wrapper::Logger;
+using SDL2Wrapper::LogType;
 
 namespace ui {
 
@@ -45,14 +52,17 @@ createStaticColorTexture(int width, int height, const ImVec4& color) {
                                    height);
 
   SDL_SetRenderTarget(renderer, texture);
-  SDL_SetRenderDrawColor(
-      renderer, color.x * 255., color.y * 255., color.z * 255., color.w * 255.);
+  SDL_SetRenderDrawColor(renderer,
+                         static_cast<Uint8>(color.x * 255.),
+                         static_cast<Uint8>(color.y * 255.),
+                         static_cast<Uint8>(color.z * 255.),
+                         static_cast<Uint8>(color.w * 255.));
   SDL_RenderClear(renderer);
   SDL_SetRenderTarget(renderer, nullptr);
 
   std::stringstream ss;
   ss << width << "," << height << "," << color.x << "," << color.y << ","
-     << color.z << "," << color.w << std::endl;
+     << color.z << "," << color.w << Logger::endl;
   // track texture in SDLWrapper Store so it can be deleted gracefully on
   // program end.
   SDL2Wrapper::Store::storeTextTexture(ss.str(), texture);

@@ -3,7 +3,12 @@
 // #include <iostream>
 // #include <vector>
 
-#include "lib/sdl2wrapper/SDL2Wrapper.h"
+#include "lib/sdl2wrapper/Events.h"
+#include "lib/sdl2wrapper/Logger.h"
+#include "lib/sdl2wrapper/Store.h"
+#include "lib/sdl2wrapper/Window.h"
+
+#include <SDL2/SDL.h>
 
 #include "lib/imgui/imgui.h"
 #include "lib/imgui/imgui_impl_sdl.h"
@@ -11,8 +16,13 @@
 
 #include "ui/Ui.h"
 
+using SDL2Wrapper::Logger;
+using SDL2Wrapper::LogType;
+
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays)
 void parseArgs(int argc, char* argv[], std::vector<std::string>& args) {
   for (int i = 0; i < argc; i++) {
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
     std::string arg = argv[i];
     if (arg.size() > 2 && arg.at(0) == '-' && arg.at(1) == '-') {
       arg = arg.substr(2);
@@ -47,8 +57,9 @@ SDL_Texture* createStaticColorTexture(
   return texture;
 }
 
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays)
 int main(int argc, char* argv[]) {
-  SDL2Wrapper::Logger() << "Program Begin." << std::endl;
+  SDL2Wrapper::Logger() << "Program Begin." << Logger::endl;
   srand(time(NULL));
 
   std::vector<std::string> args;
@@ -60,6 +71,10 @@ int main(int argc, char* argv[]) {
     SDL2Wrapper::Store::createFont("default", "assets/Chicago.ttf");
     window.setCurrentFont("default", 18);
 
+    auto events = &window.getEvents();
+    events->setEventHandler(
+        [](SDL_Event e) { ImGui_ImplSDL2_ProcessEvent(&e); });
+
     auto renderer = &window.getRenderer();
     auto sdlWindow = &window.getSDLWindow();
 
@@ -68,6 +83,7 @@ int main(int argc, char* argv[]) {
     ImGui_ImplSDL2_InitForSDLRenderer(sdlWindow, renderer);
 
     ImGuiIO& io = ImGui::GetIO();
+    // ImGui_ImplSDL2_ProcessEvent(&e);
     // Enable Keyboard Controls
     // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     // Enable Gamepad Controls
@@ -104,9 +120,9 @@ int main(int argc, char* argv[]) {
       return true;
     });
 
-    SDL2Wrapper::Logger() << "Program End." << std::endl;
+    Logger() << "Program End." << Logger::endl;
   } catch (const std::string& e) {
-    SDL2Wrapper::Logger(SDL2Wrapper::ERROR) << e << std::endl;
+    Logger(LogType::ERROR) << e << Logger::endl;
   }
 
   ImGui_ImplSDL2_Shutdown();

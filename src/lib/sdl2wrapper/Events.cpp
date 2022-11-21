@@ -1,25 +1,20 @@
 #include "Events.h"
 #include "Logger.h"
 
+// #include <SDL2/SDL.h>
+
 namespace SDL2Wrapper {
 
-struct EventRoute {
-  std::function<void(int, int)> onmousedown;
-  std::function<void(int, int)> onmouseup;
-  std::function<void(int, int)> onmousemove;
-  std::function<void(const std::string&)> onkeydown;
-  std::function<void(const std::string&)> onkeyup;
-  std::function<void(const std::string&)> onkeypress;
+auto SDL2WRAPPER_EVENTS_NO_EVENT = [](SDL_Event e) {};
 
-  EventRoute() {
-    onmousedown = [](int, int) {};
-    onmouseup = [](int, int) {};
-    onmousemove = [](int, int) {};
-    onkeydown = [](const std::string&) {};
-    onkeyup = [](const std::string&) {};
-    onkeypress = [](const std::string&) {};
-  }
-};
+EventRoute::EventRoute() {
+  onmousedown = [](int, int) {};
+  onmouseup = [](int, int) {};
+  onmousemove = [](int, int) {};
+  onkeydown = [](const std::string&) {};
+  onkeyup = [](const std::string&) {};
+  onkeypress = [](const std::string&) {};
+}
 
 Events::Events(Window& windowA)
     : window(windowA),
@@ -31,7 +26,8 @@ Events::Events(Window& windowA)
       mouseY(0),
       mouseDownX(0),
       mouseDownY(0),
-      wheel(0) {
+      wheel(0),
+      cb(SDL2WRAPPER_EVENTS_NO_EVENT) {
   pushRoute();
 }
 
@@ -72,8 +68,8 @@ void Events::setMouseEvent(const std::string& name,
   } else if (name == "mouseup") {
     route->onmouseup = cb;
   } else {
-    Logger(WARN) << "[SDL2Wrapper] WARNING Cannot set mouse event named: " << name
-              << std::endl;
+    Logger(WARN) << "[SDL2Wrapper] WARNING Cannot set mouse event named: "
+                 << name << Logger::endl;
   }
 }
 void Events::setKeyboardEvent(const std::string& name,
@@ -87,7 +83,7 @@ void Events::setKeyboardEvent(const std::string& name,
     route->onkeypress = cb;
   } else {
     Logger(WARN) << "[SDL2Wrapper] WARNING Cannot set keyboard event named: "
-              << name << std::endl;
+                 << name << Logger::endl;
   }
 }
 
@@ -122,7 +118,7 @@ void Events::mousemove(int x, int y) {
 void Events::keydown(int key) {
   std::unique_ptr<EventRoute>& route = routes.top();
   const std::string k = std::string(SDL_GetKeyName(key));
-  // Logger(DEBUG) << "SDLKEY: " << key << " " << k << std::endl;
+  // Logger(DEBUG) << "SDLKEY: " << key << " " << k << Logger::endl;
   if (!keys[k]) {
     keys[k] = true;
     route->onkeydown(k);
@@ -136,6 +132,8 @@ void Events::keyup(int key) {
 
   route->onkeyup(k);
 }
+void Events::handleEvent(SDL_Event e) { cb(e); }
+void Events::setEventHandler(std::function<void(SDL_Event)> cbA) { cb = cbA; };
 void Events::update() {
   if (shouldPushRoute) {
     shouldPushRoute = false;
@@ -146,5 +144,4 @@ void Events::update() {
     popRoute();
   }
 }
-
 } // namespace SDL2Wrapper

@@ -1,6 +1,7 @@
 #include "TalkCmpt.h"
 #include "../Ui.h"
 #include <vector>
+#include <sstream>
 
 constexpr double TALK_CMPT_HEADER_HEIGHT_PCT_VERT = .2;
 constexpr double TALK_CMPT_NAMEPLATE_HEIGHT_PCT_VERT = .05;
@@ -69,7 +70,7 @@ void renderNameplate(const Ui& ui) {
 
 void renderTextArea(const Ui& ui) {
   auto outerWindowSize = ImGui::GetWindowSize();
-  int spacing = 12;
+  const int spacing = 12;
 
   float width = outerWindowSize.x - spacing;
   float height = outerWindowSize.y * TALK_CMPT_TEXT_AREA_HEIGHT_PCT_VERT;

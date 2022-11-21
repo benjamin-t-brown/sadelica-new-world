@@ -1,8 +1,6 @@
 #pragma once
 
-#include <iostream>
 #include <sstream>
-#include <stdio.h>
 #include <string>
 
 #ifdef __vita__
@@ -11,23 +9,21 @@
 
 namespace SDL2Wrapper {
 
-enum typelog { DEBUG, INFO, WARN, ERROR };
+enum LogType { DEBUG, INFO, WARN, ERROR };
 
 class Logger {
 public:
   Logger() {}
-  Logger(typelog type) { operator<<("[" + getLabel(type) + "] "); }
+  Logger(LogType type) { operator<<("[" + getLabel(type) + "] "); }
   Logger(const std::string& type) { operator<<("[" + type + "] "); }
   ~Logger() {}
 
+  static const std::string endl;
+
   template <class T> Logger operator<<(const T& msg) {
-#ifdef __vita__
     std::stringstream ss;
     ss << msg;
-    printf("%s", ss.str().c_str());
-#else
-    std::cout << msg;
-#endif
+    printMessage(ss.str());
     return *this;
   }
 
@@ -35,19 +31,16 @@ public:
   typedef std::basic_ostream<char, std::char_traits<char>> CoutType;
   typedef CoutType& (*StandardEndLine)(CoutType&);
   Logger& operator<<(const StandardEndLine manipulate) {
-
-#ifdef __vita__
-    printf("\n");
-#else
-    manipulate(std::cout);
-#endif
+    manipulateMessage(manipulate);
     return *this;
   }
 
   int printf(const char* format, ...);
+  void printMessage(const std::string& msg);
+  void manipulateMessage(const StandardEndLine m);
 
 private:
-  inline std::string getLabel(typelog type) {
+  inline std::string getLabel(LogType type) {
     std::string label;
     switch (type) {
     case DEBUG:
