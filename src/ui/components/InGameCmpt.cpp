@@ -1,8 +1,8 @@
 #include "InGameCmpt.h"
-#include "../Ui.h"
+#include "ui/Ui.h"
 #include <algorithm>
-#include <string>
 #include <sstream>
+#include <string>
 
 constexpr double IN_GAME_CMPT_HEADER_HEIGHT_PCT_VERT = .1;
 constexpr double IN_GAME_CMPT_PARTY_MEMBER_STATS_HEIGHT_PCT_VERT = .175;
@@ -29,10 +29,10 @@ void renderHeader(const Ui& ui) {
   auto originalCursorPosition = ImGui::GetCursorPos();
 
   PCT_BOX(1.0f, IN_GAME_CMPT_HEADER_HEIGHT_PCT_VERT, ui.colors.BLACK);
-  float width = box.x;
-  float height = box.y;
+  const float width = box.x;
+  const float height = box.y;
 
-  float halfHeight = height / 2.f;
+  const float halfHeight = height / 2.f;
 
   const std::string partyMemberName = "Elmindreta";
   const int partyMemberMaxHp = 100;
@@ -44,16 +44,16 @@ void renderHeader(const Ui& ui) {
   ImGui::SetCursorPos(originalCursorPosition);
   {
     PCT_BOX(1.0f, IN_GAME_CMPT_HEADER_HEIGHT_PCT_VERT / 2, ui.colors.BLACK);
-    float widthIcons = box.x;
-    float heightIcons = box.y;
+    const float widthIcons = box.x;
+    const float heightIcons = box.y;
 
-    float iconSize = heightIcons - 4;
+    const float iconSize = heightIcons - 4;
 
     float cursorX = originalCursorPosition.x + 2;
-    float cursorY = originalCursorPosition.y + 2;
+    const float cursorY = originalCursorPosition.y + 2;
 
     for (unsigned int i = 0; i < 6; i++) {
-      ImGui::PushID(i);
+      ImGui::PushID(static_cast<int>(i));
 
       ImGui::PushStyleColor(ImGuiCol_Button,
                             i == 0 ? ui.colors.BLUE : ui.colors.DARK_CYAN);
@@ -77,8 +77,8 @@ void renderHeader(const Ui& ui) {
       ImVec2(originalCursorPosition.x, originalCursorPosition.y + halfHeight));
   {
     PCT_BOX(1.0f, IN_GAME_CMPT_HEADER_HEIGHT_PCT_VERT / 2, ui.colors.DARK_BLUE);
-    float widthNamePlate = box.x;
-    float heightNamePlate = box.y;
+    const float widthNamePlate = box.x;
+    const float heightNamePlate = box.y;
 
     ImGui::PushID("nameplate");
     ImGui::PushStyleColor(ImGuiCol_Button, ui.colors.TRANSPARENT);
@@ -147,18 +147,18 @@ void renderPartyMemberStatsArea(const Ui& ui) {
   PCT_BOX(1.0f,
           IN_GAME_CMPT_PARTY_MEMBER_STATS_HEIGHT_PCT_VERT,
           ui.colors.DARK_GREY);
-  float width = box.x;
-  float height = box.y;
+  const float width = box.x;
+  const float height = box.y;
 
-  int dmgMin = 9;
-  int dmgMax = 19;
-  int armorHack = 3;
-  int armorPierce = 4;
-  int accuracy = 5;
-  int power = 2;
-  int crit = 5;
+  const int dmgMin = 9;
+  const int dmgMax = 19;
+  const int armorHack = 3;
+  const int armorPierce = 4;
+  const int accuracy = 5;
+  const int power = 2;
+  const int crit = 5;
 
-  ImGuiTableFlags flags = 0;
+  const ImGuiTableFlags flags = 0;
   ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0, 10));
   ImGui::SetCursorPos(
       ImVec2(originalCursorPosition.x + 4, originalCursorPosition.y));
@@ -231,8 +231,8 @@ void renderPartyMemberStatsArea(const Ui& ui) {
 
 void renderStatusArea(const Ui& ui) {
   PCT_BOX(1.0f, IN_GAME_CMPT_STATUS_HEIGHT_PCT_VERT, ui.colors.BLACK);
-  float width = box.x;
-  float height = box.y;
+  const float width = box.x;
+  const float height = box.y;
 }
 
 void subRenderInventoryItem(const Ui& ui) {}
@@ -240,14 +240,14 @@ void subRenderInventoryItem(const Ui& ui) {}
 void renderInventoryList(const Ui& ui) {
   PCT_BOX(
       1.0f, IN_GAME_CMPT_INVENTORY_LIST_HEIGHT_PCT_VERT, ui.colors.DARK_GREY);
-  float width = box.x;
-  float height = box.y;
+  const float width = box.x;
+  const float height = box.y;
 }
 
 void renderFooter(const Ui& ui) {
   PCT_BOX(1.0f, IN_GAME_CMPT_FOOTER_HEIGHT_PCT_VERT, ui.colors.BLACK);
-  float width = box.x;
-  float height = box.y;
+  const float width = box.x;
+  const float height = box.y;
 }
 
 } // namespace ui_InGameCmpt
@@ -255,13 +255,13 @@ void renderFooter(const Ui& ui) {
 namespace ui {
 
 void renderInGameCmpt(const Ui& ui) {
-  ImGuiWindowFlags windowFlags =
+  const ImGuiWindowFlags windowFlags =
       ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar |
       ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |
       ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoBringToFrontOnFocus;
 
-  SDL2Wrapper::Window& window = SDL2Wrapper::Window::getGlobalWindow();
-  ImGuiIO& io = ImGui::GetIO();
+  const SDL2Wrapper::Window& window = SDL2Wrapper::Window::getGlobalWindow();
+  const ImGuiIO& io = ImGui::GetIO();
 
   prepareFullScreenWindow();
 

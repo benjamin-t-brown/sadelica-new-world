@@ -1,7 +1,9 @@
 #include "TalkCmpt.h"
-#include "../Ui.h"
-#include <vector>
+#include "ui/Ui.h"
+#include <algorithm>
 #include <sstream>
+#include <string>
+#include <vector>
 
 constexpr double TALK_CMPT_HEADER_HEIGHT_PCT_VERT = .2;
 constexpr double TALK_CMPT_NAMEPLATE_HEIGHT_PCT_VERT = .05;
@@ -17,16 +19,21 @@ using namespace ui_TalkCmpt;
 namespace ui_TalkCmpt {
 void renderHeader(const Ui& ui) {
   auto outerWindowSize = ImGui::GetWindowSize();
-  float width = outerWindowSize.x;
-  float height = outerWindowSize.y * TALK_CMPT_HEADER_HEIGHT_PCT_VERT;
+  const float width = outerWindowSize.x;
+  const float height =
+      static_cast<float>(outerWindowSize.y * TALK_CMPT_HEADER_HEIGHT_PCT_VERT);
 
-  float portraitWidth = std::max(height, 128.f);
-  float borderColumnsWidth = (width - portraitWidth) / 2.;
+  const float portraitWidth = std::max(height, 128.f);
+  const float borderColumnsWidth = (width - portraitWidth) / 2.f;
 
   static auto columnRectangle =
-      createStaticColorTexture(borderColumnsWidth, height, ui.colors.BLACK);
+      createStaticColorTexture(static_cast<int>(borderColumnsWidth),
+                               static_cast<int>(height),
+                               ui.colors.BLACK);
   static auto portraitRectangle =
-      createStaticColorTexture(portraitWidth, height, ui.colors.BLUE);
+      createStaticColorTexture(static_cast<int>(portraitWidth),
+                               static_cast<int>(height),
+                               ui.colors.BLUE);
 
   ImGui::SetCursorPos(ImVec2(0, 0));
   ImGui::Image(columnRectangle, ImVec2(borderColumnsWidth, height));
@@ -40,15 +47,18 @@ void renderHeader(const Ui& ui) {
 
 void renderNameplate(const Ui& ui) {
   auto outerWindowSize = ImGui::GetWindowSize();
-  float width = outerWindowSize.x;
-  float height = outerWindowSize.y * TALK_CMPT_NAMEPLATE_HEIGHT_PCT_VERT;
+  const float width = outerWindowSize.x;
+  const float height = static_cast<float>(outerWindowSize.y *
+                                          TALK_CMPT_NAMEPLATE_HEIGHT_PCT_VERT);
 
   auto originalCursorPosition = ImGui::GetCursorPos();
 
-  static auto borderRectangle =
-      createStaticColorTexture(width, height, ui.colors.WHITE);
+  static auto borderRectangle = createStaticColorTexture(
+      static_cast<int>(width), static_cast<int>(height), ui.colors.WHITE);
   static auto bgRectangle =
-      createStaticColorTexture(width - 4, height - 4, ui.colors.PURPLE);
+      createStaticColorTexture(static_cast<int>(width - 4),
+                               static_cast<int>(height - 4),
+                               ui.colors.PURPLE);
 
   const std::string name = "Radmilla Web";
 
@@ -58,11 +68,12 @@ void renderNameplate(const Ui& ui) {
   ImGui::Image(bgRectangle, ImVec2(width - 4, height + -4));
 
   ImGui::SetCursorPos(originalCursorPosition);
-  ImGui::SetCursorPosX(originalCursorPosition.x + width / 4.);
+  ImGui::SetCursorPosX(static_cast<float>(originalCursorPosition.x) +
+                       width / 4.f);
   ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(0, 0, 0, 0));
   ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor(0, 0, 0, 0));
   ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor(0, 0, 0, 0));
-  ImGui::Button(name.c_str(), ImVec2(width / 2., height));
+  ImGui::Button(name.c_str(), ImVec2(width / 2.f, height));
   ImGui::PopStyleColor(3);
 
   ImGui::SetCursorPosY(originalCursorPosition.y + height);
@@ -70,26 +81,29 @@ void renderNameplate(const Ui& ui) {
 
 void renderTextArea(const Ui& ui) {
   auto outerWindowSize = ImGui::GetWindowSize();
-  const int spacing = 12;
+  const float spacing = 12;
 
-  float width = outerWindowSize.x - spacing;
-  float height = outerWindowSize.y * TALK_CMPT_TEXT_AREA_HEIGHT_PCT_VERT;
+  const float width = static_cast<float>(outerWindowSize.x) - spacing;
+  const float height = static_cast<float>(outerWindowSize.y *
+                                          TALK_CMPT_TEXT_AREA_HEIGHT_PCT_VERT);
 
-  auto originalCursorPosition = ImGui::GetCursorPos();
+  const auto originalCursorPosition = ImGui::GetCursorPos();
 
   static auto bgRectangle =
-      createStaticColorTexture(width + spacing, height, ui.colors.DARK_GREY);
+      createStaticColorTexture(static_cast<int>(width + spacing),
+                               static_cast<int>(height),
+                               ui.colors.DARK_GREY);
   ImGui::Image(bgRectangle, ImVec2(width + spacing, height));
   ImGui::SetCursorPos(originalCursorPosition);
 
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding,
-                      ImVec2(spacing / 2, spacing / 2));
+                      ImVec2(spacing / 2.f, spacing / 2.f));
   ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing,
-                      ImVec2(spacing / 2, spacing / 2));
+                      ImVec2(spacing / 2.f, spacing / 2.f));
   ImGui::SetCursorPosX(spacing);
   ImGui::BeginChild("TextArea", ImVec2(width, height));
 
-  std::vector<std::string> texts = {
+  const std::vector<std::string> texts = {
       "Before you stands a woman of imposing stature.  Easily twice your "
       "height, her shadow engulfs you completely.  At first she does not "
       "notice you, but after an awkward moment she blinks and cocks an "
@@ -124,7 +138,7 @@ void renderTextArea(const Ui& ui) {
       "'discretion'.  You should learn what that means and, more importantly, "
       "employ it.'"};
 
-  std::vector<std::string> choices = {
+  const std::vector<std::string> choices = {
       "Don't worry, I know what I'm doing.",
       "I don't like your tone, woman.  Why don't you stuff it, huh?",
       "I understand.",
@@ -150,8 +164,7 @@ void renderTextArea(const Ui& ui) {
 
     std::stringstream ss;
     ss << ctr << ". " << choice;
-    const char* textStr = ss.str().c_str();
-    auto textSize = ImGui::CalcTextSize(textStr, NULL, false, width);
+    auto textSize = ImGui::CalcTextSize(ss.str().c_str(), NULL, false, width);
     textSize.y += 8;
     textSize.x += 4;
 
@@ -159,7 +172,7 @@ void renderTextArea(const Ui& ui) {
     ImGui::Button("", ImVec2(width - spacing, textSize.y));
     ImGui::SetCursorPos(
         ImVec2(buttonCursorPosition.x + 2, buttonCursorPosition.y + 4));
-    ImGui::TextWrapped(textStr);
+    ImGui::TextWrapped(ss.str().c_str());
     ImGui::SetCursorPosY(buttonCursorPosition.y + textSize.y);
 
     ImGui::PopStyleColor(4);
@@ -180,13 +193,14 @@ void renderTextArea(const Ui& ui) {
 
 void renderFooter(const Ui& ui) {
   auto outerWindowSize = ImGui::GetWindowSize();
-  float width = outerWindowSize.x;
-  float height = outerWindowSize.y * TALK_CMPT_FOOTER_HEIGHT_PCT_VERT;
+  const float width = outerWindowSize.x;
+  const float height =
+      static_cast<float>(outerWindowSize.y * TALK_CMPT_FOOTER_HEIGHT_PCT_VERT);
 
   auto originalCursorPosition = ImGui::GetCursorPos();
 
-  static auto bgRectangle =
-      createStaticColorTexture(width, height, ui.colors.GREY);
+  static auto bgRectangle = createStaticColorTexture(
+      static_cast<int>(width), static_cast<int>(height), ui.colors.GREY);
 
   ImGui::Image(bgRectangle, ImVec2(width, height));
 
@@ -204,13 +218,13 @@ void renderFooter(const Ui& ui) {
 namespace ui {
 
 void renderTalkCmpt(const Ui& ui) {
-  ImGuiWindowFlags windowFlags =
+  const ImGuiWindowFlags windowFlags =
       ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar |
       ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |
       ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoBringToFrontOnFocus;
 
-  SDL2Wrapper::Window& window = SDL2Wrapper::Window::getGlobalWindow();
-  ImGuiIO& io = ImGui::GetIO();
+  const SDL2Wrapper::Window& window = SDL2Wrapper::Window::getGlobalWindow();
+  const ImGuiIO& io = ImGui::GetIO();
 
   prepareFullScreenWindow();
 

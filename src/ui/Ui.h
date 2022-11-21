@@ -1,11 +1,12 @@
 #pragma once
 
-#include "../lib/imgui/imgui.h"
-#include "../lib/sdl2wrapper/Window.h"
+#include "lib/imgui/imgui.h"
+#include "lib/sdl2wrapper/Window.h"
 #include <string>
 
 using namespace ImGui;
 
+// NOLINTNEXTLINE
 #define PCT_BOX(w, h, color)                                                   \
   auto box = getBoxBasedOnScreenPct(w, h);                                     \
   static auto bgRectangle = createStaticColorTexture(box.x, box.y, color);     \

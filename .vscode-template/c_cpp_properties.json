@@ -2,15 +2,13 @@
   "configurations": [
     {
       "name": "Win32",
-      "includePath": [
-        "${workspaceFolder}\\src\\**"
-      ],
+      "includePath": ["${workspaceFolder}\\src"],
       "defines": ["_DEBUG", "UNICODE", "_UNICODE", "__LITTLE_ENDIAN__"],
       "cStandard": "c17",
       "cppStandard": "c++17",
       "intelliSenseMode": "windows-gcc-x64",
       "compilerArgs": ["-Wall", "-Wextra", "-std=c++"],
-      "compilerPath": "C:\\msys64\\mingw64\\bin\\g++.exe"
+      "compilerPath": "C:\\progs\\msys2\\mingw64\\bin\\g++.exe"
     }
   ],
   "version": 4
