@@ -8,7 +8,7 @@
   },
   "clang-tidy.blacklist": ["entt.*"],
   "clang-tidy.compilerArgsBefore": ["-xc++"],
-  "clang-tidy.compilerArgs": ["-std=c++17", "-stdlib=libstdc++"],
+  "clang-tidy.compilerArgs": ["-std=c++17", "-stdlib=libstdc++", "-Icpp"],
   "clang-tidy.checks": [
     "misc-*",
     "bugprone-*",
@@ -21,7 +21,8 @@
     "-cppcoreguidelines-avoid-non-const-global-variables",
     "-cppcoreguidelines-init-variables",
     "-cppcoreguidelines-avoid-magic-numbers",
-    "-cppcoreguidelines-pro-type-vararg"
+    "-cppcoreguidelines-pro-type-vararg",
+    "-bugprone-easily-swappable-parameters"
   ],
   "cpplint.filters": [
     "-whitespace",
@@ -46,7 +47,8 @@
     "cppcoreguidelines-avoid-non-const-global-variables",
     "cppcoreguidelines-init-variables",
     "cppcoreguidelines-avoid-magic-numbers",
-    "cppcoreguidelines-pro-type-vararg"
+    "cppcoreguidelines-pro-type-vararg",
+    "bugprone-easily-swappable-parameters"
   ],
   "C_Cpp.codeAnalysis.clangTidy.codeAction.showDisable": true,
   "C_Cpp.codeAnalysis.exclude": {

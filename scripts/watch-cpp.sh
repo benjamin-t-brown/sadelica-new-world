@@ -1,0 +1,1 @@
+../node_modules/.bin/nodemon build-cpp.js --ext .cpp,.h --watch ../cpp

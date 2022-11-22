@@ -21,7 +21,7 @@ const DIST_DIR = path.resolve(__dirname + '/../dist/');
 const SAVE_DIR = path.resolve(__dirname + '/../save/');
 const COMPILER_DIR = path.resolve(__dirname + '/../src-compile/');
 const COMPILER_OUT = path.resolve(__dirname + '/../src-compile/out');
-const EXPORT_DIR = path.resolve(__dirname + '/../../src/in2/');
+const EXPORT_DIR = path.resolve(__dirname + '/../../cpp/assets/in2');
 
 // Windows path because it's invoked with cmd.exe /C <AUDACITY_PATH>
 const AUDACITY_PATH = 'C:/Program Files/Audacity/Audacity.exe';
@@ -277,9 +277,7 @@ http_server.get('standalone', (obj, resp) => {
 
 http_server.post('export', async (obj, res) => {
   try {
-    const resp = await execAsync(
-      `cd ${COMPILER_DIR} && node ${compiler} -d --export`
-    );
+    const resp = await execAsync(`cd ${COMPILER_DIR} && node ${compiler} -d`);
     const errors = getErrorsFromCompilation(resp);
 
     if (errors) {

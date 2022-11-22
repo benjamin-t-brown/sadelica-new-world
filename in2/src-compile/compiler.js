@@ -1,6 +1,24 @@
 const fs = require('fs');
 const prettier = require('prettier');
 
+const QUOTE = "'";
+const escapeQuotes = q => {
+  return q.replaceAll(QUOTE, '\\' + QUOTE);
+};
+
+if (!String.prototype.replaceAll) {
+  String.prototype.replaceAll = function (str, newStr) {
+    // If a regex pattern
+    if (
+      Object.prototype.toString.call(str).toLowerCase() === '[object regexp]'
+    ) {
+      return this.replace(str, newStr);
+    }
+
+    // If a string
+    return this.replace(new RegExp(str, 'g'), newStr);
+  };
+}
 //This program can compile compatible json files into IN2 *.compiled.js files.
 //Usage:
 //  Compile all files within the ${ProjectDir}/save dirsectory into ${ProjectDir}/src-compile/main.compiled.js
@@ -103,12 +121,12 @@ function _eval_content(content, params) {
 
   const { quote } = params;
   if (quote) {
-    content = `\`${content}\``;
+    content = `${QUOTE}${escapeQuotes(content)}${QUOTE}`;
   }
 
   const prefix = `
   var window = global;
-  window.addEventListener = () => {};
+  window.addEventListener = function() {};
   window.IN2 = true;
   window.IN2COMPILER = true;
   window.CURRENT_NODE_VAR = '${CURRENT_NODE_VAR}';
@@ -120,13 +138,15 @@ function _eval_content(content, params) {
   const postfix = `
   player = {...player};
   core = {...core, ...{
-    say: () => {},
-    choose: () => {},
-    exit: () => {},
+    say: function() {},
+    choose: function() {},
+    exit: function() {},
   }};
   `;
 
-  const evalStr = `{${prefix}\n${standalone}\n${postfix}\n${content}\n}`;
+  const evalStr = `{${prefix}\n${standalone}\n${postfix}\n${escapeQuotes(
+    content
+  )}\n}`;
   try {
     // evalInContext(evalStr, {});
   } catch (e) {
@@ -142,7 +162,7 @@ function _create_action_node(content, id, childId, isAsync) {
   }
   const ret =
     `// action\n` +
-    `scope.${id} = ${isAsync ? 'async ' : ''}() => {\n` +
+    `scope.${id} = ${isAsync ? 'async ' : ''}function() {\n` +
     `    player.set(CURRENT_NODE_VAR, '${id}' );\n` +
     `    ${content};\n` +
     `    scope.${childId}();\n` +
@@ -151,15 +171,17 @@ function _create_action_node(content, id, childId, isAsync) {
 }
 
 function _create_text_node(content, id, child_id) {
-  let evaluationFailure = _eval_content(`\`${content}\``);
+  let evaluationFailure = _eval_content(
+    `${QUOTE}${escapeQuotes(content)}${QUOTE}`
+  );
   if (evaluationFailure) {
     return evaluationFailure;
   }
   const ret =
     `// text\n` +
-    `scope.${id} = () => {\n` +
+    `scope.${id} = function() {\n` +
     `    player.set(CURRENT_NODE_VAR, '${id}');\n` +
-    `    let text = \`${content}\`;\n` +
+    `    var text = ${QUOTE}${escapeQuotes(content)}${QUOTE};\n` +
     `    core.say(text, scope.${child_id}, '${id}', '${child_id}');\n` +
     `};\n`;
   return ret;
@@ -219,7 +241,7 @@ class Compiler {
             `    scope[id]();\n` +
             `}\n`;
           return (
-            `files[\`${file.name}\`] = id => {\n` +
+            `files[${QUOTE}${file.name}${QUOTE}] = function(id) {\n` +
             `player.set(CURRENT_FILE_VAR, '${file.name}' );\n` +
             declContent +
             innerContent +
@@ -272,7 +294,9 @@ class Compiler {
           return null;
         }
         try {
-          let evaluationFailure = _eval_content(`\`${node.content}\``);
+          let evaluationFailure = _eval_content(
+            `${QUOTE}${escapeQuotes(node.content)}${QUOTE}`
+          );
           if (evaluationFailure) {
             return evaluationFailure;
           }
@@ -290,7 +314,7 @@ class Compiler {
           `// ${node.type}\n` +
           `scope.${node.id} = function() {\n` +
           `    player.set(CURRENT_NODE_VAR, '${node.id}' );\n` +
-          `    let text = \`${node.content}\`;\n` +
+          `    var text = ${QUOTE}${escapeQuotes(node.content)}${QUOTE};\n` +
           `    core.choose(text, '${node.id}', [` +
           ``;
         const nodes_to_compile = [];
@@ -350,10 +374,12 @@ class Compiler {
           nodes_to_compile.push(textChildChildren[0]);
           ret +=
             `{\n` +
-            `        t: \`${text_child.content}\`,\n` +
+            `        t: ${QUOTE}${escapeQuotes(
+              text_child.content
+            )}${QUOTE},\n` +
             `        id: '${textChildChildren[0].id}',\n` +
             `        cb: scope.${textChildChildren[0].id},\n` +
-            `        c: () => { ${
+            `        c: function() { ${
               condition_child
                 ? 'return ' + condition_child.content
                 : 'return true;'
@@ -407,7 +433,7 @@ class Compiler {
         }
         const nodes_to_compile = [];
         let ret = `// ${node.type}\n`;
-        ret += `scope.${node.id} = () => {\n`;
+        ret += `scope.${node.id} = function() {\n`;
         ret += `    player.set(CURRENT_NODE_VAR, '${node.id}' );\n`;
         for (let i in children) {
           const child = children[i];
@@ -444,9 +470,9 @@ class Compiler {
             );
             return null;
           }
-          ret += `    ${
-            Number(i) === 0 ? 'if' : 'else if'
-          }(${content})\n        scope.${child2.id}();\n`;
+          ret += `    ${Number(i) === 0 ? 'if' : 'else if'}(${escapeQuotes(
+            content
+          )})\n        scope.${child2.id}();\n`;
           nodes_to_compile.push(child2);
         }
         ret += '}';
@@ -478,9 +504,11 @@ class Compiler {
         }
         let ret =
           `// ${node.type}\n` +
-          `scope.${node.id} = () => {\n` +
+          `scope.${node.id} = function() {\n` +
           `    player.set(CURRENT_NODE_VAR, '${node.id}');\n` +
-          `    const condition = (() => { return ${node.content} })();\n` +
+          `    var condition = (function() { return ${escapeQuotes(
+            node.content
+          )} })();\n` +
           ``;
         try {
           let evaluationFailure = _eval_content(node.content);
@@ -520,14 +548,14 @@ class Compiler {
             ret +=
               `    if(condition){\n` +
               `        player.set(CURRENT_NODE_VAR, '${child.id}');\n` +
-              `        let text = \`${child.content}\`;\n` +
+              `        var text = ${QUOTE}${child.content}${QUOTE};\n` +
               `        core.say(text, scope.${child2.id});\n` +
               `    }\n`;
           } else if (child.type === 'fail_text') {
             ret +=
               `    if(!condition){\n` +
               `        player.set(CURRENT_NODE_VAR, '${child.id}');\n` +
-              `        let text = \`${child.content}\`;\n` +
+              `        var text = ${QUOTE}${child.content}${QUOTE};\n` +
               `        core.say(text, scope.${child2.id});\n` +
               `    }\n`;
           }
@@ -592,8 +620,8 @@ class Compiler {
           const child = children[0];
           const ret =
             `// ${node.type}\n` +
-            `scope.${node.id} = () => {\n` +
-            `    core.picture( \`${node.content}\` );\n` +
+            `scope.${node.id} = function() {\n` +
+            `    core.picture( ${QUOTE}${node.content}${QUOTE} );\n` +
             `    scope.${child.id}();\n` +
             `};\n`;
           return ret + '\n' + this.compileNode(child, file);
@@ -651,12 +679,12 @@ class Compiler {
           const child = children[0];
           const first_ret =
             `// ${node.type} FIRST\n` +
-            `scope.${node.id} = () => {\n` +
+            `scope.${node.id} = function() {\n` +
             `    scope.${node.id + '_0'}();\n` +
             `};\n`;
           const last_ret =
             `// ${node.type} LAST\n` +
-            `scope.${node.id + '_' + node_list.length} = () => {\n` +
+            `scope.${node.id + '_' + node_list.length} = function() {\n` +
             `    scope.${child.id}();\n` +
             `};\n`;
           return (
@@ -709,6 +737,7 @@ class Compiler {
           return ret + '\n' + this.compileNode(child, file);
         }
       },
+      // this is broken
       defer: (node, file) => {
         const children = file.getChildren(node);
         if (children.length === 0) {
@@ -729,7 +758,7 @@ class Compiler {
           const child = children[0];
           const ret =
             `// defer\n` +
-            `scope.${node.id} = async () => {\n` +
+            `scope.${node.id} = async function() {\n` +
             `    player.set(CURRENT_NODE_VAR, '${node.id}');\n` +
             `    await core.defer(${node.content});\n` +
             `    scope.${child.id}();\n` +
@@ -792,10 +821,10 @@ class Compiler {
         this.files_to_verify.push(node.content);
         let ret =
           `// ${node.type}\n` +
-          `scope.${node.id} = () => {\n` +
+          `scope.${node.id} = function() {\n` +
           `    player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));` +
-          `    let key = \`${node.content}\`;\n` +
-          `    let func = files[key];\n` +
+          `    var key = ${QUOTE}${escapeQuotes(node.content)}${QUOTE};\n` +
+          `    var func = files[key];\n` +
           `    if(func) {\n` +
           `        func();\n}`;
         if (includeDebugStatements) {
@@ -825,17 +854,17 @@ class Compiler {
     */\n/*eslint-disable-line*/${
       isExport ? 'export' : ''
     } function run(isDryRun){\n/* global player, core, engine */
-const files = {};
-const scope = {};
-const CURRENT_NODE_VAR = '${CURRENT_NODE_VAR}';
-const CURRENT_FILE_VAR = '${CURRENT_FILE_VAR}';
-const LAST_FILE_VAR = '${LAST_FILE_VAR}';
+var files = {};
+var scope = {};
+var CURRENT_NODE_VAR = '${CURRENT_NODE_VAR}';
+var CURRENT_FILE_VAR = '${CURRENT_FILE_VAR}';
+var LAST_FILE_VAR = '${LAST_FILE_VAR}';
 player.set('scope', scope);`;
   }
   //footer for entire file (not individual compiled files)
   getFooter(mainFileName) {
     const ret =
-      `files.exit = () => {\n` +
+      `files.exit = function() {\n` +
       `  core.exit();\n` +
       `};\n` +
       `if (!isDryRun){ files['${mainFileName}'](); }\n` +

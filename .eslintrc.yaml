@@ -2,15 +2,8 @@ parser: '@typescript-eslint/parser'
 
 extends:
   - 'plugin:prettier/recommended'
-  - 'eslint:recommended'
   - 'plugin:@typescript-eslint/eslint-recommended'
   - 'plugin:@typescript-eslint/recommended'
-  - 'preact'
-
-plugins:
-  - 'babel'
-  - 'prettier'
-  - '@typescript-eslint'
 
 env:
   browser: true
