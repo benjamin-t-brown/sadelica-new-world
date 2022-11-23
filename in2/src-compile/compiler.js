@@ -799,9 +799,9 @@ class Compiler {
               );
               return null;
             }
-            this.declarations[
-              first.trim().replace(/;/g, '')
-            ] = second.trim().replace(/;/g, '');
+            this.declarations[first.trim().replace(/;/g, '')] = escapeQuotes(
+              second.trim().replace(/;/g, '')
+            );
           }
           const ret = _create_action_node(``, node.id, child.id);
           if (ret.slice(0, 5) === 'error') {

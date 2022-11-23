@@ -1,22 +1,21 @@
 #pragma once
 
-#include "Window.h"
-
 namespace SDL2Wrapper {
+
+class Window;
 
 class Gauge {
 protected:
-  const Window& window;
   double aggTime;
   double maxTime;
 
 public:
-  Gauge(const Window& windowA, int maxFrames);
+  Gauge(int maxFrames);
   double getPctFull() const;
   bool isFull() const;
   void setMs(int ms);
   void empty();
-  void fill();
+  void fill(double dt);
 };
 
 } // namespace SDL2Wrapper

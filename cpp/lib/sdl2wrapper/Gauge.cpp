@@ -2,10 +2,10 @@
 
 namespace SDL2Wrapper {
 
-Gauge::Gauge(const Window& windowA, int maxTimeMs)
-    : window(windowA), aggTime(0.0), maxTime(static_cast<double>(maxTimeMs)) {}
+Gauge::Gauge(int maxTimeMs)
+    : aggTime(0.0), maxTime(static_cast<double>(maxTimeMs)) {}
 double Gauge::getPctFull() const {
-  double ret = aggTime / maxTime;
+  const double ret = aggTime / maxTime;
   if (aggTime >= maxTime) {
     return 1.0;
   } else {
@@ -13,17 +13,13 @@ double Gauge::getPctFull() const {
   }
 }
 bool Gauge::isFull() const { return getPctFull() >= 1.0; }
-void Gauge::setMs(int ms) {
-  maxTime = ms;
-}
-void Gauge::fill() {
-  aggTime += window.getDeltaTime();
+void Gauge::setMs(int ms) { maxTime = ms; }
+void Gauge::fill(double dt) {
+  aggTime += dt;
   if (aggTime > maxTime) {
     aggTime = maxTime;
   }
 }
-void Gauge::empty() {
-  aggTime = 0;
-}
+void Gauge::empty() { aggTime = 0; }
 
 } // namespace SDL2Wrapper

@@ -1,8 +1,9 @@
+MAIN=Main.cpp
+
 CODE=\
 ui/Ui.cpp\
 ui/components/TalkCmpt.cpp\
-ui/components/InGameCmpt.cpp\
-Main.cpp
+ui/components/InGameCmpt.cpp
 
 LIB_CODE=\
 lib/imgui/imgui_draw.cpp\
@@ -26,8 +27,27 @@ lib/sdl2wrapper/Window.cpp\
 lib/duktape/duktape.cpp\
 lib/in2/in2.cpp
 
+TEST_CODE=\
+test/test.cpp\
+test/sdl2wrapper/Gauge.test.cpp
+
+MAIN_OBJECT=$(MAIN:.cpp=.o)
 OBJECTS=$(CODE:.cpp=.o)
 LIB_OBJECTS=$(LIB_CODE:.cpp=.o)
+TEST_OBJECTS=$(TEST_CODE:.cpp=.o)
+
+# If the first argument is "run"...
+ifeq (test,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "run"
+  ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+	ifeq ($(ARGS),)
+		ARGS := *
+	else
+	  # ...and turn them into do-nothing targets
+  	$(eval $(ARGS):;@:)
+	endif
+	TEST_ARGS := --gtest_filter=*$(ARGS)*
+endif
 
 EMCC_LIBS=\
 -g -O3\
@@ -49,20 +69,26 @@ EMCC_EXPORTED=\
 -s EXPORTED_RUNTIME_METHODS=['ccall']
 
 EXE=SNW
+EXE_TEST=SNW_TEST
 ifeq ($(OS),Windows_NT)
   LIBS=-mconsole -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
 else
   LIBS=-lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
 endif
+LIBS_TEST=-lpthread -lgtest
 
 FLAGS=-g -Wall -std=c++17 -I.
 
-.PHONY: $(EXE)
-$(EXE): precompiled.h.gch $(LIB_OBJECTS) $(OBJECTS) 
-	g++ $(FLAGS) $(OBJECTS) $(LIB_OBJECTS) -o $(EXE) $(LIBS)
+.PHONY: $(EXE) test
+$(EXE): precompiled.h.gch $(LIB_OBJECTS) $(OBJECTS) $(MAIN_OBJECT)
+	g++ $(FLAGS) $(MAIN_OBJECT) $(OBJECTS) $(LIB_OBJECTS) -o $(EXE) $(LIBS)
 
 precompiled.h.gch:
 	g++ $(FLAGS) -c precompiled.h -o precompiled.h.gch
+
+test: precompiled.h.gch $(LIB_OBJECTS) $(OBJECTS) $(TEST_OBJECTS)
+	g++ $(FLAGS) $(TEST_OBJECTS) $(LIB_OBJECTS) -o $(EXE_TEST) $(LIBS_TEST) $(LIBS)
+	./$(EXE_TEST) $(TEST_ARGS)
 
 .cpp.o:
 	g++ $(FLAGS) -include precompiled.h -c $(@:.o=.cpp) -o $@
@@ -81,10 +107,13 @@ run: $(EXE)
 
 clean_all: clean
 	rm -f $(LIB_OBJECTS)
+	rm -f *.h.gch
 
 clean:
 	rm -f $(OBJECTS)
-	rm -f *.h.gch
+	rm -rf $(TEST_OBJECTS)
 	rm -f $(EXE)
 	rm -f $(EXE).exe
+	rm -f $(EXE_TEST)
+	rm -f $(EXE_TEST).exe
 	rm -fd .build
