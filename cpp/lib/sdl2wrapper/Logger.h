@@ -14,8 +14,8 @@ enum LogType { DEBUG, INFO, WARN, ERROR };
 class Logger {
 public:
   Logger() {}
-  Logger(LogType type) { operator<<("[" + getLabel(type) + "] "); }
-  Logger(const std::string& type) { operator<<("[" + type + "] "); }
+  explicit Logger(LogType type) { operator<<("[" + getLabel(type) + "] "); }
+  explicit Logger(const std::string& type) { operator<<("[" + type + "] "); }
   ~Logger() {}
 
   static const std::string endl;

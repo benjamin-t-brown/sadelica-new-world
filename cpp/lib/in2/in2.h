@@ -1,17 +1,22 @@
 #pragma once
 
-#include <string>
+// #include <string>
 
 namespace in2 {
 
-static std::string IN2_SRC_CORE_PATH;
-static std::string in2CoreSrc;
-static std::string in2CompiledSrc;
+void init();
 
-void readIn2CoreSrc();
-const std::string& getIn2CoreSrc();
+class In2Context {
+private:
+  void* dukCtx = nullptr;
+  void* jsonState = nullptr;
 
-void readIn2CompiledSrc();
-const std::string& getIn2CompiledSrc();
+  // std::vector callbacks;
+
+public:
+  int id;
+  In2Context();
+  ~In2Context();
+};
 
 }; // namespace in2

@@ -15,3 +15,4 @@ src-js-standalone/main.js
 src-srv/config.js
 scratch/
 out.log
+src-compile/main.compiled.es5.js

@@ -159,7 +159,7 @@ module.exports = {
         .then(function (response) {
           response.json().then(function (d) {
             if (d.err) {
-              console.error('Internal Server Error', d.err, url);
+              console.error('req error', d.err, url);
             } else {
               if (cb) {
                 cb(d, +new Date() - initial_time);
