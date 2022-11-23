@@ -3,6 +3,8 @@ import expose from 'expose';
 import css from 'css';
 import utils from './utils';
 
+const NOTIF_TIME_MS = 3000;
+
 const Notification = ({ id, message, severity, remove }) => {
   const [, setTimeoutId] = useState(null);
 
@@ -14,9 +16,9 @@ const Notification = ({ id, message, severity, remove }) => {
         elem.style.opacity = 0;
         const timeoutId = setTimeout(() => {
           remove(id);
-        }, 1000);
+        }, NOTIF_TIME_MS);
         setTimeoutId(timeoutId);
-      }, 1000);
+      }, NOTIF_TIME_MS);
       setTimeoutId(timeoutId);
     }
   }, [id, remove, setTimeoutId]);

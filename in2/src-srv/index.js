@@ -213,17 +213,19 @@ http_server.get('file', (obj, resp) => {
   if (obj.event_args[0]) {
     fs.readFile(SAVE_DIR + '/' + obj.event_args[0], async (err, data) => {
       let ret_data;
+      let err_msg = String(err ?? '');
+
       try {
         ret_data = JSON.parse(data.toString());
       } catch (e) {
         if (!err) {
-          err = 'Invalid JSON in file "' + obj.event_args[0] + '"';
+          err_msg = 'Invalid JSON in file "' + obj.event_args[0] + '"';
         }
         ret_data = null;
       }
       await markVoiceExistsForFile(ret_data);
       http_server.reply(resp, {
-        err: err,
+        err: err_msg,
         data: ret_data,
       });
     });
@@ -290,9 +292,11 @@ http_server.post('export', async (obj, res) => {
       });
       return;
     }
-
     await execAsync(
-      `cp ${COMPILER_OUT}/main.compiled.${extension} ${EXPORT_DIR}`
+      `cd ${COMPILER_DIR}/../ && babel ${COMPILER_OUT}/main.compiled.${extension} --out-file ${COMPILER_OUT}/main.compiled.es5.${extension} --presets @babel/preset-env`
+    );
+    await execAsync(
+      `cp ${COMPILER_OUT}/main.compiled.es5.${extension} ${EXPORT_DIR}/main.compiled.${extension}`
     );
     http_server.reply(res, {
       err: null,
@@ -313,7 +317,7 @@ http_server.get('images', (obj, resp) => {
   fs.readdir(`${DIST_DIR}/assets/img/`, (err, dirs) => {
     const ret = {
       err: err,
-      data: null,
+      // data: null,
     };
     ret.data = dirs
       .filter(dir => {

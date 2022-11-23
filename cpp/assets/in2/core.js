@@ -1,18 +1,52 @@
-core = {
-  init() {
-    log('[standalone] init');
+var ctxId = -1;
+
+function addLine(args) {
+  cpp_say(args.line);
+  resumeCb = args.cb;
+}
+
+var resumeCb = function () {};
+function resumeExecution(arg) {
+  resumeCb(arg);
+}
+
+function addDialogChoices(choices) {
+  choices.forEach(function (c) {
+    addLine({ line: c.line });
+  });
+  resumeCb = function (arg) {
+    var choice = choices.find(c.id === arg);
+    if (choice) {
+      choice.cb();
+    } else {
+      log('Error, no choice found for nodeId=' + arg);
+      log(
+        choices
+          .map(function (c) {
+            return c.id;
+          })
+          .join(',')
+      );
+    }
+  };
+}
+
+var core = {
+  init(id) {
+    log('init');
+    ctxId = id;
     // in2 = run(true);
   },
 
   isChoiceNode(id) {
-    const scope = player.get('scope');
+    var scope = player.get('scope');
     if (scope) {
       return scope[id || ''].isChoice;
     }
   },
 
   hasPickedChoice(id) {
-    const nodes = player.get('nodes');
+    var nodes = player.get('nodes');
 
     if (nodes) {
       return nodes[id || ''];
@@ -20,7 +54,7 @@ core = {
   },
 
   say(text, cb, nodeId, childId) {
-    log('[standalone] SAY INNER', text);
+    // log('SAY INNER', text);
     if (Array.isArray(text)) {
       if (text.length === 1) {
         addLine({ line: text[0], id: nodeId || '' });
@@ -47,7 +81,7 @@ core = {
     if (text) {
       addLine({ line: text, id: nodeId });
     }
-    const actualChoices = choices
+    var actualChoices = choices
       .filter(function (choice) {
         player.dontTriggerOnce = true;
         if (choice.c()) {
@@ -68,86 +102,43 @@ core = {
         };
       });
 
-    addDialogChoices({
-      choices: actualChoices.map(function (c) {
+    addDialogChoices(
+      actualChoices.map(function (c) {
         return {
           line: c.text,
           id: c.id,
+          cb: c.cb,
         };
-      }),
-      choiceCallbacks: actualChoices.map(function (c) {
-        return c.cb;
-      }),
-    });
+      })
+    );
   },
   // async defer(func, args) {
   //   args = args || [this.get(CURRENT_NODE_VAR), this.get('curIN2f')];
   //   await func.apply(null, args);
   // },
   exit() {
-    log('[standalone] EXIT');
+    log('EXIT');
 
     // hideSection(AppSection.DIALOG);
   },
 };
 
-const player = {
+var player = {
   state: {
     //curIN2n
     //curIN2f
     //lasIN2f
-    coins: 100,
+    // coins: 100,
   },
   dontTriggerOnce: false,
   init: function () {
     player.state = {};
   },
-  get: function (path) {
-    const _helper = function (paths, obj) {
-      const k = paths.shift();
-      if (!paths.length) {
-        return obj[k] === undefined ? undefined : obj[k];
-      }
-
-      const nextObj = obj[k];
-      if (nextObj !== undefined) {
-        return _helper(paths, nextObj);
-      } else {
-        return undefined;
-      }
-    };
-
-    return _helper(path.split('.'), player.state);
-  },
-  set: function (path, val) {
-    if (path === CURRENT_NODE_VAR) {
-      player.set('nodes.' + val);
-    }
-    if (path === 'curIN2f') {
-      player.set('files.' + val.replace('.json', ''));
-    }
-    val = val === undefined ? true : val;
-    const _helper = function (keys, obj) {
-      const k = keys.shift();
-      if (k === undefined) {
-        return;
-      }
-      if (!keys.length) {
-        obj[k] = val;
-        return;
-      }
-
-      if (!obj[k]) {
-        obj[k] = {};
-      }
-      _helper(keys, obj[k]);
-    };
-
-    _helper(path.split('.'), player.state);
-  },
+  get: function (path) {},
+  set: function (path, val) {},
   once: function () {
-    const nodeId = player.get(CURRENT_NODE_VAR);
-    const key = 'once.' + nodeId;
+    var nodeId = player.get(CURRENT_NODE_VAR);
+    var key = 'once.' + nodeId;
     if (!player.get(key)) {
       if (!player.dontTriggerOnce) {
         player.set(key);

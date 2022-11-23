@@ -1,13 +1,17 @@
 const fs = require('fs');
 const prettier = require('prettier');
 
-const QUOTE = "'";
+const QUOTE = '`';
 const escapeQuotes = q => {
   return q.replaceAll(QUOTE, '\\' + QUOTE);
 };
 
-if (!String.prototype.replaceAll) {
-  String.prototype.replaceAll = function (str, newStr) {
+/**
+ * @type {any}
+ */
+const strProto = String.prototype;
+if (!strProto.replaceAll) {
+  strProto.replaceAll = function (str, newStr) {
     // If a regex pattern
     if (
       Object.prototype.toString.call(str).toLowerCase() === '[object regexp]'
@@ -19,6 +23,7 @@ if (!String.prototype.replaceAll) {
     return this.replace(new RegExp(str, 'g'), newStr);
   };
 }
+
 //This program can compile compatible json files into IN2 *.compiled.js files.
 //Usage:
 //  Compile all files within the ${ProjectDir}/save dirsectory into ${ProjectDir}/src-compile/main.compiled.js
@@ -799,9 +804,9 @@ class Compiler {
               );
               return null;
             }
-            this.declarations[
-              first.trim().replace(/;/g, '')
-            ] = second.trim().replace(/;/g, '');
+            this.declarations[first.trim().replace(/;/g, '')] = second
+              .trim()
+              .replace(/;/g, '');
           }
           const ret = _create_action_node(``, node.id, child.id);
           if (ret.slice(0, 5) === 'error') {
@@ -854,11 +859,11 @@ class Compiler {
     */\n/*eslint-disable-line*/${
       isExport ? 'export' : ''
     } function run(isDryRun){\n/* global player, core, engine */
-var files = {};
-var scope = {};
-var CURRENT_NODE_VAR = '${CURRENT_NODE_VAR}';
-var CURRENT_FILE_VAR = '${CURRENT_FILE_VAR}';
-var LAST_FILE_VAR = '${LAST_FILE_VAR}';
+const files = {};
+const scope = {};
+const CURRENT_NODE_VAR = '${CURRENT_NODE_VAR}';
+const CURRENT_FILE_VAR = '${CURRENT_FILE_VAR}';
+const LAST_FILE_VAR = '${LAST_FILE_VAR}';
 player.set('scope', scope);`;
   }
   //footer for entire file (not individual compiled files)

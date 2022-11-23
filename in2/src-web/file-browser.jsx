@@ -1,11 +1,11 @@
-import dialog from 'dialog';
+import dialog from './dialog';
 import { notify } from './notifications';
 
 const React = require('react');
-const css = require('css');
-const utils = require('utils');
-const expose = require('expose');
-const core = require('core-in2');
+const css = require('./css');
+const utils = require('./utils');
+const expose = require('./expose');
+const core = require('./core-in2');
 
 //This file represents the file browser on the right side of the screen.
 //It can:
@@ -21,8 +21,14 @@ class FileBrowser extends expose.Component {
     super(props);
     this.expose('file-browser');
     const filter = localStorage.getItem('last_filter_value');
+
+    /**
+     * @type {string[]}
+     */
+    const file_list = [];
+
     this.state = {
-      file_list: [],
+      file_list,
       filter: filter || '',
       checked_files: {},
       check_all: false,
@@ -261,6 +267,9 @@ class FileBrowser extends expose.Component {
     } catch (e) {
       is_valid_regex = false;
     }
+    /**
+     * @type {any}
+     */
     let elems = this.state.file_list
       .filter(filename => {
         if (this.state.filter) {
@@ -469,6 +478,9 @@ class FileBrowser extends expose.Component {
             const resp = await new Promise(resolve => {
               utils.get('/compile', resolve);
             });
+            /**
+             * @type {any}
+             */
             let states = {};
             if (resp.error) {
               states.error = resp.error;
@@ -555,7 +567,8 @@ class FileBrowser extends expose.Component {
                 </>
               );
             } else {
-              notify('Export successful!', 'confirm');
+              console.log('DATA', resp.data);
+              notify('Export successful!  ' + resp.data.msg, 'confirm');
               // dialog.show_notification(
               //   <>
               //     <div>Export successful!</div>
