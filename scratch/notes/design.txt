@@ -96,9 +96,9 @@ Characters become more effective with melee weapons by:
   - Poison arrow - makes target poisoned
   - Heal arrow - heals target
   - Silver arrow - silences target
-  - Bomb arrow - deals damage in an area
-  - Shield arrow - puts a shield on the ground that prevents zones from spawning
-  - Purify arrow - removes a zone from the target tile
+  - Bomb arrow - deals damage in an area, creates Oppressive field on spot
+  - Shield arrow - puts a shield on the ground that prevents fields from spawning
+  - Purify arrow - removes a field from the target tile
 
 Arrows can be combined with Power Stones to make Super arrows, more effective versions of previous ones.
 Bows are inaccurate the further away you shoot, up to a max dist.  Focus decreases this
@@ -109,6 +109,23 @@ Characters become more effective with bow weapons by:
   - Increasing Focus to make bows more accurate
   - Finding a practice range to hone your skill.
 
+## Fields
+
+Fields are persistent effects that cover tiles.  Each field does something to the character 
+standing on top of it.
+
+Weak Barrier - blocks movement, can be destroyed with a fireball
+Strong Barrier - blocks movement, can be destroyed with dispel barrier
+Slippery - can instantly reduce AP to 0 of somebody who walks atop it, when not in combat does nothing
+Slowing - if a character starts a combat round in this field, they are slowed (ap reduced to 2)
+Suffocating - a character in this field cannot cast spells
+Lethargic - a character in this field deals less melee damage
+Minor Obstruction - requires 2 AP to move onto this field
+Oppressive - reduces stats by flat value
+Restoration - every turn standing in this field raises hp
+Cleansing - walking into this field removes every status effect (good and bad) from character
+Storm Wall - walk into or standing in this field causes large damage
+
 # CIVIL FEATS
 
 Traits that work like Kotor feats
@@ -118,7 +135,7 @@ Bartering - increase trade value of junk? increase trade value of actually tradi
 Lockpicking - 1-3, works like Avernum Lockpicking
 Alertness - prevents you from getting surprised by events
 Intimidation  1-3, Allows you to do more damage to lower level enemies
-Luck - 1-3, increases base hit chance, increases chance of crits
+Luck - 1-3, increases base hit chance, increases chance of crits, increases money from killing stuff
 Silver Tongue - Allows you to gain special dialog choices to skip stuff
 Empathetic - Allows you to know the outcome of dialog choices
 Distracting - Lets allies do more damage to enemies adjacent to you
@@ -134,4 +151,14 @@ Exceptional Strength - more melee damage
 Overcharged - more magic damage
 Efficient - spells cost less mana
 
+# ITEMS
+
+Items can be placed in a few categories
+
+Combat: Weapons and Armor
+Combat: Usable - items you can primarily use during battle
+Usable Upgrade - items that upgrade a Character
+Resources
+Quest Items
+Money
 
