@@ -1,62 +1,77 @@
 var ctxId = -1;
 
-function addLine(args) {
-  cpp_say(args.line);
-  resumeCb = args.cb;
+var resumeCb = function () {};
+function fromCpp_resumeExecution() {
+  resumeCb();
+}
+function fromCpp_chooseExecution(choiceId) {
+  return resumeCb(choiceId);
 }
 
-var resumeCb = function () {};
-function resumeExecution(arg) {
-  resumeCb(arg);
+function fromCpp_runFile(fileName) {
+  var func = core.in2.files[fileName];
+  if (func) {
+    func();
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+function addLine(args) {
+  player.set('nodes.' + args.id);
+  cpp_say(ctxId, args.line);
 }
 
 function addDialogChoices(choices) {
-  choices.forEach(function (c) {
-    addLine({ line: c.line });
-  });
+  const args = choices.reduce(
+    function (agg, c) {
+      agg.push(c.line);
+      agg.push(c.id);
+      return agg;
+    },
+    [ctxId]
+  );
   resumeCb = function (arg) {
-    var choice = choices.find(c.id === arg);
+    var choiceInd = choices
+      .map(function (c) {
+        return c.id;
+      })
+      .indexOf(arg);
+    var choice = choices[choiceInd];
+    log('Pick choice ' + choiceInd + ' ' + arg + ' ' + JSON.stringify(choices));
     if (choice) {
+      player.set('nodes.' + choice.id);
       choice.cb();
+      return 0;
     } else {
-      log('Error, no choice found for nodeId=' + arg);
-      log(
-        choices
-          .map(function (c) {
-            return c.id;
-          })
-          .join(',')
-      );
+      return 1;
     }
   };
+  cpp_setWaitingForChoice(ctxId);
+  cpp_choose.apply(null, args);
 }
 
 var core = {
   init(id) {
     log('init');
     ctxId = id;
-    // in2 = run(true);
+    var obj = run(true);
+    core.in2 = obj;
   },
 
   isChoiceNode(id) {
-    var scope = player.get('scope');
-    if (scope) {
-      return scope[id || ''].isChoice;
-    }
+    return player.get('scope.' + id);
   },
 
   hasPickedChoice(id) {
-    var nodes = player.get('nodes');
-
-    if (nodes) {
-      return nodes[id || ''];
-    }
+    return player.get('nodes.' + id);
   },
 
   say(text, cb, nodeId, childId) {
-    // log('SAY INNER', text);
     if (Array.isArray(text)) {
       if (text.length === 1) {
+        log('add text1 ' + text);
         addLine({ line: text[0], id: nodeId || '' });
       } else {
         core.say(text[0], function () {
@@ -70,7 +85,10 @@ var core = {
         cb && cb();
         return;
       } else {
+        log('add text2 ' + text + ' ' + ctxId);
+        cpp_setWaitingForResume(ctxId);
         addLine({ line: text, id: nodeId || '', cb });
+        resumeCb = cb;
       }
       if (core.isChoiceNode(childId)) {
         cb();
@@ -97,6 +115,7 @@ var core = {
           id: choice.id,
           text: i + 1 + '. ' + choice.t,
           cb: function () {
+            player.set(choice.id, true);
             choice.cb();
           },
         };
@@ -112,30 +131,45 @@ var core = {
       })
     );
   },
-  // async defer(func, args) {
-  //   args = args || [this.get(CURRENT_NODE_VAR), this.get('curIN2f')];
-  //   await func.apply(null, args);
-  // },
   exit() {
     log('EXIT');
-
-    // hideSection(AppSection.DIALOG);
+    cpp_setExecutionCompleted(ctxId);
   },
 };
 
+var UNDEFINED = 'STORAGE_IN2_UNDEFINED';
+var CURRENT_NODE_VAR = 'curIN2n';
+var CURRENT_FILE_VAR = 'curIN2f';
+var LAST_FILE_VAR = 'lasIN2f';
+
 var player = {
-  state: {
-    //curIN2n
-    //curIN2f
-    //lasIN2f
-    // coins: 100,
-  },
   dontTriggerOnce: false,
-  init: function () {
-    player.state = {};
+  init: function () {},
+  get: function (path) {
+    var result = cpp_getString(ctxId, path);
+    var numResult = parseFloat(result);
+    var ret = undefined;
+    if (result === 'true') {
+      ret = true;
+    } else if (result === 'false') {
+      ret = false;
+    } else if (result === '') {
+      ret = undefined;
+    } else if (!isNaN(numResult)) {
+      ret = numResult;
+    } else {
+      ret = result;
+    }
+    log('get: ' + path + '=' + result);
+    return ret;
   },
-  get: function (path) {},
-  set: function (path, val) {},
+  set: function (path, val) {
+    if (val === null || val === undefined) {
+      val = true;
+    }
+    cpp_setString(ctxId, path, String(val));
+    log('set: ' + path + '=' + String(val));
+  },
   once: function () {
     var nodeId = player.get(CURRENT_NODE_VAR);
     var key = 'once.' + nodeId;

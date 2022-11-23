@@ -4,7 +4,6 @@
 #include "lib/json/json.h"
 #include <algorithm>
 #include <fstream>
-// #include <functional>
 #include <sstream>
 #include <vector>
 
@@ -20,13 +19,14 @@ static int in2InstanceIdCtr = 0;
 static std::vector<In2Context*> in2InstancePtrs;
 
 static void handleDukError(void* udata, const char* msg) {
-  Logger() << "Error in duktape js: " << msg << Logger::endl;
+  Logger(LogType::ERROR) << "Error in duktape js: " << msg << Logger::endl;
   exit(1);
 }
 
 void readIn2CoreSrc() {
   const std::string path = IN2_CORE_SRC_PATH;
-  Logger() << "Reading in2 core src from " << path << Logger::endl;
+  Logger(LogType::DEBUG) << "Reading in2 core src from " << path
+                         << Logger::endl;
   const std::ifstream src(path);
 
   std::stringstream buffer;
@@ -38,7 +38,8 @@ const std::string& getIn2CoreSrc() { return in2CoreSrc; }
 
 void readIn2CompiledSrc() {
   const std::string path = IN2_COMPILED_SRC_PATH;
-  Logger() << "Reading in2 compiled src from " << path << Logger::endl;
+  Logger(LogType::DEBUG) << "Reading in2 compiled src from " << path
+                         << Logger::endl;
   const std::ifstream src(path);
 
   std::stringstream buffer;
@@ -48,12 +49,17 @@ void readIn2CompiledSrc() {
 
 const std::string& getIn2CompiledSrc() { return in2CompiledSrc; }
 
-void init() {
+void init(const std::string _in2CompiledSrc = "") {
+  Logger(LogType::DEBUG) << "Init In2" << Logger::endl;
   readIn2CoreSrc();
-  readIn2CompiledSrc();
+  if (_in2CompiledSrc == "") {
+    readIn2CompiledSrc();
+  } else {
+    in2CompiledSrc = _in2CompiledSrc;
+  }
 };
 
-duk_context* catDukCtx(void* ctx) {
+duk_context* castDukCtx(void* ctx) {
   return reinterpret_cast<duk_context*>(ctx);
 }
 
@@ -67,6 +73,7 @@ In2Context* getIn2Context(int id) {
       return ctx;
     }
   }
+  Logger(LogType::ERROR) << "Failed to get in2 context: " << id << Logger::endl;
   return nullptr;
 }
 void deregisterIn2Context(In2Context* ctx) {
@@ -81,26 +88,8 @@ void deregisterIn2Context(In2Context* ctx) {
 
 //----------------------------------------------------------------------------------------
 
-/* Being an embeddable engine, Duktape doesn't provide I/O
- * bindings by default.  Here's a simple one argument print()
- * function.
- */
-// /* Adder: add argument values. */
-// static duk_ret_t native_adder(duk_context* ctx) {
-//   int i;
-//   const int numArgs = duk_get_top(ctx); /* #args */
-//   double res = 0.0;
-
-//   for (i = 0; i < numArgs; i++) {
-//     res += duk_to_number(ctx, i);
-//   }
-
-//   duk_push_number(ctx, res);
-//   return 1; /* one return value */
-// }
-
 static duk_ret_t duk_log(duk_context* ctx) {
-  Logger() << "[duktape] " << duk_to_string(ctx, 0) << Logger::endl;
+  Logger() << "[js] " << duk_to_string(ctx, 0) << Logger::endl;
   return 0;
 }
 
@@ -108,16 +97,110 @@ static duk_ret_t duk_coreSay(duk_context* ctx) {
   const int ctxId = static_cast<int>(duk_to_number(ctx, 0));
   const std::string line = duk_to_string(ctx, 1);
 
-  Logger() << line << Logger::endl;
+  auto in2Ctx = getIn2Context(ctxId);
+
+  Logger(LogType::DEBUG) << "duk_coreSay " << line << Logger::endl;
+
+  if (in2Ctx != nullptr) {
+    in2Ctx->pushLine(line);
+  }
+
   return 0;
 }
 
-static duk_ret_t duk_coreSetString(duk_context* ctx) {
+static duk_ret_t duk_coreChoose(duk_context* ctx) {
+  const int numArgs = duk_get_top(ctx);
+  const int ctxId = static_cast<int>(duk_to_number(ctx, 0));
+
+  auto in2Ctx = getIn2Context(ctxId);
+  if (in2Ctx == nullptr) {
+    return 0;
+  }
+
+  in2Ctx->resetChoices();
+
+  for (int i = 1; i < numArgs; i += 2) {
+    const std::string line = duk_to_string(ctx, i);
+    const std::string id = duk_to_string(ctx, i + 1);
+
+    // in2Ctx->pushLine(line);
+    in2Ctx->pushChoice(In2Choice{line, id});
+  }
+
+  return 0;
+}
+
+static duk_ret_t duk_coreGet(duk_context* ctx) {
   const int ctxId = static_cast<int>(duk_to_number(ctx, 0));
   const std::string key = duk_to_string(ctx, 1);
-  const std::string value = duk_to_string(ctx, 2);
 
-  // Logger() << duk_to_string(ctx, 0) << Logger::endl;
+  auto in2Ctx = getIn2Context(ctxId);
+  if (in2Ctx == nullptr) {
+    duk_push_string(ctx, "");
+    return 1;
+  }
+
+  duk_push_string(ctx, in2Ctx->getStorage(key).c_str());
+  return 1;
+}
+
+static duk_ret_t duk_coreSet(duk_context* ctx) {
+  const int ctxId = static_cast<int>(duk_to_number(ctx, 0));
+  const std::string key = duk_to_string(ctx, 1);
+  const std::string strValue = duk_to_string(ctx, 2);
+
+  auto in2Ctx = getIn2Context(ctxId);
+  if (in2Ctx == nullptr) {
+    return 0;
+  }
+
+  in2Ctx->setStorage(key, strValue);
+
+  return 0;
+}
+
+static duk_ret_t duk_setWaitingForResume(duk_context* ctx) {
+  const int ctxId = static_cast<int>(duk_to_number(ctx, 0));
+
+  auto in2Ctx = getIn2Context(ctxId);
+  if (in2Ctx == nullptr) {
+    Logger(LogType::ERROR) << "Failed to duk_setWaitingForResume no ctx found."
+                           << Logger::endl;
+    return 0;
+  }
+
+  in2Ctx->waitingForResume = true;
+  Logger(LogType::DEBUG) << "Waiting for resume..." << Logger::endl;
+  return 0;
+}
+
+static duk_ret_t duk_setWaitingForChoice(duk_context* ctx) {
+  const int ctxId = static_cast<int>(duk_to_number(ctx, 0));
+
+  auto in2Ctx = getIn2Context(ctxId);
+  if (in2Ctx == nullptr) {
+    Logger(LogType::ERROR) << "Failed to duk_setWaitingForChoice no ctx found."
+                           << Logger::endl;
+    return 0;
+  }
+
+  in2Ctx->waitingForChoice = true;
+  Logger(LogType::DEBUG) << "Waiting for choice..." << Logger::endl;
+  return 0;
+}
+
+static duk_ret_t duk_setExecutionCompleted(duk_context* ctx) {
+  const int ctxId = static_cast<int>(duk_to_number(ctx, 0));
+
+  auto in2Ctx = getIn2Context(ctxId);
+  if (in2Ctx == nullptr) {
+    Logger(LogType::ERROR)
+        << "Failed to duk_setExecutionCompleted no ctx found." << Logger::endl;
+    return 0;
+  }
+
+  in2Ctx->isExecutionCompleted = true;
+  Logger(LogType::DEBUG) << "Execution Completed." << Logger::endl;
   return 0;
 }
 
@@ -126,33 +209,111 @@ In2Context::In2Context() {
   id = in2InstanceIdCtr++;
   dukCtx = duk_create_heap(NULL, NULL, NULL, NULL, handleDukError);
   jsonState = new json();
-  auto ctx = catDukCtx(dukCtx);
+  auto ctx = castDukCtx(dukCtx);
 
-  Logger() << "Add duk_ native functions to duk ctx" << Logger::endl;
+  Logger(LogType::DEBUG) << "Add duk_ native functions to duk ctx"
+                         << Logger::endl;
   duk_push_c_function(ctx, duk_log, 2);
   duk_put_global_string(ctx, "log");
   duk_push_c_function(ctx, duk_coreSay, 3);
   duk_put_global_string(ctx, "cpp_say");
+  duk_push_c_function(ctx, duk_coreChoose, DUK_VARARGS);
+  duk_put_global_string(ctx, "cpp_choose");
+  duk_push_c_function(ctx, duk_coreSet, 3);
+  duk_put_global_string(ctx, "cpp_setString");
+  duk_push_c_function(ctx, duk_coreGet, 2);
+  duk_put_global_string(ctx, "cpp_getString");
+  duk_push_c_function(ctx, duk_setWaitingForResume, 1);
+  duk_put_global_string(ctx, "cpp_setWaitingForResume");
+  duk_push_c_function(ctx, duk_setWaitingForChoice, 1);
+  duk_put_global_string(ctx, "cpp_setWaitingForChoice");
+  duk_push_c_function(ctx, duk_setExecutionCompleted, 1);
+  duk_put_global_string(ctx, "cpp_setExecutionCompleted");
 
-  Logger() << "Eval core src" << Logger::endl
-           << getIn2CoreSrc().c_str() << Logger::endl;
-  duk_eval_string(ctx, getIn2CoreSrc().c_str());
+  Logger(LogType::DEBUG) << "Eval core src" << Logger::endl;
+  duk_eval_string_noresult(ctx, getIn2CoreSrc().c_str());
 
-  Logger() << "Eval compiled src" << Logger::endl
-           << getIn2CompiledSrc().c_str() << Logger::endl;
-  duk_eval_string(ctx, getIn2CompiledSrc().c_str());
+  Logger(LogType::DEBUG) << "Eval compiled src" << Logger::endl;
+  duk_eval_string_noresult(ctx, getIn2CompiledSrc().c_str());
 
   std::stringstream ss;
   ss << "core.init(" << id << ");";
-
-  Logger() << "Eval: " << ss.str() << Logger::endl;
+  Logger(LogType::DEBUG) << "Init: " << ss.str() << Logger::endl;
   duk_eval_string_noresult(ctx, ss.str().c_str());
 }
 
 In2Context::~In2Context() {
-  duk_destroy_heap(catDukCtx(dukCtx));
+  duk_destroy_heap(castDukCtx(dukCtx));
+  // NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
   delete castJsonState(jsonState);
   deregisterIn2Context(this);
 }
+
+void In2Context::executeFile(const std::string& fileName) {
+  isExecutionCompleted = false;
+  auto ctx = castDukCtx(dukCtx);
+  std::stringstream ss;
+  ss << "fromCpp_runFile('" << fileName << ".json');";
+  Logger(LogType::DEBUG) << "executeFile: " << ss.str() << Logger::endl;
+  duk_eval_string_noresult(ctx, ss.str().c_str());
+  const int result = static_cast<int>(duk_get_int(ctx, -1));
+  if (result == 1) {
+    Logger(LogType::ERROR) << "Invalid in2 file: " << fileName << Logger::endl;
+  }
+}
+
+void In2Context::resumeExecution() {
+  if (waitingForResume) {
+    waitingForResume = false;
+    auto ctx = castDukCtx(dukCtx);
+    std::stringstream ss;
+    ss << "fromCpp_resumeExecution();";
+    Logger(LogType::DEBUG) << "resumeExecution: " << ss.str() << Logger::endl;
+    duk_eval_string_noresult(ctx, ss.str().c_str());
+  }
+}
+
+void In2Context::chooseExecution(const std::string& id) {
+  if (waitingForChoice) {
+    waitingForChoice = false;
+    auto ctx = castDukCtx(dukCtx);
+    std::stringstream ss;
+    ss << "fromCpp_chooseExecution('" << id << "');";
+    Logger(LogType::DEBUG) << "chooseExecution: " << ss.str() << Logger::endl;
+    duk_eval_string(ctx, ss.str().c_str());
+    const int result = static_cast<int>(duk_get_int(ctx, -1));
+    if (result == 1) {
+      Logger(LogType::WARN) << "Invalid choice: " << id << Logger::endl;
+      waitingForChoice = true;
+    }
+  }
+}
+
+void In2Context::pushLine(const std::string& line) {
+  lines.push_back(line);
+  Logger() << line << std::endl;
+}
+
+void In2Context::pushChoice(In2Choice c) { choices.push_back(c); }
+void In2Context::resetChoices() {
+  choices.erase(choices.begin(), choices.end());
+}
+
+const std::vector<In2Choice>& In2Context::getChoices() { return choices; }
+
+std::string In2Context::getStorage(const std::string& key) {
+  auto iter = storage.find(key);
+  if (iter != storage.end()) {
+    return iter->second;
+  }
+
+  return "";
+}
+
+void In2Context::setStorage(const std::string& key, const std::string& value) {
+  storage[key] = value;
+}
+
+const std::vector<std::string>& In2Context::getLines() { return lines; }
 
 }; // namespace in2

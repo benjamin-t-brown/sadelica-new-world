@@ -29,7 +29,8 @@ lib/in2/in2.cpp
 
 TEST_CODE=\
 test/test.cpp\
-test/sdl2wrapper/Gauge.test.cpp
+test/sdl2wrapper/Gauge.test.cpp\
+test/in2/in2.test.cpp
 
 MAIN_OBJECT=$(MAIN:.cpp=.o)
 OBJECTS=$(CODE:.cpp=.o)
@@ -65,7 +66,15 @@ EMCC_LIBS=\
 -s JS_MATH=true
 
 EMCC_EXPORTED=\
--s EXPORTED_FUNCTIONS='["_main", "_enableSound", "_disableSound", "_setVolume", "_setKeyDown", "_setKeyUp", "_setKeyStatus"]'\
+-s EXPORTED_FUNCTIONS='[\
+ "_main",\
+ "_enableSound",\
+ "_disableSound",\
+ "_setVolume",\
+ "_setKeyDown",\
+ "_setKeyUp",\
+ "_setKeyStatus"\
+]'\
 -s EXPORTED_RUNTIME_METHODS=['ccall']
 
 EXE=SNW

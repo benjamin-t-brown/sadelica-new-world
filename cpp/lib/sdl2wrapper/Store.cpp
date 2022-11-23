@@ -29,7 +29,7 @@ std::unordered_map<std::string, std::unique_ptr<Mix_Music, SDL_Deleter>>
 
 void throwError(const std::string& errorMessage) {
   Logger(ERROR) << errorMessage << Logger::endl;
-  throw std::string(errorMessage);
+  throw std::runtime_error(errorMessage);
 }
 
 Store::Store() {}

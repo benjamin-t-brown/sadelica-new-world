@@ -16,3 +16,5 @@ src-srv/config.js
 scratch/
 out.log
 src-compile/main.compiled.es5.js
+src-compile/main.compiled.js
+src-compile/out

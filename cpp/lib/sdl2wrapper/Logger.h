@@ -19,6 +19,7 @@ public:
   ~Logger() {}
 
   static const std::string endl;
+  static bool disabled;
 
   template <class T> Logger operator<<(const T& msg) {
     std::stringstream ss;
@@ -44,16 +45,16 @@ private:
     std::string label;
     switch (type) {
     case DEBUG:
-      label = "SDL2Wrapper:DEBUG";
+      label = "DEBUG";
       break;
     case INFO:
-      label = "SDL2Wrapper:INFO";
+      label = "INFO";
       break;
     case WARN:
-      label = "SDL2Wrapper:WARN";
+      label = "WARN";
       break;
     case ERROR:
-      label = "SDL2Wrapper:ERROR";
+      label = "ERROR";
       break;
     }
     return label;

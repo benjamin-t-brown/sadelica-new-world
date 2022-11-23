@@ -142,9 +142,14 @@ http_server.get('compile', (obj, resp) => {
             )
             .toString();
         }
-        http_server.reply(resp, {
-          err: err,
-          data: ret,
+        execAsync(
+          `cd ${COMPILER_DIR}/../ && babel ${COMPILER_OUT}/${obj.event_args[0]}.compiled.${extension} --out-file ${COMPILER_OUT}/${obj.event_args[0]}.compiled.es5.${extension} --source-type script --presets @babel/preset-env --plugins remove-use-strict`
+        ).then(() => {
+          console.log('single file babeled');
+          http_server.reply(resp, {
+            err: err,
+            data: ret,
+          });
         });
       })
     );
@@ -293,7 +298,7 @@ http_server.post('export', async (obj, res) => {
       return;
     }
     await execAsync(
-      `cd ${COMPILER_DIR}/../ && babel ${COMPILER_OUT}/main.compiled.${extension} --out-file ${COMPILER_OUT}/main.compiled.es5.${extension} --presets @babel/preset-env`
+      `cd ${COMPILER_DIR}/../ && babel ${COMPILER_OUT}/main.compiled.${extension} --out-file ${COMPILER_OUT}/main.compiled.es5.${extension} --source-type script --presets @babel/preset-env --plugins remove-use-strict`
     );
     await execAsync(
       `cp ${COMPILER_OUT}/main.compiled.es5.${extension} ${EXPORT_DIR}/main.compiled.${extension}`

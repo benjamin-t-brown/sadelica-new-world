@@ -13,8 +13,12 @@
 namespace SDL2Wrapper {
 
 const std::string Logger::endl = std::string("\n");
+bool Logger::disabled = false;
 
 void Logger::printMessage(const std::string& msg) {
+  if (Logger::disabled) {
+    return;
+  }
 #ifdef __vita__
   printf("%s", msg.c_str());
 #else
@@ -23,6 +27,9 @@ void Logger::printMessage(const std::string& msg) {
 }
 
 void Logger::manipulateMessage(const StandardEndLine m) {
+  if (Logger::disabled) {
+    return;
+  }
 #ifdef __vita__
   printf("\n");
 #else
@@ -31,6 +38,9 @@ void Logger::manipulateMessage(const StandardEndLine m) {
 }
 
 int Logger::printf(const char* c, ...) {
+  if (Logger::disabled) {
+    return 0;
+  }
 #ifdef __vita__
   va_list lst;
   va_start(lst, c);
