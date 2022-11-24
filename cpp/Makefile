@@ -18,11 +18,17 @@ lib/sdl2wrapper/Sound.cpp\
 lib/sdl2wrapper/Sprite.cpp\
 lib/sdl2wrapper/Store.cpp\
 lib/sdl2wrapper/Window.cpp\
+game/cliContext.cpp\
+game/state/cliDispatch.cpp\
+game/state/cliResultProcessor.cpp\
 ui/Ui.cpp\
 ui/components/TalkCmpt.cpp\
 ui/components/InGameCmpt.cpp
 
-SERVER_CODE=
+SERVER_CODE=\
+game/srvContext.cpp\
+game/state/srvDispatchProcessor.cpp\
+game/state/srvResult.cpp\
 
 SHARED_CODE=\
 lib/sdl2wrapper/Timer.cpp\

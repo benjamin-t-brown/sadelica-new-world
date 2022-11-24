@@ -4,9 +4,9 @@
 #include "Sprite.h"
 #include "Store.h"
 #include <fstream>
-#include <iostream>
 #include <sstream>
 
+// maximum length of a line in the asset file
 #define TEXT_LEN 1024 * 32
 
 #ifdef __vita__
@@ -164,7 +164,8 @@ void loadSpriteAssetsFromFile(const std::string& path) {
     }
     fclose(file);
   } catch (std::exception& e) {
-    Logger(ERROR) << "Failed to parse sprite list: " << e.what() << Logger::endl;
+    Logger(ERROR) << "Failed to parse sprite list: " << e.what()
+                  << Logger::endl;
   }
 }
 

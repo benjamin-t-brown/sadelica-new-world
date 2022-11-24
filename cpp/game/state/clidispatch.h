@@ -9,13 +9,13 @@ using DispatchAction = snw::state::DispatchAction;
 namespace snw {
 namespace state {
 
-class DispatchProcessor {
+class ClientDispatch {
 private:
   std::vector<DispatchAction> actionsToCommit;
 
 public:
   void enqueue(const DispatchAction& action);
-  void apply();
+  void dispatch();
 };
 
 } // namespace state
@@ -23,6 +23,8 @@ public:
 namespace dispatch {
 
 void startTalk(const std::string& talkName);
+void continueTalk();
+void chooseTalk(const std::string& choiceId);
 
 } // namespace dispatch
 } // namespace snw

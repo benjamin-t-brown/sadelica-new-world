@@ -3,6 +3,7 @@
 #include "lib/imgui/imgui.h"
 #include "lib/sdl2wrapper/Window.h"
 #include <string>
+#include <unordered_map>
 
 using namespace ImGui;
 
@@ -14,19 +15,12 @@ using namespace ImGui;
           box.x, box.y, imVec4ToSDL2WrapperColor(color));                      \
   ImGui::Image(bgRectangle, box);
 
-// constexpr auto PCT_BOX(double w, double h, const ImColor& color) {
-//   auto box = getBoxBasedOnScreenPct(w, h);
-//   static auto bgRectangle = createStaticColorTexture(box.x, box.y, color);
-//   ImGui::Image(bgRectangle, box);
-// }
-
 namespace ui {
 void textCentered(const std::string& text);
 ImVec2 getBoxBasedOnScreenPct(const float pctWidth, const float pctHeight);
 void prepareFullScreenWindow();
 
 SDL2Wrapper::Color imVec4ToSDL2WrapperColor(const ImVec4& c);
-// SDL_Color
 
 struct UiColors {
   ImVec4 TRANSPARENT = ImColor(255, 255, 255, 0);
@@ -46,9 +40,14 @@ struct UiColors {
 };
 
 class Ui {
+  // These fonts are owned by ImGui, so no need to clean them up
+  std::unordered_map<std::string, ImFont*> imguiFonts;
+
 public:
   UiColors colors;
   Ui();
+  void loadFonts();
+  ImFont* getFont(const std::string& fontName);
   void render();
 };
 } // namespace ui

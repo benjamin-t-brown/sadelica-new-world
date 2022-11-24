@@ -6,13 +6,13 @@
 namespace snw {
 namespace state {
 
-class ResultProcessor {
+class ClientResultProcessor {
 private:
   std::vector<ResultAction> actionsToCommit;
 
 public:
   void enqueue(const ResultAction& action);
-  void applyCurrentActions();
+  void process();
 };
 
 } // namespace state

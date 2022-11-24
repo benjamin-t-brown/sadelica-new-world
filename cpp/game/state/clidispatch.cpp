@@ -1,5 +1,5 @@
-#include "clidispatch.h"
-#include "game/context.h"
+#include "cliDispatch.h"
+#include "game/cliContext.h"
 #include "lib/json/json.h"
 #include <string>
 
@@ -8,20 +8,17 @@ using json = nlohmann::json;
 namespace snw {
 namespace state {
 
-void DispatchProcessor::enqueue(const DispatchAction& action) {}
-void DispatchProcessor::apply() {}
+void ClientDispatch::enqueue(const DispatchAction& action) {}
+void ClientDispatch::dispatch() {}
 
 } // namespace state
 
 namespace dispatch {
 
 void startTalk(const std::string& talkName) {
-  auto payloadPtr = new json();
-  json& payload = *payloadPtr;
-  payload["filename"] = talkName;
   const DispatchAction action{DispatchActionType::CIVIL_DECLARE_TALK,
-                              payloadPtr};
-  snw::Context::dispatchProcessor.enqueue(action);
+                              new json({"fileName", talkName})};
+  ClientContext::getClientDispatch().enqueue(action);
 }
 
 } // namespace dispatch

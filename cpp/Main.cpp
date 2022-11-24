@@ -1,3 +1,4 @@
+#include "game/cliContext.h"
 #include "game/in2/in2.h"
 #include "lib/imgui/imgui.h"
 #include "lib/imgui/imgui_impl_sdl.h"
@@ -26,8 +27,8 @@
 // ImGui::PushFont(font1);
 
 void setupWindow(SDL2Wrapper::Window& window) {
-  SDL2Wrapper::Store::createFont("default", "assets/Chicago.ttf");
-  window.setCurrentFont("default", 18);
+  SDL2Wrapper::Store::createFont("Chicago", "assets/Chicago.ttf");
+  window.setCurrentFont("Chicago", 18);
   auto events = &window.getEvents();
   events->setEventHandler([](SDL_Event e) { ImGui_ImplSDL2_ProcessEvent(&e); });
 }
@@ -39,26 +40,7 @@ void setupImgui(SDL2Wrapper::Window& window) {
   ImGui::CreateContext();
   ImGui_ImplSDL2_InitForSDLRenderer(sdlWindow, renderer);
   ImGui_ImplSDLRenderer_Init(renderer);
-  ImGuiIO& io = ImGui::GetIO();
   ImGui::StyleColorsDark();
-
-  auto font2 = io.Fonts->AddFontFromFileTTF("assets/Chicago.ttf", 20);
-
-  // auto font = ImGui::GetIO().Fonts->AddFontFromFileTTF(
-  //     "C:\\Windows\\Fonts\\Verdana.ttf", 100);
-  // ImGui::PushFont(font);
-
-  // ImGui_ImplSDL2_NewFrame();
-  // ImFont* font1 = io.Fonts->AddFontDefault();
-  // auto font2 = io.Fonts->AddFontFromFileTTF("assets/Chicago.ttf", 18);
-  // ImGui::PushFont(font2);
-  // ImFont* font2 =
-  //     io.Fonts->AddFontFromFileTTF("../../extra_fonts/Ruda-Bold.ttf", 16.0f);
-  // ImGui::PushFont(font);
-  // ImGui::NewFrame();
-  // ImGui::Render();
-  // ImGuiSDL::Render(ImGui::GetDrawData());
-  // ImGui::PushFont(font1);
 }
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays)
@@ -75,22 +57,22 @@ int main(int argc, char* argv[]) {
     SDL2Wrapper::Window window("Sadelica: NW", 480, 854, 25, 50);
     setupWindow(window);
     setupImgui(window);
-
-    ImGuiIO& io = ImGui::GetIO();
     auto uiInstance = ui::Ui();
+    uiInstance.loadFonts();
 
     window.startRenderLoop([&]() {
-      window.setBackgroundColor(window.makeColor(10, 10, 10));
-      window.setCurrentFont("default", 24);
-
       ImGui_ImplSDLRenderer_NewFrame();
       ImGui_ImplSDL2_NewFrame();
       ImGui::NewFrame();
+      window.setBackgroundColor(window.makeColor(10, 10, 10));
+      window.setCurrentFont("Chicago", 20);
+      ImGui::PushFont(uiInstance.getFont("Chicago20"));
 
       uiInstance.render();
 
       ImGui::ShowDemoWindow();
 
+      ImGui::PopFont();
       ImGui::Render();
       ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
       return true;

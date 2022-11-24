@@ -1,9 +1,16 @@
+# Make commands
+
+`make` builds everything
+`make run` builds everything and runs the combined server/client program
+`make test` builds everything+tests and runs all tests
+`make test <test regex>` builds everything+tests and then runs tests with the provided regex
+
 # Installation: Windows
 
 Requires MSYS2, specifically the MING64 terminal, see https://www.devdungeon.com/content/install-gcc-compiler-windows-msys2-cc
 
 ```
-pacman -S base-devel gcc vim cmake git
+pacman -S base-devel vim cmake git python2
 pacman -S mingw-w64-x86_64-toolchain
 pacman -S mingw64/mingw-w64-x86_64-SDL2  mingw64/mingw-w64-x86_64-SDL2_image mingw64/mingw-w64-x86_64-SDL2_mixer mingw64/mingw-w64-x86_64-SDL2_ttf
 ```
@@ -19,6 +26,37 @@ Clang for formatting/linting
 ```
 pacman -S mingw-w64-x86_64-clang
 pacman -S mingw-w64-x86_64-clang-tools-extra
+```
+
+*optional* Python2 For some lib dependencies
+```
+pacman -S mingw64/mingw-w64-x86_64-python2-pip mingw64/mingw-w64-x86_64-python2
+```
+
+## Using ucrt64 instead of mingw64
+
+```
+pacman -S base-devel vim cmake git python2
+pacman -S ucrt64/mingw-w64-ucrt-x86_64-gcc ucrt64/mingw-w64-ucrt-x86_64-gdb
+pacman -S ucrt64/mingw-w64-ucrt-x86_64-SDL2  ucrt64/mingw-w64-ucrt-x86_64-SDL2_image ucrt64/mingw-w64-ucrt-x86_64-SDL2_mixer ucrt64/mingw-w64-ucrt-x86_64-SDL2_ttf
+```
+
+Gtest
+
+```
+pacman -S ucrt64/mingw-w64-ucrt-x86_64-gtest
+```
+
+Clang for formatting/linting
+
+```
+pacman -S ucrt64/mingw-w64-ucrt-x86_64-clang
+pacman -S ucrt64/mingw-w64-ucrt-x86_64-clang-tools-extra
+```
+
+*optional* Python2 For some lib dependencies
+```
+pacman -S ucrt64/mingw-w64-ucrt-x86_64-python2-pip ucrt64/mingw-w64-ucrt-x86_64-python2
 ```
 
 # Installation Ubuntu:
@@ -81,6 +119,7 @@ duktape
 ```
 # If you need python 2 in mingw64
 pacman -S mingw64/mingw-w64-x86_64-python2-pip mingw64/mingw-w64-x86_64-python2
+# or pacman -S ucrt64/mingw-w64-x86_64-python2-pip ucrt64/mingw-w64-x86_64-python2
 pip2 install PyYAML
 
 cd duktape/duktape-2.7.0
@@ -95,5 +134,5 @@ fmt
 
 ```
 cd fmt/fmt-9.0.0
-cp -r include/fmt/* ../ 
+cp -r include/fmt/* ../
 ```
