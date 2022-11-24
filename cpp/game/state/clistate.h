@@ -1,8 +1,9 @@
+#include "game/in2/in2.h"
 #include "lib/betterenum/enum.h"
 #include <vector>
 
-namespace SNW {
-namespace State {
+namespace snw {
+namespace state {
 
 // NOLINTNEXTLINE
 BETTER_ENUM(SectionType,
@@ -19,7 +20,8 @@ struct SectionInfo {
 
 struct ClientState {
   std::vector<SectionInfo> sections;
+  snw::in2::In2Context* in2Ctx;
 };
 
-} // namespace State
-} // namespace SNW
+} // namespace state
+} // namespace snw

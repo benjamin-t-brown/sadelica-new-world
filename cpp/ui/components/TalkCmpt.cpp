@@ -114,12 +114,12 @@ void renderTextArea(const Ui& ui) {
       "Before you stands a woman of imposing stature.  Easily twice your "
       "height, her shadow engulfs you completely.  At first she does not "
       "notice you, but after an awkward moment she blinks and cocks an "
-      "eyebrow.",
-      "'I see you've returned in one piece.'",
-      "No thanks to you.",
+      "eyebrow.\n"
+      "'I see you've returned in one piece.'\n"
+      "No thanks to you.\n"
       "'It occurs to me that you do not know the meaning of the word "
       "'discretion'.  You should learn what that means and, more importantly, "
-      "employ it.'"};
+      "employ it.'\n"};
 
   const std::vector<std::string> choices = {
       "Don't worry, I know what I'm doing.",
@@ -130,6 +130,7 @@ void renderTextArea(const Ui& ui) {
   ImGui::Spacing();
   for (const std::string& text : texts) {
     ImGui::TextWrapped("%s", text.c_str());
+    ;
     ImGui::Spacing();
   }
 
@@ -155,7 +156,7 @@ void renderTextArea(const Ui& ui) {
     ImGui::Button("", ImVec2(width - spacing, textSize.y));
     ImGui::SetCursorPos(
         ImVec2(buttonCursorPosition.x + 2, buttonCursorPosition.y + 4));
-    ImGui::TextWrapped(ss.str().c_str());
+    ImGui::TextWrapped("%s", ss.str().c_str());
     ImGui::SetCursorPosY(buttonCursorPosition.y + textSize.y);
 
     ImGui::PopStyleColor(4);
@@ -166,7 +167,7 @@ void renderTextArea(const Ui& ui) {
   }
   ImGui::PopStyleVar(1);
 
-  for (unsigned int i = 0; i < 25; i++) {
+  for (unsigned int i = 0; i < 15; i++) {
     ImGui::Text(" ");
   }
 

@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-namespace SNW {
+namespace snw {
 namespace in2 {
 
 void init(const std::string compiledSrc);
@@ -42,4 +42,4 @@ public:
 };
 
 } // namespace in2
-}; // namespace SNW
+}; // namespace snw

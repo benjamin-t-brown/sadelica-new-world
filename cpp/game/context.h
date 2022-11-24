@@ -1,26 +1,31 @@
 #pragma once
 
 // #include "lib/sdl2wrapper/Window.h"
-#include "game/state/statecli.h"
-#include "game/state/statesrv.h"
+#include "game/state/clidispatch.h"
+#include "game/state/clistate.h"
+#include "game/state/result.h"
+#include "game/state/srvstate.h"
 
-namespace SNW {
+namespace snw {
 
 class Context {
 private:
-  static SNW::State::ClientState* clientState;
-  static SNW::State::ServerState* serverState;
+  static snw::state::ClientState* clientState;
+  static snw::state::ServerState* serverState;
 
 public:
   static void init();
 
-  static void setClientState(SNW::State::ClientState* s);
-  static const SNW::State::ClientState& getClientState();
-  static SNW::State::ClientState& getClientStateMut();
+  static state::DispatchProcessor dispatchProcessor;
+  static state::ResultProcessor resultProcessor;
 
-  static void setServerState(SNW::State::ServerState* s);
-  static const SNW::State::ServerState& getServerState();
-  static SNW::State::ServerState& getServerStateMut();
+  static void setClientState(snw::state::ClientState* s);
+  static const snw::state::ClientState& getClientState();
+  static snw::state::ClientState& getClientStateMut();
+
+  static void setServerState(snw::state::ServerState* s);
+  static const snw::state::ServerState& getServerState();
+  static snw::state::ServerState& getServerStateMut();
 };
 
-} // namespace SNW
+} // namespace snw

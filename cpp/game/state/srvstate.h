@@ -1,11 +1,11 @@
 #include <vector>
 
-namespace SNW {
-namespace State {
+namespace snw {
+namespace state {
 
 struct ServerState {
   // std::vector<SectionInfo> sections;
 };
 
-} // namespace State
-} // namespace SNW
+} // namespace state
+} // namespace snw

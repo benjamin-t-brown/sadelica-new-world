@@ -2,8 +2,8 @@
 
 #include "lib/betterenum/enum.h"
 
-namespace SNW {
-namespace State {
+namespace snw {
+namespace state {
 
 // NOLINTNEXTLINE
 BETTER_ENUM(DispatchActionType,
@@ -16,8 +16,8 @@ BETTER_ENUM(DispatchActionType,
             UI_CONFIRM_CHOICE_MODAL,
             UI_CANCEL_CHOICE_MODAL,
 
-            CONVERSATION_SELECT_CHOICE,
-            CONVERSATION_CONTINUE,
+            TALK_SELECT_CHOICE,
+            TALK_CONTINUE,
 
             LOAD_GAME,
             SAVE_GAME,
@@ -74,8 +74,11 @@ BETTER_ENUM(ResultActionType,
             CHARACTER_USED_MELEE_SKILL,
             CHARACTER_USED_MAGIC_SKILL,
 
-            CHARACTER_STARTED_TALK,
-            CHARACTER_ENDED_TALK,
+            TALK_STARTED,
+            TALK_ENDED,
+            TALK_RESUMED,
+            TALK_CHOICE_PICKED,
+
             CHARACTER_STARTED_STEAL,
             CHARACTER_ENDED_STEAL,
             CHARACTER_EXAMINED,
@@ -106,5 +109,5 @@ struct ResultAction {
   void* jsonPayload = nullptr;
 };
 
-} // namespace State
-} // namespace SNW
+} // namespace state
+} // namespace snw

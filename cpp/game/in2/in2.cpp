@@ -9,7 +9,7 @@
 
 using json = nlohmann::json;
 
-namespace SNW {
+namespace snw {
 namespace in2 {
 
 constexpr const char* IN2_CORE_SRC_PATH = "assets/in2/core.js";
@@ -335,4 +335,4 @@ void In2Context::setStorage(const std::string& key, const std::string& value) {
 const std::vector<std::string>& In2Context::getLines() { return lines; }
 
 } // namespace in2
-}; // namespace SNW
+}; // namespace snw

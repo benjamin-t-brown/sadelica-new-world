@@ -42,7 +42,7 @@ void setupImgui(SDL2Wrapper::Window& window) {
   ImGuiIO& io = ImGui::GetIO();
   ImGui::StyleColorsDark();
 
-  auto font2 = io.Fonts->AddFontFromFileTTF("assets/Chicago.ttf", 24);
+  auto font2 = io.Fonts->AddFontFromFileTTF("assets/Chicago.ttf", 20);
 
   // auto font = ImGui::GetIO().Fonts->AddFontFromFileTTF(
   //     "C:\\Windows\\Fonts\\Verdana.ttf", 100);
@@ -65,7 +65,7 @@ void setupImgui(SDL2Wrapper::Window& window) {
 int main(int argc, char* argv[]) {
   logger::info("Program Begin.");
   srand(time(NULL));
-  SNW::in2::init("");
+  snw::in2::init("");
 
   std::vector<std::string> args;
   utils::parseArgs(argc, argv, args);

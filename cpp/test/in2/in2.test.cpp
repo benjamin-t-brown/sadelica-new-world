@@ -3,7 +3,7 @@
 #include <fstream>
 #include <gtest/gtest.h>
 
-using namespace SNW;
+using namespace snw;
 
 std::string readIn2CompiledSrcMock() {
   const std::string path = "test/in2/main.compiled.mock.js";
