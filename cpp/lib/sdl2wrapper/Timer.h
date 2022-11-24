@@ -3,30 +3,27 @@
 #include <functional>
 
 namespace SDL2Wrapper {
-class Window;
-
 class Timer {
 
 protected:
-  const Window& window;
   bool removeFlag;
   double aggTime;
   double maxTime;
 
 public:
-  Timer(const Window& windowA, int maxFrames);
+  Timer(int maxFrames);
   double getPctComplete() const;
   void restart();
   virtual bool shouldRemove() const;
   virtual void remove();
-  virtual void update();
+  virtual void update(double dt);
 };
 
 class FuncTimer : public Timer {
   std::function<void()> cb;
 
 public:
-  FuncTimer(const Window& windowA, int maxFrames, std::function<void()> cbA);
+  FuncTimer(int maxFrames, std::function<void()> cbA);
   void remove() override;
 };
 
@@ -34,7 +31,7 @@ class BoolTimer : public Timer {
   bool& ref;
 
 public:
-  BoolTimer(const Window& windowA, int maxFrames, bool& refA);
+  BoolTimer(int maxFrames, bool& refA);
   void remove() override;
 };
 

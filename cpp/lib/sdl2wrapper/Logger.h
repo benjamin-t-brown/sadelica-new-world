@@ -37,8 +37,11 @@ public:
   }
 
   int printf(const char* format, ...);
+
   void printMessage(const std::string& msg);
   void manipulateMessage(const StandardEndLine m);
+
+  // fmt::print("in {}s\n", 47);
 
 private:
   inline std::string getLabel(LogType type) {

@@ -1,5 +1,5 @@
-#include "Logging.h"
 #include "lib/in2/in2.h"
+#include "Logger.h"
 #include <fstream>
 #include <gtest/gtest.h>
 

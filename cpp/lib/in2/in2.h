@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 namespace in2 {
@@ -20,7 +19,6 @@ private:
 
   std::vector<std::string> lines;
   std::vector<In2Choice> choices;
-  std::unordered_map<std::string, std::string> storage;
 
 public:
   bool waitingForResume = false;

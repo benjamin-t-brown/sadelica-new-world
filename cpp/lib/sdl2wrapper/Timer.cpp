@@ -2,12 +2,11 @@
 #include "Window.h"
 
 namespace SDL2Wrapper {
-Timer::Timer(const Window& windowA, int maxTimeMs)
-    : window(windowA), removeFlag(false), aggTime(0.0) {
+Timer::Timer(int maxTimeMs) : removeFlag(false), aggTime(0.0) {
   maxTime = static_cast<double>(maxTimeMs);
 }
 double Timer::getPctComplete() const {
-  double ret = aggTime / maxTime;
+  const double ret = aggTime / maxTime;
   if (aggTime >= maxTime) {
     return 1.0;
   } else {
@@ -20,26 +19,23 @@ void Timer::restart() {
   removeFlag = false;
 }
 void Timer::remove() { removeFlag = true; }
-void Timer::update() {
+void Timer::update(double dt) {
   if (!removeFlag) {
-    aggTime += window.getDeltaTime();
+    aggTime += dt;
     if (aggTime > maxTime) {
       remove();
     }
   }
 }
-FuncTimer::FuncTimer(const Window& windowA,
-                     int maxTimeMs,
-                     std::function<void()> cbA)
-    : Timer(windowA, maxTimeMs), cb(cbA) {}
+FuncTimer::FuncTimer(int maxTimeMs, std::function<void()> cbA)
+    : Timer(maxTimeMs), cb(cbA) {}
 void FuncTimer::remove() {
   if (!removeFlag) {
     cb();
   }
   Timer::remove();
 }
-BoolTimer::BoolTimer(const Window& windowA, int maxTimeMs, bool& refA)
-    : Timer(windowA, maxTimeMs), ref(refA) {}
+BoolTimer::BoolTimer(int maxTimeMs, bool& refA) : Timer(maxTimeMs), ref(refA) {}
 void BoolTimer::remove() {
   if (!removeFlag) {
     ref = !ref;

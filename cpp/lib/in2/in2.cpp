@@ -1,5 +1,5 @@
 #include "in2.h"
-#include "Logging.h"
+#include "Logger.h"
 #include "lib/duktape/duktape.h"
 #include "lib/json/json.h"
 #include <algorithm>
@@ -291,7 +291,9 @@ void In2Context::chooseExecution(const std::string& id) {
 
 void In2Context::pushLine(const std::string& line) {
   lines.push_back(line);
-  Logger() << line << std::endl;
+
+  // This is temporary
+  // Logger() << line << std::endl;
 }
 
 void In2Context::pushChoice(In2Choice c) { choices.push_back(c); }
@@ -302,16 +304,30 @@ void In2Context::resetChoices() {
 const std::vector<In2Choice>& In2Context::getChoices() { return choices; }
 
 std::string In2Context::getStorage(const std::string& key) {
-  auto iter = storage.find(key);
-  if (iter != storage.end()) {
-    return iter->second;
+  auto json = castJsonState(jsonState);
+
+  if (json == nullptr) {
+    Logger(LogType::ERROR) << "Failed to getStorage no json found."
+                           << Logger::endl;
+    return "";
+  }
+  if (json->contains(key)) {
+    return (*json)[key];
   }
 
   return "";
 }
 
 void In2Context::setStorage(const std::string& key, const std::string& value) {
-  storage[key] = value;
+  auto json = castJsonState(jsonState);
+
+  if (json == nullptr) {
+    Logger(LogType::ERROR) << "Failed to setStorage no json found."
+                           << Logger::endl;
+    return;
+  }
+
+  (*json)[key] = value;
 }
 
 const std::vector<std::string>& In2Context::getLines() { return lines; }

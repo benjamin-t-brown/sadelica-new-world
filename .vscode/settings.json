@@ -73,7 +73,9 @@
     "thread": "cpp",
     "cinttypes": "cpp",
     "typeinfo": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "*.def": "cpp",
+    "*.inc": "cpp"
   },
   "clang-tidy.blacklist": ["entt.*"],
   "clang-tidy.compilerArgsBefore": ["-xc++"],

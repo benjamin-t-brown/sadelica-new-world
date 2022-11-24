@@ -39,7 +39,7 @@ function addDialogChoices(choices) {
       })
       .indexOf(arg);
     var choice = choices[choiceInd];
-    log('Pick choice ' + choiceInd + ' ' + arg + ' ' + JSON.stringify(choices));
+    // log('Pick choice ' + choiceInd + ' ' + arg + ' ' + JSON.stringify(choices));
     if (choice) {
       player.set('nodes.' + choice.id);
       choice.cb();
@@ -61,7 +61,11 @@ var core = {
   },
 
   isChoiceNode(id) {
-    return player.get('scope.' + id);
+    var obj = core.in2.scope[id];
+    if (obj) {
+      return obj.isChoice;
+    }
+    return false;
   },
 
   hasPickedChoice(id) {
@@ -71,7 +75,7 @@ var core = {
   say(text, cb, nodeId, childId) {
     if (Array.isArray(text)) {
       if (text.length === 1) {
-        log('add text1 ' + text);
+        // is this even used?
         addLine({ line: text[0], id: nodeId || '' });
       } else {
         core.say(text[0], function () {
@@ -85,7 +89,6 @@ var core = {
         cb && cb();
         return;
       } else {
-        log('add text2 ' + text + ' ' + ctxId);
         cpp_setWaitingForResume(ctxId);
         addLine({ line: text, id: nodeId || '', cb });
         resumeCb = cb;
@@ -160,7 +163,7 @@ var player = {
     } else {
       ret = result;
     }
-    log('get: ' + path + '=' + result);
+    // log('get: ' + path + '=' + result);
     return ret;
   },
   set: function (path, val) {
@@ -168,7 +171,7 @@ var player = {
       val = true;
     }
     cpp_setString(ctxId, path, String(val));
-    log('set: ' + path + '=' + String(val));
+    // log('set: ' + path + '=' + String(val));
   },
   once: function () {
     var nodeId = player.get(CURRENT_NODE_VAR);

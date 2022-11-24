@@ -10,7 +10,7 @@ ContinuousSound::ContinuousSound(Window& windowA,
       soundName(soundNameA),
       ms(msA),
       playing(false),
-      timer(BoolTimer(window, msA, shouldPlaySound)) {}
+      timer(BoolTimer(msA, shouldPlaySound)) {}
 
 void ContinuousSound::play() {
   if (!playing) {
@@ -27,7 +27,7 @@ void ContinuousSound::pause() {
 
 void ContinuousSound::update() {
   if (playing) {
-    timer.update();
+    timer.update(window.getDeltaTime());
     if (shouldPlaySound) {
       window.playSound(soundName);
       shouldPlaySound = false;
@@ -36,4 +36,4 @@ void ContinuousSound::update() {
   }
 }
 
-}
+} // namespace SDL2Wrapper
