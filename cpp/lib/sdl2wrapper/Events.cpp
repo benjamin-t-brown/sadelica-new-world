@@ -1,7 +1,6 @@
 #include "Events.h"
 #include "Logger.h"
-
-// #include <SDL2/SDL.h>
+#include <SDL2/SDL.h>
 
 namespace SDL2Wrapper {
 

@@ -29,7 +29,8 @@ lib/sdl2wrapper/Timer.cpp\
 lib/sdl2wrapper/Gauge.cpp\
 lib/sdl2wrapper/Logger.cpp\
 lib/duktape/duktape.cpp\
-lib/in2/in2.cpp
+game/in2/in2.cpp\
+utils/utils.cpp
 
 TEST_CODE=\
 test/test.cpp\

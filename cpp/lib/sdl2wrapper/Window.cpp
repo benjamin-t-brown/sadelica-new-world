@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <time.h>
 
+#include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
@@ -362,6 +363,30 @@ SDL_Texture* Window::getTextTexture(const std::string& text,
     Store::storeTextTexture(key, texPtr);
     return Store::getTextTexture(key);
   }
+}
+
+SDL_Texture* Window::getStaticColorTexture(int width, int height, Color color) {
+  std::stringstream ss;
+  ss << width << "," << height << "," << color.r << "," << color.g << ","
+     << color.b << "," << color.a;
+  auto textureName = ss.str();
+  if (Store::textureExists(textureName)) {
+    return Store::getTexture(ss.str());
+  }
+
+  auto texture = SDL_CreateTexture(renderer.get(),
+                                   SDL_PIXELFORMAT_RGBA32,
+                                   SDL_TEXTUREACCESS_TARGET,
+                                   width,
+                                   height);
+
+  SDL_SetRenderTarget(renderer.get(), texture);
+  SDL_SetRenderDrawColor(renderer.get(), color.r, color.g, color.b, color.a);
+  SDL_RenderClear(renderer.get());
+  SDL_SetRenderTarget(renderer.get(), nullptr);
+  SDL2Wrapper::Store::storeTexture(textureName, texture);
+
+  return texture;
 }
 
 void Window::drawSprite(const std::string& name,

@@ -75,7 +75,13 @@
     "typeinfo": "cpp",
     "valarray": "cpp",
     "*.def": "cpp",
-    "*.inc": "cpp"
+    "*.inc": "cpp",
+    "future": "cpp",
+    "numbers": "cpp",
+    "semaphore": "cpp",
+    "span": "cpp",
+    "typeindex": "cpp",
+    "variant": "cpp"
   },
   "clang-tidy.blacklist": ["entt.*"],
   "clang-tidy.compilerArgsBefore": ["-xc++"],

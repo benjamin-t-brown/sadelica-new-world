@@ -1,5 +1,6 @@
 #include "lib/fmt/format.h"
 #include "lib/sdl2wrapper/Logger.h"
+#include <sstream>
 
 using SDL2Wrapper::Logger;
 using SDL2Wrapper::LogType;

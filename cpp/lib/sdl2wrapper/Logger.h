@@ -22,12 +22,13 @@ public:
   static bool disabled;
 
   template <class T> Logger operator<<(const T& msg) {
+    // clang-tidy bug? It keeps saying this can be const, but obviously it can't
+    // NOLINTNEXTLINE(misc-const-correctness)
     std::stringstream ss;
     ss << msg;
     printMessage(ss.str());
     return *this;
   }
-
   typedef Logger& (*StreamManipulator)(Logger&);
   typedef std::basic_ostream<char, std::char_traits<char>> CoutType;
   typedef CoutType& (*StandardEndLine)(CoutType&);
@@ -40,8 +41,6 @@ public:
 
   void printMessage(const std::string& msg);
   void manipulateMessage(const StandardEndLine m);
-
-  // fmt::print("in {}s\n", 47);
 
 private:
   inline std::string getLabel(LogType type) {

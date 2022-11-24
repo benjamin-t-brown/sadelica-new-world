@@ -6,7 +6,7 @@
 #include <stack>
 #include <string>
 
-#include <SDL2/SDL.h>
+union SDL_Event;
 
 namespace SDL2Wrapper {
 

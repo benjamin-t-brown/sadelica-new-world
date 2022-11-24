@@ -27,13 +27,15 @@ void renderHeader(const Ui& ui) {
   const float borderColumnsWidth = (width - portraitWidth) / 2.f;
 
   static auto columnRectangle =
-      createStaticColorTexture(static_cast<int>(borderColumnsWidth),
-                               static_cast<int>(height),
-                               ui.colors.BLACK);
+      SDL2Wrapper::Window::getGlobalWindow().getStaticColorTexture(
+          static_cast<int>(borderColumnsWidth),
+          static_cast<int>(height),
+          imVec4ToSDL2WrapperColor(ui.colors.BLACK));
   static auto portraitRectangle =
-      createStaticColorTexture(static_cast<int>(portraitWidth),
-                               static_cast<int>(height),
-                               ui.colors.BLUE);
+      SDL2Wrapper::Window::getGlobalWindow().getStaticColorTexture(
+          static_cast<int>(portraitWidth),
+          static_cast<int>(height),
+          imVec4ToSDL2WrapperColor(ui.colors.BLUE));
 
   ImGui::SetCursorPos(ImVec2(0, 0));
   ImGui::Image(columnRectangle, ImVec2(borderColumnsWidth, height));
@@ -53,12 +55,16 @@ void renderNameplate(const Ui& ui) {
 
   auto originalCursorPosition = ImGui::GetCursorPos();
 
-  static auto borderRectangle = createStaticColorTexture(
-      static_cast<int>(width), static_cast<int>(height), ui.colors.WHITE);
+  static auto borderRectangle =
+      SDL2Wrapper::Window::getGlobalWindow().getStaticColorTexture(
+          static_cast<int>(width),
+          static_cast<int>(height),
+          imVec4ToSDL2WrapperColor(ui.colors.WHITE));
   static auto bgRectangle =
-      createStaticColorTexture(static_cast<int>(width - 4),
-                               static_cast<int>(height - 4),
-                               ui.colors.PURPLE);
+      SDL2Wrapper::Window::getGlobalWindow().getStaticColorTexture(
+          static_cast<int>(width - 4),
+          static_cast<int>(height - 4),
+          imVec4ToSDL2WrapperColor(ui.colors.PURPLE));
 
   const std::string name = "Radmilla Web";
 
@@ -90,9 +96,10 @@ void renderTextArea(const Ui& ui) {
   const auto originalCursorPosition = ImGui::GetCursorPos();
 
   static auto bgRectangle =
-      createStaticColorTexture(static_cast<int>(width + spacing),
-                               static_cast<int>(height),
-                               ui.colors.DARK_GREY);
+      SDL2Wrapper::Window::getGlobalWindow().getStaticColorTexture(
+          static_cast<int>(width + spacing),
+          static_cast<int>(height),
+          imVec4ToSDL2WrapperColor(ui.colors.DARK_GREY));
   ImGui::Image(bgRectangle, ImVec2(width + spacing, height));
   ImGui::SetCursorPos(originalCursorPosition);
 
@@ -199,8 +206,11 @@ void renderFooter(const Ui& ui) {
 
   auto originalCursorPosition = ImGui::GetCursorPos();
 
-  static auto bgRectangle = createStaticColorTexture(
-      static_cast<int>(width), static_cast<int>(height), ui.colors.GREY);
+  static auto bgRectangle =
+      SDL2Wrapper::Window::getGlobalWindow().getStaticColorTexture(
+          static_cast<int>(width),
+          static_cast<int>(height),
+          imVec4ToSDL2WrapperColor(ui.colors.GREY));
 
   ImGui::Image(bgRectangle, ImVec2(width, height));
 

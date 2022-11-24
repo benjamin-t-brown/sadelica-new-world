@@ -1,17 +1,9 @@
 #pragma once
 
-#include "lib/enum/enum.h"
-#include <string>
-#include <vector>
+#include "lib/betterenum/enum.h"
 
-namespace dispatch {
-
-// NOLINTNEXTLINE
-BETTER_ENUM(SectionType, int, MENU_SPLASH = 1, MENU_START, MENU_OPTIONS)
-
-struct SectionInfo {
-  SectionType type;
-};
+namespace SNW {
+namespace State {
 
 // NOLINTNEXTLINE
 BETTER_ENUM(DispatchActionType,
@@ -24,8 +16,8 @@ BETTER_ENUM(DispatchActionType,
             UI_CONFIRM_CHOICE_MODAL,
             UI_CANCEL_CHOICE_MODAL,
 
-            DIALOG_SELECT_CHOICE,
-            DIALOG_CONTINUE,
+            CONVERSATION_SELECT_CHOICE,
+            CONVERSATION_CONTINUE,
 
             LOAD_GAME,
             SAVE_GAME,
@@ -57,7 +49,7 @@ BETTER_ENUM(DispatchActionType,
             INVENTORY_DECLARE_UNEQUIP)
 
 // NOLINTNEXTLINE
-BETTER_ENUM(ActionReceivedType,
+BETTER_ENUM(ResultActionType,
             int,
             NOOP = 1,
             MAP_LOADED,
@@ -109,22 +101,10 @@ struct DispatchAction {
   void* jsonPayload = nullptr;
 };
 
-struct ReceiveAction {
-  ActionReceivedType type = ActionReceivedType::NOOP;
+struct ResultAction {
+  ResultActionType type = ResultActionType::NOOP;
   void* jsonPayload = nullptr;
 };
 
-class Dispatcher {
-private:
-  std::vector<DispatchAction> actionsToCommit;
-
-public:
-  void dispatch(const DispatchAction& action);
-  void applyCurrentActions();
-};
-
-struct ClientStore {
-  std::vector<SectionInfo> sections;
-};
-
-} // namespace dispatch
+} // namespace State
+} // namespace SNW

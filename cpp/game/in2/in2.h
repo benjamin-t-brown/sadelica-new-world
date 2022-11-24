@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+namespace SNW {
 namespace in2 {
 
 void init(const std::string compiledSrc);
@@ -40,4 +41,5 @@ public:
   const std::vector<std::string>& getLines();
 };
 
-}; // namespace in2
+} // namespace in2
+}; // namespace SNW

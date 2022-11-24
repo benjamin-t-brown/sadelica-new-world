@@ -1,55 +1,95 @@
-#include "Logger.h"
-#include "lib/fmt/format.h"
-#include "lib/in2/in2.h"
-#include <ctime>
-#include <iostream>
-#include <string>
+#include "game/in2/in2.h"
+#include "lib/imgui/imgui.h"
+#include "lib/imgui/imgui_impl_sdl.h"
+#include "lib/imgui/imgui_sdl.h"
+#include "lib/sdl2wrapper/Events.h"
+#include "lib/sdl2wrapper/Store.h"
+#include "lib/sdl2wrapper/Window.h"
+#include "logger.h"
+#include "ui/Ui.h"
+#include "utils/utils.h"
+#include <SDL2/SDL.h>
 
-// NOLINTNEXTLINE
+// ImGui_ImplSDL2_ProcessEvent(&e);
+// Enable Keyboard Controls
+// io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+// Enable Gamepad Controls
+// io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+// ImGui_ImplSDL2_NewFrame();
+// io.Fonts->AddFontFromFileTTF("assets/Chicago.ttf", 24);
+// ImGui::NewFrame();
+// ImGui::Render();
+// ImGui::PushFont(font1);
+
+void setupWindow(SDL2Wrapper::Window& window) {
+  SDL2Wrapper::Store::createFont("default", "assets/Chicago.ttf");
+  window.setCurrentFont("default", 18);
+  auto events = &window.getEvents();
+  events->setEventHandler([](SDL_Event e) { ImGui_ImplSDL2_ProcessEvent(&e); });
+}
+
+void setupImgui(SDL2Wrapper::Window& window) {
+  auto renderer = &window.getRenderer();
+  auto sdlWindow = &window.getSDLWindow();
+  ImGui::CreateContext();
+  ImGuiSDL::Initialize(renderer, window.width, window.height);
+  ImGui_ImplSDL2_InitForSDLRenderer(sdlWindow, renderer);
+
+  ImGuiIO& io = ImGui::GetIO();
+  ImGui_ImplSDL2_NewFrame();
+  // auto font = io.Fonts->AddFontFromFileTTF("assets/Chicago.ttf", 24);
+  ImFont* font1 = io.Fonts->AddFontDefault();
+  // ImFont* font2 =
+  //     io.Fonts->AddFontFromFileTTF("../../extra_fonts/Ruda-Bold.ttf", 16.0f);
+  // ImGui::PushFont(font);
+  // ImGui::NewFrame();
+  // ImGui::Render();
+  // ImGuiSDL::Render(ImGui::GetDrawData());
+  // ImGui::PushFont(font1);
+}
+
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays)
 int main(int argc, char* argv[]) {
-  Logger() << "Program Begin." << Logger::endl;
+  logger::info("Program Begin.");
   srand(time(NULL));
-  in2::init("");
+  SNW::in2::init("");
 
-  // const auto fmt = fmt::format("This is a test {} okay {}?");
-  logger::info("Hello world");
-  Logger() << "Hello world" << Logger::endl;
-  // Logger().printf2("This is a test {} okay {}?", "something", 2);
+  std::vector<std::string> args;
+  utils::parseArgs(argc, argv, args);
+  try {
+    // SDL2Wrapper::Window window("Sadelica: NW", 720, 1280, 25, 50);
+    // SDL2Wrapper::Window window("Sadelica: NW", 576, 1024, 25, 50);
+    SDL2Wrapper::Window window("Sadelica: NW", 480, 854, 25, 50);
+    setupWindow(window);
+    setupImgui(window);
 
-  // in2::In2Context in2 = in2::In2Context();
+    ImGuiIO& io = ImGui::GetIO();
+    auto uiInstance = ui::Ui();
 
-  // in2.executeFile("CPP_Test");
+    window.startRenderLoop([&]() {
+      window.setBackgroundColor(window.makeColor(10, 10, 10));
+      window.setCurrentFont("default", 24);
 
-  // int choice = -1;
-  // bool looping = true;
-  // do {
-  //   if (in2.waitingForResume) {
-  //     Logger() << " Press Enter to continue." << Logger::endl;
-  //     if (std::cin.get() == '\n') {
-  //       in2.resumeExecution();
-  //     }
-  //   } else if (in2.waitingForChoice) {
-  //     auto choices = in2.getChoices();
-  //     for (const auto& choice : choices) {
-  //       in2.pushLine(choice.line);
-  //     }
-  //     std::cin >> choice;
-  //     if (choice >= 1 && choice <= static_cast<int>(choices.size())) {
-  //       in2.chooseExecution(choices[choice - 1].id);
-  //       std::cin.get();
-  //     } else {
-  //       Logger() << "invalid choice" << Logger::endl;
-  //     }
-  //   } else if (in2.isExecutionCompleted) {
-  //     Logger() << "Ending execution" << Logger::endl;
-  //     looping = false;
-  //   } else {
-  //     Logger(LogType::ERROR) << "Error ended execution early!" <<
-  //     Logger::endl; looping = false;
-  //   }
-  // } while (looping);
+      ImGui_ImplSDL2_NewFrame();
+      ImGui::NewFrame();
 
-  Logger() << "Program End." << Logger::endl;
+      uiInstance.render();
+
+      ImGui::ShowDemoWindow();
+
+      ImGui::Render();
+      ImGuiSDL::Render(ImGui::GetDrawData());
+      return true;
+    });
+
+    logger::info("Program End.");
+  } catch (const std::string& e) {
+    Logger(LogType::ERROR) << e << Logger::endl;
+  }
+
+  ImGui_ImplSDL2_Shutdown();
+  ImGui::DestroyContext();
 
   return 0;
 }

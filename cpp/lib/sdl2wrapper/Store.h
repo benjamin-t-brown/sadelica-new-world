@@ -1,12 +1,10 @@
 #pragma once
 
+#include "Animation.h"
+#include "SDL2Includes.h"
+#include "Sprite.h"
 #include <memory>
 #include <unordered_map>
-
-#include "SDL2Includes.h"
-
-#include "Animation.h"
-#include "Sprite.h"
 
 namespace SDL2Wrapper {
 
@@ -53,13 +51,12 @@ public:
                                                         const bool loop);
   static void createSound(const std::string& name, const std::string& path);
   static void createMusic(const std::string& name, const std::string& path);
-
+  static void storeTexture(const std::string& name, SDL_Texture* tex);
   static void storeTextTexture(const std::string& name, SDL_Texture* tex);
-
   static void logSprites();
   static void logAnimationDefinitions();
   static void logFonts();
-
+  static bool textureExists(const std::string& name);
   static SDL_Texture* getTexture(const std::string& name);
   static SDL_Texture* getTextTexture(const std::string& name);
   static Sprite& getSprite(const std::string& name);

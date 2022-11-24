@@ -119,7 +119,8 @@ void renderHeader(const Ui& ui) {
                              originalCursorPosition.y));
   {
     static auto borderRectangle =
-        createStaticColorTexture(height, height, ui.colors.WHITE);
+        SDL2Wrapper::Window::getGlobalWindow().getStaticColorTexture(
+            height, height, imVec4ToSDL2WrapperColor(ui.colors.WHITE));
     ImGui::Image(borderRectangle, box);
     float buttonSize = height - 4;
 

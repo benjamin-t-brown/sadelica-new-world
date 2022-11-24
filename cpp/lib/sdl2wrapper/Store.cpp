@@ -1,12 +1,12 @@
 #include "Store.h"
 #include "Logger.h"
 #include "Window.h"
-#include <algorithm>
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
+#include <algorithm>
+#include <stdexcept>
 
 namespace SDL2Wrapper {
 
@@ -38,6 +38,11 @@ Store::~Store() {}
 
 void Store::setRenderer(std::unique_ptr<SDL_Renderer, SDL_Deleter>& rendererA) {
   Store::rendererPtr = rendererA.get();
+}
+
+void Store::storeTexture(const std::string& name, SDL_Texture* tex) {
+  textures[name] =
+      std::unique_ptr<SDL_Texture, SDL_Deleter>(tex, SDL_Deleter());
 }
 
 void Store::storeTextTexture(const std::string& name, SDL_Texture* tex) {
@@ -218,6 +223,15 @@ void Store::logFonts() {
   Logger(DEBUG) << "[SDL2Wrapper] Fonts:" << Logger::endl;
   for (auto& it : fonts) {
     Logger(DEBUG) << " " << it.first << Logger::endl;
+  }
+}
+
+bool Store::textureExists(const std::string& name) {
+  auto pair = textures.find(name);
+  if (pair != textures.end()) {
+    return true;
+  } else {
+    return false;
   }
 }
 

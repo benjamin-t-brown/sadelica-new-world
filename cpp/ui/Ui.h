@@ -9,7 +9,9 @@ using namespace ImGui;
 // NOLINTNEXTLINE
 #define PCT_BOX(w, h, color)                                                   \
   auto box = getBoxBasedOnScreenPct(w, h);                                     \
-  static auto bgRectangle = createStaticColorTexture(box.x, box.y, color);     \
+  static auto bgRectangle =                                                    \
+      SDL2Wrapper::Window::getGlobalWindow().getStaticColorTexture(            \
+          box.x, box.y, imVec4ToSDL2WrapperColor(color));                      \
   ImGui::Image(bgRectangle, box);
 
 // constexpr auto PCT_BOX(double w, double h, const ImColor& color) {
@@ -22,8 +24,9 @@ namespace ui {
 void textCentered(const std::string& text);
 ImVec2 getBoxBasedOnScreenPct(const float pctWidth, const float pctHeight);
 void prepareFullScreenWindow();
-SDL_Texture*
-createStaticColorTexture(int width, int height, const ImVec4& color);
+
+SDL2Wrapper::Color imVec4ToSDL2WrapperColor(const ImVec4& c);
+// SDL_Color
 
 struct UiColors {
   ImVec4 TRANSPARENT = ImColor(255, 255, 255, 0);

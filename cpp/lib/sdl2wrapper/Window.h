@@ -1,21 +1,22 @@
 #pragma once
 
-// #include <deque>
-// #include <functional>
-// #include <map>
-// #include <memory>
-// #include <string>
-// #include <utility>
-
-#include "SDL2Includes.h"
-
 #include "Animation.h"
 #include "Events.h"
-// #include "Sprite.h"
+#include "SDL2Includes.h"
 
-#include <SDL2/SDL.h>
+struct SDL_Window;
+struct SDL_Texture;
+struct SDL_Renderer;
+struct SDL_Color;
 
 namespace SDL2Wrapper {
+
+struct Color {
+  uint8_t r;
+  uint8_t g;
+  uint8_t b;
+  uint8_t a;
+};
 
 class Window {
   std::unique_ptr<SDL_Window, SDL_Deleter> window;
@@ -31,6 +32,7 @@ class Window {
                               const int sz,
                               const SDL_Color& color);
   SDL_Texture* getEmptyTexture(int w, int h);
+
   void onResize(int w, int h);
   void clear();
   void swap();
@@ -45,7 +47,7 @@ class Window {
   double deltaTime;
   bool isLooping = false;
   bool firstLoop;
-  Uint64 lastFrameTime = 0;
+  uint64_t lastFrameTime = 0;
   bool shouldRender = true;
   std::deque<double> pastFrameRatios;
   int deadZoneXDir = 0;
@@ -59,12 +61,12 @@ public:
   int countedFrames;
   int fps;
   int globalAlpha;
-  Uint32 colorkey;
+  uint32_t colorkey;
   bool soundForcedDisabled = false;
   bool isInputEnabled = true;
   std::map<std::string, int> soundChannels;
 
-  static Uint64 now;
+  static uint64_t now;
   static const double targetFrameMS;
   static bool soundEnabled;
   static int soundPercent;
@@ -76,8 +78,8 @@ public:
   Window(const std::string& title,
          const int widthA,
          const int heightA,
-         const int windowPosX = SDL_WINDOWPOS_UNDEFINED,
-         const int windowPosY = SDL_WINDOWPOS_UNDEFINED);
+         const int windowPosX = -1,
+         const int windowPosY = -1);
   ~Window();
 
   Events& getEvents();
@@ -86,7 +88,8 @@ public:
   void setCurrentFont(const std::string& fontName, const int sz);
   const std::string& getCurrentFontName() const;
   int getCurrentFontSize() const;
-  static Uint64 staticGetNow();
+  SDL_Texture* getStaticColorTexture(int width, int height, Color color);
+  static uint64_t staticGetNow();
   double getNow() const;
   double getDeltaTime() const;
   double getFrameRatio() const;
@@ -94,7 +97,7 @@ public:
   void setAnimationFromDefinition(const std::string& name,
                                   Animation& anim) const;
 
-  const SDL_Color makeColor(Uint8 r, Uint8 g, Uint8 b) const;
+  const SDL_Color makeColor(uint8_t r, uint8_t g, uint8_t b) const;
 
   void disableSound();
   void enableSound();
