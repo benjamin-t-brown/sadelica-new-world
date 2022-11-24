@@ -1,7 +1,7 @@
 #include "game/in2/in2.h"
 #include "lib/imgui/imgui.h"
 #include "lib/imgui/imgui_impl_sdl.h"
-#include "lib/imgui/imgui_sdl.h"
+#include "lib/imgui/imgui_impl_sdlrenderer.h"
 #include "lib/sdl2wrapper/Events.h"
 #include "lib/sdl2wrapper/Store.h"
 #include "lib/sdl2wrapper/Window.h"
@@ -10,6 +10,9 @@
 #include "utils/utils.h"
 #include <SDL2/SDL.h>
 
+#if !SDL_VERSION_ATLEAST(2, 0, 17)
+#error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
+#endif
 // ImGui_ImplSDL2_ProcessEvent(&e);
 // Enable Keyboard Controls
 // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
@@ -32,14 +35,23 @@ void setupWindow(SDL2Wrapper::Window& window) {
 void setupImgui(SDL2Wrapper::Window& window) {
   auto renderer = &window.getRenderer();
   auto sdlWindow = &window.getSDLWindow();
+  IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGuiSDL::Initialize(renderer, window.width, window.height);
   ImGui_ImplSDL2_InitForSDLRenderer(sdlWindow, renderer);
-
+  ImGui_ImplSDLRenderer_Init(renderer);
   ImGuiIO& io = ImGui::GetIO();
-  ImGui_ImplSDL2_NewFrame();
-  // auto font = io.Fonts->AddFontFromFileTTF("assets/Chicago.ttf", 24);
-  ImFont* font1 = io.Fonts->AddFontDefault();
+  ImGui::StyleColorsDark();
+
+  auto font2 = io.Fonts->AddFontFromFileTTF("assets/Chicago.ttf", 24);
+
+  // auto font = ImGui::GetIO().Fonts->AddFontFromFileTTF(
+  //     "C:\\Windows\\Fonts\\Verdana.ttf", 100);
+  // ImGui::PushFont(font);
+
+  // ImGui_ImplSDL2_NewFrame();
+  // ImFont* font1 = io.Fonts->AddFontDefault();
+  // auto font2 = io.Fonts->AddFontFromFileTTF("assets/Chicago.ttf", 18);
+  // ImGui::PushFont(font2);
   // ImFont* font2 =
   //     io.Fonts->AddFontFromFileTTF("../../extra_fonts/Ruda-Bold.ttf", 16.0f);
   // ImGui::PushFont(font);
@@ -71,6 +83,7 @@ int main(int argc, char* argv[]) {
       window.setBackgroundColor(window.makeColor(10, 10, 10));
       window.setCurrentFont("default", 24);
 
+      ImGui_ImplSDLRenderer_NewFrame();
       ImGui_ImplSDL2_NewFrame();
       ImGui::NewFrame();
 
@@ -79,7 +92,7 @@ int main(int argc, char* argv[]) {
       ImGui::ShowDemoWindow();
 
       ImGui::Render();
-      ImGuiSDL::Render(ImGui::GetDrawData());
+      ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
       return true;
     });
 
@@ -88,6 +101,7 @@ int main(int argc, char* argv[]) {
     Logger(LogType::ERROR) << e << Logger::endl;
   }
 
+  ImGui_ImplSDLRenderer_Shutdown();
   ImGui_ImplSDL2_Shutdown();
   ImGui::DestroyContext();
 

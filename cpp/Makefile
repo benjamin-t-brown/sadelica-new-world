@@ -5,10 +5,10 @@ MAIN_ALL=Main.cpp
 CLIENT_CODE=\
 lib/imgui/imgui_draw.cpp\
 lib/imgui/imgui_demo.cpp\
-lib/imgui/imgui_sdl.cpp\
 lib/imgui/imgui_tables.cpp\
 lib/imgui/imgui_widgets.cpp\
 lib/imgui/imgui_impl_sdl.cpp\
+lib/imgui/imgui_impl_sdlrenderer.cpp\
 lib/imgui/imgui.cpp\
 lib/sdl2wrapper/Animation.cpp\
 lib/sdl2wrapper/AssetLoader.cpp\

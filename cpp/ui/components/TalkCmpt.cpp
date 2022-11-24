@@ -108,33 +108,9 @@ void renderTextArea(const Ui& ui) {
   ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing,
                       ImVec2(spacing / 2.f, spacing / 2.f));
   ImGui::SetCursorPosX(spacing);
-  ImGui::BeginChild("TextArea", ImVec2(width, height));
+  ImGui::BeginChild("in2_TextArea", ImVec2(width, height), false);
 
   const std::vector<std::string> texts = {
-      "Before you stands a woman of imposing stature.  Easily twice your "
-      "height, her shadow engulfs you completely.  At first she does not "
-      "notice you, but after an awkward moment she blinks and cocks an "
-      "eyebrow.",
-      "Before you stands a woman of imposing stature.  Easily twice your "
-      "height, her shadow engulfs you completely.  At first she does not "
-      "notice you, but after an awkward moment she blinks and cocks an "
-      "eyebrow.",
-      "Before you stands a woman of imposing stature.  Easily twice your "
-      "height, her shadow engulfs you completely.  At first she does not "
-      "notice you, but after an awkward moment she blinks and cocks an "
-      "eyebrow.",
-      "Before you stands a woman of imposing stature.  Easily twice your "
-      "height, her shadow engulfs you completely.  At first she does not "
-      "notice you, but after an awkward moment she blinks and cocks an "
-      "eyebrow.",
-      "Before you stands a woman of imposing stature.  Easily twice your "
-      "height, her shadow engulfs you completely.  At first she does not "
-      "notice you, but after an awkward moment she blinks and cocks an "
-      "eyebrow.",
-      "Before you stands a woman of imposing stature.  Easily twice your "
-      "height, her shadow engulfs you completely.  At first she does not "
-      "notice you, but after an awkward moment she blinks and cocks an "
-      "eyebrow.",
       "Before you stands a woman of imposing stature.  Easily twice your "
       "height, her shadow engulfs you completely.  At first she does not "
       "notice you, but after an awkward moment she blinks and cocks an "
@@ -153,11 +129,11 @@ void renderTextArea(const Ui& ui) {
 
   ImGui::Spacing();
   for (const std::string& text : texts) {
-    ImGui::TextWrapped(text.c_str());
+    ImGui::TextWrapped("%s", text.c_str());
     ImGui::Spacing();
   }
 
-  auto font = ImGui::GetFont();
+  // auto font = ImGui::GetFont();
 
   ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2, 2));
   int ctr = 1;
@@ -244,7 +220,8 @@ void renderTalkCmpt(const Ui& ui) {
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
   ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
   ImGui::Begin("Talk", NULL, windowFlags);
-  ImGui::SetWindowFontScale(2.);
+  // ImGui::SetWindowFontScale(2.);
+  // ImGui::SetWindowFo
 
   renderHeader(ui);
   renderNameplate(ui);
