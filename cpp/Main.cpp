@@ -1,4 +1,4 @@
-#include "game/cliContext.h"
+#include "game/stateClient/cliContext.h"
 #include "game/in2/in2.h"
 #include "lib/imgui/imgui.h"
 #include "lib/imgui/imgui_impl_sdl.h"

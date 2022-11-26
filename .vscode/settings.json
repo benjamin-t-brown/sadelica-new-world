@@ -100,6 +100,7 @@
     "-cppcoreguidelines-avoid-magic-numbers",
     "-cppcoreguidelines-pro-type-vararg",
     "-cppcoreguidelines-prefer-member-initializer",
+    "-cppcoreguidelines-pro-type-reinterpret-cast",
     "-bugprone-easily-swappable-parameters"
   ],
   "cpplint.filters": [
@@ -129,6 +130,7 @@
     "cppcoreguidelines-avoid-magic-numbers",
     "cppcoreguidelines-pro-type-vararg",
     "cppcoreguidelines-prefer-member-initializer",
+    "cppcoreguidelines-pro-type-reinterpret-cast",
     "bugprone-easily-swappable-parameters"
   ],
   "C_Cpp.codeAnalysis.clangTidy.codeAction.showDisable": true,

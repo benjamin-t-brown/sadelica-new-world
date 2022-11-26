@@ -18,17 +18,20 @@ lib/sdl2wrapper/Sound.cpp\
 lib/sdl2wrapper/Sprite.cpp\
 lib/sdl2wrapper/Store.cpp\
 lib/sdl2wrapper/Window.cpp\
-game/cliContext.cpp\
-game/state/cliDispatch.cpp\
-game/state/cliResultProcessor.cpp\
+game/stateClient/cliContext.cpp\
+game/stateClient/cliDispatch.cpp\
+game/stateClient/cliResultProcessor.cpp\
+game/stateClient/cliLoopbackProcessor.cpp\
+game/stateClient/cliState.cpp\
+game/stateClient/cliLoopbackHandlers.cpp\
 ui/Ui.cpp\
 ui/components/TalkCmpt.cpp\
 ui/components/InGameCmpt.cpp
 
 SERVER_CODE=\
-game/srvContext.cpp\
-game/state/srvDispatchProcessor.cpp\
-game/state/srvResult.cpp\
+game/stateServer/srvContext.cpp\
+game/stateServer/srvDispatchProcessor.cpp\
+game/stateServer/srvResult.cpp
 
 SHARED_CODE=\
 lib/sdl2wrapper/Timer.cpp\
@@ -42,7 +45,8 @@ TEST_CODE=\
 test/test.cpp\
 test/sdl2wrapper/Gauge.test.cpp\
 test/in2/in2.test.cpp\
-test/Logger.test.cpp
+test/Logger.test.cpp\
+test/state/clientState.test.cpp
 
 MAIN_CLIENT_OBJECT=$(MAIN_CLIENT:.cpp=.o)
 MAIN_SERVER_OBJECT=$(MAIN_SERVER:.cpp=.o)
@@ -117,11 +121,11 @@ else
 endif
 LIBS_TEST=-lpthread -lgtest
 
-FLAGS=-g -Wall -std=c++17 -DFMT_HEADER_ONLY -I.
+FLAGS=-O0 -g -Wall -std=c++17 -DFMT_HEADER_ONLY -I.
 
 .PHONY: $(EXE) test
 $(EXE): precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(MAIN_ALL_OBJECT)
-	g++ $(FLAGS) $(MAIN_ALL_OBJECT) $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) -o $(EXE) $(LIBS)
+	g++ -include precompiled.h $(FLAGS) $(MAIN_ALL_OBJECT) $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) -o $(EXE) $(LIBS)
 
 precompiled.h.gch:
 	g++ $(FLAGS) -c precompiled.h -o precompiled.h.gch
@@ -148,5 +152,6 @@ run: $(EXE)
 clean:
 	rm -f $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(MAIN_ALL_OBJECT) $(MAIN_CLIENT_OBJECT) $(MAIN_SERVER_OBJECT)
 	rm -f $(TEST_OBJECTS)
+	rm -f precompiled.h.gch
 	rm -f $(EXE) $(EXE).exe $(EXE_CLIENT) $(EXE_CLIENT).exe $(EXE_SERVER) $(EXE_SERVER).exe 
 	rm -fd .build

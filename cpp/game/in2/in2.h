@@ -21,6 +21,8 @@ private:
   std::vector<std::string> lines;
   std::vector<In2Choice> choices;
 
+  int lastLineRetrieved = 0;
+
 public:
   bool waitingForResume = false;
   bool waitingForChoice = false;
@@ -39,6 +41,7 @@ public:
   std::string getStorage(const std::string& key);
   void setStorage(const std::string& key, const std::string& value);
   const std::vector<std::string>& getLines();
+  const std::vector<std::string> getNextLines();
 };
 
 } // namespace in2

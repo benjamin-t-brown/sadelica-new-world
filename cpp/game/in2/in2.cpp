@@ -333,6 +333,15 @@ void In2Context::setStorage(const std::string& key, const std::string& value) {
 }
 
 const std::vector<std::string>& In2Context::getLines() { return lines; }
+const std::vector<std::string> In2Context::getNextLines() {
+  std::vector<std::string> ret;
+  const int sz = static_cast<int>(lines.size());
+  for (int i = lastLineRetrieved; i < sz; i++) {
+    ret.push_back(lines[i]);
+  }
+  lastLineRetrieved = sz;
+  return ret;
+}
 
 } // namespace in2
 }; // namespace snw

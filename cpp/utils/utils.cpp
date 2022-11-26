@@ -1,5 +1,6 @@
 #include "utils.h"
 #include <algorithm>
+#include <sstream>
 
 namespace utils {
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays)
@@ -21,4 +22,18 @@ bool includes(const std::string& arg, const std::vector<std::string>& args) {
     return false;
   }
 }
+
+std::string join(const std::vector<std::string>& arr,
+                 const std::string& delim) {
+  std::stringstream ss;
+  int sz = static_cast<int>(arr.size());
+  for (int i = 0; i < sz; i++) {
+    ss << arr[i];
+    if (i < sz - 1) {
+      ss << delim;
+    }
+  }
+  return ss.str();
+}
+
 } // namespace utils

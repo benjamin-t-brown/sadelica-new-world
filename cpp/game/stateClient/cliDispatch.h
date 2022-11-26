@@ -1,6 +1,6 @@
 #pragma once
 
-#include "actions.h"
+#include "game/actions.h"
 #include <vector>
 
 using DispatchActionType = snw::state::DispatchActionType;
@@ -16,15 +16,19 @@ private:
 public:
   void enqueue(const DispatchAction& action);
   void dispatch();
+  void reset();
+  std::vector<void*> getPayloadPtrs();
 };
-
-} // namespace state
 
 namespace dispatch {
 
 void startTalk(const std::string& talkName);
 void continueTalk();
 void chooseTalk(const std::string& choiceId);
+void endTalk();
 
 } // namespace dispatch
+
+} // namespace state
+
 } // namespace snw

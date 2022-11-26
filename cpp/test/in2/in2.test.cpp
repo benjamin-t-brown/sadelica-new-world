@@ -5,17 +5,6 @@
 
 using namespace snw;
 
-std::string readIn2CompiledSrcMock() {
-  const std::string path = "test/in2/main.compiled.mock.js";
-  Logger(LogType::DEBUG) << "Reading in2 compiled src from " << path
-                         << Logger::endl;
-  const std::ifstream src(path);
-
-  std::stringstream buffer;
-  buffer << src.rdbuf();
-  return buffer.str();
-}
-
 class In2Test : public testing::Test {
 protected:
   // before all
@@ -31,6 +20,17 @@ protected:
 
   // after each
   void TearDown() override {}
+
+  static std::string readIn2CompiledSrcMock() {
+    const std::string path = "test/in2/main.compiled.mock.js";
+    Logger(LogType::DEBUG) << "Reading in2 compiled src from " << path
+                           << Logger::endl;
+    const std::ifstream src(path);
+
+    std::stringstream buffer;
+    buffer << src.rdbuf();
+    return buffer.str();
+  }
 };
 
 TEST_F(In2Test, CanBeConstructed) {

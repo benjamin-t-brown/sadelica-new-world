@@ -1,6 +1,6 @@
 #pragma once
 
-#include "actions.h"
+#include "game/actions.h"
 #include <vector>
 
 namespace snw {
@@ -13,6 +13,7 @@ private:
 public:
   void enqueue(const ResultAction& action);
   void process();
+  void reset();
 };
 
 } // namespace state
