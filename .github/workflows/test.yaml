@@ -1,66 +1,62 @@
---- 
-jobs: 
-  build-and-deploy: 
+name: Tests CI
+on: [push, pull_request]
+jobs:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    steps: 
-      - 
-        name: "Checkout 🛎️"
+    steps:
+      - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
-        with: 
+        with:
           persist-credentials: false
-      - 
-        name: "Install SDL"
+
+      - name: Install SDL
         run: |
-            sudo apt install libsdl2-ttf-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-gfx-dev -y
-            cd /tmp
-            git clone https://github.com/libsdl-org/SDL
-            cd SDL
-            mkdir build
-            cd build
-            ../configure
-            make
-            sudo make install
-      - 
-        name: "Install Gtest"
+          sudo apt install libsdl2-ttf-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-gfx-dev -y
+          cd /tmp
+          git clone https://github.com/libsdl-org/SDL
+          cd SDL
+          mkdir build
+          cd build
+          ../configure
+          make
+          sudo make install
+
+      - name: Install Gtest
         run: |
-            sudo apt-get install libgtest-dev
-            cd /usr/src/googletest/googletest
-            sudo mkdir build
-            cd build
-            sudo cmake ..
-            sudo make
-            sudo cp libgtest* /usr/lib/
-            cd ..
-            sudo rm -rf build
-            sudo mkdir /usr/local/lib/googletest
-            sudo ln -s /usr/lib/libgtest.a /usr/local/lib/googletest/libgtest.a
-            sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/googletest/libgtest_main.a
-      - 
-        name: Build
+          sudo apt-get install libgtest-dev
+          cd /usr/src/googletest/googletest
+          sudo mkdir build
+          cd build
+          sudo cmake ..
+          sudo make
+          sudo cp libgtest* /usr/lib/
+          cd ..
+          sudo rm -rf build
+          sudo mkdir /usr/local/lib/googletest
+          sudo ln -s /usr/lib/libgtest.a /usr/local/lib/googletest/libgtest.a
+          sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/googletest/libgtest_main.a
+
+      - name: Build
         run: |
-            cd cpp
-            make test
-      - 
-        if: "${{ success() }}"
-        name: "Tests ✅"
+          cd cpp
+          make test
+
+      - name: Tests ✅
+        if: ${{ success() }}
         run: |
-            curl --request POST           --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}           --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'           --header 'content-type: application/json'           --data '{
-              "context": "tests",
-              "state": "success",
-              "description": "Tests passed",
-              "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            }'
-      - 
-        if: "${{ failure() }}"
-        name: "Tests 🚨"
+          curl --request POST           --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}           --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'           --header 'content-type: application/json'           --data '{
+            "context": "tests",
+            "state": "success",
+            "description": "Tests passed",
+            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }'
+
+      - name: Tests 🚨
+        if: ${{ failure() }}
         run: |
-            curl --request POST           --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}           --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'           --header 'content-type: application/json'           --data '{
-              "context": "tests",
-              "state": "failure",
-              "description": "Tests failed",
-              "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            }'
-name: "Tests CI"
-true: 
-  - push
-  - pull_request
+          curl --request POST           --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}           --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'           --header 'content-type: application/json'           --data '{
+            "context": "tests",
+            "state": "failure",
+            "description": "Tests failed",
+            "target_url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }'
