@@ -41,7 +41,7 @@ jobs:
       - name: Build
         run: |
           cd cpp
-          make test
+          make test -j8
 
       - name: Tests ✅
         if: ${{ success() }}

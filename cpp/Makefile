@@ -2,6 +2,8 @@ MAIN_CLIENT=MainClient.cpp
 MAIN_SERVER=MainServer.cpp
 MAIN_ALL=Main.cpp
 
+WORKING_DIR = $(shell pwd)
+
 CLIENT_CODE=\
 lib/imgui/imgui_draw.cpp\
 lib/imgui/imgui_demo.cpp\
@@ -121,7 +123,7 @@ else
 endif
 LIBS_TEST=-lpthread -lgtest
 
-FLAGS=-O0 -g -Wall -std=c++17 -DFMT_HEADER_ONLY -I.
+FLAGS=-O0 -g -Wall -std=c++17 -DFMT_HEADER_ONLY -I$(WORKING_DIR)
 
 .PHONY: $(EXE) test
 $(EXE): precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(MAIN_ALL_OBJECT)
