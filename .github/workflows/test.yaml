@@ -13,15 +13,16 @@ jobs:
           sudo apt update
           sudo apt install cmake
 
-      - name: Install Gtest
+      - name: install GoogleTest
+        if: ${{ steps.cache.output.cache-hit != 'true' }}
         run: |
-          sudo apt-get install libgtest-dev -y
-          cd /usr/src/gtest
-          sudo cmake CMakeLists.txt
-          sudo make
-          sudo cp *.a /usr/lib
-          sudo ln -s /usr/lib/libgtest.a /usr/local/lib/libgtest.a
-          sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
+          cd ..
+          git clone https://github.com/google/googletest.git --branch release-1.10.0
+          cd googletest
+          cmake -Bbuild -DCMAKE_INSTALL_PREFIX="$HOME/.local" -Dgtest_force_shared_crt=1
+          cmake --build build --config Release
+          cmake --build build --target install --config Release
+          cd ../modern-cpp-template
 
       - name: Install SDL2
         run: |
