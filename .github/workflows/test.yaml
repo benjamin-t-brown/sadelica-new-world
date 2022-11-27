@@ -16,20 +16,12 @@ jobs:
       - name: Install Gtest
         run: |
           sudo apt-get install libgtest-dev -y
-          cd /usr/src/googletest/googletest
-          sudo mkdir build
-          cd build
-          sudo cmake ..
-          echo "NOW MAKE!"
+          cd /usr/src/gtest
+          sudo cmake CMakeLists.txt
           sudo make
-          echo "NOW COPY!"
-          ls
-          sudo cp libgtest* /usr/lib/
-          cd ..
-          sudo rm -rf build
-          sudo mkdir /usr/local/lib/googletest
-          sudo ln -s /usr/lib/libgtest.a /usr/local/lib/googletest/libgtest.a
-          sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/googletest/libgtest_main.a
+          sudo cp *.a /usr/lib
+          sudo ln -s /usr/lib/libgtest.a /usr/local/lib/libgtest.a
+          sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
 
       - name: Install SDL2
         run: |
