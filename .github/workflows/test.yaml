@@ -11,6 +11,7 @@ jobs:
 
       - name: Install SDL
         run: |
+          sudo apt update
           sudo apt install libsdl2-ttf-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-gfx-dev -y
           cd /tmp
           git clone https://github.com/libsdl-org/SDL
