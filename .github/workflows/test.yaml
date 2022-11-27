@@ -18,7 +18,7 @@ jobs:
           cd SDL
           mkdir build
           cd build
-          ../configure
+          cd ../configure
           make
           sudo make install
 
