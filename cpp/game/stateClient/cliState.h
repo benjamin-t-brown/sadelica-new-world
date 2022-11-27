@@ -1,7 +1,6 @@
 #pragma once
 
 #include "game/in2/in2.h"
-#include "lib/betterenum/enum.h"
 #include <vector>
 
 namespace snw {
