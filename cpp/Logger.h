@@ -10,10 +10,35 @@ using SDL2Wrapper::LogType;
 
 namespace logger {
 
-inline void info(const char* c, ...) {
-  std::stringstream ss;
-  va_list lst;
-  va_start(lst, c);
+// template <class... Args> void info(std::string_view f, Args... args);
+
+// template <class... Args> void debug(std::string_view f, Args... args);
+
+// template <class... Args> void warn(std::string_view f, Args... args);
+
+// template <class... Args> void error(std::string_view f, Args... args);
+
+// template <class... Args> void info(std::string_view f, Args... args) {
+//   const auto msg = fmt::vformat(f, fmt::make_format_args(args...));
+//   Logger(LogType::INFO) << msg << Logger::endl;
+// }
+
+// template <class... Args> void debug(std::string_view f, Args... args) {
+//   const auto msg = fmt::vformat(f, fmt::make_format_args(args...));
+//   Logger(LogType::DEBUG) << msg << Logger::endl;
+// }
+
+// template <class... Args> void warn(std::string_view f, Args... args) {
+//   const auto msg = fmt::vformat(f, fmt::make_format_args(args...));
+//   Logger(LogType::WARN) << msg << Logger::endl;
+// }
+
+// template <class... Args> void error(std::string_view f, Args... args) {
+//   const auto msg = fmt::vformat(f, fmt::make_format_args(args...));
+//   Logger(LogType::ERROR) << msg << Logger::endl;
+// }
+
+inline void args(va_list lst, const char* c, std::stringstream& ss) {
   while (*c != '\0') {
     if (*c != '%') {
       ss << *c;
@@ -27,13 +52,24 @@ inline void info(const char* c, ...) {
     case 's':
       ss << va_arg(lst, char*);
       break;
+    case 'i':
     case 'c':
       ss << va_arg(lst, int);
+      break;
+    case 'd':
+      ss << va_arg(lst, double);
       break;
     }
     // NOLINTNEXTLINE
     c++;
   }
+}
+
+inline void info(const char* c, ...) {
+  std::stringstream ss;
+  va_list lst;
+  va_start(lst, c);
+  args(lst, c, ss);
   va_end(lst);
   Logger(LogType::INFO) << ss.str() << Logger::endl;
 }
@@ -42,25 +78,7 @@ inline void error(const char* c, ...) {
   std::stringstream ss;
   va_list lst;
   va_start(lst, c);
-  while (*c != '\0') {
-    if (*c != '%') {
-      ss << *c;
-      c++;
-      continue;
-    }
-    // NOLINTNEXTLINE
-    c++;
-    switch (*c) {
-    case 's':
-      ss << va_arg(lst, char*);
-      break;
-    case 'c':
-      ss << va_arg(lst, int);
-      break;
-    }
-    // NOLINTNEXTLINE
-    c++;
-  }
+  args(lst, c, ss);
   va_end(lst);
   Logger(LogType::ERROR) << ss.str() << Logger::endl;
 }
@@ -69,26 +87,7 @@ inline void debug(const char* c, ...) {
   std::stringstream ss;
   va_list lst;
   va_start(lst, c);
-  while (*c != '\0') {
-    if (*c != '%') {
-      ss << *c;
-      // NOLINTNEXTLINE
-      c++;
-      continue;
-    }
-    // NOLINTNEXTLINE
-    c++;
-    switch (*c) {
-    case 's':
-      ss << va_arg(lst, char*);
-      break;
-    case 'c':
-      ss << va_arg(lst, int);
-      break;
-    }
-    // NOLINTNEXTLINE
-    c++;
-  }
+  args(lst, c, ss);
   va_end(lst);
   Logger(LogType::DEBUG) << ss.str() << Logger::endl;
 }
@@ -97,26 +96,7 @@ inline void warn(const char* c, ...) {
   std::stringstream ss;
   va_list lst;
   va_start(lst, c);
-  while (*c != '\0') {
-    if (*c != '%') {
-      ss << *c;
-      // NOLINTNEXTLINE
-      c++;
-      continue;
-    }
-    // NOLINTNEXTLINE
-    c++;
-    switch (*c) {
-    case 's':
-      ss << va_arg(lst, char*);
-      break;
-    case 'c':
-      ss << va_arg(lst, int);
-      break;
-    }
-    // NOLINTNEXTLINE
-    c++;
-  }
+  args(lst, c, ss);
   va_end(lst);
   Logger(LogType::WARN) << ss.str() << Logger::endl;
 }

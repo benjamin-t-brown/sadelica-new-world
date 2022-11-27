@@ -40,7 +40,8 @@ using namespace ClientStateTestHelpers;
 
 TEST_F(ClientStateTest, CanStartContinueAndStopAConversation) {
   dispatch::startTalk("main1");
-  EXPECT_EQ(getState().in2.conversationText, "The value of test is TEST.");
+  ClientContext::get().update();
+  EXPECT_EQ(getState().in2.conversationText, "The value of test is value.");
 
   ClientContext::get().update();
   EXPECT_TRUE(helpers::isSectionVisible(getState(), SectionType::CONVERSATION));

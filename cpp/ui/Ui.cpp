@@ -24,7 +24,7 @@ void Ui::loadFonts() {
     if (font == NULL) {
       throw std::runtime_error("Failed to load font: " + key);
     }
-    logger::debug("Loaded font: {}", key);
+    logger::debug("Loaded font: {}", key.c_str());
 
     imguiFonts[key] = font;
   }

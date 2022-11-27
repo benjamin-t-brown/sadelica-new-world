@@ -20,15 +20,15 @@ void ClientLoopbackProcessor::enqueue(const DispatchAction& action) {
 void ClientLoopbackProcessor::process() {
   ClientState state = ClientState(ClientContext::get().getState());
   for (auto& it : actionsToCommit) {
-    logger::debug("process loopback action {}", dispatchActionString(it.type));
+    logger::debug("process loopback action {}", dispatchActionString(it.type).c_str());
     auto itHandler = handlers.find(it.type);
     if (itHandler == handlers.end()) {
       logger::warn("Could not find loopback handler for type={}",
-                   dispatchActionString(it.type));
+                   dispatchActionString(it.type).c_str());
       if (it.jsonPayload != nullptr) {
         // NOLINTNEXTLINE
         auto j = reinterpret_cast<json*>(it.jsonPayload);
-        logger::warn("Payload: {}", j->dump());
+        logger::warn("Payload: {}", j->dump().c_str());
       }
       continue;
     }

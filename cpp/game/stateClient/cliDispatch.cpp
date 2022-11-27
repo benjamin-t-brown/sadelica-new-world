@@ -17,7 +17,7 @@ void ClientDispatch::enqueue(const DispatchAction& action) {
 }
 void ClientDispatch::dispatch() {
   for (auto& it : actionsToCommit) {
-    logger::debug("Dispatch action: {}", dispatchActionString(it.type));
+    logger::debug("Dispatch action: %s", dispatchActionString(it.type).c_str());
     switch (it.cl) {
     case ActionCl::SEND_ONLY:
       break;

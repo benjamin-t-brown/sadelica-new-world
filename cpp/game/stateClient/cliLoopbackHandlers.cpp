@@ -23,8 +23,8 @@ struct PayloadCivilTalkChoose {
 
 void logAssertionError(DispatchActionType type, const std::string& msg) {
   logger::error("Failure at ClientLoopbackProcessor during {}: {}",
-                dispatchActionString(type),
-                msg);
+                dispatchActionString(type).c_str(),
+                msg.c_str());
 }
 
 void ClientLoopbackProcessor::init() {

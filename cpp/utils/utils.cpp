@@ -26,7 +26,7 @@ bool includes(const std::string& arg, const std::vector<std::string>& args) {
 std::string join(const std::vector<std::string>& arr,
                  const std::string& delim) {
   std::stringstream ss;
-  int sz = static_cast<int>(arr.size());
+  const int sz = static_cast<int>(arr.size());
   for (int i = 0; i < sz; i++) {
     ss << arr[i];
     if (i < sz - 1) {
