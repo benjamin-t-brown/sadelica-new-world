@@ -62,10 +62,10 @@ void continueTalk() {
   ClientContext::get().getDispatch().enqueue(action);
 }
 
-void chooseTalk(const std::string& choiceId) {
+void chooseTalk(const int choiceIndex) {
   const DispatchAction action{ActionCl::BOTH,
                               DispatchActionType::TALK_SELECT_CHOICE,
-                              new json({{"choiceId", choiceId}})};
+                              new json({{"choiceIndex", choiceIndex}})};
 
   ClientContext::get().getDispatch().enqueue(action);
 }

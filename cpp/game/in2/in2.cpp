@@ -257,9 +257,10 @@ void In2Context::executeFile(const std::string& fileName) {
   std::stringstream ss;
   ss << "fromCpp_runFile('" << fileName << ".json');";
   Logger(LogType::DEBUG) << "executeFile: " << ss.str() << Logger::endl;
-  duk_eval_string_noresult(ctx, ss.str().c_str());
+  duk_eval_string(ctx, ss.str().c_str());
   const int result = static_cast<int>(duk_get_int(ctx, -1));
   if (result == 1) {
+    isExecutionErrored = true;
     Logger(LogType::ERROR) << "Invalid in2 file: " << fileName << Logger::endl;
   }
 }
@@ -272,6 +273,9 @@ void In2Context::resumeExecution() {
     ss << "fromCpp_resumeExecution();";
     Logger(LogType::DEBUG) << "resumeExecution: " << ss.str() << Logger::endl;
     duk_eval_string_noresult(ctx, ss.str().c_str());
+  } else {
+    Logger(LogType::WARN) << "Cannot resume execution, not waiting for resume."
+                          << Logger::endl;
   }
 }
 
@@ -288,6 +292,9 @@ void In2Context::chooseExecution(const std::string& id) {
       Logger(LogType::WARN) << "Invalid choice: " << id << Logger::endl;
       waitingForChoice = true;
     }
+  } else {
+    Logger(LogType::WARN) << "Cannot choose execution, not waiting for choice."
+                          << Logger::endl;
   }
 }
 
@@ -295,7 +302,7 @@ void In2Context::pushLine(const std::string& line) {
   lines.push_back(line);
 
   // This is temporary
-  // Logger() << line << std::endl;
+  // Logger(LogType::DEBUG) << "Push line: " << line << std::endl;
 }
 
 void In2Context::pushChoice(In2Choice c) { choices.push_back(c); }
@@ -305,7 +312,16 @@ void In2Context::resetChoices() {
 
 const std::vector<In2Choice>& In2Context::getChoices() { return choices; }
 
-std::string In2Context::getStorage(const std::string& key) {
+bool In2Context::hasChosenChoice(int index) const {
+  if (index >= 0 && index <= static_cast<int>(choices.size())) {
+    auto& c = choices[index];
+    const auto s = getStorage("choice." + c.id);
+    return s == "true";
+  }
+  return false;
+}
+
+std::string In2Context::getStorage(const std::string& key) const {
   auto json = castJsonState(jsonState);
 
   if (json == nullptr) {
@@ -330,6 +346,16 @@ void In2Context::setStorage(const std::string& key, const std::string& value) {
   }
 
   (*json)[key] = value;
+}
+
+void In2Context::logStorage() {
+  auto json = castJsonState(jsonState);
+
+  if (json == nullptr) {
+    Logger(LogType::INFO) << "No storage" << std::endl;
+  } else {
+    Logger(LogType::INFO) << std::setw(4) << json->dump() << Logger::endl;
+  }
 }
 
 const std::vector<std::string>& In2Context::getLines() { return lines; }

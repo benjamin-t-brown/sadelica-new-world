@@ -24,7 +24,7 @@ namespace dispatch {
 
 void startTalk(const std::string& talkName);
 void continueTalk();
-void chooseTalk(const std::string& choiceId);
+void chooseTalk(const int choiceIndex);
 void endTalk();
 
 } // namespace dispatch

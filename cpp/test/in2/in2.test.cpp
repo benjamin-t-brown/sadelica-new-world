@@ -66,3 +66,9 @@ TEST_F(In2Test, CanExecuteABasicFileWithChoices) {
   EXPECT_EQ(in2Ctx.waitingForChoice, false);
   EXPECT_EQ(in2Ctx.isExecutionCompleted, true);
 }
+
+TEST_F(In2Test, ProperlyErrorsWhenAnInvalidFilenameIsGiven) {
+  auto in2Ctx = in2::In2Context();
+  in2Ctx.executeFile("nonExistantFile");
+  EXPECT_TRUE(in2Ctx.isExecutionErrored);
+}

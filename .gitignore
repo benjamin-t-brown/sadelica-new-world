@@ -2,10 +2,7 @@ node_modules
 *.log
 *.zip
 build/
-SNW.exe
-SNW
-SNW_TEST.exe
-SNW_TEST
+SNW*
 CMakeCache.txt
 CMakeFiles/
 *.o

@@ -105,121 +105,6 @@
     }
     return player.state;
   };
-  files["CPP_Test.json"] = function (id) {
-    player.set(CURRENT_FILE_VAR, 'CPP_Test.json');
-    // text
-    scope.u0nqma13x = function () {
-      player.set(CURRENT_NODE_VAR, 'u0nqma13x');
-      var text = "This is an example text node.";
-      core.say(text, scope.xdkm9gezm, 'u0nqma13x', 'xdkm9gezm');
-    };
-
-    // text
-    scope.xdkm9gezm = function () {
-      player.set(CURRENT_NODE_VAR, 'xdkm9gezm');
-      var text = "This is a consecutive example text node.";
-      core.say(text, scope.qbn2zhkpg, 'xdkm9gezm', 'qbn2zhkpg');
-    };
-
-    // pass_fail
-    scope.qbn2zhkpg = function () {
-      player.set(CURRENT_NODE_VAR, 'qbn2zhkpg');
-      var condition = function () {
-        return player.once() ? true : false;
-      }();
-      if (condition) {
-        player.set(CURRENT_NODE_VAR, 'ygwd7qkgt');
-        var text = "";
-        core.say(text, scope.oa5s7r8dc);
-      }
-      if (!condition) {
-        player.set(CURRENT_NODE_VAR, 'aggzhpzge');
-        var text = "";
-        core.say(text, scope.kfp463kgf);
-      }
-    };
-    // text
-    scope.oa5s7r8dc = function () {
-      player.set(CURRENT_NODE_VAR, 'oa5s7r8dc');
-      var text = "This is the green area.";
-      core.say(text, scope.qyf4wnqb0, 'oa5s7r8dc', 'qyf4wnqb0');
-    };
-
-    // choice
-    scope.qyf4wnqb0 = function () {
-      player.set(CURRENT_NODE_VAR, 'qyf4wnqb0');
-      var text = "";
-      core.choose(text, 'qyf4wnqb0', [{
-        t: "This is choice 1.",
-        id: 'cr542qh57',
-        cb: scope.cr542qh57,
-        c: function c() {
-          return true;
-        }
-      }, {
-        t: "This is choice 2.",
-        id: 'nam8am70m',
-        cb: scope.nam8am70m,
-        c: function c() {
-          return true;
-        }
-      }, {
-        t: "This is choice 3.",
-        id: 'egfudg9nn',
-        cb: scope.egfudg9nn,
-        c: function c() {
-          return player.get('nodes.cr542qh57');
-        }
-      }]);
-    };
-    scope['qyf4wnqb0'].isChoice = true;
-
-    // text
-    scope.cr542qh57 = function () {
-      player.set(CURRENT_NODE_VAR, 'cr542qh57');
-      var text = "You have chosen the 1st choice.";
-      core.say(text, scope.qyf4wnqb0, 'cr542qh57', 'qyf4wnqb0');
-    };
-
-    // text
-    scope.nam8am70m = function () {
-      player.set(CURRENT_NODE_VAR, 'nam8am70m');
-      var text = "You have chosen the 2nd choice.";
-      core.say(text, scope.qyf4wnqb0, 'nam8am70m', 'qyf4wnqb0');
-    };
-
-    // text
-    scope.egfudg9nn = function () {
-      player.set(CURRENT_NODE_VAR, 'egfudg9nn');
-      var text = "You have chosen the 3rd choice.";
-      core.say(text, scope.u0nqma13x, 'egfudg9nn', 'u0nqma13x');
-    };
-
-    // text
-    scope.kfp463kgf = function () {
-      player.set(CURRENT_NODE_VAR, 'kfp463kgf');
-      var text = "This is the red area.";
-      core.say(text, scope.psu994kkb, 'kfp463kgf', 'psu994kkb');
-    };
-
-    // next_file
-    scope.psu994kkb = function () {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      var key = "Alinea_CH_Scopey.json";
-      var func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-    if (id === undefined) {
-      scope.u0nqma13x();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
   files["Alinea_CH_SpyRigby.json"] = function (id) {
     player.set(CURRENT_FILE_VAR, 'Alinea_CH_SpyRigby.json');
     // next_file
@@ -235,46 +120,6 @@
     };
     if (id === undefined) {
       scope.Hg9db();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-  files["Alinea_CH_Sol.json"] = function (id) {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Sol.json');
-    // next_file
-    scope.tG08a = function () {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      var key = "NONE";
-      var func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-    if (id === undefined) {
-      scope.tG08a();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-  files["Alinea_CH_Scopey.json"] = function (id) {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Scopey.json');
-    // next_file
-    scope.bUbbt = function () {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      var key = "NONE";
-      var func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-    if (id === undefined) {
-      scope.bUbbt();
     } else if (id) {
       scope[id]();
     }
@@ -375,26 +220,6 @@
     };
     if (id === undefined) {
       scope.FdbAF();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-  files["Alinea_CH_Elvyosa.json"] = function (id) {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Elvyosa.json');
-    // next_file
-    scope.m8Gsl = function () {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      var key = "NONE";
-      var func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-    if (id === undefined) {
-      scope.m8Gsl();
     } else if (id) {
       scope[id]();
     }
@@ -1243,6 +1068,26 @@
     }
     return player.state;
   };
+  files["Alinea_CH_Gruff.json"] = function (id) {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Gruff.json');
+    // next_file
+    scope.f1zni = function () {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      var key = "NONE";
+      var func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+    if (id === undefined) {
+      scope.f1zni();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
   files["Alinea_CH_DunnsMurose.json"] = function (id) {
     player.set(CURRENT_FILE_VAR, 'Alinea_CH_DunnsMurose.json');
     // next_file
@@ -1263,10 +1108,10 @@
     }
     return player.state;
   };
-  files["Alinea_CH_Gruff.json"] = function (id) {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Gruff.json');
+  files["Alinea_CH_Elvyosa.json"] = function (id) {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Elvyosa.json');
     // next_file
-    scope.f1zni = function () {
+    scope.m8Gsl = function () {
       player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
       var key = "NONE";
       var func = files[key];
@@ -1277,7 +1122,27 @@
       }
     };
     if (id === undefined) {
-      scope.f1zni();
+      scope.m8Gsl();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+  files["Alinea_CH_Chem.json"] = function (id) {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Chem.json');
+    // next_file
+    scope.RLgZd = function () {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      var key = "NONE";
+      var func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+    if (id === undefined) {
+      scope.RLgZd();
     } else if (id) {
       scope[id]();
     }
@@ -1372,28 +1237,8 @@
     }
     return player.state;
   };
-  files["Alinea_CH_Chem.json"] = function (id) {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Chem.json');
-    // next_file
-    scope.RLgZd = function () {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      var key = "NONE";
-      var func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
-    };
-    if (id === undefined) {
-      scope.RLgZd();
-    } else if (id) {
-      scope[id]();
-    }
-    return player.state;
-  };
-  files["Alinea_CH_BartoCaldeburn.json"] = function (id) {
-    player.set(CURRENT_FILE_VAR, 'Alinea_CH_BartoCaldeburn.json');
+  files["Alinea_CH_BartoloCaldeburn.json"] = function (id) {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_BartoloCaldeburn.json');
     // switch
     scope.enWMm = function () {
       player.set(CURRENT_NODE_VAR, 'enWMm');
@@ -1402,15 +1247,15 @@
     // text
     scope.mqogS = function () {
       player.set(CURRENT_NODE_VAR, 'mqogS');
-      var text = "A plump nobleman sits here, easily recognizable by his gaudy attire: a deep blue lace lines every possible seam of his silk coat, and his auburn trousers glint with a startling sheen.  A grumpy scowl adorns his face as he clasps a large glass of plum wine and idly taps a finger on the rough wood of the table.  He tries to ignore you as you approach, but when it becomes clear you want to talk, he narrows his eyes and raises a pointed eyebrow.";
-      core.say(text, scope.lkfobaa3s, 'mqogS', 'lkfobaa3s');
+      var text = "A nobleman sits here, his clothes notably more gaudy and pretentious than anyone else around.  A deep blue lace lines every possible edge of his silk coat, and auburn trousers glint with a distracting sheen.  He clasps a large glass of plum wine and idly taps a finger on the rough wood of the table.  He ignores the other patrons in the room as his gaze passes imperiously by them to rest upon you.";
+      core.say(text, scope.dY7sz, 'mqogS', 'dY7sz');
     };
 
     // text
-    scope.lkfobaa3s = function () {
-      player.set(CURRENT_NODE_VAR, 'lkfobaa3s');
-      var text = "\"What do *you* want?\"";
-      core.say(text, scope.ku2iV, 'lkfobaa3s', 'ku2iV');
+    scope.dY7sz = function () {
+      player.set(CURRENT_NODE_VAR, 'dY7sz');
+      var text = "\"And what have we here?  Another rabble come to further dissuade me from this pit of a town?\"";
+      core.say(text, scope.ku2iV, 'dY7sz', 'ku2iV');
     };
 
     // choice
@@ -1425,25 +1270,39 @@
           return true;
         }
       }, {
-        t: "You mentioned that there are bandits up north?",
-        id: 'wEid3',
-        cb: scope.wEid3,
+        t: "Don't like Alinea much?",
+        id: 'zkasm',
+        cb: scope.zkasm,
         c: function c() {
-          return player.get('nodes.KLPVt');
+          return true;
         }
       }, {
-        t: "What is such an 'esteemed' nobleman doing in a town like this?",
+        t: "You work for Lord Guildimarche?  Who is that?",
+        id: 'ecss2',
+        cb: scope.ecss2,
+        c: function c() {
+          return player.get('nodes.ASqD8');
+        }
+      }, {
+        t: "What is someone as 'esteemed' as you doing here?",
         id: 'KLPVt',
         cb: scope.KLPVt,
         c: function c() {
           return player.get('nodes.ASqD8');
         }
       }, {
-        t: "I'm looking for something.  All I know is the number \"9\".  Any ideas?",
-        id: 'Np8TQ',
-        cb: scope.Np8TQ,
+        t: "Idle threats?  Are you always this distasteful?",
+        id: 'DRtxf',
+        cb: scope.DRtxf,
         c: function c() {
-          return true;
+          return player.get('nodes.OfySb');
+        }
+      }, {
+        t: "There are bandits to the north?",
+        id: 'wEid3',
+        cb: scope.wEid3,
+        c: function c() {
+          return player.get('nodes.KLPVt');
         }
       }, {
         t: "Nevermind.",
@@ -1489,263 +1348,77 @@
     scope.tE4LF = function () {
       player.set(CURRENT_NODE_VAR, 'tE4LF');
       var text = "\"Yes well... They are renowned on the Mainland for their luxury.  I suppose simpletons such as yourselves would not understand.  Suffice to say that I am important.  Very important.  You should certainly not underestimate that fact.  These days I lend my assistance to Lord Guildimarche and his grand estate.\"";
-      core.say(text, scope.y0ide, 'tE4LF', 'y0ide');
-    };
-
-    // choice
-    scope.y0ide = function () {
-      player.set(CURRENT_NODE_VAR, 'y0ide');
-      var text = "";
-      core.choose(text, 'y0ide', [{
-        t: "You work for Lord Guildimarche?  Who is that?",
-        id: 'cezeE',
-        cb: scope.cezeE,
-        c: function c() {
-          return true;
-        }
-      }, {
-        t: "Actually, let's talk about something else.",
-        id: 'hSAyw',
-        cb: scope.hSAyw,
-        c: function c() {
-          return true;
-        }
-      }]);
-    };
-    scope['y0ide'].isChoice = true;
-
-    // text
-    scope.cezeE = function () {
-      player.set(CURRENT_NODE_VAR, 'cezeE');
-      var text = "His face contorts into an aghast expression. \"I do not 'work for' Lord Guildimarche, as you so uncouthly put it.  We are of the noble persuasion, we do favors for each other.  We lend aid!  It just so happens that the Guildimarche estate has quite the pull on Sadelica.  Piss poor towns like Alinea are of the few places not under Guildimarche jurisdiction.  Perhaps *you* would not know of such things, but support for such a strong house tends to bear fruit.\"";
-      core.say(text, scope.pf1yk, 'cezeE', 'pf1yk');
-    };
-
-    // choice
-    scope.pf1yk = function () {
-      player.set(CURRENT_NODE_VAR, 'pf1yk');
-      var text = "";
-      core.choose(text, 'pf1yk', [{
-        t: "Sorry, I didn't realize that was such a touchy subject...",
-        id: 'eZ8YM',
-        cb: scope.eZ8YM,
-        c: function c() {
-          return true;
-        }
-      }, {
-        t: "Don't like Alinea much?",
-        id: 'zkasm',
-        cb: scope.zkasm,
-        c: function c() {
-          return true;
-        }
-      }, {
-        t: "Actually, let's talk about something else.",
-        id: 'hSAyw',
-        cb: scope.hSAyw,
-        c: function c() {
-          return true;
-        }
-      }]);
-    };
-    scope['pf1yk'].isChoice = true;
-
-    // text
-    scope.eZ8YM = function () {
-      player.set(CURRENT_NODE_VAR, 'eZ8YM');
-      var text = "\"I would advise you to watch your tongue from now on.  A Lark should know their place.\"";
-      core.say(text, scope.pf1yk, 'eZ8YM', 'pf1yk');
+      core.say(text, scope.ku2iV, 'tE4LF', 'ku2iV');
     };
 
     // text
     scope.zkasm = function () {
       player.set(CURRENT_NODE_VAR, 'zkasm');
-      var text = "\"Certainly not!  The people here no nothing of luxury.  They they think only in singles.\" He taps his glass. \"A mere single selection of wine, a single bed, a single tavern...  How can a man visit this town with anything but disappointment?\"  He makes a shooing gesture at you.  \"The only thing I can say for sure that it has is plenty of Larks.\"  ";
-      core.say(text, scope.pf1yk, 'zkasm', 'pf1yk');
+      var text = "\"Certainly not!  The people here no nothing of luxury.  They they think only in singles.\" He taps his glass. \"A mere single selection of wine, a single bed, a single tavern...  How can a man visit this town with anything but disappointment?\"";
+      core.say(text, scope.gIcZc, 'zkasm', 'gIcZc');
     };
 
     // text
-    scope.hSAyw = function () {
-      player.set(CURRENT_NODE_VAR, 'hSAyw');
-      var text = "\"What do you want?\"";
-      core.say(text, scope.ku2iV, 'hSAyw', 'ku2iV');
+    scope.gIcZc = function () {
+      player.set(CURRENT_NODE_VAR, 'gIcZc');
+      var text = "\"The only thing I can say for sure that it has is plenty of Larks.\"  He makes a shooing gesture at you.";
+      core.say(text, scope.ku2iV, 'gIcZc', 'ku2iV');
     };
 
     // text
-    scope.wEid3 = function () {
-      player.set(CURRENT_NODE_VAR, 'wEid3');
-      var text = "\"Yes, there are bandits blocking the north bridge.  It's the only road that gives access north, so it's quite inconvenient for me, as I have urgent business in the town of Remmet.  I'm simply waiting for them to be dealt with.  It is only a matter of time.\"";
-      core.say(text, scope.fzsAh, 'wEid3', 'fzsAh');
-    };
-
-    // choice
-    scope.fzsAh = function () {
-      player.set(CURRENT_NODE_VAR, 'fzsAh');
-      var text = "";
-      core.choose(text, 'fzsAh', [{
-        t: "Who is dealing with these bandits?",
-        id: 'uRL1R',
-        cb: scope.uRL1R,
-        c: function c() {
-          return true;
-        }
-      }, {
-        t: "Why are they blocking the road?  Are the bandits making any demands?",
-        id: 'hXfrd',
-        cb: scope.hXfrd,
-        c: function c() {
-          return true;
-        }
-      }, {
-        t: "I see, let's talk about something else.",
-        id: 'N90qN',
-        cb: scope.N90qN,
-        c: function c() {
-          return true;
-        }
-      }]);
-    };
-    scope['fzsAh'].isChoice = true;
-
-    // text
-    scope.uRL1R = function () {
-      player.set(CURRENT_NODE_VAR, 'uRL1R');
-      var text = "\"The Realm, of course!  This is their town, so the bandits are their problem.\"";
-      core.say(text, scope.RuDt4, 'uRL1R', 'RuDt4');
-    };
-
-    // choice
-    scope.RuDt4 = function () {
-      player.set(CURRENT_NODE_VAR, 'RuDt4');
-      var text = "";
-      core.choose(text, 'RuDt4', [{
-        t: "What can you tell me about the Realm?",
-        id: 'FGQA3',
-        cb: scope.FGQA3,
-        c: function c() {
-          return true;
-        }
-      }, {
-        t: "Let's talk about something else.",
-        id: 'ku2iV',
-        cb: scope.ku2iV,
-        c: function c() {
-          return true;
-        }
-      }]);
-    };
-    scope['RuDt4'].isChoice = true;
-
-    // text
-    scope.FGQA3 = function () {
-      player.set(CURRENT_NODE_VAR, 'FGQA3');
-      var text = "\"This is why I dislike talking to Larks...  I simply have no desire to be your encyclopedia.  Go bother Captain Mullen if you want to know more about the Realm and these bandits.\"";
-      core.say(text, scope.ItN9L, 'FGQA3', 'ItN9L');
-    };
-
-    // next_file
-    scope.ItN9L = function () {
-      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
-      var key = "";
-      var func = files[key];
-      if (func) {
-        func();
-      } else {
-        core.exit();
-      }
+    scope.ecss2 = function () {
+      player.set(CURRENT_NODE_VAR, 'ecss2');
+      var text = "Lord Cladeburn's face contorts into an aghast expression.";
+      core.say(text, scope.GM0EE, 'ecss2', 'GM0EE');
     };
 
     // text
-    scope.hXfrd = function () {
-      player.set(CURRENT_NODE_VAR, 'hXfrd');
-      var text = "\"I have no idea, but why should that matter?  The Realm just needs to send in a contingent of guards and sweep them off the road.\"";
-      core.say(text, scope.RuDt4, 'hXfrd', 'RuDt4');
+    scope.GM0EE = function () {
+      player.set(CURRENT_NODE_VAR, 'GM0EE');
+      var text = "\"I do not 'work for' Lord Guildimarche, as you so uncouthly put it.  We are of the noble persuasion, we do favors for each other.  We lend aid!\"  ";
+      core.say(text, scope.ViWA8, 'GM0EE', 'ViWA8');
     };
 
     // text
-    scope.N90qN = function () {
-      player.set(CURRENT_NODE_VAR, 'N90qN');
-      var text = "\"What do you want.\"";
-      core.say(text, scope.ku2iV, 'N90qN', 'ku2iV');
+    scope.ViWA8 = function () {
+      player.set(CURRENT_NODE_VAR, 'ViWA8');
+      var text = "\"It just so happens that the Guildimarche estate has quite the pull on Sadelica.  Save for Alinea and perhaps the Magi Tower, go most anywhere on this accursed island and you'll find some establishment associated with that name.  This is not a coincidence.  Perhaps *you* would not know of such things, but support for such a strong house tends to bear fruit.\"";
+      core.say(text, scope.ku2iV, 'ViWA8', 'ku2iV');
     };
 
     // text
     scope.KLPVt = function () {
       player.set(CURRENT_NODE_VAR, 'KLPVt');
-      var text = "He raises an eyebrow.  \"I am waiting for the bandits blocking the northern bridge to be dealt with.  Then I can safety return to a place of at least relative sanity.\" He takes a small sip from his drink, and you notice a wickedly curved blade on a hilt at his hip.  \"And might I advise you to watch your tone, or you might find your tongue in a ditch somewhere.\" ";
-      core.say(text, scope.i7rtr, 'KLPVt', 'i7rtr');
+      var text = "\"I am waiting for the Bandits currently occupying the northern bridge to be dealt with.  Then I can safety return to a place of at least relative sanity.\"";
+      core.say(text, scope.OfySb, 'KLPVt', 'OfySb');
     };
 
-    // choice
-    scope.i7rtr = function () {
-      player.set(CURRENT_NODE_VAR, 'i7rtr');
-      var text = "";
-      core.choose(text, 'i7rtr', [{
-        t: "Idle threats?  Is the nobility of Sadelica always this distasteful?",
-        id: 'DRtxf',
-        cb: scope.DRtxf,
-        c: function c() {
-          return true;
-        }
-      }, {
-        t: "There are bandits in the north?",
-        id: 'wEid3',
-        cb: scope.wEid3,
-        c: function c() {
-          return true;
-        }
-      }, {
-        t: "Let's talk about something else.",
-        id: 'N90qN',
-        cb: scope.N90qN,
-        c: function c() {
-          return true;
-        }
-      }]);
+    // text
+    scope.OfySb = function () {
+      player.set(CURRENT_NODE_VAR, 'OfySb');
+      var text = "\"And might I advise you to watch your tone, or you might find your tongue in a ditch somewhere.\"";
+      core.say(text, scope.CfFBg, 'OfySb', 'CfFBg');
     };
-    scope['i7rtr'].isChoice = true;
+
+    // text
+    scope.CfFBg = function () {
+      player.set(CURRENT_NODE_VAR, 'CfFBg');
+      var text = "He takes a small sip from his drink, and you notice a wickedly curved blade on a hilt at his hip.";
+      core.say(text, scope.ku2iV, 'CfFBg', 'ku2iV');
+    };
 
     // text
     scope.DRtxf = function () {
       player.set(CURRENT_NODE_VAR, 'DRtxf');
       var text = "\"Like most reasonable people, I do not suffer fools.\"";
-      core.say(text, scope.i7rtr, 'DRtxf', 'i7rtr');
+      core.say(text, scope.ku2iV, 'DRtxf', 'ku2iV');
     };
 
     // text
-    scope.Np8TQ = function () {
-      player.set(CURRENT_NODE_VAR, 'Np8TQ');
-      var text = "\"No, I have no idea what that means.  Go bother somebody else.\"";
-      core.say(text, scope.limpcw236, 'Np8TQ', 'limpcw236');
-    };
-
-    // choice
-    scope.limpcw236 = function () {
-      player.set(CURRENT_NODE_VAR, 'limpcw236');
-      var text = "";
-      core.choose(text, 'limpcw236', [{
-        t: "Are you sure you don't know anything?  I could really use some help...",
-        id: 'p2tifagu6',
-        cb: scope.p2tifagu6,
-        c: function c() {
-          return true;
-        }
-      }, {
-        t: "Okay, let's talk about something else.",
-        id: 'N90qN',
-        cb: scope.N90qN,
-        c: function c() {
-          return true;
-        }
-      }]);
-    };
-    scope['limpcw236'].isChoice = true;
-
-    // text
-    scope.p2tifagu6 = function () {
-      player.set(CURRENT_NODE_VAR, 'p2tifagu6');
-      var text = "\"Yes I am sure.  Even if I did know something about a statement as vague as 'the number 8', I likely would not tell you anything.  You're a nobody and hardly worth speaking to.\"";
-      core.say(text, scope.limpcw236, 'p2tifagu6', 'limpcw236');
+    scope.wEid3 = function () {
+      player.set(CURRENT_NODE_VAR, 'wEid3');
+      var text = "\"Yes there are, and they have been quite the nuisance.  I'm simply waiting for them to be dealt with.  It is only a matter of time.\"";
+      core.say(text, scope.ku2iV, 'wEid3', 'ku2iV');
     };
 
     // next_file
@@ -1763,7 +1436,7 @@
     // text
     scope.SwzEw = function () {
       player.set(CURRENT_NODE_VAR, 'SwzEw');
-      var text = "\"The Lark is back again I see...\"";
+      var text = "\"Back again I see...\"";
       core.say(text, scope.ku2iV, 'SwzEw', 'ku2iV');
     };
     if (id === undefined) {
@@ -1850,6 +1523,161 @@
     };
     if (id === undefined) {
       scope.xn4GD();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+  files["Alinea_CH_Sol.json"] = function (id) {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Sol.json');
+    // next_file
+    scope.tG08a = function () {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      var key = "NONE";
+      var func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+    if (id === undefined) {
+      scope.tG08a();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+  files["CPP_Test.json"] = function (id) {
+    player.set(CURRENT_FILE_VAR, 'CPP_Test.json');
+    // text
+    scope.u0nqma13x = function () {
+      player.set(CURRENT_NODE_VAR, 'u0nqma13x');
+      var text = "This is an example text node.";
+      core.say(text, scope.xdkm9gezm, 'u0nqma13x', 'xdkm9gezm');
+    };
+
+    // text
+    scope.xdkm9gezm = function () {
+      player.set(CURRENT_NODE_VAR, 'xdkm9gezm');
+      var text = "This is a consecutive example text node.";
+      core.say(text, scope.qbn2zhkpg, 'xdkm9gezm', 'qbn2zhkpg');
+    };
+
+    // pass_fail
+    scope.qbn2zhkpg = function () {
+      player.set(CURRENT_NODE_VAR, 'qbn2zhkpg');
+      var condition = function () {
+        return player.once() ? true : false;
+      }();
+      if (condition) {
+        player.set(CURRENT_NODE_VAR, 'ygwd7qkgt');
+        var text = "";
+        core.say(text, scope.oa5s7r8dc);
+      }
+      if (!condition) {
+        player.set(CURRENT_NODE_VAR, 'aggzhpzge');
+        var text = "";
+        core.say(text, scope.kfp463kgf);
+      }
+    };
+    // text
+    scope.oa5s7r8dc = function () {
+      player.set(CURRENT_NODE_VAR, 'oa5s7r8dc');
+      var text = "This is the green area.";
+      core.say(text, scope.qyf4wnqb0, 'oa5s7r8dc', 'qyf4wnqb0');
+    };
+
+    // choice
+    scope.qyf4wnqb0 = function () {
+      player.set(CURRENT_NODE_VAR, 'qyf4wnqb0');
+      var text = "";
+      core.choose(text, 'qyf4wnqb0', [{
+        t: "This is choice 1.  It has a lot of text in it to wrap so that's kinda cool.",
+        id: 'cr542qh57',
+        cb: scope.cr542qh57,
+        c: function c() {
+          return true;
+        }
+      }, {
+        t: "This is choice 2.",
+        id: 'nam8am70m',
+        cb: scope.nam8am70m,
+        c: function c() {
+          return true;
+        }
+      }, {
+        t: "This is choice 3.",
+        id: 'egfudg9nn',
+        cb: scope.egfudg9nn,
+        c: function c() {
+          return player.get('nodes.cr542qh57');
+        }
+      }]);
+    };
+    scope['qyf4wnqb0'].isChoice = true;
+
+    // text
+    scope.cr542qh57 = function () {
+      player.set(CURRENT_NODE_VAR, 'cr542qh57');
+      var text = "You have chosen the 1st choice.  You have done a wonderful job in choosing this choice and that's pretty cool, huh?";
+      core.say(text, scope.qyf4wnqb0, 'cr542qh57', 'qyf4wnqb0');
+    };
+
+    // text
+    scope.nam8am70m = function () {
+      player.set(CURRENT_NODE_VAR, 'nam8am70m');
+      var text = "You have chosen the 2nd choice.";
+      core.say(text, scope.qyf4wnqb0, 'nam8am70m', 'qyf4wnqb0');
+    };
+
+    // text
+    scope.egfudg9nn = function () {
+      player.set(CURRENT_NODE_VAR, 'egfudg9nn');
+      var text = "You have chosen the 3rd choice.";
+      core.say(text, scope.u0nqma13x, 'egfudg9nn', 'u0nqma13x');
+    };
+
+    // text
+    scope.kfp463kgf = function () {
+      player.set(CURRENT_NODE_VAR, 'kfp463kgf');
+      var text = "This is the red area.";
+      core.say(text, scope.psu994kkb, 'kfp463kgf', 'psu994kkb');
+    };
+
+    // next_file
+    scope.psu994kkb = function () {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      var key = "Alinea_CH_Scopey.json";
+      var func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+    if (id === undefined) {
+      scope.u0nqma13x();
+    } else if (id) {
+      scope[id]();
+    }
+    return player.state;
+  };
+  files["Alinea_CH_Scopey.json"] = function (id) {
+    player.set(CURRENT_FILE_VAR, 'Alinea_CH_Scopey.json');
+    // next_file
+    scope.bUbbt = function () {
+      player.set(LAST_FILE_VAR, player.get(CURRENT_FILE_VAR));
+      var key = "NONE";
+      var func = files[key];
+      if (func) {
+        func();
+      } else {
+        core.exit();
+      }
+    };
+    if (id === undefined) {
+      scope.bUbbt();
     } else if (id) {
       scope[id]();
     }

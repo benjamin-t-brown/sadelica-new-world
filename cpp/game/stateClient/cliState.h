@@ -25,6 +25,7 @@ struct In2State {
   snw::in2::In2Context* in2Ctx = nullptr;
   std::string conversationText = "";
   std::vector<std::string> choices;
+  std::string chName = "";
 };
 
 struct ClientState {
@@ -42,8 +43,9 @@ struct ClientState {
 namespace helpers {
 
 bool isSectionVisible(const ClientState& state, SectionType type);
+void setIn2StateAfterExecution(ClientState& state);
 
-}
+} // namespace helpers
 
 } // namespace state
 } // namespace snw

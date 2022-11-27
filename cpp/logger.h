@@ -48,6 +48,12 @@ inline void args(va_list lst, const char* c, std::stringstream& ss) {
     }
     // NOLINTNEXTLINE
     c++;
+    if (*c == '%') {
+      ss << '%';
+      // NOLINTNEXTLINE
+      c++;
+      continue;
+    }
     switch (*c) {
     case 's':
       ss << va_arg(lst, char*);

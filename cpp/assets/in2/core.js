@@ -1,19 +1,40 @@
 var ctxId = -1;
+var loggingEnabled = true;
 
 var resumeCb = function () {};
 function fromCpp_resumeExecution() {
+  console.log('resumeExecution');
   resumeCb();
 }
 function fromCpp_chooseExecution(choiceId) {
+  console.log('chooseExecution');
   return resumeCb(choiceId);
 }
 
+var console = {
+  log: function (text) {
+    if (loggingEnabled) {
+      log(text);
+    }
+  },
+  error: function (text) {
+    log('ERR: ' + text);
+  },
+};
+
 function fromCpp_runFile(fileName) {
+  console.log('runFile: ' + fileName);
   var func = core.in2.files[fileName];
   if (func) {
     func();
     return 0;
   } else {
+    console.log(
+      'Cannot run file, it does not exist: ' +
+        fileName +
+        ',\n ' +
+        Object.keys(core.in2.files).join('\n ')
+    );
     return 1;
   }
 }
@@ -54,7 +75,7 @@ function addDialogChoices(choices) {
 
 var core = {
   init(id) {
-    log('init');
+    console.log('init');
     ctxId = id;
     var obj = run(true);
     core.in2 = obj;
@@ -89,12 +110,13 @@ var core = {
         cb && cb();
         return;
       } else {
-        cpp_setWaitingForResume(ctxId);
         addLine({ line: text, id: nodeId || '', cb });
-        resumeCb = cb;
-      }
-      if (core.isChoiceNode(childId)) {
-        cb();
+        if (core.isChoiceNode(childId)) {
+          cb();
+        } else {
+          cpp_setWaitingForResume(ctxId);
+          resumeCb = cb;
+        }
       }
     }
   },
@@ -116,9 +138,9 @@ var core = {
       .map(function (choice, i) {
         return {
           id: choice.id,
-          text: i + 1 + '. ' + choice.t,
+          text: choice.t,
           cb: function () {
-            player.set(choice.id, true);
+            player.set('choice.' + choice.id, true);
             choice.cb();
           },
         };
@@ -135,7 +157,7 @@ var core = {
     );
   },
   exit() {
-    log('EXIT');
+    console.log('EXIT');
     cpp_setExecutionCompleted(ctxId);
   },
 };
@@ -163,7 +185,7 @@ var player = {
     } else {
       ret = result;
     }
-    // log('get: ' + path + '=' + result);
+    console.log('get: ' + path + '=' + result);
     return ret;
   },
   set: function (path, val) {
@@ -171,7 +193,7 @@ var player = {
       val = true;
     }
     cpp_setString(ctxId, path, String(val));
-    // log('set: ' + path + '=' + String(val));
+    console.log('set: ' + path + '=' + String(val));
   },
   once: function () {
     var nodeId = player.get(CURRENT_NODE_VAR);

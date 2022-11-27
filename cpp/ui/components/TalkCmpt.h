@@ -2,5 +2,5 @@
 
 namespace ui {
 class Ui;
-void renderTalkCmpt(const Ui& ui);
+void renderTalkCmpt(Ui& ui);
 } // namespace ui

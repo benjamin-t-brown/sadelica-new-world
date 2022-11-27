@@ -410,8 +410,8 @@ void Window::drawSprite(const std::string& name,
     flip = SDL_FLIP_HORIZONTAL;
   }
 
-  const double scaledX = double(sprite.cw) * scaleLocal.first;
-  const double scaledY = double(sprite.ch) * scaleLocal.second;
+  const double scaledX = static_cast<double>(sprite.cw) * scaleLocal.first;
+  const double scaledY = static_cast<double>(sprite.ch) * scaleLocal.second;
   const SDL_Rect pos = {x + (centered ? -sprite.cw / 2 : 0),
                         y + (centered ? -sprite.ch / 2 : 0),
                         static_cast<int>(floor(scaledX)),
@@ -470,7 +470,7 @@ void Window::drawTextCentered(const std::string& text,
 
 void Window::renderLoop() {
   const Uint64 nowMicroSeconds = SDL_GetPerformanceCounter();
-  double freq = (double)SDL_GetPerformanceFrequency();
+  double freq = static_cast<double>(SDL_GetPerformanceFrequency());
   now =
       static_cast<Uint64>((static_cast<double>(nowMicroSeconds) * 1000) / freq);
 
@@ -600,13 +600,13 @@ void Window::renderLoop() {
       if (isInputEnabled) {
         int x, y;
         SDL_GetMouseState(&x, &y);
-        events.mousedown(x, y, (int)e.button.button);
+        events.mousedown(x, y, static_cast<int>(e.button.button));
       }
     } else if (e.type == SDL_MOUSEBUTTONUP) {
       if (isInputEnabled) {
         int x, y;
         SDL_GetMouseState(&x, &y);
-        events.mouseup(x, y, (int)e.button.button);
+        events.mouseup(x, y, static_cast<int>(e.button.button));
       }
     }
     if (e.type == SDL_MOUSEWHEEL) {

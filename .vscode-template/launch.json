@@ -10,9 +10,9 @@
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}\\cpp",
       "environment": [],
-      "externalConsole": true,
+      "externalConsole": false,
       "MIMode": "gdb",
-      "miDebuggerPath": "C:\\progs\\msys2\\mingw64\\bin\\gdb.exe",
+      "miDebuggerPath": "C:\\progs\\msys2\\ucrt64\\bin\\gdb.exe",
       "setupCommands": [
         {
           "description": "Enable pretty-printing for gdb",
@@ -21,6 +21,48 @@
         }
       ]
       // "preLaunchTask": "C/C++: g++.exe build SNW"
+    },
+    {
+      "name": "(gdb) Launch Tests",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}\\cpp\\SNW_TEST.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}\\cpp",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:\\progs\\msys2\\ucrt64\\bin\\gdb.exe",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "build"
+    },
+    {
+      "name": "(gdb) Launch Tests UI",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}\\cpp\\SNW_TEST_UI.exe",
+      "args": ["--gtest_filter=*TalkCmpt*"],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}\\cpp",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:\\progs\\msys2\\ucrt64\\bin\\gdb.exe",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "build"
     }
   ]
 }

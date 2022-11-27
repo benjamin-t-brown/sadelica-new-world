@@ -1,4 +1,4 @@
-#include "./logger.h"
+#include "ui/components/TalkCmpt.h"
 #include "game/in2/in2.h"
 #include "game/stateClient/cliContext.h"
 #include "lib/imgui/imgui.h"
@@ -7,40 +7,44 @@
 #include "lib/sdl2wrapper/Events.h"
 #include "lib/sdl2wrapper/Store.h"
 #include "lib/sdl2wrapper/Window.h"
+#include "logger.h"
 #include "ui/Ui.h"
 #include "utils/utils.h"
 #include <SDL2/SDL.h>
+#include <fstream>
+#include <gtest/gtest.h>
 
-#if !SDL_VERSION_ATLEAST(2, 0, 17)
-#error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
-#endif
-// ImGui_ImplSDL2_ProcessEvent(&e);
-// Enable Keyboard Controls
-// io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-// Enable Gamepad Controls
-// io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+using namespace snw;
+using namespace snw::state;
+using ClientContext = snw::state::ClientContext;
 
-// ImGui_ImplSDL2_NewFrame();
-// io.Fonts->AddFontFromFileTTF("assets/Chicago.ttf", 24);
-// ImGui::NewFrame();
-// ImGui::Render();
-// ImGui::PushFont(font1);
+class TalkCmptTest : public testing::Test {
+protected:
+  static const bool loggingEnabled = true;
+  static void SetUpTestSuite() {
+    Logger::disabled = !loggingEnabled;
+    in2::init("");
+    ClientContext::init();
+  }
+  static void TearDownTestSuite() {}
+  void SetUp() override { Logger::disabled = !loggingEnabled; }
+  void TearDown() override {}
 
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays)
-int main(int argc, char* argv[]) {
+  static const ClientState& getState() {
+    return ClientContext::get().getState();
+  }
+};
+
+TEST_F(TalkCmptTest, CanDisplayAConversation) {
   logger::info("Program Begin.");
   srand(time(NULL));
-  IMGUI_CHECKVERSION();
   snw::in2::init("");
-
-  std::vector<std::string> args;
-  utils::parseArgs(argc, argv, args);
   try {
-    // SDL2Wrapper::Window window("Sadelica: NW", 720, 1280, 25, 50);
-    // SDL2Wrapper::Window window("Sadelica: NW", 576, 1024, 25, 50);
-    SDL2Wrapper::Window window("Sadelica: NW", 480, 854, 25, 50);
+    SDL2Wrapper::Window window("TestTalkCmpt", 480, 854, 25, 50);
     auto uiInstance = ui::Ui();
     uiInstance.init(window);
+
+    dispatch::startTalk("CPP_Test");
 
     window.startRenderLoop([&]() {
       ImGui_ImplSDLRenderer_NewFrame();
@@ -50,13 +54,17 @@ int main(int argc, char* argv[]) {
       window.setCurrentFont("Chicago", 20);
       ImGui::PushFont(uiInstance.getFont("Chicago20"));
 
-      uiInstance.render();
-
-      ImGui::ShowDemoWindow();
+      ClientContext::get().update();
+      renderTalkCmpt(uiInstance);
 
       ImGui::PopFont();
       ImGui::Render();
       ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
+
+      if (getState().in2.in2Ctx->isExecutionCompleted) {
+        return false;
+      }
+
       return true;
     });
 
@@ -69,5 +77,10 @@ int main(int argc, char* argv[]) {
   ImGui_ImplSDL2_Shutdown();
   ImGui::DestroyContext();
 
-  return 0;
+  EXPECT_EQ(1, 1);
+}
+
+int main(int argc, char** argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }

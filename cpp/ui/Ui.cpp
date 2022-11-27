@@ -1,16 +1,38 @@
 #include "Ui.h"
 #include "components/InGameCmpt.h"
 #include "components/TalkCmpt.h"
+#include "lib/imgui/imgui_impl_sdl.h"
+#include "lib/imgui/imgui_impl_sdlrenderer.h"
 #include "lib/sdl2wrapper/Store.h"
 #include "logger.h"
+#include <SDL2/SDL.h>
 #include <sstream>
-
-using SDL2Wrapper::Logger;
-using SDL2Wrapper::LogType;
 
 namespace ui {
 
+void setupWindow(SDL2Wrapper::Window& window) {
+  SDL2Wrapper::Store::createFont("Chicago", "assets/Chicago.ttf");
+  window.setCurrentFont("Chicago", 18);
+  auto events = &window.getEvents();
+  events->setEventHandler([](SDL_Event e) { ImGui_ImplSDL2_ProcessEvent(&e); });
+}
+
+void setupImgui(SDL2Wrapper::Window& window) {
+  auto renderer = &window.getRenderer();
+  auto sdlWindow = &window.getSDLWindow();
+  ImGui::CreateContext();
+  ImGui_ImplSDL2_InitForSDLRenderer(sdlWindow, renderer);
+  ImGui_ImplSDLRenderer_Init(renderer);
+  ImGui::StyleColorsDark();
+}
+
 Ui::Ui() {}
+
+void Ui::init(SDL2Wrapper::Window& window) {
+  setupWindow(window);
+  setupImgui(window);
+  loadFonts();
+}
 
 void Ui::loadFonts() {
   ImGuiIO& io = ImGui::GetIO();
@@ -24,7 +46,7 @@ void Ui::loadFonts() {
     if (font == NULL) {
       throw std::runtime_error("Failed to load font: " + key);
     }
-    logger::debug("Loaded font: {}", key.c_str());
+    logger::debug("Loaded font: %s", key.c_str());
 
     imguiFonts[key] = font;
   }
@@ -36,7 +58,7 @@ ImFont* Ui::getFont(const std::string& fontName) {
     return fontItr->second;
   }
   throw std::runtime_error("Could not getFont from ImGui (was it loaded?): " +
-                           fontName);
+                           std::string(fontName));
 }
 
 SDL2Wrapper::Color imVec4ToSDL2WrapperColor(const ImVec4& c) {
@@ -74,6 +96,7 @@ void prepareFullScreenWindow() {
 }
 
 void Ui::render() {
+
   renderTalkCmpt(*this);
   // renderInGameCmpt(*this);
 }

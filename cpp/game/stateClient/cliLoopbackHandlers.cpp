@@ -13,16 +13,18 @@ namespace state {
 
 struct PayloadCivilDeclareTalk {
   std::string fileName = "";
+  // this macro makes this struct deserializable so you can do:
+  // auto args = j.get<snw::state::PayloadCivilDeclareTalk>();
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(PayloadCivilDeclareTalk, fileName)
 };
 
 struct PayloadCivilTalkChoose {
-  std::string choiceId = "";
-  NLOHMANN_DEFINE_TYPE_INTRUSIVE(PayloadCivilTalkChoose, choiceId)
+  int choiceIndex = -1;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(PayloadCivilTalkChoose, choiceIndex)
 };
 
 void logAssertionError(DispatchActionType type, const std::string& msg) {
-  logger::error("Failure at ClientLoopbackProcessor during {}: {}",
+  logger::error("Failure at ClientLoopbackProcessor during %s: %s",
                 dispatchActionString(type).c_str(),
                 msg.c_str());
 }
@@ -52,10 +54,10 @@ void ClientLoopbackProcessor::init() {
 
         auto newState = ClientState(state);
         newState.in2.in2Ctx = new in2::In2Context();
-        newState.in2.in2Ctx->executeFile(args.fileName);
         newState.sections.push_back(SectionType::CONVERSATION);
-        newState.in2.conversationText =
-            utils::join(newState.in2.in2Ctx->getLines(), "\n");
+        newState.in2.chName = args.fileName;
+        newState.in2.in2Ctx->executeFile(args.fileName);
+        helpers::setIn2StateAfterExecution(newState);
 
         return newState;
       };
@@ -69,10 +71,14 @@ void ClientLoopbackProcessor::init() {
           return state;
         }
 
+        logger::info("Talk continue!");
+
         auto newState = ClientState(state);
         newState.in2.in2Ctx->resumeExecution();
-        newState.in2.conversationText =
-            utils::join(newState.in2.in2Ctx->getLines(), "\n");
+        helpers::setIn2StateAfterExecution(newState);
+        if (newState.in2.in2Ctx->isExecutionCompleted) {
+          dispatch::endTalk();
+        }
 
         return newState;
       };
@@ -85,20 +91,30 @@ void ClientLoopbackProcessor::init() {
                             "no conversation is active.");
           return state;
         }
-
+        auto newState = ClientState(state);
+        auto& choices = newState.in2.in2Ctx->getChoices();
         auto j = *reinterpret_cast<json*>(it.jsonPayload);
         auto args = j.get<snw::state::PayloadCivilTalkChoose>();
-        if (args.choiceId == "") {
+        if (args.choiceIndex < 0 ||
+            args.choiceIndex > static_cast<int>(choices.size())) {
           logAssertionError(DispatchActionType::TALK_SELECT_CHOICE,
-                            "choiceId is ''.");
+                            "choiceIndex is not valid: " +
+                                std::to_string(args.choiceIndex));
           return state;
         }
 
-        auto newState = ClientState(state);
-        newState.in2.in2Ctx->chooseExecution(args.choiceId);
+        auto& choice = choices[args.choiceIndex];
+        std::stringstream ss;
+        ss << "  " << args.choiceIndex + 1 << ". " << choice.line;
+        newState.in2.in2Ctx->pushLine(ss.str());
+        newState.in2.in2Ctx->chooseExecution(choice.id);
+        helpers::setIn2StateAfterExecution(newState);
+        if (newState.in2.in2Ctx->isExecutionCompleted) {
+          dispatch::endTalk();
+        }
 
-        newState.in2.conversationText =
-            utils::join(newState.in2.in2Ctx->getLines(), "\n");
+        logger::info("Log storage");
+        newState.in2.in2Ctx->logStorage();
 
         return newState;
       };
@@ -121,6 +137,9 @@ void ClientLoopbackProcessor::init() {
 
         delete newState.in2.in2Ctx;
         newState.in2.in2Ctx = nullptr;
+        newState.in2.conversationText = "";
+        newState.in2.chName = "";
+        newState.in2.choices = {};
         newState.sections.erase(
             std::remove_if(
                 newState.sections.begin(),

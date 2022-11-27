@@ -30,13 +30,11 @@ protected:
     buffer << src.rdbuf();
     return buffer.str();
   }
+
+  static const ClientState& getState() {
+    return ClientContext::get().getState();
+  }
 };
-
-namespace ClientStateTestHelpers {
-const ClientState& getState() { return ClientContext::get().getState(); }
-} // namespace ClientStateTestHelpers
-
-using namespace ClientStateTestHelpers;
 
 TEST_F(ClientStateTest, CanStartContinueAndStopAConversation) {
   dispatch::startTalk("main1");

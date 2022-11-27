@@ -1,4 +1,5 @@
 #include "TalkCmpt.h"
+#include "game/stateClient/cliContext.h"
 #include "ui/Ui.h"
 #include <algorithm>
 #include <sstream>
@@ -12,12 +13,14 @@ constexpr double TALK_CMPT_TEXT_AREA_HEIGHT_PCT_VERT =
     (1.0 - TALK_CMPT_HEADER_HEIGHT_PCT_VERT -
      TALK_CMPT_NAMEPLATE_HEIGHT_PCT_VERT - TALK_CMPT_FOOTER_HEIGHT_PCT_VERT);
 
+using ClientContext = snw::state::ClientContext;
+
 namespace ui_TalkCmpt {}
 using namespace ui;
 using namespace ui_TalkCmpt;
 
 namespace ui_TalkCmpt {
-void renderHeader(const Ui& ui) {
+void renderHeader(Ui& ui) {
   auto outerWindowSize = ImGui::GetWindowSize();
   const float width = outerWindowSize.x;
   const float height =
@@ -47,7 +50,7 @@ void renderHeader(const Ui& ui) {
   ImGui::Image(portraitRectangle, ImVec2(portraitWidth, height));
 }
 
-void renderNameplate(const Ui& ui) {
+void renderNameplate(Ui& ui) {
   auto outerWindowSize = ImGui::GetWindowSize();
   const float width = outerWindowSize.x;
   const float height = static_cast<float>(outerWindowSize.y *
@@ -66,7 +69,7 @@ void renderNameplate(const Ui& ui) {
           static_cast<int>(height - 4),
           imVec4ToSDL2WrapperColor(ui.colors.PURPLE));
 
-  const std::string name = "Radmilla Web";
+  const std::string name = "<not defined yet>";
 
   ImGui::Image(borderRectangle, ImVec2(width, height));
   ImGui::SetCursorPos(
@@ -85,9 +88,11 @@ void renderNameplate(const Ui& ui) {
   ImGui::SetCursorPosY(originalCursorPosition.y + height);
 }
 
-void renderTextArea(const Ui& ui) {
+void renderTextArea(Ui& ui) {
+
   auto outerWindowSize = ImGui::GetWindowSize();
-  const float spacing = 12;
+  // horizontal spacing
+  const float spacing = 16;
 
   const float width = static_cast<float>(outerWindowSize.x) - spacing;
   const float height = static_cast<float>(outerWindowSize.y *
@@ -110,62 +115,78 @@ void renderTextArea(const Ui& ui) {
   ImGui::SetCursorPosX(spacing);
   ImGui::BeginChild("in2_TextArea", ImVec2(width, height), false);
 
-  const std::vector<std::string> texts = {
-      "Before you stands a woman of imposing stature.  Easily twice your "
-      "height, her shadow engulfs you completely.  At first she does not "
-      "notice you, but after an awkward moment she blinks and cocks an "
-      "eyebrow.\n"
-      "'I see you've returned in one piece.'\n"
-      "No thanks to you.\n"
-      "'It occurs to me that you do not know the meaning of the word "
-      "'discretion'.  You should learn what that means and, more importantly, "
-      "employ it.'\n"};
+  auto& state = ClientContext::get().getState();
+  const std::string& text = state.in2.conversationText;
 
-  const std::vector<std::string> choices = {
-      "Don't worry, I know what I'm doing.",
-      "I don't like your tone, woman.  Why don't you stuff it, huh?",
-      "I understand.",
-      "Actually, nevermind."};
+  if (state.in2.in2Ctx == nullptr || state.in2.in2Ctx->isExecutionErrored) {
+    return;
+  }
 
   ImGui::Spacing();
-  for (const std::string& text : texts) {
-    ImGui::TextWrapped("%s", text.c_str());
-    ;
+  ImGui::Spacing();
+  ImGui::Spacing();
+  ImGui::TextWrapped("%s", text.c_str());
+  ImGui::Spacing();
+
+  ImGui::PushFont(ui.getFont("Chicago20"));
+  if (state.in2.in2Ctx->waitingForResume) {
+    ImGui::PushStyleColor(ImGuiCol_Button, ui.colors.PURPLE);
+    ImGui::PushStyleColor(ImGuiCol_Text, ui.colors.WHITE);
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ui.colors.BLACK);
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ui.colors.DARK_GREY);
     ImGui::Spacing();
-  }
-
-  // auto font = ImGui::GetFont();
-
-  ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2, 2));
-  int ctr = 1;
-  for (const std::string& choice : choices) {
-    ImGui::PushID(ctr);
-
-    ImGui::PushStyleColor(ImGuiCol_Button, ui.colors.DARK_CYAN);
-    ImGui::PushStyleColor(ImGuiCol_Text, ui.colors.CYAN);
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ui.colors.DARK_GREY);
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ui.colors.GREY);
-
     std::stringstream ss;
-    ss << ctr << ". " << choice;
+    ss << "Continue.";
     auto textSize = ImGui::CalcTextSize(ss.str().c_str(), NULL, false, width);
-    textSize.y += 8;
-    textSize.x += 4;
-
-    auto buttonCursorPosition = ImGui::GetCursorPos();
-    ImGui::Button("", ImVec2(width - spacing, textSize.y));
-    ImGui::SetCursorPos(
-        ImVec2(buttonCursorPosition.x + 2, buttonCursorPosition.y + 4));
-    ImGui::TextWrapped("%s", ss.str().c_str());
-    ImGui::SetCursorPosY(buttonCursorPosition.y + textSize.y);
-
-    ImGui::PopStyleColor(4);
+    textSize.y += 24;
+    if (ImGui::Button(ss.str().c_str(), ImVec2(width - spacing, textSize.y))) {
+      snw::state::dispatch::continueTalk();
+    }
     ImGui::Spacing();
+    ImGui::PopStyleColor(4);
+  } else if (state.in2.in2Ctx->waitingForChoice) {
+    const auto& choices = state.in2.choices;
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2, 2));
+    int ctr = 1;
+    for (const std::string& choice : choices) {
+      ImGui::PushID(ctr);
+      std::stringstream ss;
 
-    ImGui::PopID();
-    ctr++;
+      if (state.in2.in2Ctx->hasChosenChoice(ctr - 1)) {
+        ImGui::PushStyleColor(ImGuiCol_Button, ui.colors.DARK_CYAN);
+        ImGui::PushStyleColor(ImGuiCol_Text, ui.colors.WHITE);
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ui.colors.BLACK);
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ui.colors.DARK_GREY);
+      } else {
+        ImGui::PushStyleColor(ImGuiCol_Button, ui.colors.DARK_CYAN);
+        ImGui::PushStyleColor(ImGuiCol_Text, ui.colors.CYAN);
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ui.colors.BLACK);
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ui.colors.DARK_GREY);
+      }
+
+      ss << ctr << ". " << choice;
+      auto textSize = ImGui::CalcTextSize(ss.str().c_str(), NULL, false, width);
+      textSize.y += 24;
+      textSize.x += 4;
+
+      auto buttonCursorPosition = ImGui::GetCursorPos();
+      if (ImGui::Button("", ImVec2(width - spacing, textSize.y))) {
+        snw::state::dispatch::chooseTalk(ctr - 1);
+      }
+      ImGui::SetCursorPos(
+          ImVec2(buttonCursorPosition.x + 2, buttonCursorPosition.y + 12));
+      ImGui::TextWrapped("%s", ss.str().c_str());
+      ImGui::SetCursorPosY(buttonCursorPosition.y + textSize.y);
+
+      ImGui::PopStyleColor(4);
+      ImGui::Spacing();
+
+      ImGui::PopID();
+      ctr++;
+    }
+    ImGui::PopStyleVar(1);
   }
-  ImGui::PopStyleVar(1);
+  ImGui::PopFont();
 
   for (unsigned int i = 0; i < 15; i++) {
     ImGui::Text(" ");
@@ -175,7 +196,7 @@ void renderTextArea(const Ui& ui) {
   ImGui::EndChild();
 }
 
-void renderFooter(const Ui& ui) {
+void renderFooter(Ui& ui) {
   auto outerWindowSize = ImGui::GetWindowSize();
   const float width = outerWindowSize.x;
   const float height =
@@ -204,7 +225,7 @@ void renderFooter(const Ui& ui) {
 
 namespace ui {
 
-void renderTalkCmpt(const Ui& ui) {
+void renderTalkCmpt(Ui& ui) {
   const ImGuiWindowFlags windowFlags =
       ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar |
       ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |
@@ -220,6 +241,7 @@ void renderTalkCmpt(const Ui& ui) {
   ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
   ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+  ImGui::PushFont(ui.getFont("Chicago20"));
   ImGui::Begin("Talk", NULL, windowFlags);
   // ImGui::SetWindowFontScale(2.);
   // ImGui::SetWindowFo
@@ -235,6 +257,7 @@ void renderTalkCmpt(const Ui& ui) {
 
   ImGui::End();
   ImGui::PopStyleVar(3);
+  ImGui::PopFont();
 }
 
 } // namespace ui

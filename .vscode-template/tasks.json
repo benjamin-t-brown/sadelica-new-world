@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Build Cpp",
+      "label": "build",
       "type": "shell",
       "command": "C:\\progs\\msys2\\usr\\bin\\make",
       "args": ["-j8"],
@@ -13,9 +13,9 @@
       }
     },
     {
-      "label": "Debug Cpp",
+      "label": "debug",
       "type": "shell",
-      "command": "C:\\progs\\msys2\\mingw64\\bin\\gdb.exe",
+      "command": "C:\\progs\\msys2\\ucrt64\\bin\\gdb.exe",
       "group": "build",
       "problemMatcher": "$msCompile",
       "options": {

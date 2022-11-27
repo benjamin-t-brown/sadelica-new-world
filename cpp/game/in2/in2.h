@@ -27,6 +27,7 @@ public:
   bool waitingForResume = false;
   bool waitingForChoice = false;
   bool isExecutionCompleted = false;
+  bool isExecutionErrored = false;
   int id;
   In2Context();
   ~In2Context();
@@ -35,11 +36,13 @@ public:
   void resumeExecution();
   void chooseExecution(const std::string& id);
   const std::vector<In2Choice>& getChoices();
+  bool hasChosenChoice(int index) const;
   void pushLine(const std::string& line);
   void pushChoice(In2Choice c);
   void resetChoices();
-  std::string getStorage(const std::string& key);
+  std::string getStorage(const std::string& key) const;
   void setStorage(const std::string& key, const std::string& value);
+  void logStorage();
   const std::vector<std::string>& getLines();
   const std::vector<std::string> getNextLines();
 };

@@ -24,7 +24,7 @@ SDL2Wrapper::Color imVec4ToSDL2WrapperColor(const ImVec4& c);
 
 struct UiColors {
   ImVec4 TRANSPARENT = ImColor(255, 255, 255, 0);
-  ImVec4 WHITE = ImColor(255, 255, 255, 0);
+  ImVec4 WHITE = ImColor(255, 255, 255, 255);
   ImVec4 BLACK = ImColor(0, 0, 0, 255);
   ImVec4 GREY = ImColor(90, 83, 83, 255);
   ImVec4 LIGHT_GREY = ImColor(188, 183, 197, 255);
@@ -40,12 +40,14 @@ struct UiColors {
 };
 
 class Ui {
+  // Track the loaded fonts here so they can be pushed/popped later
   // These fonts are owned by ImGui, so no need to clean them up
   std::unordered_map<std::string, ImFont*> imguiFonts;
 
 public:
   UiColors colors;
   Ui();
+  void init(SDL2Wrapper::Window& window);
   void loadFonts();
   ImFont* getFont(const std::string& fontName);
   void render();
