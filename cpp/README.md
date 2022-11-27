@@ -28,7 +28,8 @@ pacman -S mingw-w64-x86_64-clang
 pacman -S mingw-w64-x86_64-clang-tools-extra
 ```
 
-*optional* Python2 For some lib dependencies
+_optional_ Python2 For some lib dependencies
+
 ```
 pacman -S mingw64/mingw-w64-x86_64-python2-pip mingw64/mingw-w64-x86_64-python2
 ```
@@ -54,7 +55,8 @@ pacman -S ucrt64/mingw-w64-ucrt-x86_64-clang
 pacman -S ucrt64/mingw-w64-ucrt-x86_64-clang-tools-extra
 ```
 
-*optional* Python2 For some lib dependencies
+_optional_ Python2 For some lib dependencies
+
 ```
 pacman -S ucrt64/mingw-w64-ucrt-x86_64-python2-pip ucrt64/mingw-w64-ucrt-x86_64-python2
 ```
@@ -73,29 +75,29 @@ The version of SDL2 on ubuntu is too old to work with imgui sdl impl, so you nee
 it manually
 
 ```
+sudo apt install cmake
 cd /tmp
 git clone https://github.com/libsdl-org/SDL
 cd SDL
-mkdir build
+git checkout SDL2
+mkdir -p build
 cd build
 ../configure
-make
+make -j8
 sudo make install
 ```
 
 Other SDL libs are fine.
 
 ```
-	sudo apt install libsdl2-ttf-dev -y
-	sudo apt install libsdl2-image-dev -y
-	sudo apt install libsdl2-mixer-dev -y
-	sudo apt install libsdl2-gfx-dev -y
+sudo apt update
+sudo apt install libsdl2-ttf-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-gfx-dev -y
 ```
 
 Gtest
 
 ```
-sudo apt-get install libgtest-dev
+sudo apt-get install libgtest-dev -y
 cd /usr/src/googletest/googletest
 sudo mkdir build
 cd build
