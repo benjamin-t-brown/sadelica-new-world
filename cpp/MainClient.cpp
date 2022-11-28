@@ -21,7 +21,7 @@ int main() {
   }
 
   ENetAddress address = {0};
-  ENetEvent event = {0};
+  ENetEvent event;
   ENetPeer* peer = {0};
   /* Connect to some.server.net:1234. */
   enet_address_set_host(&address, "127.0.0.1");
@@ -50,7 +50,7 @@ int main() {
   // Disconnect
   enet_peer_disconnect(peer, 0);
 
-  uint8_t disconnected = false;
+  bool disconnected = false;
   /* Allow up to 3 seconds for the disconnect to succeed
    * and drop any packets received packets.
    */

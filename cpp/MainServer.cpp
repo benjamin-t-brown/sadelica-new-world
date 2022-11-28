@@ -30,8 +30,8 @@ int main() {
   ENetEvent event;
   char* s = "Client information";
 
-  /* Wait up to 1000 milliseconds for an event. (WARNING: blocking) */
-  while (enet_host_service(server, &event, 1000) > 0) {
+  /* Wait up to 10000 milliseconds for an event. (WARNING: blocking) */
+  while (enet_host_service(server, &event, 10000) > 0) {
     switch (event.type) {
     case ENET_EVENT_TYPE_CONNECT:
       printf("A new client connected from %x:%u.\n",
