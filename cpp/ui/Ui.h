@@ -19,6 +19,7 @@ namespace ui {
 void textCentered(const std::string& text);
 ImVec2 getBoxBasedOnScreenPct(const float pctWidth, const float pctHeight);
 void prepareFullScreenWindow();
+bool isKeyPressed(ImGuiKey key);
 
 SDL2Wrapper::Color imVec4ToSDL2WrapperColor(const ImVec4& c);
 

@@ -183,6 +183,28 @@ Window::~Window() {
   Logger(INFO) << "SDL2Wrapper Window removed" << Logger::endl;
 }
 
+void Window::initSDL() {
+  SDL_Init(SDL_INIT_EVERYTHING);
+  SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
+  TTF_Init();
+}
+
+void Window::uninitSDL() {
+  IMG_Quit();
+  TTF_Quit();
+  SDL_Quit();
+}
+
+double Window::calculateTime(uint64_t now) {
+  const Uint64 nowMicroSeconds = SDL_GetPerformanceCounter();
+  const double freq = static_cast<double>(SDL_GetPerformanceFrequency());
+  now =
+      static_cast<Uint64>((static_cast<double>(nowMicroSeconds) * 1000) / freq);
+
+  return static_cast<double>((nowMicroSeconds - now) *
+                             static_cast<Uint64>(1000 / freq));
+}
+
 Window& Window::getGlobalWindow() { return *Window::globalWindow; }
 
 void Window::createWindow(const std::string& title,
@@ -267,6 +289,7 @@ const std::string& Window::getCurrentFontName() const {
 }
 int Window::getCurrentFontSize() const { return currentFontSize; }
 Uint64 Window::staticGetNow() { return Window::now; }
+double Window::staticGetNowD() { return static_cast<double>(Window::now); }
 double Window::getNow() const {
   return static_cast<double>(SDL_GetPerformanceCounter());
 }

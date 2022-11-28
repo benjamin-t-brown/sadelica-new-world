@@ -95,6 +95,10 @@ void prepareFullScreenWindow() {
 #endif
 }
 
+bool isKeyPressed(ImGuiKey key) {
+  return ImGui::IsKeyPressed(ImGui::GetKeyIndex(key), false);
+}
+
 void Ui::render() {
 
   renderTalkCmpt(*this);

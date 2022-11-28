@@ -1,17 +1,28 @@
 #include "TalkCmpt.h"
 #include "game/stateClient/cliContext.h"
+#include "logger.h"
 #include "ui/Ui.h"
 #include <algorithm>
 #include <sstream>
 #include <string>
 #include <vector>
 
+// height of the header as a percent
 constexpr double TALK_CMPT_HEADER_HEIGHT_PCT_VERT = .2;
+// height of the nameplate as a percent
 constexpr double TALK_CMPT_NAMEPLATE_HEIGHT_PCT_VERT = .05;
+// height of the footer as a percent
 constexpr double TALK_CMPT_FOOTER_HEIGHT_PCT_VERT = .075;
+// height of the textarea as a percent
 constexpr double TALK_CMPT_TEXT_AREA_HEIGHT_PCT_VERT =
     (1.0 - TALK_CMPT_HEADER_HEIGHT_PCT_VERT -
      TALK_CMPT_NAMEPLATE_HEIGHT_PCT_VERT - TALK_CMPT_FOOTER_HEIGHT_PCT_VERT);
+// there's a delay of this number of frames before the scrollbar scrolls.  Need
+// this or it flickers dumbly
+constexpr double TALK_CMPT_TEXT_SCROLL_DELAY = 8;
+
+// padding between the text and the sides of the screen
+constexpr float TALK_CMPT_TEXT_HORIZ_SPACING = 16;
 
 using ClientContext = snw::state::ClientContext;
 
@@ -20,6 +31,7 @@ using namespace ui;
 using namespace ui_TalkCmpt;
 
 namespace ui_TalkCmpt {
+
 void renderHeader(Ui& ui) {
   auto outerWindowSize = ImGui::GetWindowSize();
   const float width = outerWindowSize.x;
@@ -89,10 +101,13 @@ void renderNameplate(Ui& ui) {
 }
 
 void renderTextArea(Ui& ui) {
-
   auto outerWindowSize = ImGui::GetWindowSize();
   // horizontal spacing
-  const float spacing = 16;
+  const float spacing = TALK_CMPT_TEXT_HORIZ_SPACING;
+  bool eventOccurred = false;
+
+  static bool scrollBottomNextUpdate = false;
+  static int scrollForceCtr = TALK_CMPT_TEXT_SCROLL_DELAY;
 
   const float width = static_cast<float>(outerWindowSize.x) - spacing;
   const float height = static_cast<float>(outerWindowSize.y *
@@ -139,8 +154,11 @@ void renderTextArea(Ui& ui) {
     ss << "Continue.";
     auto textSize = ImGui::CalcTextSize(ss.str().c_str(), NULL, false, width);
     textSize.y += 24;
-    if (ImGui::Button(ss.str().c_str(), ImVec2(width - spacing, textSize.y))) {
+
+    if (ImGui::Button(ss.str().c_str(), ImVec2(width - spacing, textSize.y)) ||
+        isKeyPressed(ImGuiKey_Space) || isKeyPressed(ImGuiKey_Enter)) {
       snw::state::dispatch::continueTalk();
+      eventOccurred = true;
     }
     ImGui::Spacing();
     ImGui::PopStyleColor(4);
@@ -169,9 +187,13 @@ void renderTextArea(Ui& ui) {
       textSize.y += 24;
       textSize.x += 4;
 
+      const int keyNum = ImGuiKey_1 + ctr - 1;
       auto buttonCursorPosition = ImGui::GetCursorPos();
-      if (ImGui::Button("", ImVec2(width - spacing, textSize.y))) {
+      if (ImGui::Button("", ImVec2(width - spacing, textSize.y)) ||
+          ImGui::IsKeyPressed(ImGui::GetKeyIndex(static_cast<ImGuiKey>(keyNum)),
+                              false)) {
         snw::state::dispatch::chooseTalk(ctr - 1);
+        scrollBottomNextUpdate = true;
       }
       ImGui::SetCursorPos(
           ImVec2(buttonCursorPosition.x + 2, buttonCursorPosition.y + 12));
@@ -188,8 +210,21 @@ void renderTextArea(Ui& ui) {
   }
   ImGui::PopFont();
 
-  for (unsigned int i = 0; i < 15; i++) {
+  for (unsigned int i = 0; i < 1; i++) {
     ImGui::Text(" ");
+  }
+
+  if (scrollBottomNextUpdate) {
+    scrollForceCtr--;
+    if (scrollForceCtr < 0) {
+      ImGui::SetScrollHereY(1.f);
+      scrollForceCtr = TALK_CMPT_TEXT_SCROLL_DELAY;
+      scrollBottomNextUpdate = false;
+    }
+  }
+
+  if (eventOccurred) {
+    scrollBottomNextUpdate = true;
   }
 
   ImGui::PopStyleVar(2);

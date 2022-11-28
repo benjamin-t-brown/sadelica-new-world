@@ -135,9 +135,9 @@ EXE_SERVER=SNW_SERVER
 EXE_TEST=SNW_TEST
 EXE_TEST_UI=SNW_TEST_UI
 ifeq ($(OS),Windows_NT)
-  LIBS=-mconsole -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+  LIBS=-mconsole -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lenet
 else
-  LIBS=-lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+  LIBS=-lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lenet
 endif
 LIBS_TEST=-lpthread -lgtest
 
@@ -146,6 +146,18 @@ FLAGS=-O0 -g -Wall -std=c++17 -DFMT_HEADER_ONLY -I$(WORKING_DIR)
 .PHONY: $(EXE) test
 $(EXE): precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(MAIN_ALL_OBJECT) $(TEST_OBJECTS) $(TEST_UI_OBJECTS)
 	g++ -include precompiled.h $(FLAGS) $(MAIN_ALL_OBJECT) $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) -o $(EXE) $(LIBS)
+
+client: $(EXE) $(MAIN_CLIENT_OBJECT);
+	g++ -include precompiled.h $(FLAGS) $(MAIN_CLIENT_OBJECT) $(CLIENT_OBJECTS) $(SHARED_OBJECTS) -o $(EXE_CLIENT) $(LIBS)
+
+runclient: client
+	./$(EXE_CLIENT)
+
+server: $(EXE) $(MAIN_SERVER_OBJECT);
+	g++ -include precompiled.h $(FLAGS) $(MAIN_SERVER_OBJECT) $(SERVER_OBJECTS) $(SHARED_OBJECTS) -o $(EXE_SERVER) $(LIBS)
+
+runserver: server
+	./$(EXE_SERVER)
 
 precompiled.h.gch:
 	g++ $(FLAGS) -c precompiled.h -o precompiled.h.gch

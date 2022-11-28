@@ -82,6 +82,10 @@ public:
          const int windowPosY = -1);
   ~Window();
 
+  static void initSDL();
+  static void uninitSDL();
+  static double calculateTime(uint64_t now);
+
   Events& getEvents();
   SDL_Renderer& getRenderer();
   SDL_Window& getSDLWindow();
@@ -90,6 +94,7 @@ public:
   int getCurrentFontSize() const;
   SDL_Texture* getStaticColorTexture(int width, int height, Color color);
   static uint64_t staticGetNow();
+  static double staticGetNowD();
   double getNow() const;
   double getDeltaTime() const;
   double getFrameRatio() const;

@@ -7,7 +7,7 @@
 
 # Installation: Windows
 
-Requires MSYS2, specifically the MING64 terminal, see https://www.devdungeon.com/content/install-gcc-compiler-windows-msys2-cc
+Requires MSYS2, specifically the MING64 terminal, mostly sourced from https://www.devdungeon.com/content/install-gcc-compiler-windows-msys2-cc
 
 ```
 pacman -S base-devel vim cmake git python2
@@ -15,7 +15,13 @@ pacman -S mingw-w64-x86_64-toolchain
 pacman -S mingw64/mingw-w64-x86_64-SDL2  mingw64/mingw-w64-x86_64-SDL2_image mingw64/mingw-w64-x86_64-SDL2_mixer mingw64/mingw-w64-x86_64-SDL2_ttf
 ```
 
-Gtest
+libwebsockets for the server
+
+```
+pacman -S mingw64/mingw-w64-x86_64-libwebsockets
+```
+
+Gtest for testing
 
 ```
 pacman -S mingw64/mingw-w64-x86_64-gtest
@@ -37,9 +43,15 @@ pacman -S mingw64/mingw-w64-x86_64-python2-pip mingw64/mingw-w64-x86_64-python2
 ## Using ucrt64 instead of mingw64
 
 ```
-pacman -S base-devel vim cmake git python2
+pacman -S base-devel vim cmake git
 pacman -S ucrt64/mingw-w64-ucrt-x86_64-gcc ucrt64/mingw-w64-ucrt-x86_64-gdb
 pacman -S ucrt64/mingw-w64-ucrt-x86_64-SDL2  ucrt64/mingw-w64-ucrt-x86_64-SDL2_image ucrt64/mingw-w64-ucrt-x86_64-SDL2_mixer ucrt64/mingw-w64-ucrt-x86_64-SDL2_ttf
+```
+
+libwebsockets
+
+```
+pacman -S ucrt64/mingw-w64-ucrt-x86_64-libwebsockets
 ```
 
 Gtest
@@ -92,6 +104,12 @@ Other SDL libs are fine.
 ```
 sudo apt update
 sudo apt install libsdl2-ttf-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-gfx-dev -y
+```
+
+libwebsockets
+
+```
+sudo apt-get install libwebsockets-dev
 ```
 
 Gtest

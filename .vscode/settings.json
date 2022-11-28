@@ -81,7 +81,8 @@
     "semaphore": "cpp",
     "span": "cpp",
     "typeindex": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "libwebsockets.h": "c"
   },
   "clang-tidy.blacklist": ["entt.*"],
   "clang-tidy.compilerArgsBefore": ["-xc++"],

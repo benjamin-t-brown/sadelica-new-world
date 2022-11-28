@@ -26,6 +26,7 @@ struct In2State {
   std::string conversationText = "";
   std::vector<std::string> choices;
   std::string chName = "";
+  // bool scrollDownNext
 };
 
 struct ClientState {
