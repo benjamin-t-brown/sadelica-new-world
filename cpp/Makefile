@@ -147,13 +147,16 @@ FLAGS=-O0 -g -Wall -std=c++17 -DFMT_HEADER_ONLY -I$(WORKING_DIR)
 $(EXE): precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(MAIN_ALL_OBJECT) $(TEST_OBJECTS) $(TEST_UI_OBJECTS)
 	g++ -include precompiled.h $(FLAGS) $(MAIN_ALL_OBJECT) $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) -o $(EXE) $(LIBS)
 
-client: $(EXE) $(MAIN_CLIENT_OBJECT);
+run: $(EXE)
+	./$(EXE) --nointro
+
+client: precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(TEST_OBJECTS) $(TEST_UI_OBJECTS) $(MAIN_CLIENT_OBJECT)
 	g++ -include precompiled.h $(FLAGS) $(MAIN_CLIENT_OBJECT) $(CLIENT_OBJECTS) $(SHARED_OBJECTS) -o $(EXE_CLIENT) $(LIBS)
 
 runclient: client
 	./$(EXE_CLIENT)
 
-server: $(EXE) $(MAIN_SERVER_OBJECT);
+server: precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(TEST_OBJECTS) $(TEST_UI_OBJECTS) $(MAIN_SERVER_OBJECT)
 	g++ -include precompiled.h $(FLAGS) $(MAIN_SERVER_OBJECT) $(SERVER_OBJECTS) $(SHARED_OBJECTS) -o $(EXE_SERVER) $(LIBS)
 
 runserver: server
@@ -181,9 +184,6 @@ testui: precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) 
 # 	mkdir -p ../dist
 # 	mv -v .build/* ../dist
 # 	rm -fd .build
-
-run: $(EXE)
-	./$(EXE) --nointro
 
 clean:
 	rm -f $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(MAIN_ALL_OBJECT) $(MAIN_CLIENT_OBJECT) $(MAIN_SERVER_OBJECT)
