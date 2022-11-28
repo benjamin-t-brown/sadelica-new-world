@@ -7,18 +7,18 @@
 
 # Installation: Windows
 
-Requires MSYS2, specifically the MING64 terminal, mostly sourced from https://www.devdungeon.com/content/install-gcc-compiler-windows-msys2-cc
+Requires MSYS2, (MINGW64 or UCRT64).  Instructions based on https://www.devdungeon.com/content/install-gcc-compiler-windows-msys2-cc
 
 ```
 pacman -S base-devel vim cmake git python2
-pacman -S mingw-w64-x86_64-toolchain
-pacman -S mingw64/mingw-w64-x86_64-SDL2  mingw64/mingw-w64-x86_64-SDL2_image mingw64/mingw-w64-x86_64-SDL2_mixer mingw64/mingw-w64-x86_64-SDL2_ttf
+pacman -S mingw64/mingw-w64-x86_64-gcc
+pacman -S mingw64/mingw-w64-x86_64-SDL2 mingw64/mingw-w64-x86_64-SDL2_image mingw64/mingw-w64-x86_64-SDL2_mixer mingw64/mingw-w64-x86_64-SDL2_ttf
 ```
 
-libwebsockets for the server
+enet for server/client
 
 ```
-pacman -S mingw64/mingw-w64-x86_64-libwebsockets
+pacman -S mingw64/mingw-w64-x86_64-enet
 ```
 
 Gtest for testing
@@ -51,7 +51,7 @@ pacman -S ucrt64/mingw-w64-ucrt-x86_64-SDL2  ucrt64/mingw-w64-ucrt-x86_64-SDL2_i
 libwebsockets
 
 ```
-pacman -S ucrt64/mingw-w64-ucrt-x86_64-libwebsockets
+pacman -S ucrt64/mingw-w64-ucrt-x86_64-enet
 ```
 
 Gtest
@@ -106,10 +106,10 @@ sudo apt update
 sudo apt install libsdl2-ttf-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-gfx-dev -y
 ```
 
-libwebsockets
+enet
 
 ```
-sudo apt-get install libwebsockets-dev
+sudo apt-get install enet-dev
 ```
 
 Gtest
@@ -130,7 +130,7 @@ sudo ln -s /usr/lib/libgtest.a /usr/local/lib/googletest/libgtest.a
 sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/googletest/libgtest_main.a
 ```
 
-# 3rd Party Libs
+# 3rd Party Libs Included In Repo
 
 Should you ever need to re-generate 3rd party libs:
 

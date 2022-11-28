@@ -1,7 +1,6 @@
-#include <stdio.h>
-// #define ENET_IMPLEMENTATION
 #include "logger.h"
 #include <enet/enet.h>
+#include <stdio.h>
 
 constexpr const char* HOST = "127.0.0.1";
 constexpr const int PORT = 7777;
@@ -63,9 +62,6 @@ int main() {
   // Receive some events
   enet_host_service(client, &event, 5000);
 
-  // Disconnect
-  enet_peer_disconnect(peer, 0);
-
   bool disconnected = false;
   /* Allow up to 3 seconds for the disconnect to succeed
    * and drop any packets received packets.
@@ -73,7 +69,11 @@ int main() {
   while (enet_host_service(client, &event, 3000) > 0) {
     switch (event.type) {
     case ENET_EVENT_TYPE_RECEIVE:
+      logger::info("Destroying a received packet");
       enet_packet_destroy(event.packet);
+
+      // Disconnect
+      enet_peer_disconnect(peer, 0);
       break;
     case ENET_EVENT_TYPE_DISCONNECT:
       logger::info("Disconnection succeeded.");
