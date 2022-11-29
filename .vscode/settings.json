@@ -82,7 +82,9 @@
     "span": "cpp",
     "typeindex": "cpp",
     "variant": "cpp",
-    "libwebsockets.h": "c"
+    "libwebsockets.h": "c",
+    "charconv": "cpp",
+    "regex": "cpp"
   },
   "clang-tidy.blacklist": ["entt.*"],
   "clang-tidy.compilerArgsBefore": ["-xc++"],

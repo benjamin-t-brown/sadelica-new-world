@@ -13,7 +13,7 @@ TEST(LoggerTest, CanSupportMultipleTypesOfLogging) {
   Logger(LogType::WARN) << "SDL2Wrapper Log Test" << Logger::endl;
   Logger(LogType::ERROR) << "SDL2Wrapper Log Test" << Logger::endl;
 
-  logger::info("Escape percent %%s?", "arg");
+  logger::info("Escape percent %%s", "arg");
   // logger::warn("What?");
 
   // expect no errors

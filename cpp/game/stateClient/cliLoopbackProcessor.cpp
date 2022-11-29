@@ -20,7 +20,8 @@ void ClientLoopbackProcessor::enqueue(const DispatchAction& action) {
 void ClientLoopbackProcessor::process() {
   ClientState state = ClientState(ClientContext::get().getState());
   for (auto& it : actionsToCommit) {
-    logger::debug("process loopback action %s", dispatchActionString(it.type).c_str());
+    logger::debug("process loopback action %s",
+                  dispatchActionString(it.type).c_str());
     auto itHandler = handlers.find(it.type);
     if (itHandler == handlers.end()) {
       logger::warn("Could not find loopback handler for type={}",

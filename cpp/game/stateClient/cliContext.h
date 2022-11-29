@@ -4,6 +4,7 @@
 #include "cliLoopbackProcessor.h"
 #include "cliResultProcessor.h"
 #include "cliState.h"
+#include "lib/net/client.h"
 
 namespace snw {
 namespace state {
@@ -14,6 +15,8 @@ private:
   ClientDispatch clientDispatch;
   ClientResultProcessor clientResultProcessor;
   ClientLoopbackProcessor clientLoopbackProcessor;
+
+  net::Client netClient;
 
   static ClientContext globalClientContext;
 
@@ -30,8 +33,12 @@ public:
   ClientDispatch& getDispatch();
   ClientResultProcessor& getResultProcessor();
   ClientLoopbackProcessor& getLoopbackProcessor();
+  net::Client& getNetClient();
   void update();
 };
+
+ClientContext& getCliContext();
+const ClientState& getCliState();
 
 } // namespace state
 } // namespace snw

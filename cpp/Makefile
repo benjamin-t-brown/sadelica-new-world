@@ -48,10 +48,11 @@ test/test.cpp\
 test/sdl2wrapper/Gauge.test.cpp\
 test/in2/in2.test.cpp\
 test/logger.test.cpp\
-test/state/clientState.test.cpp
+test/state/clientState.test.cpp\
+test/net/netMock.test.cpp
 
 TEST_CODE_UI=\
-test/ui/TalkCmpt.test.cpp\
+test/ui/TalkCmpt.test.cpp
 
 MAIN_CLIENT_OBJECT=$(MAIN_CLIENT:.cpp=.o)
 MAIN_SERVER_OBJECT=$(MAIN_SERVER:.cpp=.o)
@@ -92,6 +93,19 @@ ifeq (testui,$(firstword $(MAKECMDGOALS)))
   	$(eval $(ARGS):;@:)
 	endif
 	TEST_ARGS := --gtest_filter=*$(ARGS)*
+endif
+
+ifeq (server,$(firstword $(MAKECMDGOALS)))
+	EXTRA_FLAGS_NET := -DNET_ENABLED
+endif
+ifeq (runserver,$(firstword $(MAKECMDGOALS)))
+	EXTRA_FLAGS_NET := -DNET_ENABLED
+endif
+ifeq (client,$(firstword $(MAKECMDGOALS)))
+	EXTRA_FLAGS_NET := -DNET_ENABLED
+endif
+ifeq (runclient,$(firstword $(MAKECMDGOALS)))
+	EXTRA_FLAGS_NET := -DNET_ENABLED
 endif
 
 EMCC_LIBS_CLIENT=\
@@ -143,7 +157,7 @@ else
 endif
 LIBS_TEST=-lpthread -lgtest
 
-FLAGS=-O0 -g -Wall -std=c++17 -DFMT_HEADER_ONLY -I$(WORKING_DIR)
+FLAGS=-O0 -g -Wall -std=c++17 -DFMT_HEADER_ONLY -I$(WORKING_DIR) $(EXTRA_FLAGS_NET)
 
 .PHONY: $(EXE) test
 $(EXE): precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(MAIN_ALL_OBJECT) $(TEST_OBJECTS) $(TEST_UI_OBJECTS)

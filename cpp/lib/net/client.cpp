@@ -2,14 +2,19 @@
 #include "logger.h"
 #include <stdexcept>
 
-#ifdef NET_MOCK_SERVER
-#else
+#ifdef NET_ENABLED
 #include <enet/enet.h>
+#else
+#include "server.h"
 #endif
 
 namespace net {
 
+std::vector<std::string> Client::mockClientMessagesToSend;
+std::vector<std::string> Client::mockClientMessagesToProcess;
+
 bool Client::connect(const std::string& host, int port) {
+#ifdef NET_ENABLED
   if (enet_initialize() != 0) {
     throw std::runtime_error("[NET] An error occurred while initializing ENet");
   }
@@ -52,11 +57,16 @@ bool Client::connect(const std::string& host, int port) {
     isConnected = false;
     return false;
   }
+#else
+  return true;
+#endif
 }
 
 void Client::send(const std::string& message) {
+#ifdef NET_ENABLED
+
   if (clientPeer == nullptr) {
-    throw std::runtime_error("[NET] Cannot send.  Not connected!");
+    // throw std::runtime_error("[NET] Cannot send.  Not connected!");
     return;
   }
 
@@ -65,9 +75,17 @@ void Client::send(const std::string& message) {
   ENetPacket* packet = enet_packet_create(
       message.c_str(), message.size() + 1, ENET_PACKET_FLAG_RELIABLE);
   enet_peer_send(peer, 0, packet);
+
+#else
+
+  Client::mockClientMessagesToSend.push_back(message);
+
+#endif
 }
 
 void Client::update(std::function<void(const std::string& msg)> cb) {
+#ifdef NET_ENABLED
+
   if (clientPeer == nullptr || clientHost == nullptr) {
     throw std::runtime_error("[NET] Cannot update.  Not connected!");
     return;
@@ -94,9 +112,26 @@ void Client::update(std::function<void(const std::string& msg)> cb) {
       break;
     }
   }
+
+#else
+
+  for (const auto& message : Client::mockClientMessagesToSend) {
+    Server::mockServerMessagesToProcess.push_back(
+        std::make_pair("mock-1234", message));
+  }
+
+  for (const auto& message : Client::mockClientMessagesToProcess) {
+    cb(message);
+  }
+
+  Client::mockClientMessagesToSend.clear();
+  Client::mockClientMessagesToProcess.clear();
+
+#endif
 }
 
 void Client::cleanUp() {
+#ifdef NET_ENABLED
   // Drop connection, since disconnection didn't succeed
   if (clientPeer != nullptr && clientHost != nullptr) {
     // ENetPeer* peer = reinterpret_cast<ENetPeer*>(clientPeer);
@@ -104,6 +139,9 @@ void Client::cleanUp() {
     enet_host_destroy(client);
     enet_deinitialize();
   }
+#else
+
+#endif
 }
 
 } // namespace net

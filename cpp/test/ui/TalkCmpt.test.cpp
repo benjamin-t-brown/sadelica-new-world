@@ -1,4 +1,3 @@
-#include "ui/components/TalkCmpt.h"
 #include "game/in2/in2.h"
 #include "game/stateClient/cliContext.h"
 #include "lib/imgui/imgui.h"
@@ -9,6 +8,7 @@
 #include "lib/sdl2wrapper/Window.h"
 #include "logger.h"
 #include "ui/Ui.h"
+#include "ui/components/TalkCmpt.h"
 #include "utils/utils.h"
 #include <SDL2/SDL.h>
 #include <fstream>
@@ -60,6 +60,8 @@ TEST_F(TalkCmptTest, CanDisplayAConversation) {
       ImGui::PopFont();
       ImGui::Render();
       ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
+
+      EXPECT_NE(getState().in2.in2Ctx, nullptr);
 
       if (getState().in2.in2Ctx->isExecutionCompleted) {
         return false;

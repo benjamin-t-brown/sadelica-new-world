@@ -2,9 +2,10 @@
 #include "logger.h"
 #include <stdexcept>
 
-#ifdef NET_MOCK_SERVER
-#else
+#ifdef NET_ENABLED
 #include <enet/enet.h>
+#else
+#include "client.h"
 #endif
 
 namespace net {
@@ -33,10 +34,11 @@ std::string getRandomId(int len = 10) {
                                      'e',
                                      'f',
                                      'g'};
+
   std::stringstream ss;
 
   for (int i = 0; i < len; i++) {
-    int ind = rand() % static_cast<int>(options.size());
+    const int ind = rand() % static_cast<int>(options.size());
     ss << options[ind];
     if (i > 0 && i % (len / 2) == 0) {
       ss << '-';
@@ -47,8 +49,7 @@ std::string getRandomId(int len = 10) {
 }
 
 void Server::listen(int port) {
-#ifdef NET_MOCK_SERVER
-#else
+#ifdef NET_ENABLED
   if (enet_initialize() != 0) {
     throw std::runtime_error(
         "[NET] An error occurred while initializing ENet.");
@@ -74,13 +75,12 @@ void Server::listen(int port) {
   }
 
   serverHost = server;
+#else
 #endif
 }
 
 void Server::broadcast(const std::string& message) {
-#ifdef NET_MOCK_SERVER
-  Server::mockServerMessagesToBroadcast.push_back(message);
-#else
+#ifdef NET_ENABLED
   if (serverHost == nullptr) {
     throw std::runtime_error("[NET] Cannot broadcast, server is null.");
     return;
@@ -89,20 +89,15 @@ void Server::broadcast(const std::string& message) {
   ENetPacket* packet = enet_packet_create(
       message.c_str(), message.size() + 1, ENET_PACKET_FLAG_RELIABLE);
   enet_host_broadcast(server, 0, packet);
+#else
+  Server::mockServerMessagesToBroadcast.push_back(message);
 #endif
 }
 
 void Server::update(
     std::function<void(const std::string id, const std::string& msg)> cb) {
-#ifdef NET_MOCK_SERVER
-  for (const auto& messagePair : Server::mockServerMessagesToProcess) {
-    cb(messagePair.first, messagePair.second);
-  }
 
-  for (const auto& message : Server::mockServerMessagesToBroadcast) {
-    // mock client push message
-  }
-#else
+#ifdef NET_ENABLED
   if (serverHost == nullptr) {
     return;
   }
@@ -155,18 +150,32 @@ void Server::update(
       break;
     }
   }
+#else
+
+  for (const auto& messagePair : Server::mockServerMessagesToProcess) {
+    cb(messagePair.first, messagePair.second);
+  }
+
+  for (const auto& message : Server::mockServerMessagesToBroadcast) {
+    Client::mockClientMessagesToProcess.push_back(message);
+  }
+
+  Server::mockServerMessagesToProcess.clear();
+  Server::mockServerMessagesToBroadcast.clear();
+
 #endif
 }
 
 void Server::cleanUp() {
-#ifdef NET_MOCK_SERVER
-#else
+#ifdef NET_ENABLED
   if (serverHost != nullptr) {
     ENetHost* server = reinterpret_cast<ENetHost*>(serverHost);
     enet_host_destroy(server);
     enet_deinitialize();
     serverHost = nullptr;
   }
+#else
+
 #endif
 }
 

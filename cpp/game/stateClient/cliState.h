@@ -15,10 +15,15 @@ namespace state {
 //             MENU_GAME,
 //             CONVERSATION)
 
-enum SectionType { MENU_SPLASH, CONVERSATION };
+enum SectionType { NONE, MENU_SPLASH, CONVERSATION };
+
+struct AccountInfo {
+  std::string id = "";
+  bool isConnected = false;
+};
 
 struct SectionInfo {
-  SectionType type;
+  SectionType type = SectionType::NONE;
 };
 
 struct In2State {
@@ -26,19 +31,19 @@ struct In2State {
   std::string conversationText = "";
   std::vector<std::string> choices;
   std::string chName = "";
-  // bool scrollDownNext
 };
 
 struct ClientState {
+  AccountInfo account;
   std::vector<SectionType> sections;
   In2State in2;
 
-  ClientState();
-  ClientState(const ClientState& state);
-  ClientState(ClientState&&) = default;
-  ClientState& operator=(const ClientState&) = default;
-  ClientState& operator=(ClientState&&) = default;
-  virtual ~ClientState() = default;
+  // ClientState();
+  // ClientState(const ClientState& state);
+  // ClientState(ClientState&&) = default;
+  // ClientState& operator=(const ClientState&) = default;
+  // ClientState& operator=(ClientState&&) = default;
+  // virtual ~ClientState() = default;
 };
 
 namespace helpers {

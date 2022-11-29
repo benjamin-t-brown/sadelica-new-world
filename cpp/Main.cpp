@@ -12,7 +12,7 @@
 #include <SDL2/SDL.h>
 
 #if !SDL_VERSION_ATLEAST(2, 0, 17)
-#error This backend requires SDL 2.0.17+ because of SDL_RenderGeometry() function
+#error Requires SDL 2.0.17+ because of SDL_RenderGeometry() function
 #endif
 // ImGui_ImplSDL2_ProcessEvent(&e);
 // Enable Keyboard Controls

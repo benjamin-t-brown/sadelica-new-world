@@ -16,18 +16,34 @@ void ClientDispatch::enqueue(const DispatchAction& action) {
   actionsToCommit.push_back(action);
 }
 void ClientDispatch::dispatch() {
+  json serverPayload = json::array();
+
   for (auto& it : actionsToCommit) {
     logger::debug("Dispatch action: %s", dispatchActionString(it.type).c_str());
     switch (it.cl) {
-    case ActionCl::SEND_ONLY:
-      break;
     case ActionCl::LOOPBACK_ONLY:
       ClientContext::get().getLoopbackProcessor().enqueue(it);
       break;
     case ActionCl::BOTH:
       ClientContext::get().getLoopbackProcessor().enqueue(it);
+    case ActionCl::SEND_ONLY: {
+      json action;
+      action["type"] = it.type;
+      if (it.jsonPayload != nullptr) {
+        json* p = reinterpret_cast<json*>(it.jsonPayload);
+        action["payload"] = *p;
+      }
+      serverPayload.push_back(action);
       break;
     }
+    }
+  }
+
+  if (serverPayload.size() > 0) {
+    const json message = {{"id", getCliState().account.id},
+                          {"payload", serverPayload}};
+    logger::debug("Sending to server: %s", message.dump().c_str());
+    getCliContext().getNetClient().send(message.dump());
   }
 }
 

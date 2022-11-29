@@ -5,15 +5,16 @@
 
 namespace snw {
 namespace state {
-ClientState::ClientState() : sections({}), in2(In2State()) {}
+// ClientState::ClientState() : sections({}), in2(In2State()) {}
 
-ClientState::ClientState(const ClientState& state) {
-  sections = state.sections;
-  in2 = {state.in2.in2Ctx,
-         state.in2.conversationText,
-         state.in2.choices,
-         state.in2.chName};
-}
+// ClientState::ClientState(const ClientState& state) {
+//   account = state.account;
+//   sections = state.sections;
+//   in2 = {state.in2.in2Ctx,
+//          state.in2.conversationText,
+//          state.in2.choices,
+//          state.in2.chName};
+// }
 
 namespace helpers {
 
@@ -25,6 +26,8 @@ bool isSectionVisible(const ClientState& state, SectionType type) {
   return false;
 }
 
+// After the in2 state executes to it's next waiting period, some stuff
+// on the state needs to be set up.  This function sets all that up.
 void setIn2StateAfterExecution(ClientState& state) {
   if (state.in2.in2Ctx == nullptr) {
     logger::error("Cannot setIn2StateAfterExecution in2ctx is null");

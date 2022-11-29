@@ -1,5 +1,6 @@
 #include "cliContext.h"
 #include "lib/json/json.h"
+#include "logger.h"
 
 using json = nlohmann::json;
 
@@ -32,6 +33,8 @@ ClientLoopbackProcessor& ClientContext::getLoopbackProcessor() {
   return clientLoopbackProcessor;
 }
 
+net::Client& ClientContext::getNetClient() { return netClient; }
+
 void ClientContext::update() {
   auto payloadPtrs = clientDispatch.getPayloadPtrs();
 
@@ -42,6 +45,10 @@ void ClientContext::update() {
   clientResultProcessor.process();
   clientResultProcessor.reset();
 
+  netClient.update([](const std::string& msg){
+    logger::info("Recvd message from server %s", msg.c_str());
+  });
+
   for (auto it : payloadPtrs) {
     // NOLINTNEXTLINE
     auto j = reinterpret_cast<json*>(it);
@@ -49,6 +56,9 @@ void ClientContext::update() {
     delete j;
   }
 }
+
+ClientContext& getCliContext() { return ClientContext::get(); }
+const ClientState& getCliState() { return ClientContext::get().getState(); }
 
 } // namespace state
 } // namespace snw
