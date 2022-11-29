@@ -10,14 +10,7 @@ lib/imgui/imgui_widgets.cpp\
 lib/imgui/imgui_impl_sdl.cpp\
 lib/imgui/imgui_impl_sdlrenderer.cpp\
 lib/imgui/imgui.cpp\
-lib/sdl2wrapper/Animation.cpp\
-lib/sdl2wrapper/AssetLoader.cpp\
-lib/sdl2wrapper/Events.cpp\
-lib/sdl2wrapper/SDL2Includes.cpp\
-lib/sdl2wrapper/Sound.cpp\
-lib/sdl2wrapper/Sprite.cpp\
-lib/sdl2wrapper/Store.cpp\
-lib/sdl2wrapper/Window.cpp\
+lib/net/client.cpp\
 game/stateClient/cliContext.cpp\
 game/stateClient/cliDispatch.cpp\
 game/stateClient/cliResultProcessor.cpp\
@@ -31,9 +24,18 @@ ui/components/InGameCmpt.cpp
 SERVER_CODE=\
 game/stateServer/srvContext.cpp\
 game/stateServer/srvDispatchProcessor.cpp\
-game/stateServer/srvResult.cpp
+game/stateServer/srvResult.cpp\
+lib/net/server.cpp
 
 SHARED_CODE=\
+lib/sdl2wrapper/Animation.cpp\
+lib/sdl2wrapper/AssetLoader.cpp\
+lib/sdl2wrapper/Events.cpp\
+lib/sdl2wrapper/SDL2Includes.cpp\
+lib/sdl2wrapper/Sound.cpp\
+lib/sdl2wrapper/Sprite.cpp\
+lib/sdl2wrapper/Store.cpp\
+lib/sdl2wrapper/Window.cpp\
 lib/sdl2wrapper/Timer.cpp\
 lib/sdl2wrapper/Gauge.cpp\
 lib/sdl2wrapper/Logger.cpp\

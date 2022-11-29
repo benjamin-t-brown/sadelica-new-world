@@ -1,6 +1,7 @@
 #include "utils.h"
 #include <algorithm>
 #include <sstream>
+#include <vector>
 
 namespace utils {
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays)
@@ -33,6 +34,37 @@ std::string join(const std::vector<std::string>& arr,
       ss << delim;
     }
   }
+  return ss.str();
+}
+
+std::string getRandomId(int len) {
+  const std::vector<char> options = {'0',
+                                     '1',
+                                     '2',
+                                     '3',
+                                     '4',
+                                     '5',
+                                     '6',
+                                     '7',
+                                     '8',
+                                     '9',
+                                     'a',
+                                     'b',
+                                     'c',
+                                     'd',
+                                     'e',
+                                     'f',
+                                     'g'};
+  std::stringstream ss;
+
+  for (int i = 0; i < len; i++) {
+    int ind = rand() % static_cast<int>(options.size());
+    ss << options[ind];
+    if (i > 0 && i % (len / 2) == 0) {
+      ss << '-';
+    }
+  }
+
   return ss.str();
 }
 

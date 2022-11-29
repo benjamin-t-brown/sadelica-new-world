@@ -132,18 +132,25 @@ void windowThrowError(const std::string& errorMessage) {
   throw std::string(errorMessage);
 }
 
-Window::Window() : events(*this) {
+Window::Window()
+    : events(*this),
+      currentFontSize(18),
+      deltaTime(0),
+      globalAlpha(255),
+      colorkey(0) {
+  Window::instanceCount++;
+  firstLoop = true;
+  Window::soundEnabled = true;
   Window::globalWindow = this;
-  globalAlpha = 255;
   fps = 60;
   countedFrames = 0;
   height = 512;
   width = 512;
   firstLoop = true;
-  deltaTime = 0;
-  currentFontSize = 20;
   onresize = nullptr;
+  soundEnabled = true;
   soundForcedDisabled = false;
+  colorkey = 0x00FFFFFF;
 }
 Window::Window(const std::string& title,
                const int widthA,
@@ -158,7 +165,6 @@ Window::Window(const std::string& title,
   Window::instanceCount++;
   firstLoop = true;
   Window::soundEnabled = true;
-  createWindow(title, widthA, heightA, windowPosX, windowPosY);
   Window::globalWindow = this;
   fps = 60;
   countedFrames = 0;
@@ -168,6 +174,8 @@ Window::Window(const std::string& title,
   onresize = nullptr;
   soundEnabled = true;
   soundForcedDisabled = false;
+  colorkey = 0x00FFFFFF;
+  createWindow(title, widthA, heightA, windowPosX, windowPosY);
   Logger(INFO) << "SDL2Wrapper Window initialized" << Logger::endl;
 }
 
@@ -193,16 +201,6 @@ void Window::uninitSDL() {
   IMG_Quit();
   TTF_Quit();
   SDL_Quit();
-}
-
-double Window::calculateTime(uint64_t now) {
-  const Uint64 nowMicroSeconds = SDL_GetPerformanceCounter();
-  const double freq = static_cast<double>(SDL_GetPerformanceFrequency());
-  now =
-      static_cast<Uint64>((static_cast<double>(nowMicroSeconds) * 1000) / freq);
-
-  return static_cast<double>((nowMicroSeconds - now) *
-                             static_cast<Uint64>(1000 / freq));
 }
 
 Window& Window::getGlobalWindow() { return *Window::globalWindow; }
@@ -289,7 +287,6 @@ const std::string& Window::getCurrentFontName() const {
 }
 int Window::getCurrentFontSize() const { return currentFontSize; }
 Uint64 Window::staticGetNow() { return Window::now; }
-double Window::staticGetNowD() { return static_cast<double>(Window::now); }
 double Window::getNow() const {
   return static_cast<double>(SDL_GetPerformanceCounter());
 }
@@ -492,10 +489,10 @@ void Window::drawTextCentered(const std::string& text,
 }
 
 void Window::renderLoop() {
+  const Uint64 div = 1000;
   const Uint64 nowMicroSeconds = SDL_GetPerformanceCounter();
-  double freq = static_cast<double>(SDL_GetPerformanceFrequency());
-  now =
-      static_cast<Uint64>((static_cast<double>(nowMicroSeconds) * 1000) / freq);
+  auto freq = SDL_GetPerformanceFrequency();
+  now = (nowMicroSeconds * div) / freq;
 
   if (!static_cast<bool>(freq)) {
     freq = 1;
@@ -505,9 +502,10 @@ void Window::renderLoop() {
     firstLoop = false;
     pastFrameRatios.push_back(1.0);
   } else {
-    deltaTime = static_cast<double>((nowMicroSeconds - lastFrameTime) *
-                                    static_cast<Uint64>(1000 / freq));
+    deltaTime = static_cast<double>((nowMicroSeconds - lastFrameTime) * div) /
+                static_cast<double>(freq);
   }
+
   lastFrameTime = nowMicroSeconds;
   const double d = deltaTime / Window::targetFrameMS;
   pastFrameRatios.push_back(std::min(d, 2.0));
@@ -669,9 +667,55 @@ void Window::startRenderLoop(std::function<bool(void)> cb) {
     if (shouldRender) {
       renderLoop();
     } else {
-      SDL_Delay(10);
+      SDL_Delay(16);
     }
   }
 #endif
 }
+
+void Window::timedLoop() {
+  const Uint64 div = 1000;
+  const Uint64 nowMicroSeconds = SDL_GetPerformanceCounter();
+  auto freq = SDL_GetPerformanceFrequency();
+  now = (nowMicroSeconds * div) / freq;
+
+  if (!static_cast<bool>(freq)) {
+    freq = 1;
+  }
+  if (firstLoop) {
+    deltaTime = 16.6666;
+    firstLoop = false;
+    pastFrameRatios.push_back(1.0);
+  } else {
+    deltaTime = static_cast<double>((nowMicroSeconds - lastFrameTime) * div) /
+                static_cast<double>(freq);
+  }
+
+  lastFrameTime = nowMicroSeconds;
+  const double d = deltaTime / Window::targetFrameMS;
+  pastFrameRatios.push_back(std::min(d, 2.0));
+  if (pastFrameRatios.size() > 10) {
+    pastFrameRatios.pop_front();
+  }
+
+  isLooping = renderCb();
+  events.update();
+
+  if (!isLooping) {
+    return;
+  }
+}
+
+void Window::startTimedLoop(std::function<bool(void)> cb, int ms) {
+  firstLoop = true;
+  renderCb = cb;
+  isLooping = true;
+  Window::now = SDL_GetPerformanceCounter();
+
+  while (isLooping) {
+    timedLoop();
+    SDL_Delay(static_cast<Uint32>(ms));
+  }
+}
+
 } // namespace SDL2Wrapper

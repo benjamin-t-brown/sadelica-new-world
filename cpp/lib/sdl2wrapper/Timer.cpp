@@ -1,4 +1,5 @@
 #include "Timer.h"
+#include "Logger.h"
 #include "Window.h"
 
 namespace SDL2Wrapper {
@@ -22,11 +23,14 @@ void Timer::remove() { removeFlag = true; }
 void Timer::update(double dt) {
   if (!removeFlag) {
     aggTime += dt;
+    // Logger() << "What " << aggTime << " " << dt << " vs " << maxTime
+    //          << Logger::endl;
     if (aggTime > maxTime) {
       remove();
     }
   }
 }
+
 FuncTimer::FuncTimer(int maxTimeMs, std::function<void()> cbA)
     : Timer(maxTimeMs), cb(cbA) {}
 void FuncTimer::remove() {
@@ -35,6 +39,7 @@ void FuncTimer::remove() {
   }
   Timer::remove();
 }
+
 BoolTimer::BoolTimer(int maxTimeMs, bool& refA) : Timer(maxTimeMs), ref(refA) {}
 void BoolTimer::remove() {
   if (!removeFlag) {
