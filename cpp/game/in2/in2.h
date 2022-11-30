@@ -26,11 +26,14 @@ private:
 public:
   bool waitingForResume = false;
   bool waitingForChoice = false;
-  bool isExecutionCompleted = false;
-  bool isExecutionErrored = false;
+  bool executionCompleted = false;
+  bool executionErrored = false;
   int id;
   In2Context();
   ~In2Context();
+
+  void createNewCtx();
+  void cleanCtx();
 
   void executeFile(const std::string& fileName);
   void resumeExecution();
@@ -43,6 +46,7 @@ public:
   std::string getStorage(const std::string& key) const;
   void setStorage(const std::string& key, const std::string& value);
   void logStorage();
+  bool isExecutionActive() const;
   const std::vector<std::string>& getLines();
   const std::vector<std::string> getNextLines();
 };

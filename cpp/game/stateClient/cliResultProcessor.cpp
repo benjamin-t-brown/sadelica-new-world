@@ -1,5 +1,6 @@
 
 #include "cliResultProcessor.h"
+#include "game/resultAction.h"
 
 namespace snw {
 namespace state {

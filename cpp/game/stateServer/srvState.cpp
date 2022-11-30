@@ -1,15 +1,7 @@
-#pragma once
-
-#include <vector>
+#include "srvState.h"
 
 namespace snw {
 namespace state {
-
-struct ServerState {
-  // std::vector<SectionInfo> sections;
-};
-
 namespace helpers {} // namespace helpers
-
 } // namespace state
 } // namespace snw

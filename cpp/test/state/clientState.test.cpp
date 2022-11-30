@@ -12,7 +12,6 @@ using ClientContext = snw::state::ClientContext;
 class ClientStateTest : public testing::Test {
 protected:
   static void SetUpTestSuite() {
-    Logger::disabled = true;
     in2::init(readIn2CompiledSrcMock());
     ClientContext::init();
   }
@@ -37,21 +36,30 @@ protected:
 };
 
 TEST_F(ClientStateTest, CanStartContinueAndStopAConversation) {
+  // a startTalk should show the first line of text in the conversation
   dispatch::startTalk("main1");
   ClientContext::get().update();
   EXPECT_EQ(getState().in2.conversationText, "The value of test is value.");
-
-  ClientContext::get().update();
   EXPECT_TRUE(helpers::isSectionVisible(getState(), SectionType::CONVERSATION));
-  EXPECT_NE(getState().in2.in2Ctx, nullptr);
-  EXPECT_EQ(ClientContext::get().getDispatch().getPayloadPtrs().size(), 0);
 
+  // a blank update shouldn't change the in2 state
+  ClientContext::get().update();
+  EXPECT_EQ(getState().in2.conversationText, "The value of test is value.");
+
+  // continuing the talk should change the text
+  dispatch::continueTalk();
+  ClientContext::get().update();
+  EXPECT_EQ(getState().in2.conversationText,
+            "The value of test is value.\n\nThis node currently has no actual "
+            "content.");
+  EXPECT_TRUE(helpers::isSectionVisible(getState(), SectionType::CONVERSATION));
+
+  // ending a conversation should remove it from the sections
   dispatch::continueTalk();
   dispatch::endTalk();
   ClientContext::get().update();
-
   EXPECT_FALSE(
       helpers::isSectionVisible(getState(), SectionType::CONVERSATION));
-  EXPECT_EQ(getState().in2.in2Ctx, nullptr);
-  EXPECT_EQ(ClientContext::get().getDispatch().getPayloadPtrs().size(), 0);
+  EXPECT_EQ(getState().in2.waitingState, In2WaitingState::IN2_NONE);
+  EXPECT_FALSE(getCliContext().getIn2Ctx().isExecutionActive());
 }

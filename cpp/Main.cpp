@@ -1,6 +1,7 @@
 #include "./logger.h"
 #include "game/in2/in2.h"
 #include "game/stateClient/cliContext.h"
+#include "game/stateServer/srvContext.h"
 #include "lib/imgui/imgui.h"
 #include "lib/imgui/imgui_impl_sdl.h"
 #include "lib/imgui/imgui_impl_sdlrenderer.h"
@@ -32,6 +33,9 @@ int main(int argc, char* argv[]) {
   srand(time(NULL));
   IMGUI_CHECKVERSION();
   snw::in2::init("");
+  snw::state::ServerContext::init();
+  snw::state::ClientContext::init();
+  auto uiInstance = ui::Ui();
 
   std::vector<std::string> args;
   utils::parseArgs(argc, argv, args);
@@ -39,7 +43,6 @@ int main(int argc, char* argv[]) {
     // SDL2Wrapper::Window window("Sadelica: NW", 720, 1280, 25, 50);
     // SDL2Wrapper::Window window("Sadelica: NW", 576, 1024, 25, 50);
     SDL2Wrapper::Window window("Sadelica: NW", 480, 854, 25, 50);
-    auto uiInstance = ui::Ui();
     uiInstance.init(window);
 
     window.startRenderLoop([&]() {

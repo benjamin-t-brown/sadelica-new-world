@@ -15,6 +15,21 @@ using namespace ImGui;
           box.x, box.y, imVec4ToSDL2WrapperColor(color));                      \
   ImGui::Image(bgRectangle, box);
 
+#define COLOR_TRANSPARENT ImColor(255, 255, 255, 0);
+#define COLOR_WHITE ImColor(255, 255, 255, 255);
+#define COLOR_BLACK ImColor(0, 0, 0, 255);
+#define COLOR_GREY ImColor(90, 83, 83, 255);
+#define COLOR_LIGHT_GREY ImColor(188, 183, 197, 255);
+#define COLOR_DARK_GREY ImColor(65, 60, 61, 255);
+#define COLOR_BLUE ImColor(55, 202, 253, 255);
+#define COLOR_DARK_BLUE ImColor(36, 63, 114, 255);
+#define COLOR_CYAN ImColor(66, 202, 253, 255);
+#define COLOR_DARK_CYAN ImColor(46, 55, 64, 255);
+#define COLOR_PURPLE ImColor(67, 59, 85, 255);
+#define COLOR_GREEN ImColor(0, 95, 27, 255);
+#define COLOR_RED ImColor(255, 83, 74, 255);
+#define COLOR_BROWN ImColor(122, 68, 74, 255);
+
 namespace ui {
 void textCentered(const std::string& text);
 ImVec2 getBoxBasedOnScreenPct(const float pctWidth, const float pctHeight);
@@ -24,20 +39,20 @@ bool isKeyPressed(ImGuiKey key);
 SDL2Wrapper::Color imVec4ToSDL2WrapperColor(const ImVec4& c);
 
 struct UiColors {
-  ImVec4 TRANSPARENT = ImColor(255, 255, 255, 0);
-  ImVec4 WHITE = ImColor(255, 255, 255, 255);
-  ImVec4 BLACK = ImColor(0, 0, 0, 255);
-  ImVec4 GREY = ImColor(90, 83, 83, 255);
-  ImVec4 LIGHT_GREY = ImColor(188, 183, 197, 255);
-  ImVec4 DARK_GREY = ImColor(65, 60, 61, 255);
-  ImVec4 BLUE = ImColor(55, 202, 253, 255);
-  ImVec4 DARK_BLUE = ImColor(36, 63, 114, 255);
-  ImVec4 CYAN = ImColor(66, 202, 253, 255);
-  ImVec4 DARK_CYAN = ImColor(46, 55, 64, 255);
-  ImVec4 PURPLE = ImColor(57, 49, 75, 255);
-  ImVec4 GREEN = ImColor(0, 95, 27, 255);
-  ImVec4 RED = ImColor(255, 83, 74, 255);
-  ImVec4 BROWN = ImColor(122, 68, 74, 255);
+  ImVec4 TRANSPARENT = COLOR_TRANSPARENT;
+  ImVec4 WHITE = COLOR_WHITE;
+  ImVec4 BLACK = COLOR_BLACK;
+  ImVec4 GREY = COLOR_GREY;
+  ImVec4 LIGHT_GREY = COLOR_LIGHT_GREY;
+  ImVec4 DARK_GREY = COLOR_DARK_GREY;
+  ImVec4 BLUE = COLOR_BLUE;
+  ImVec4 DARK_BLUE = COLOR_DARK_BLUE;
+  ImVec4 CYAN = COLOR_CYAN;
+  ImVec4 DARK_CYAN = COLOR_DARK_CYAN;
+  ImVec4 PURPLE = COLOR_PURPLE;
+  ImVec4 GREEN = COLOR_GREEN;
+  ImVec4 RED = COLOR_RED;
+  ImVec4 BROWN = COLOR_BROWN;
 };
 
 class Ui {

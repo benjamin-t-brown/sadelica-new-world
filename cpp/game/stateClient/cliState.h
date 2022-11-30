@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game/in2/in2.h"
+// #include "game/in2/in2.h"
 #include <vector>
 
 namespace snw {
@@ -26,11 +26,19 @@ struct SectionInfo {
   SectionType type = SectionType::NONE;
 };
 
+enum In2WaitingState {
+  IN2_NONE,
+  WAITING_FOR_CONTINUE,
+  WAITING_FOR_CHOICE,
+  COMPLETE,
+};
+
 struct In2State {
-  snw::in2::In2Context* in2Ctx = nullptr;
   std::string conversationText = "";
   std::vector<std::string> choices;
   std::string chName = "";
+  In2WaitingState waitingState = In2WaitingState::IN2_NONE;
+  // bool
 };
 
 struct ClientState {

@@ -1,5 +1,6 @@
 #include "cliDispatch.h"
 #include "cliContext.h"
+#include "game/dispatchAction.h"
 #include "lib/json/json.h"
 #include "logger.h"
 #include <string>
@@ -29,10 +30,7 @@ void ClientDispatch::dispatch() {
     case ActionCl::SEND_ONLY: {
       json action;
       action["type"] = it.type;
-      if (it.jsonPayload != nullptr) {
-        json* p = reinterpret_cast<json*>(it.jsonPayload);
-        action["payload"] = *p;
-      }
+      action["payload"] = it.jsonPayload;
       serverPayload.push_back(action);
       break;
     }
@@ -47,16 +45,6 @@ void ClientDispatch::dispatch() {
   }
 }
 
-std::vector<void*> ClientDispatch::getPayloadPtrs() {
-  std::vector<void*> ptrs;
-  for (auto& it : actionsToCommit) {
-    if (it.jsonPayload != nullptr) {
-      ptrs.push_back(it.jsonPayload);
-    }
-  }
-  return ptrs;
-}
-
 void ClientDispatch::reset() {
   actionsToCommit.erase(actionsToCommit.begin(), actionsToCommit.end());
 }
@@ -66,7 +54,7 @@ namespace dispatch {
 void startTalk(const std::string& talkName) {
   const DispatchAction action{ActionCl::BOTH,
                               DispatchActionType::TALK_START,
-                              new json({{"fileName", talkName}})};
+                              json({{"fileName", talkName}})};
 
   ClientContext::get().getDispatch().enqueue(action);
 }
@@ -81,7 +69,7 @@ void continueTalk() {
 void chooseTalk(const int choiceIndex) {
   const DispatchAction action{ActionCl::BOTH,
                               DispatchActionType::TALK_SELECT_CHOICE,
-                              new json({{"choiceIndex", choiceIndex}})};
+                              json({{"choiceIndex", choiceIndex}})};
 
   ClientContext::get().getDispatch().enqueue(action);
 }

@@ -209,41 +209,14 @@ enum ResultActionType {
 //             PLAYER_TILES_WERE_REVEALED,
 //             PLAYER_TILES_WERE_UNREVEALED)
 
-struct DispatchAction {
-  ActionCl cl = ActionCl::LOOPBACK_ONLY;
-  DispatchActionType type = DispatchActionType::NOOP_DISPATCH;
-  void* jsonPayload = nullptr;
-};
+std::string dispatchActionString(DispatchActionType type);
+std::string resultActionString(ResultActionType type);
 
-struct ResultAction {
-  ResultActionType type = ResultActionType::NOOP_RESULT;
-  void* jsonPayload = nullptr;
-};
+struct DispatchAction;
+struct ResultAction;
 
-inline std::string dispatchActionString(DispatchActionType type) {
-  switch (type) {
-  case DispatchActionType::NOOP_DISPATCH:
-    return "NOOP_DISPATCH";
-  case DispatchActionType::TALK_START:
-    return "TALK_START";
-  case DispatchActionType::TALK_SELECT_CHOICE:
-    return "TALK_SELECT_CHOICE";
-  case DispatchActionType::TALK_CONTINUE:
-    return "TALK_CONTINUE";
-  case DispatchActionType::TALK_END:
-    return "TALK_END";
-  default:
-    return std::to_string(static_cast<int>(type));
-  }
-}
-inline std::string resultActionString(ResultActionType type) {
-  switch (type) {
-  case ResultActionType::NOOP_RESULT:
-    return "NOOP_RESULT";
-  default:
-    return std::to_string(static_cast<int>(type));
-  }
-}
+DispatchAction jsonToDispatchAction(const std::string& jsonDispatchAction);
+ResultAction jsonToResultAction(const std::string& jsonDispatchAction);
 
 } // namespace state
 } // namespace snw

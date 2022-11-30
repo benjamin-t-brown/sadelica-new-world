@@ -1,4 +1,6 @@
 #include "cliContext.h"
+#include "game/dispatchAction.h"
+#include "game/resultAction.h"
 #include "lib/json/json.h"
 #include "logger.h"
 
@@ -7,6 +9,9 @@ using json = nlohmann::json;
 namespace snw {
 namespace state {
 
+constexpr int CONNECT_PORT = 7777;
+constexpr char* CONNECT_URL = "127.0.0.1";
+
 ClientContext ClientContext::globalClientContext = ClientContext();
 
 ClientContext::ClientContext()
@@ -14,10 +19,16 @@ ClientContext::ClientContext()
       clientDispatch(ClientDispatch()),
       clientResultProcessor(ClientResultProcessor()),
       clientLoopbackProcessor(ClientLoopbackProcessor()) {}
-void ClientContext::init() {}
+void ClientContext::init() {
+#ifndef NET_ENABLED
+  logger::info("CLI using mock net.");
+#endif
+  logger::info("CLI attempting to connect to %s:%i", CONNECT_URL, CONNECT_PORT);
+  ClientContext::get().getNetClient().connect(CONNECT_URL, CONNECT_PORT);
+  logger::info("CLI now connected.");
+}
 ClientContext& ClientContext::get() { return globalClientContext; }
 const ClientState& ClientContext::getState() const { return clientState; }
-ClientState& ClientContext::getStateMut() { return clientState; }
 const ClientState& ClientContext::setState(const ClientState& s) {
   clientState = ClientState(s);
 
@@ -35,9 +46,9 @@ ClientLoopbackProcessor& ClientContext::getLoopbackProcessor() {
 
 net::Client& ClientContext::getNetClient() { return netClient; }
 
-void ClientContext::update() {
-  auto payloadPtrs = clientDispatch.getPayloadPtrs();
+snw::in2::In2Context& ClientContext::getIn2Ctx() { return in2Ctx; }
 
+void ClientContext::update() {
   clientDispatch.dispatch();
   clientDispatch.reset();
   clientLoopbackProcessor.process();
@@ -45,16 +56,9 @@ void ClientContext::update() {
   clientResultProcessor.process();
   clientResultProcessor.reset();
 
-  netClient.update([](const std::string& msg){
-    logger::info("Recvd message from server %s", msg.c_str());
+  netClient.update([](const std::string& msg) {
+    logger::info("CLI Recvd message from server %s", msg.c_str());
   });
-
-  for (auto it : payloadPtrs) {
-    // NOLINTNEXTLINE
-    auto j = reinterpret_cast<json*>(it);
-    // NOLINTNEXTLINE
-    delete j;
-  }
 }
 
 ClientContext& getCliContext() { return ClientContext::get(); }

@@ -62,6 +62,10 @@ void init(const std::string _in2CompiledSrc = "") {
 };
 
 duk_context* castDukCtx(void* ctx) {
+  if (ctx == nullptr) {
+    throw std::runtime_error("Attempted to cast null duk ctx.");
+  }
+
   return reinterpret_cast<duk_context*>(ctx);
 }
 
@@ -101,7 +105,7 @@ static duk_ret_t duk_coreSay(duk_context* ctx) {
 
   auto in2Ctx = getIn2Context(ctxId);
 
-  Logger(LogType::DEBUG) << "duk_coreSay " << line << Logger::endl;
+  Logger(LogType::DEBUG) << "duk_coreSay '" << line << "'" << Logger::endl;
 
   if (in2Ctx != nullptr) {
     in2Ctx->pushLine(line);
@@ -201,7 +205,7 @@ static duk_ret_t duk_setExecutionCompleted(duk_context* ctx) {
     return 0;
   }
 
-  in2Ctx->isExecutionCompleted = true;
+  in2Ctx->executionCompleted = true;
   Logger(LogType::DEBUG) << "Execution Completed." << Logger::endl;
   return 0;
 }
@@ -209,12 +213,26 @@ static duk_ret_t duk_setExecutionCompleted(duk_context* ctx) {
 In2Context::In2Context() {
   registerIn2Context(this);
   id = in2InstanceIdCtr++;
+  dukCtx = nullptr;
+  jsonState = nullptr;
+}
+
+In2Context::~In2Context() {
+  cleanCtx();
+  deregisterIn2Context(this);
+}
+
+void In2Context::createNewCtx() {
+  cleanCtx();
+
+  executionCompleted = false;
+  waitingForChoice = false;
+  waitingForResume = false;
+
   dukCtx = duk_create_heap(NULL, NULL, NULL, NULL, handleDukError);
   jsonState = new json();
   auto ctx = castDukCtx(dukCtx);
 
-  Logger(LogType::DEBUG) << "Add duk_ native functions to duk ctx"
-                         << Logger::endl;
   duk_push_c_function(ctx, duk_log, 2);
   duk_put_global_string(ctx, "log");
   duk_push_c_function(ctx, duk_coreSay, 3);
@@ -232,27 +250,32 @@ In2Context::In2Context() {
   duk_push_c_function(ctx, duk_setExecutionCompleted, 1);
   duk_put_global_string(ctx, "cpp_setExecutionCompleted");
 
-  Logger(LogType::DEBUG) << "Eval core src" << Logger::endl;
+  Logger(LogType::DEBUG) << "Eval core src." << Logger::endl;
   duk_eval_string_noresult(ctx, getIn2CoreSrc().c_str());
 
-  Logger(LogType::DEBUG) << "Eval compiled src" << Logger::endl;
+  Logger(LogType::DEBUG) << "Eval compiled src." << Logger::endl;
   duk_eval_string_noresult(ctx, getIn2CompiledSrc().c_str());
 
   std::stringstream ss;
   ss << "core.init(" << id << ");";
-  Logger(LogType::DEBUG) << "Init: " << ss.str() << Logger::endl;
+  Logger(LogType::DEBUG) << "Call core init func." << Logger::endl;
   duk_eval_string_noresult(ctx, ss.str().c_str());
 }
 
-In2Context::~In2Context() {
-  duk_destroy_heap(castDukCtx(dukCtx));
-  // NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
-  delete castJsonState(jsonState);
-  deregisterIn2Context(this);
+void In2Context::cleanCtx() {
+  if (dukCtx != nullptr) {
+    duk_destroy_heap(castDukCtx(dukCtx));
+    dukCtx = nullptr;
+  }
+  if (jsonState != nullptr) {
+    // NOLINTNEXTLINE(cppcoreguidelines-owning-memory)
+    delete castJsonState(jsonState);
+    jsonState = nullptr;
+  }
 }
 
 void In2Context::executeFile(const std::string& fileName) {
-  isExecutionCompleted = false;
+  executionCompleted = false;
   auto ctx = castDukCtx(dukCtx);
   std::stringstream ss;
   ss << "fromCpp_runFile('" << fileName << ".json');";
@@ -260,7 +283,7 @@ void In2Context::executeFile(const std::string& fileName) {
   duk_eval_string(ctx, ss.str().c_str());
   const int result = static_cast<int>(duk_get_int(ctx, -1));
   if (result == 1) {
-    isExecutionErrored = true;
+    executionErrored = true;
     Logger(LogType::ERROR) << "Invalid in2 file: " << fileName << Logger::endl;
   }
 }
@@ -325,7 +348,7 @@ std::string In2Context::getStorage(const std::string& key) const {
   auto json = castJsonState(jsonState);
 
   if (json == nullptr) {
-    Logger(LogType::ERROR) << "Failed to getStorage no json found."
+    Logger(LogType::ERROR) << "Failed to getStorage no ctx has been created."
                            << Logger::endl;
     return "";
   }
@@ -340,7 +363,7 @@ void In2Context::setStorage(const std::string& key, const std::string& value) {
   auto json = castJsonState(jsonState);
 
   if (json == nullptr) {
-    Logger(LogType::ERROR) << "Failed to setStorage no json found."
+    Logger(LogType::ERROR) << "Failed to setStorage no ctx has been created."
                            << Logger::endl;
     return;
   }
@@ -357,6 +380,8 @@ void In2Context::logStorage() {
     Logger(LogType::INFO) << std::setw(4) << json->dump() << Logger::endl;
   }
 }
+
+bool In2Context::isExecutionActive() const { return dukCtx != nullptr; }
 
 const std::vector<std::string>& In2Context::getLines() { return lines; }
 const std::vector<std::string> In2Context::getNextLines() {

@@ -16,8 +16,9 @@ game/stateClient/cliDispatch.cpp\
 game/stateClient/cliResultProcessor.cpp\
 game/stateClient/cliLoopbackProcessor.cpp\
 game/stateClient/cliState.cpp\
-game/stateClient/cliLoopbackHandlers.cpp\
+game/stateClient/loopbackHandlers/in2Handlers.cpp\
 ui/Ui.cpp\
+ui/Elements.cpp\
 ui/components/TalkCmpt.cpp\
 ui/components/InGameCmpt.cpp
 
@@ -41,6 +42,7 @@ lib/sdl2wrapper/Gauge.cpp\
 lib/sdl2wrapper/Logger.cpp\
 lib/duktape/duktape.cpp\
 game/in2/in2.cpp\
+game/actions.cpp\
 utils/utils.cpp
 
 TEST_CODE=\

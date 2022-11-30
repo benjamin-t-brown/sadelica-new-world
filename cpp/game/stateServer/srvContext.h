@@ -11,6 +11,7 @@ namespace state {
 class ServerContext {
 private:
   ServerState serverState;
+  ServerDispatchProcessor serverDispatchProcessor;
 
   net::Server netServer;
 
@@ -30,7 +31,7 @@ public:
   void update();
 };
 
-ServerState& getSrvContext();
+ServerContext& getSrvContext();
 const ServerState& getSrvState();
 
 } // namespace state

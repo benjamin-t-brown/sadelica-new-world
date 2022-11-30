@@ -17,7 +17,6 @@ public:
   void enqueue(const DispatchAction& action);
   void dispatch();
   void reset();
-  std::vector<void*> getPayloadPtrs();
 };
 
 namespace dispatch {

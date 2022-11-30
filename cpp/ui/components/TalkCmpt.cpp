@@ -1,6 +1,8 @@
 #include "TalkCmpt.h"
 #include "game/stateClient/cliContext.h"
+#include "game/stateClient/cliState.h"
 #include "logger.h"
+#include "ui/Elements.h"
 #include "ui/Ui.h"
 #include <algorithm>
 #include <sstream>
@@ -133,9 +135,9 @@ void renderTextArea(Ui& ui) {
   auto& state = ClientContext::get().getState();
   const std::string& text = state.in2.conversationText;
 
-  if (state.in2.in2Ctx == nullptr || state.in2.in2Ctx->isExecutionErrored) {
-    return;
-  }
+  // if (state.in2.in2Ctx == nullptr || state.in2.in2Ctx->isExecutionErrored) {
+  //   return;
+  // }
 
   ImGui::Spacing();
   ImGui::Spacing();
@@ -144,25 +146,28 @@ void renderTextArea(Ui& ui) {
   ImGui::Spacing();
 
   ImGui::PushFont(ui.getFont("Chicago20"));
-  if (state.in2.in2Ctx->waitingForResume) {
-    ImGui::PushStyleColor(ImGuiCol_Button, ui.colors.PURPLE);
-    ImGui::PushStyleColor(ImGuiCol_Text, ui.colors.WHITE);
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ui.colors.BLACK);
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ui.colors.DARK_GREY);
+  if (state.in2.waitingState ==
+      snw::state::In2WaitingState::WAITING_FOR_CONTINUE) {
     ImGui::Spacing();
-    std::stringstream ss;
-    ss << "Continue.";
-    auto textSize = ImGui::CalcTextSize(ss.str().c_str(), NULL, false, width);
-    textSize.y += 24;
 
-    if (ImGui::Button(ss.str().c_str(), ImVec2(width - spacing, textSize.y)) ||
-        isKeyPressed(ImGuiKey_Space) || isKeyPressed(ImGuiKey_Enter)) {
+    ui::elements::ButtonProps p;
+    const std::string label = "Continue.";
+    p.label = label;
+    p.textColor = ui.colors.WHITE;
+    p.bgColor = ui.colors.DARK_CYAN;
+    p.bgColorActive = ui.colors.DARK_GREY;
+    p.bgColorHover = ui.colors.BLACK;
+    p.size = ImVec2(width - spacing, 24);
+    p.keyboardShortcuts = {ImGuiKey_Space, ImGuiKey_Enter};
+    p.onClick = [&]() {
       snw::state::dispatch::continueTalk();
       eventOccurred = true;
-    }
+    };
+    ui::elements::Button(p);
+
     ImGui::Spacing();
-    ImGui::PopStyleColor(4);
-  } else if (state.in2.in2Ctx->waitingForChoice) {
+  } else if (state.in2.waitingState ==
+             snw::state::In2WaitingState::WAITING_FOR_CHOICE) {
     const auto& choices = state.in2.choices;
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2, 2));
     int ctr = 1;
@@ -170,7 +175,7 @@ void renderTextArea(Ui& ui) {
       ImGui::PushID(ctr);
       std::stringstream ss;
 
-      if (state.in2.in2Ctx->hasChosenChoice(ctr - 1)) {
+      if (ClientContext::get().getIn2Ctx().hasChosenChoice(ctr - 1)) {
         ImGui::PushStyleColor(ImGuiCol_Button, ui.colors.DARK_CYAN);
         ImGui::PushStyleColor(ImGuiCol_Text, ui.colors.WHITE);
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ui.colors.BLACK);

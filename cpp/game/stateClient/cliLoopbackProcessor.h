@@ -25,7 +25,13 @@ public:
   void enqueue(const DispatchAction& action);
   void process();
   void reset();
+  void addHandler(DispatchActionType type,
+                  std::function<ClientState(const ClientState&,
+                                            const DispatchAction&)> handler);
 };
+
+void logLoopbackDispatchAssertionError(DispatchActionType type,
+                                       const std::string& msg);
 
 } // namespace state
 } // namespace snw
