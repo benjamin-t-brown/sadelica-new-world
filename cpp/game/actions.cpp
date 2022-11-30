@@ -1,6 +1,7 @@
 #include "actions.h"
 #include "dispatchAction.h"
 #include "lib/json/json.h"
+#include "logger.h"
 #include "resultAction.h"
 
 using json = nlohmann::json;
@@ -24,6 +25,8 @@ std::string dispatchActionToString(DispatchActionType type) {
     return "TALK_CONTINUE";
   case DispatchActionType::TALK_END:
     return "TALK_END";
+  case DispatchActionType::TALK_UPDATE:
+    return "TALK_UPDATE";
   default:
     return std::to_string(static_cast<int>(type));
   }
@@ -32,6 +35,8 @@ std::string resultActionToString(ResultActionType type) {
   switch (type) {
   case ResultActionType::NOOP_RESULT:
     return "NOOP_RESULT";
+  case ResultActionType::TALK_UPDATED:
+    return "TALK_UPDATED";
   default:
     return std::to_string(static_cast<int>(type));
   }
@@ -40,8 +45,19 @@ std::string resultActionToString(ResultActionType type) {
 DispatchActionList jsonToDispatchActionList(const std::string& jsonMsg) {
   json jMsg = json::parse(jsonMsg);
 
-  const std::string clientId = jMsg["id"];
+  const int clientIdInt = jMsg["id"];
   std::vector<DispatchAction> actions;
+
+  ClientId clientId = ClientId::PLAYER_NONE;
+
+  if (clientIdInt == 1) {
+    clientId = ClientId::PLAYER1;
+  } else if (clientIdInt == 2) {
+    clientId = ClientId::PLAYER2;
+  } else {
+    logger::warn("Translating to dispatch action with invalid clientId=%i",
+                 clientIdInt);
+  }
 
   for (auto& j : jMsg["payload"]) {
     DispatchAction action;

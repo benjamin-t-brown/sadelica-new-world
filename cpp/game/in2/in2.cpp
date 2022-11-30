@@ -263,6 +263,13 @@ void In2Context::createNewCtx() {
 }
 
 void In2Context::cleanCtx() {
+  choices = {};
+  lines = {};
+
+  executionCompleted = false;
+  waitingForChoice = false;
+  waitingForResume = false;
+
   if (dukCtx != nullptr) {
     duk_destroy_heap(castDukCtx(dukCtx));
     dukCtx = nullptr;

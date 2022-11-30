@@ -5,7 +5,7 @@
 namespace snw {
 namespace state {
 
-void initIn2Handlers(ClientLoopbackProcessor& p);
+void initLoopbackHandlers(ClientLoopbackProcessor& p);
 
 } // namespace state
 } // namespace snw

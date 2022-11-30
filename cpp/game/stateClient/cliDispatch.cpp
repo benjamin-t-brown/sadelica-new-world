@@ -1,6 +1,7 @@
 #include "cliDispatch.h"
 #include "cliContext.h"
 #include "game/dispatchAction.h"
+#include "game/payloads.h"
 #include "lib/json/json.h"
 #include "logger.h"
 #include <string>
@@ -20,7 +21,8 @@ void ClientDispatch::dispatch() {
   json serverPayload = json::array();
 
   for (auto& it : actionsToCommit) {
-    logger::debug("Dispatch action: %s", dispatchActionToString(it.type).c_str());
+    logger::debug("Dispatch action: %s",
+                  dispatchActionToString(it.type).c_str());
     switch (it.cl) {
     case ActionCl::LOOPBACK_ONLY:
       ClientContext::get().getLoopbackProcessor().enqueue(it);
@@ -51,6 +53,13 @@ void ClientDispatch::reset() {
 
 namespace dispatch {
 
+void establishConnection(const std::string& playerName) {
+  const DispatchAction action{
+      ActionCl::SEND_ONLY,
+      DispatchActionType::NET_CONNECT,
+      json(payloads::PayloadEstablishConnection{0, playerName})};
+}
+
 void startTalk(const std::string& talkName) {
   const DispatchAction action{ActionCl::BOTH,
                               DispatchActionType::TALK_START,
@@ -77,6 +86,18 @@ void chooseTalk(const int choiceIndex) {
 void endTalk() {
   const DispatchAction action{
       ActionCl::BOTH, DispatchActionType::TALK_END, nullptr};
+
+  ClientContext::get().getDispatch().enqueue(action);
+}
+
+void updateTalk(const In2State& in2State) {
+  const DispatchAction action{
+      ActionCl::SEND_ONLY,
+      DispatchActionType::TALK_UPDATE,
+      json({{"conversationText", in2State.conversationText},
+            {"choices", in2State.choices},
+            {"chName", in2State.chName},
+            {"waitingState", in2State.waitingState}})};
 
   ClientContext::get().getDispatch().enqueue(action);
 }

@@ -1,9 +1,10 @@
-#include "../cliContext.h"
-#include "../cliLoopbackProcessor.h"
-#include "../cliState.h"
 #include "game/actions.h"
 #include "game/dispatchAction.h"
-#include "lib/json/jsonHelpers.h"
+#include "game/payloads.h"
+#include "game/stateClient/cliContext.h"
+#include "game/stateClient/cliLoopbackProcessor.h"
+#include "game/stateClient/cliState.h"
+#include "lib/json/json.h"
 #include "logger.h"
 #include "utils/utils.h"
 
@@ -11,18 +12,6 @@ using json = nlohmann::json;
 
 namespace snw {
 namespace state {
-
-struct PayloadCivilDeclareTalk {
-  std::string fileName = "";
-  // this macro makes this struct deserializable so you can do:
-  // auto args = j.get<snw::state::PayloadCivilDeclareTalk>();
-  NLOHMANN_DEFINE_TYPE_INTRUSIVE(PayloadCivilDeclareTalk, fileName)
-};
-
-struct PayloadCivilTalkChoose {
-  int choiceIndex = -1;
-  NLOHMANN_DEFINE_TYPE_INTRUSIVE(PayloadCivilTalkChoose, choiceIndex)
-};
 
 void initIn2Handlers(ClientLoopbackProcessor& p) {
   p.addHandler(
@@ -40,7 +29,7 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
 
         auto& j = it.jsonPayload;
 
-        auto args = j.get<snw::state::PayloadCivilDeclareTalk>();
+        auto args = j.get<payloads::PayloadCivilDeclareTalk>();
         if (args.fileName == "") {
           logLoopbackDispatchAssertionError(DispatchActionType::TALK_START,
                                             "fileName is empty str ''.");
@@ -50,9 +39,12 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
         auto newState = ClientState(state);
         newState.sections.push_back(SectionType::CONVERSATION);
         newState.in2.chName = args.fileName;
+        newState.in2.conversationText = "";
         in2Ctx.createNewCtx();
         in2Ctx.executeFile(args.fileName);
         helpers::setIn2StateAfterExecution(newState);
+        dispatch::updateTalk(newState.in2);
+        // dispatch::update
 
         return newState;
       });
@@ -78,6 +70,7 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
         if (in2Ctx.executionCompleted) {
           dispatch::endTalk();
         }
+        dispatch::updateTalk(newState.in2);
 
         return newState;
       });
@@ -99,7 +92,7 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
         auto newState = ClientState(state);
         auto& choices = in2Ctx.getChoices();
         auto& j = it.jsonPayload;
-        auto args = j.get<snw::state::PayloadCivilTalkChoose>();
+        auto args = j.get<payloads::PayloadCivilTalkChoose>();
         if (args.choiceIndex < 0 ||
             args.choiceIndex > static_cast<int>(choices.size())) {
           logLoopbackDispatchAssertionError(
@@ -117,6 +110,7 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
         if (in2Ctx.executionCompleted) {
           dispatch::endTalk();
         }
+        dispatch::updateTalk(newState.in2);
 
         logger::info("Log storage");
         in2Ctx.logStorage();

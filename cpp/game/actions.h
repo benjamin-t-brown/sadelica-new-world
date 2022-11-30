@@ -9,6 +9,12 @@
 namespace snw {
 namespace state {
 
+enum ClientId {
+  PLAYER_NONE = 0,
+  PLAYER1 = 1,
+  PLAYER2 = 2,
+};
+
 enum ActionCl { LOOPBACK_ONLY = 1, SEND_ONLY, BOTH };
 
 enum DispatchActionType {
@@ -28,6 +34,7 @@ enum DispatchActionType {
   TALK_SELECT_CHOICE,
   TALK_CONTINUE,
   TALK_END,
+  TALK_UPDATE,
 
   LOAD_GAME,
   SAVE_GAME,
@@ -90,6 +97,7 @@ enum ResultActionType {
   TALK_ENDED,
   TALK_RESUMED,
   TALK_CHOICE_PICKED,
+  TALK_UPDATED,
 
   CHARACTER_STARTED_STEAL,
   CHARACTER_ENDED_STEAL,
@@ -217,7 +225,7 @@ struct DispatchAction;
 struct ResultAction;
 
 struct DispatchActionList {
-  std::string clientId;
+  ClientId clientId;
   std::vector<DispatchAction> actions;
 };
 

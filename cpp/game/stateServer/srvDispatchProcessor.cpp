@@ -1,4 +1,5 @@
 #include "srvDispatchProcessor.h"
+#include "dispatchHandlers/dispatchHandlers.h"
 #include "game/dispatchAction.h"
 #include "lib/json/json.h"
 #include "logger.h"
@@ -9,7 +10,13 @@ using json = nlohmann::json;
 
 namespace snw {
 namespace state {
-void ServerDispatchProcessor::enqueue(const std::string& clientId,
+
+ServerDispatchProcessor::ServerDispatchProcessor()
+    : actionsToCommit({}), handlers({}) {
+  init();
+}
+
+void ServerDispatchProcessor::enqueue(const ClientId clientId,
                                       const DispatchAction& action) {
   actionsToCommit.push_back(action);
   auto& a = actionsToCommit[actionsToCommit.size() - 1];
@@ -37,7 +44,27 @@ void ServerDispatchProcessor::reset() {
   actionsToCommit.erase(actionsToCommit.begin(), actionsToCommit.end());
 }
 
-void ServerDispatchProcessor::init() {}
+void ServerDispatchProcessor::addHandler(
+    DispatchActionType type,
+    std::function<ServerState(const ServerState&, const DispatchAction&)>
+        handler) {
+  if (handlers.find(type) != handlers.end()) {
+    throw std::runtime_error("A server handler for " +
+                             dispatchActionToString(type) + " already exists!");
+  }
+
+  // logger::debug("SRV add handler for %s", dispatchActionToString(type).c_str());
+  handlers[type] = handler;
+}
+
+void ServerDispatchProcessor::init() { initDispatchHandlers(*this); }
+
+void logServerDispatchAssertionError(DispatchActionType type,
+                                     const std::string& msg) {
+  logger::error("SRV Failure at ServerDispatchProcessor during %s: %s",
+                dispatchActionToString(type).c_str(),
+                msg.c_str());
+}
 
 } // namespace state
 } // namespace snw

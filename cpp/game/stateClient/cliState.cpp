@@ -49,6 +49,19 @@ void setIn2StateAfterExecution(ClientState& state) {
   }
 }
 
+ClientId intToClientId(int clientIdInt) {
+  if (clientIdInt == 1) {
+    return ClientId::PLAYER1;
+  } else if (clientIdInt == 2) {
+    return ClientId::PLAYER2;
+  } else {
+    logger::error(
+        "Invalid conversion to clientId from int=%i (defaulting to PLAYER1)",
+        clientIdInt);
+    return ClientId::PLAYER1;
+  }
+}
+
 } // namespace helpers
 } // namespace state
 } // namespace snw

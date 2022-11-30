@@ -58,7 +58,7 @@ std::string Logger::getLabel(LogType type) {
   case ERROR:
     label = "{ERROR} ";
     if (Logger::colorEnabled) {
-      label = "\031[31m" + label + "\033[0m";
+      label = "\033[31m" + label + "\033[0m";
     }
     break;
   }

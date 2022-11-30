@@ -42,6 +42,7 @@ public:
 
 ClientContext& getCliContext();
 const ClientState& getCliState();
+const ClientId getClientId();
 
 } // namespace state
 } // namespace snw

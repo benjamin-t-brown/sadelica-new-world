@@ -1,7 +1,7 @@
 #include "cliLoopbackProcessor.h"
 #include "cliContext.h"
 #include "game/dispatchAction.h"
-#include "lib/json/jsonHelpers.h"
+#include "lib/json/json.h"
 #include "logger.h"
 #include "loopbackHandlers/loopbackHandlers.h"
 #include "utils/utils.h"
@@ -47,15 +47,21 @@ void ClientLoopbackProcessor::addHandler(
     DispatchActionType type,
     std::function<ClientState(const ClientState&, const DispatchAction&)>
         handler) {
+  if (handlers.find(type) != handlers.end()) {
+    throw std::runtime_error("A loopback handler for " + dispatchActionToString(type) +
+                             " already exists!");
+  }
+
   handlers[type] = handler;
 }
 
 void ClientLoopbackProcessor::init() {
   // add more handlers here
-  initIn2Handlers(*this);
+  initLoopbackHandlers(*this);
 }
 
-void logLoopbackDispatchAssertionError(DispatchActionType type, const std::string& msg) {
+void logLoopbackDispatchAssertionError(DispatchActionType type,
+                                       const std::string& msg) {
   logger::error("CLI Failure at ClientLoopbackProcessor during %s: %s",
                 dispatchActionToString(type).c_str(),
                 msg.c_str());

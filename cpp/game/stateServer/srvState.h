@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
-#include <string>
+#include "game/actions.h"
+#include "game/sharedStateStructs.h"
 
 namespace snw {
 namespace state {
@@ -14,12 +14,15 @@ struct ConnectedClient {
 };
 
 struct ServerState {
-  std::vector<ConnectedClient> clients;
-
-  // std::vector<SectionInfo> sections;
+  std::vector<ConnectedClient> clients = {ConnectedClient(), ConnectedClient()};
+  std::vector<In2State> in2States = {In2State(), In2State()};
 };
 
-namespace helpers {} // namespace helpers
+namespace helpers {
+
+unsigned int clientIdToIndex(ClientId clientId);
+
+} // namespace helpers
 
 } // namespace state
 } // namespace snw

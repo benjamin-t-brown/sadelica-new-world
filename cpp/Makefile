@@ -14,9 +14,10 @@ lib/net/client.cpp\
 game/stateClient/cliContext.cpp\
 game/stateClient/cliDispatch.cpp\
 game/stateClient/cliResultProcessor.cpp\
+game/stateClient/resultHandlers/resultHandlers.cpp\
 game/stateClient/cliLoopbackProcessor.cpp\
 game/stateClient/cliState.cpp\
-game/stateClient/loopbackHandlers/in2Handlers.cpp\
+game/stateClient/loopbackHandlers/loopbackHandlers.cpp\
 ui/Ui.cpp\
 ui/Elements.cpp\
 ui/components/TalkCmpt.cpp\
@@ -24,8 +25,10 @@ ui/components/InGameCmpt.cpp
 
 SERVER_CODE=\
 game/stateServer/srvContext.cpp\
-game/stateServer/srvDispatchProcessor.cpp\
 game/stateServer/srvResult.cpp\
+game/stateServer/srvDispatchProcessor.cpp\
+game/stateServer/srvState.cpp\
+game/stateServer/dispatchHandlers/dispatchHandlers.cpp\
 lib/net/server.cpp
 
 SHARED_CODE=\
@@ -48,10 +51,11 @@ utils/utils.cpp
 TEST_CODE=\
 test/test.cpp\
 test/sdl2wrapper/Gauge.test.cpp\
-test/in2/in2.test.cpp\
-test/logger.test.cpp\
-test/state/clientState.test.cpp\
-test/net/netMock.test.cpp
+test/in2/In2.test.cpp\
+test/Logger.test.cpp\
+test/state/ClientState.test.cpp\
+test/state/ServerState.test.cpp\
+test/net/NetMock.test.cpp
 
 TEST_CODE_UI=\
 test/ui/TalkCmpt.test.cpp

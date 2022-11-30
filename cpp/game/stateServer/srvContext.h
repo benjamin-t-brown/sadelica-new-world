@@ -12,6 +12,7 @@ class ServerContext {
 private:
   ServerState serverState;
   ServerDispatchProcessor serverDispatchProcessor;
+  ServerResult serverResult;
 
   net::Server netServer;
 
@@ -27,6 +28,7 @@ public:
   ServerState& getStateMut();
   const ServerState& setState(const ServerState& state);
 
+  ServerResult& getServerResult();
   net::Server& getNetServer();
   void update();
 };

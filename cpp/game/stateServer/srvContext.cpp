@@ -31,12 +31,12 @@ const ServerState& ServerContext::setState(const ServerState& s) {
   return serverState;
 }
 
+ServerResult& ServerContext::getServerResult() { return serverResult; }
+
 net::Server& ServerContext::getNetServer() { return netServer; }
 void ServerContext::update() {
-  // auto payloadPtrs = clientDispatch.getPayloadPtrs();
-
   netServer.update([&](const std::string& socketId, const std::string& msg) {
-    logger::info("SRV Recvd message from client (id=%s): %s",
+    logger::info("SRV Recvd message from client (socketId=%s): %s",
                  socketId.c_str(),
                  msg.c_str());
     const auto actionList = jsonToDispatchActionList(msg);
@@ -45,19 +45,10 @@ void ServerContext::update() {
     }
   });
 
-  // clientDispatch.dispatch();
-  // clientDispatch.reset();
-  // clientLoopbackProcessor.process();
-  // clientLoopbackProcessor.reset();
   serverDispatchProcessor.process();
   serverDispatchProcessor.reset();
-
-  // for (auto it : payloadPtrs) {
-  //   // NOLINTNEXTLINE
-  //   auto j = reinterpret_cast<json*>(it);
-  //   // NOLINTNEXTLINE
-  //   delete j;
-  // }
+  serverResult.sendResults();
+  serverResult.reset();
 }
 
 ServerContext& getSrvContext() { return ServerContext::get(); }

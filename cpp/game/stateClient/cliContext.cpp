@@ -64,5 +64,7 @@ void ClientContext::update() {
 ClientContext& getCliContext() { return ClientContext::get(); }
 const ClientState& getCliState() { return ClientContext::get().getState(); }
 
+const ClientId getClientId() { return getCliState().account.id; }
+
 } // namespace state
 } // namespace snw
