@@ -19,7 +19,7 @@ private:
   void init();
 
 public:
-  void enqueue(const DispatchAction& action);
+  void enqueue(const std::string& clientId, const DispatchAction& action);
   void process();
   void reset();
 };

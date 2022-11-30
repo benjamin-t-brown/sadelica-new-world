@@ -11,6 +11,7 @@ namespace SDL2Wrapper {
 
 const std::string Logger::endl = std::string("\n");
 bool Logger::disabled = false;
+bool Logger::colorEnabled = true;
 
 void Logger::printMessage(const std::string& msg) {
   if (Logger::disabled) {
@@ -31,6 +32,37 @@ void Logger::manipulateMessage(const StandardEndLine m) {
   // #else
   //   m(std::cout);
   // #endif
+}
+
+std::string Logger::getLabel(LogType type) {
+  std::string label;
+  switch (type) {
+  case DEBUG:
+    label = "{DEBUG} ";
+    if (Logger::colorEnabled) {
+      label = "\033[36m" + label + "\033[0m";
+    }
+    break;
+  case INFO:
+    label = "{INFO} ";
+    if (Logger::colorEnabled) {
+      label = "\033[32m" + label + "\033[0m";
+    }
+    break;
+  case WARN:
+    label = "{WARN} ";
+    if (Logger::colorEnabled) {
+      label = "\033[33m" + label + "\033[0m";
+    }
+    break;
+  case ERROR:
+    label = "{ERROR} ";
+    if (Logger::colorEnabled) {
+      label = "\031[31m" + label + "\033[0m";
+    }
+    break;
+  }
+  return label;
 }
 
 int Logger::printf(const char* c, ...) {

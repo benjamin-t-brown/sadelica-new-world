@@ -20,7 +20,7 @@ void ClientDispatch::dispatch() {
   json serverPayload = json::array();
 
   for (auto& it : actionsToCommit) {
-    logger::debug("Dispatch action: %s", dispatchActionString(it.type).c_str());
+    logger::debug("Dispatch action: %s", dispatchActionToString(it.type).c_str());
     switch (it.cl) {
     case ActionCl::LOOPBACK_ONLY:
       ClientContext::get().getLoopbackProcessor().enqueue(it);

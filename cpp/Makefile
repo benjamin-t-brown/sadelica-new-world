@@ -205,7 +205,7 @@ testui: precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) 
 
 clean:
 	rm -f $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(MAIN_ALL_OBJECT) $(MAIN_CLIENT_OBJECT) $(MAIN_SERVER_OBJECT)
-	rm -f $(TEST_OBJECTS)
+	rm -f $(TEST_OBJECTS) $(TEST_UI_OBJECTS)
 	rm -f precompiled.h.gch
 	rm -f $(EXE) $(EXE).exe $(EXE_CLIENT) $(EXE_CLIENT).exe $(EXE_SERVER) $(EXE_SERVER).exe $(EXE_TEST) $(EXE_TEST).exe $(EXE_TEST_UI) $(EXE_TEST_UI).exe
 	rm -fd .build

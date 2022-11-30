@@ -4,6 +4,7 @@
 // #include "lib/betterenum/enum.h"
 
 #include <string>
+#include <vector>
 
 namespace snw {
 namespace state {
@@ -209,14 +210,24 @@ enum ResultActionType {
 //             PLAYER_TILES_WERE_REVEALED,
 //             PLAYER_TILES_WERE_UNREVEALED)
 
-std::string dispatchActionString(DispatchActionType type);
-std::string resultActionString(ResultActionType type);
+std::string dispatchActionToString(DispatchActionType type);
+std::string resultActionToString(ResultActionType type);
 
 struct DispatchAction;
 struct ResultAction;
 
-DispatchAction jsonToDispatchAction(const std::string& jsonDispatchAction);
-ResultAction jsonToResultAction(const std::string& jsonDispatchAction);
+struct DispatchActionList {
+  std::string clientId;
+  std::vector<DispatchAction> actions;
+};
+
+struct ResultActionList {
+  std::vector<ResultAction> actions;
+};
+
+DispatchActionList
+jsonToDispatchActionList(const std::string& jsonDispatchAction);
+ResultActionList jsonToResultActionList(const std::string& jsonDispatchAction);
 
 } // namespace state
 } // namespace snw

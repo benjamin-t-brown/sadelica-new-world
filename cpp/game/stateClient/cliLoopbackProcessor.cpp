@@ -24,13 +24,13 @@ void ClientLoopbackProcessor::process() {
   ClientState state = ClientState(ClientContext::get().getState());
   for (auto& it : actionsToCommit) {
     logger::debug("CLI process loopback action %s",
-                  dispatchActionString(it.type).c_str());
+                  dispatchActionToString(it.type).c_str());
     auto itHandler = handlers.find(it.type);
     if (itHandler == handlers.end()) {
-      logger::warn("CLI Could not find loopback handler for type={}",
-                   dispatchActionString(it.type).c_str());
+      logger::warn("CLI Could not find loopback handler for type=%s",
+                   dispatchActionToString(it.type).c_str());
       if (it.jsonPayload != nullptr) {
-        logger::warn("Payload: {}", it.jsonPayload.dump().c_str());
+        logger::warn("Payload: %", it.jsonPayload.dump().c_str());
       }
       continue;
     }
@@ -57,7 +57,7 @@ void ClientLoopbackProcessor::init() {
 
 void logLoopbackDispatchAssertionError(DispatchActionType type, const std::string& msg) {
   logger::error("CLI Failure at ClientLoopbackProcessor during %s: %s",
-                dispatchActionString(type).c_str(),
+                dispatchActionToString(type).c_str(),
                 msg.c_str());
 }
 

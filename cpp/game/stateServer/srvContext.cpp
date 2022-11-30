@@ -35,10 +35,14 @@ net::Server& ServerContext::getNetServer() { return netServer; }
 void ServerContext::update() {
   // auto payloadPtrs = clientDispatch.getPayloadPtrs();
 
-  netServer.update([](const std::string& clientId, const std::string& msg) {
+  netServer.update([&](const std::string& socketId, const std::string& msg) {
     logger::info("SRV Recvd message from client (id=%s): %s",
-                 clientId.c_str(),
+                 socketId.c_str(),
                  msg.c_str());
+    const auto actionList = jsonToDispatchActionList(msg);
+    for (const auto& action : actionList.actions) {
+      serverDispatchProcessor.enqueue(actionList.clientId, action);
+    }
   });
 
   // clientDispatch.dispatch();

@@ -10,8 +10,9 @@
 
 namespace net {
 
-constexpr unsigned int MAX_CLIENTS = 10;
+constexpr unsigned int MAX_CLIENTS = 2;
 
+std::vector<Client*> Server::mockClientsConnected;
 std::vector<std::string> Server::mockServerMessagesToBroadcast;
 std::vector<std::pair<std::string, std::string>>
     Server::mockServerMessagesToProcess;
@@ -77,6 +78,7 @@ void Server::listen(int port) {
   serverHost = server;
 #else
 #endif
+  isListening = true;
 }
 
 void Server::broadcast(const std::string& message) {
@@ -156,8 +158,10 @@ void Server::update(
     cb(messagePair.first, messagePair.second);
   }
 
-  for (const auto& message : Server::mockServerMessagesToBroadcast) {
-    Client::mockClientMessagesToProcess.push_back(message);
+  for (Client* client : Server::mockClientsConnected) {
+    for (const auto& message : Server::mockServerMessagesToBroadcast) {
+      client->mockClientMessagesToProcess.push_back(message);
+    }
   }
 
   Server::mockServerMessagesToProcess.clear();

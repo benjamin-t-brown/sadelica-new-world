@@ -9,23 +9,23 @@ using json = nlohmann::json;
 
 namespace snw {
 namespace state {
-void ServerDispatchProcessor::enqueue(const DispatchAction& action) {
+void ServerDispatchProcessor::enqueue(const std::string& clientId,
+                                      const DispatchAction& action) {
   actionsToCommit.push_back(action);
+  auto& a = actionsToCommit[actionsToCommit.size() - 1];
+  a.clientId = clientId;
 }
 
 void ServerDispatchProcessor::process() {
   ServerState state = ServerState(ServerContext::get().getState());
   for (auto& it : actionsToCommit) {
     logger::debug("SRV process dispatch action %s",
-                  dispatchActionString(it.type).c_str());
+                  dispatchActionToString(it.type).c_str());
     auto itHandler = handlers.find(it.type);
     if (itHandler == handlers.end()) {
-      logger::warn("SRV Could not find dispatch handler for type={}",
-                   dispatchActionString(it.type).c_str());
-      if (it.jsonPayload != nullptr) {
-        
-        logger::warn("Payload: {}", it.jsonPayload.dump().c_str());
-      }
+      logger::warn("SRV Could not find dispatch handler for type=%s",
+                   dispatchActionToString(it.type).c_str());
+      logger::warn("Payload: %s", it.jsonPayload.dump().c_str());
       continue;
     }
     state = ServerState(handlers[it.type](state, it));

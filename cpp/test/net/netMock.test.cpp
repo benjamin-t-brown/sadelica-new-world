@@ -7,7 +7,12 @@ class NetMockTest : public testing::Test {
 protected:
   static void SetUpTestSuite() { Logger::disabled = true; }
   static void TearDownTestSuite() {}
-  void SetUp() override { Logger::disabled = true; }
+  void SetUp() override {
+    Logger::disabled = true;
+    // since mock server connected clients is static need to clear it here or
+    // other tests interfere with it.
+    net::Server::mockClientsConnected.clear();
+  }
   void TearDown() override {}
 };
 
@@ -57,4 +62,24 @@ TEST_F(NetMockTest, CanSendAndReceiveMessagesBetweenServerAndClient) {
     ctr++;
   });
   client.update(noopClient);
+}
+
+TEST_F(NetMockTest, CanHandleTwoClients) {
+  net::Server server;
+  net::Client client1;
+  net::Client client2;
+
+  server.listen(1234);
+  client1.connect("", 1234);
+  client2.connect("", 1234);
+
+  server.broadcast("Blarg");
+
+  auto noopServer = [](const std::string id, const std::string msg) {};
+  auto noopClient = [](const std::string msg) {};
+
+  EXPECT_EQ(server.mockClientsConnected.size(), 2);
+  server.update(noopServer);
+  client1.update([](const std::string msg) { EXPECT_EQ(msg, "Blarg"); });
+  client2.update([](const std::string msg) { EXPECT_EQ(msg, "Blarg"); });
 }

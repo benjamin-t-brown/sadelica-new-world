@@ -10,9 +10,6 @@
 
 namespace net {
 
-std::vector<std::string> Client::mockClientMessagesToSend;
-std::vector<std::string> Client::mockClientMessagesToProcess;
-
 bool Client::connect(const std::string& host, int port) {
 #ifdef NET_ENABLED
   if (enet_initialize() != 0) {
@@ -45,7 +42,7 @@ bool Client::connect(const std::string& host, int port) {
   /* Wait up to 5 seconds for the connection attempt to succeed. */
   if (enet_host_service(client, &event, 5000) > 0 &&
       event.type == ENET_EVENT_TYPE_CONNECT) {
-    isConnected = true;
+    connected = true;
     clientHost = reinterpret_cast<void*>(client);
     clientPeer = reinterpret_cast<void*>(peer);
     return true;
@@ -54,10 +51,12 @@ bool Client::connect(const std::string& host, int port) {
     /* received. Reset the peer in the event the 5 seconds   */
     /* had run out without any significant event.            */
     enet_peer_reset(peer);
-    isConnected = false;
+    connected = false;
     return false;
   }
 #else
+  Server::mockClientsConnected.push_back(this);
+  connected = true;
   return true;
 #endif
 }
@@ -78,7 +77,7 @@ void Client::send(const std::string& message) {
 
 #else
 
-  Client::mockClientMessagesToSend.push_back(message);
+  mockClientMessagesToSend.push_back(message);
 
 #endif
 }
@@ -105,7 +104,7 @@ void Client::update(std::function<void(const std::string& msg)> cb) {
       break;
     }
     case ENET_EVENT_TYPE_DISCONNECT: {
-      isConnected = false;
+      connected = false;
       break;
     }
     default:
@@ -115,19 +114,23 @@ void Client::update(std::function<void(const std::string& msg)> cb) {
 
 #else
 
-  for (const auto& message : Client::mockClientMessagesToSend) {
+  for (const auto& message : mockClientMessagesToSend) {
     Server::mockServerMessagesToProcess.push_back(
         std::make_pair("mock-1234", message));
   }
 
-  for (const auto& message : Client::mockClientMessagesToProcess) {
+  for (const auto& message : mockClientMessagesToProcess) {
     cb(message);
   }
 
-  Client::mockClientMessagesToSend.clear();
-  Client::mockClientMessagesToProcess.clear();
+  mockClientMessagesToSend.clear();
+  mockClientMessagesToProcess.clear();
 
 #endif
+}
+
+bool Client::isConnected() {
+  return connected;
 }
 
 void Client::cleanUp() {
@@ -142,6 +145,7 @@ void Client::cleanUp() {
 #else
 
 #endif
+  connected = false;
 }
 
 } // namespace net

@@ -14,12 +14,13 @@ enum LogType { DEBUG, INFO, WARN, ERROR };
 class Logger {
 public:
   Logger() {}
-  explicit Logger(LogType type) { operator<<("[" + getLabel(type) + "] "); }
+  explicit Logger(LogType type) { operator<<(getLabel(type)); }
   explicit Logger(const std::string& type) { operator<<("[" + type + "] "); }
   ~Logger() {}
 
   static const std::string endl;
   static bool disabled;
+  static bool colorEnabled;
 
   template <class T> Logger operator<<(const T& msg) {
     // clang-tidy bug? It keeps saying this can be const, but obviously it can't
@@ -43,23 +44,6 @@ public:
   void manipulateMessage(const StandardEndLine m);
 
 private:
-  inline std::string getLabel(LogType type) {
-    std::string label;
-    switch (type) {
-    case DEBUG:
-      label = "DEBUG";
-      break;
-    case INFO:
-      label = "INFO";
-      break;
-    case WARN:
-      label = "WARN";
-      break;
-    case ERROR:
-      label = "ERROR";
-      break;
-    }
-    return label;
-  }
+  std::string getLabel(LogType type);
 };
 } // namespace SDL2Wrapper

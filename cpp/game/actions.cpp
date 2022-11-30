@@ -8,7 +8,7 @@ using json = nlohmann::json;
 namespace snw {
 namespace state {
 
-std::string dispatchActionString(DispatchActionType type) {
+std::string dispatchActionToString(DispatchActionType type) {
   switch (type) {
   case DispatchActionType::NOOP_DISPATCH:
     return "NOOP_DISPATCH";
@@ -28,7 +28,7 @@ std::string dispatchActionString(DispatchActionType type) {
     return std::to_string(static_cast<int>(type));
   }
 }
-std::string resultActionString(ResultActionType type) {
+std::string resultActionToString(ResultActionType type) {
   switch (type) {
   case ResultActionType::NOOP_RESULT:
     return "NOOP_RESULT";
@@ -37,26 +37,35 @@ std::string resultActionString(ResultActionType type) {
   }
 }
 
-DispatchAction jsonToDispatchAction(const std::string& jsonDispatchAction) {
-  DispatchAction action;
-  json j = json::parse(jsonDispatchAction);
-  // json* payload = new json();
+DispatchActionList jsonToDispatchActionList(const std::string& jsonMsg) {
+  json jMsg = json::parse(jsonMsg);
 
-  action.type = j['type'];
-  action.jsonPayload = j['payload'];
+  const std::string clientId = jMsg["id"];
+  std::vector<DispatchAction> actions;
 
-  return action;
+  for (auto& j : jMsg["payload"]) {
+    DispatchAction action;
+    action.type = j["type"];
+    action.jsonPayload = j["payload"];
+    actions.push_back(action);
+  }
+
+  return DispatchActionList{clientId, actions};
 }
 
-ResultAction jsonToResultAction(const std::string& jsonToResultAction) {
-  ResultAction action;
-  json j = json::parse(jsonToResultAction);
-  // json* payload = new json();
+ResultActionList jsonToResultActionList(const std::string& jsonMsg) {
+  json jMsg = json::parse(jsonMsg);
 
-  action.type = j['type'];
-  action.jsonPayload = j['payload'];
+  std::vector<ResultAction> actions;
 
-  return action;
+  for (auto& j : jMsg["payload"]) {
+    ResultAction action;
+    action.type = j["type"];
+    action.jsonPayload = j["payload"];
+    actions.push_back(action);
+  }
+
+  return ResultActionList{actions};
 }
 
 } // namespace state
