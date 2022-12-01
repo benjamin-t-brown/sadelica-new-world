@@ -21,13 +21,13 @@ static int in2InstanceIdCtr = 0;
 static std::vector<In2Context*> in2InstancePtrs;
 
 static void handleDukError(void* udata, const char* msg) {
-  Logger(LogType::ERROR) << "Error in duktape js: " << msg << Logger::endl;
+  Logger().get(LogType::ERROR) << "Error in duktape js: " << msg << Logger::endl;
   exit(1);
 }
 
 void readIn2CoreSrc() {
   const std::string path = IN2_CORE_SRC_PATH;
-  Logger(LogType::DEBUG) << "Reading in2 core src from " << path
+  Logger().get(LogType::DEBUG) << "Reading in2 core src from " << path
                          << Logger::endl;
   const std::ifstream src(path);
 
@@ -40,7 +40,7 @@ const std::string& getIn2CoreSrc() { return in2CoreSrc; }
 
 void readIn2CompiledSrc() {
   const std::string path = IN2_COMPILED_SRC_PATH;
-  Logger(LogType::DEBUG) << "Reading in2 compiled src from " << path
+  Logger().get(LogType::DEBUG) << "Reading in2 compiled src from " << path
                          << Logger::endl;
   const std::ifstream src(path);
 
@@ -52,7 +52,7 @@ void readIn2CompiledSrc() {
 const std::string& getIn2CompiledSrc() { return in2CompiledSrc; }
 
 void init(const std::string _in2CompiledSrc = "") {
-  Logger(LogType::DEBUG) << "Init In2" << Logger::endl;
+  Logger().get(LogType::DEBUG) << "Init In2" << Logger::endl;
   readIn2CoreSrc();
   if (_in2CompiledSrc == "") {
     readIn2CompiledSrc();
@@ -79,7 +79,7 @@ In2Context* getIn2Context(int id) {
       return ctx;
     }
   }
-  Logger(LogType::ERROR) << "Failed to get in2 context: " << id << Logger::endl;
+  Logger().get(LogType::ERROR) << "Failed to get in2 context: " << id << Logger::endl;
   return nullptr;
 }
 void deregisterIn2Context(In2Context* ctx) {
@@ -95,7 +95,7 @@ void deregisterIn2Context(In2Context* ctx) {
 //----------------------------------------------------------------------------------------
 
 static duk_ret_t duk_log(duk_context* ctx) {
-  Logger() << "[js] " << duk_to_string(ctx, 0) << Logger::endl;
+  Logger().get() << "[js] " << duk_to_string(ctx, 0) << Logger::endl;
   return 0;
 }
 
@@ -105,7 +105,7 @@ static duk_ret_t duk_coreSay(duk_context* ctx) {
 
   auto in2Ctx = getIn2Context(ctxId);
 
-  Logger(LogType::DEBUG) << "duk_coreSay '" << line << "'" << Logger::endl;
+  Logger().get(LogType::DEBUG) << "duk_coreSay '" << line << "'" << Logger::endl;
 
   if (in2Ctx != nullptr) {
     in2Ctx->pushLine(line);
@@ -170,13 +170,13 @@ static duk_ret_t duk_setWaitingForResume(duk_context* ctx) {
 
   auto in2Ctx = getIn2Context(ctxId);
   if (in2Ctx == nullptr) {
-    Logger(LogType::ERROR) << "Failed to duk_setWaitingForResume no ctx found."
+    Logger().get(LogType::ERROR) << "Failed to duk_setWaitingForResume no ctx found."
                            << Logger::endl;
     return 0;
   }
 
   in2Ctx->waitingForResume = true;
-  Logger(LogType::DEBUG) << "Waiting for resume..." << Logger::endl;
+  Logger().get(LogType::DEBUG) << "Waiting for resume..." << Logger::endl;
   return 0;
 }
 
@@ -185,13 +185,13 @@ static duk_ret_t duk_setWaitingForChoice(duk_context* ctx) {
 
   auto in2Ctx = getIn2Context(ctxId);
   if (in2Ctx == nullptr) {
-    Logger(LogType::ERROR) << "Failed to duk_setWaitingForChoice no ctx found."
+    Logger().get(LogType::ERROR) << "Failed to duk_setWaitingForChoice no ctx found."
                            << Logger::endl;
     return 0;
   }
 
   in2Ctx->waitingForChoice = true;
-  Logger(LogType::DEBUG) << "Waiting for choice..." << Logger::endl;
+  Logger().get(LogType::DEBUG) << "Waiting for choice..." << Logger::endl;
   return 0;
 }
 
@@ -200,13 +200,13 @@ static duk_ret_t duk_setExecutionCompleted(duk_context* ctx) {
 
   auto in2Ctx = getIn2Context(ctxId);
   if (in2Ctx == nullptr) {
-    Logger(LogType::ERROR)
+    Logger().get(LogType::ERROR)
         << "Failed to duk_setExecutionCompleted no ctx found." << Logger::endl;
     return 0;
   }
 
   in2Ctx->executionCompleted = true;
-  Logger(LogType::DEBUG) << "Execution Completed." << Logger::endl;
+  Logger().get(LogType::DEBUG) << "Execution Completed." << Logger::endl;
   return 0;
 }
 
@@ -250,15 +250,15 @@ void In2Context::createNewCtx() {
   duk_push_c_function(ctx, duk_setExecutionCompleted, 1);
   duk_put_global_string(ctx, "cpp_setExecutionCompleted");
 
-  Logger(LogType::DEBUG) << "Eval core src." << Logger::endl;
+  Logger().get(LogType::DEBUG) << "Eval core src." << Logger::endl;
   duk_eval_string_noresult(ctx, getIn2CoreSrc().c_str());
 
-  Logger(LogType::DEBUG) << "Eval compiled src." << Logger::endl;
+  Logger().get(LogType::DEBUG) << "Eval compiled src." << Logger::endl;
   duk_eval_string_noresult(ctx, getIn2CompiledSrc().c_str());
 
   std::stringstream ss;
   ss << "core.init(" << id << ");";
-  Logger(LogType::DEBUG) << "Call core init func." << Logger::endl;
+  Logger().get(LogType::DEBUG) << "Call core init func." << Logger::endl;
   duk_eval_string_noresult(ctx, ss.str().c_str());
 }
 
@@ -286,12 +286,12 @@ void In2Context::executeFile(const std::string& fileName) {
   auto ctx = castDukCtx(dukCtx);
   std::stringstream ss;
   ss << "fromCpp_runFile('" << fileName << ".json');";
-  Logger(LogType::DEBUG) << "executeFile: " << ss.str() << Logger::endl;
+  Logger().get(LogType::DEBUG) << "executeFile: " << ss.str() << Logger::endl;
   duk_eval_string(ctx, ss.str().c_str());
   const int result = static_cast<int>(duk_get_int(ctx, -1));
   if (result == 1) {
     executionErrored = true;
-    Logger(LogType::ERROR) << "Invalid in2 file: " << fileName << Logger::endl;
+    Logger().get(LogType::ERROR) << "Invalid in2 file: " << fileName << Logger::endl;
   }
 }
 
@@ -301,10 +301,10 @@ void In2Context::resumeExecution() {
     auto ctx = castDukCtx(dukCtx);
     std::stringstream ss;
     ss << "fromCpp_resumeExecution();";
-    Logger(LogType::DEBUG) << "resumeExecution: " << ss.str() << Logger::endl;
+    Logger().get(LogType::DEBUG) << "resumeExecution: " << ss.str() << Logger::endl;
     duk_eval_string_noresult(ctx, ss.str().c_str());
   } else {
-    Logger(LogType::WARN) << "Cannot resume execution, not waiting for resume."
+    Logger().get(LogType::WARN) << "Cannot resume execution, not waiting for resume."
                           << Logger::endl;
   }
 }
@@ -315,15 +315,15 @@ void In2Context::chooseExecution(const std::string& id) {
     auto ctx = castDukCtx(dukCtx);
     std::stringstream ss;
     ss << "fromCpp_chooseExecution('" << id << "');";
-    Logger(LogType::DEBUG) << "chooseExecution: " << ss.str() << Logger::endl;
+    Logger().get(LogType::DEBUG) << "chooseExecution: " << ss.str() << Logger::endl;
     duk_eval_string(ctx, ss.str().c_str());
     const int result = static_cast<int>(duk_get_int(ctx, -1));
     if (result == 1) {
-      Logger(LogType::WARN) << "Invalid choice: " << id << Logger::endl;
+      Logger().get(LogType::WARN) << "Invalid choice: " << id << Logger::endl;
       waitingForChoice = true;
     }
   } else {
-    Logger(LogType::WARN) << "Cannot choose execution, not waiting for choice."
+    Logger().get(LogType::WARN) << "Cannot choose execution, not waiting for choice."
                           << Logger::endl;
   }
 }
@@ -332,7 +332,7 @@ void In2Context::pushLine(const std::string& line) {
   lines.push_back(line);
 
   // This is temporary
-  // Logger(LogType::DEBUG) << "Push line: " << line << std::endl;
+  // Logger().get(LogType::DEBUG) << "Push line: " << line << std::endl;
 }
 
 void In2Context::pushChoice(In2Choice c) { choices.push_back(c); }
@@ -355,7 +355,7 @@ std::string In2Context::getStorage(const std::string& key) const {
   auto json = castJsonState(jsonState);
 
   if (json == nullptr) {
-    Logger(LogType::ERROR) << "Failed to getStorage no ctx has been created."
+    Logger().get(LogType::ERROR) << "Failed to getStorage no ctx has been created."
                            << Logger::endl;
     return "";
   }
@@ -370,7 +370,7 @@ void In2Context::setStorage(const std::string& key, const std::string& value) {
   auto json = castJsonState(jsonState);
 
   if (json == nullptr) {
-    Logger(LogType::ERROR) << "Failed to setStorage no ctx has been created."
+    Logger().get(LogType::ERROR) << "Failed to setStorage no ctx has been created."
                            << Logger::endl;
     return;
   }
@@ -382,9 +382,9 @@ void In2Context::logStorage() {
   auto json = castJsonState(jsonState);
 
   if (json == nullptr) {
-    Logger(LogType::INFO) << "No storage" << std::endl;
+    Logger().get(LogType::INFO) << "No storage" << std::endl;
   } else {
-    Logger(LogType::INFO) << std::setw(4) << json->dump() << Logger::endl;
+    Logger().get(LogType::INFO) << std::setw(4) << json->dump() << Logger::endl;
   }
 }
 

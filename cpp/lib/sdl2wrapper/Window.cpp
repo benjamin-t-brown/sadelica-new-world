@@ -24,7 +24,7 @@ void enableSound() {
   int volumePct = SDL2Wrapper::Window::soundPercent;
   Mix_VolumeMusic((double(volumePct) / 100.0) * double(MIX_MAX_VOLUME));
   Mix_Volume(-1, (double(volumePct) / 100.0) * double(MIX_MAX_VOLUME));
-  SDL2Wrapper::Logger(SDL2Wrapper::DEBUG) << "Enable sound" << Logger::endl;
+  SDL2Wrapper::Logger().get(SDL2Wrapper::DEBUG) << "Enable sound" << Logger::endl;
 }
 EMSCRIPTEN_KEEPALIVE
 void disableSound() {
@@ -32,14 +32,14 @@ void disableSound() {
 
   Mix_VolumeMusic(0);
   Mix_Volume(-1, 0);
-  SDL2Wrapper::Logger(SDL2Wrapper::DEBUG) << "Disable sound" << Logger::endl;
+  SDL2Wrapper::Logger().get(SDL2Wrapper::DEBUG) << "Disable sound" << Logger::endl;
 }
 EMSCRIPTEN_KEEPALIVE
 void setVolume(int volumePct) {
   SDL2Wrapper::Window::soundPercent = volumePct;
   Mix_VolumeMusic((double(volumePct) / 100.0) * double(MIX_MAX_VOLUME));
   Mix_Volume(-1, (double(volumePct) / 100.0) * double(MIX_MAX_VOLUME));
-  SDL2Wrapper::Logger(SDL2Wrapper::DEBUG)
+  SDL2Wrapper::Logger().get(SDL2Wrapper::DEBUG)
       << "Set volume:" << volumePct << "%" << Logger::endl;
 }
 EMSCRIPTEN_KEEPALIVE
@@ -47,7 +47,7 @@ void setKeyDown(int key) {
   SDL2Wrapper::Window& window = SDL2Wrapper::Window::getGlobalWindow();
   SDL2Wrapper::Events& events = window.getEvents();
   events.keydown(key);
-  SDL2Wrapper::Logger(SDL2Wrapper::DEBUG)
+  SDL2Wrapper::Logger().get(SDL2Wrapper::DEBUG)
       << "External set key down: " << key << Logger::endl;
 }
 EMSCRIPTEN_KEEPALIVE
@@ -55,7 +55,7 @@ void setKeyUp(int key) {
   SDL2Wrapper::Window& window = SDL2Wrapper::Window::getGlobalWindow();
   SDL2Wrapper::Events& events = window.getEvents();
   events.keyup(key);
-  SDL2Wrapper::Logger(SDL2Wrapper::DEBUG)
+  SDL2Wrapper::Logger().get(SDL2Wrapper::DEBUG)
       << "External set key up: " << key << Logger::endl;
 }
 
@@ -63,7 +63,7 @@ EMSCRIPTEN_KEEPALIVE
 void setKeyStatus(int status) {
   SDL2Wrapper::Window& window = SDL2Wrapper::Window::getGlobalWindow();
   window.isInputEnabled = !!status;
-  SDL2Wrapper::Logger(SDL2Wrapper::DEBUG)
+  SDL2Wrapper::Logger().get(SDL2Wrapper::DEBUG)
       << "External set key status: " << window.isInputEnabled << Logger::endl;
 }
 }
@@ -128,7 +128,7 @@ const double Window::targetFrameMS = 16.0;
 Window* Window::globalWindow = nullptr;
 
 void windowThrowError(const std::string& errorMessage) {
-  Logger(ERROR) << errorMessage;
+  Logger().get(ERROR) << errorMessage;
   throw std::string(errorMessage);
 }
 
@@ -176,7 +176,7 @@ Window::Window(const std::string& title,
   soundForcedDisabled = false;
   colorkey = 0x00FFFFFF;
   createWindow(title, widthA, heightA, windowPosX, windowPosY);
-  Logger(INFO) << "SDL2Wrapper Window initialized" << Logger::endl;
+  Logger().get(INFO) << "SDL2Wrapper Window initialized" << Logger::endl;
 }
 
 Window::~Window() {
@@ -188,7 +188,7 @@ Window::~Window() {
     TTF_Quit();
     SDL_Quit();
   }
-  Logger(INFO) << "SDL2Wrapper Window removed" << Logger::endl;
+  Logger().get(INFO) << "SDL2Wrapper Window removed" << Logger::endl;
 }
 
 void Window::initSDL() {
@@ -228,7 +228,7 @@ void Window::createWindow(const std::string& title,
   }
   if (!soundForcedDisabled) {
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-      Logger(ERROR) << "SDL_mixer could not initialize! "
+      Logger().get(ERROR) << "SDL_mixer could not initialize! "
                     << std::string(Mix_GetError()) << Logger::endl;
       soundForcedDisabled = true;
       Window::soundCanBeLoaded = false;
@@ -327,7 +327,7 @@ void Window::playSound(const std::string& name) {
   Mix_Chunk* sound = Store::getSound(name);
   const int channel = Mix_PlayChannel(-1, sound, 0);
   if (channel == -1) {
-    Logger(WARN) << "Unable to play sound in channel.  sound=" << name
+    Logger().get(WARN) << "Unable to play sound in channel.  sound=" << name
                  << " err=" << SDL_GetError() << Logger::endl;
     return;
   }
@@ -517,7 +517,7 @@ void Window::renderLoop() {
   while (SDL_PollEvent(&e) != 0) {
 #ifdef __EMSCRIPTEN__
     if (e.type == SDL_QUIT) {
-      Logger(WARN) << "QUIT is overridden in EMSCRIPTEN" << Logger::endl;
+      Logger().get(WARN) << "QUIT is overridden in EMSCRIPTEN" << Logger::endl;
       break;
     }
 #else

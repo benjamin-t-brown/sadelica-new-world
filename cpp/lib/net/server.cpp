@@ -9,7 +9,7 @@ namespace net {
 
 bool Config::mockEnabled = true;
 
-constexpr unsigned int MAX_CLIENTS = 2;
+constexpr unsigned int MAX_CLIENTS = 10;
 
 std::vector<Client*> Server::mockClientsConnected;
 std::vector<std::string> Server::mockServerMessagesToBroadcast;
@@ -110,6 +110,7 @@ void Server::update(
         ConnectionData* d = new ConnectionData{getRandomId()};
         event.peer->data = reinterpret_cast<void*>(d);
         connectedPeers[d->socketId] = "";
+        logger::debug("%s connected.", d->socketId.c_str());
         break;
       }
       case ENET_EVENT_TYPE_RECEIVE: {
@@ -129,14 +130,14 @@ void Server::update(
       }
       case ENET_EVENT_TYPE_DISCONNECT: {
         ConnectionData* d = reinterpret_cast<ConnectionData*>(event.peer->data);
-        logger::info("%s disconnected.", d->socketId.c_str());
+        logger::debug("%s disconnected.", d->socketId.c_str());
         /* Reset the peer's client information. */
         auto it = connectedPeers.find(d->socketId);
         if (it != connectedPeers.end()) {
           connectedPeers.erase(d->socketId);
         }
         delete d;
-        logger::info("resetting...");
+        logger::debug("resetting...");
         event.peer->data = NULL;
         break;
       }

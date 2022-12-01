@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
 
     logger::info("Program End.");
   } catch (const std::string& e) {
-    Logger(LogType::ERROR) << e << Logger::endl;
+    Logger().get(LogType::ERROR) << e << Logger::endl;
   }
 
   ImGui_ImplSDLRenderer_Shutdown();

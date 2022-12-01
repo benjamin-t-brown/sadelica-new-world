@@ -22,6 +22,7 @@ public:
 
 namespace dispatch {
 
+void establishConnection(const std::string& playerName);
 void startTalk(const std::string& talkName);
 void continueTalk();
 void chooseTalk(const int choiceIndex);

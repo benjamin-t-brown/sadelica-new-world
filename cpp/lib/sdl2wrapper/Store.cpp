@@ -28,7 +28,7 @@ std::unordered_map<std::string, std::unique_ptr<Mix_Music, SDL_Deleter>>
     Store::musics;
 
 void throwError(const std::string& errorMessage) {
-  Logger(ERROR) << errorMessage << Logger::endl;
+  Logger().get(ERROR) << errorMessage << Logger::endl;
   throw std::runtime_error(errorMessage);
 }
 
@@ -64,7 +64,7 @@ void Store::createTexture(const std::string& name, const std::string& path) {
   if (loadedImage != nullptr) {
     tex = SDL_CreateTextureFromSurface(Store::rendererPtr, loadedImage);
     if (tex == nullptr) {
-      Logger(WARN) << "[SDL2Wrapper] WARNING Tried to create texture image "
+      Logger().get(WARN) << "[SDL2Wrapper] WARNING Tried to create texture image "
                       "without creating a screen."
                    << Logger::endl;
       return;
@@ -110,7 +110,7 @@ void Store::createSprite(const std::string& name, SDL_Texture* tex) {
   if (sprites.find(name) == sprites.end()) {
     sprites[name] = std::make_unique<Sprite>(name, 0, 0, width, height, tex);
   } else {
-    Logger(WARN) << "[SDL2Wrapper] WARNING Sprite with name '" << name
+    Logger().get(WARN) << "[SDL2Wrapper] WARNING Sprite with name '" << name
                  << "' already exists. '" << name << "'" << Logger::endl;
   }
 }
@@ -126,7 +126,7 @@ void Store::createSprite(const std::string& name,
     SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
     sprites[name] = std::make_unique<Sprite>(name, x, y, w, h, tex);
   } else {
-    Logger(WARN) << "[SDL2Wrapper] WARNING Sprite with name '" << name
+    Logger().get(WARN) << "[SDL2Wrapper] WARNING Sprite with name '" << name
                  << "' already exists. '" << name << "'" << Logger::endl;
   }
 }
@@ -136,7 +136,7 @@ AnimationDefinition& Store::createAnimationDefinition(const std::string& name,
   if (anims.find(name) == anims.end()) {
     anims[name] = std::make_unique<AnimationDefinition>(name, loop);
   } else {
-    Logger(WARN) << "[SDL2Wrapper] WARNING Cannot create new anim, it already "
+    Logger().get(WARN) << "[SDL2Wrapper] WARNING Cannot create new anim, it already "
                     "exists: '" +
                         name + "'"
                  << Logger::endl;
@@ -146,7 +146,7 @@ AnimationDefinition& Store::createAnimationDefinition(const std::string& name,
 void Store::createSound(const std::string& name, const std::string& path) {
   if (Window::getGlobalWindow().soundForcedDisabled ||
       !Window::soundCanBeLoaded) {
-    Logger(WARN)
+    Logger().get(WARN)
         << "[SDL2Wrapper] WARNING sound load skipped due to force sound "
            "disabled "
            "exists: '" +
@@ -165,7 +165,7 @@ void Store::createSound(const std::string& name, const std::string& path) {
                           "': reason= " + std::string(Mix_GetError()));
       }
     } else {
-      Logger(WARN) << "[SDL2Wrapper] WARNING Sound with name '" << name
+      Logger().get(WARN) << "[SDL2Wrapper] WARNING Sound with name '" << name
                    << "' already exists. chunkName='" << innerSoundName << "'"
                    << Logger::endl;
     }
@@ -187,13 +187,13 @@ void Store::createMusic(const std::string& name, const std::string& path) {
                         "': reason= " + std::string(Mix_GetError()));
     }
   } else {
-    Logger(WARN) << "[SDL2Wrapper] WARNING Music with name '" << name
+    Logger().get(WARN) << "[SDL2Wrapper] WARNING Music with name '" << name
                  << "' already exists. '" << name << "'" << Logger::endl;
   }
 }
 
 void Store::logSprites() {
-  Logger(DEBUG) << "[SDL2Wrapper] Sprites:" << Logger::endl;
+  Logger().get(DEBUG) << "[SDL2Wrapper] Sprites:" << Logger::endl;
   std::vector<std::string> localSprites;
   localSprites.reserve(sprites.size());
   std::transform(sprites.begin(),
@@ -202,11 +202,11 @@ void Store::logSprites() {
                  [](const auto& p) -> std::string { return p.first; });
   std::sort(localSprites.begin(), localSprites.end());
   for (auto& it : localSprites) {
-    Logger(DEBUG) << " " << it << Logger::endl;
+    Logger().get(DEBUG) << " " << it << Logger::endl;
   }
 }
 void Store::logAnimationDefinitions() {
-  Logger(DEBUG) << "[SDL2Wrapper] AnimationDefinitions:" << Logger::endl;
+  Logger().get(DEBUG) << "[SDL2Wrapper] AnimationDefinitions:" << Logger::endl;
   std::vector<std::string> localAnims;
   localAnims.reserve(anims.size());
   std::transform(anims.begin(),
@@ -215,14 +215,14 @@ void Store::logAnimationDefinitions() {
                  [](const auto& p) -> std::string { return p.first; });
   std::sort(localAnims.begin(), localAnims.end());
   for (auto& it : localAnims) {
-    Logger(DEBUG) << " " << it << Logger::endl;
+    Logger().get(DEBUG) << " " << it << Logger::endl;
   }
 }
 
 void Store::logFonts() {
-  Logger(DEBUG) << "[SDL2Wrapper] Fonts:" << Logger::endl;
+  Logger().get(DEBUG) << "[SDL2Wrapper] Fonts:" << Logger::endl;
   for (auto& it : fonts) {
-    Logger(DEBUG) << " " << it.first << Logger::endl;
+    Logger().get(DEBUG) << " " << it.first << Logger::endl;
   }
 }
 

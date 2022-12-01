@@ -20,28 +20,29 @@ using namespace snw;
 using namespace snw::state;
 using ClientContext = snw::state::ClientContext;
 
-class ServerTalkCmptTest : public testing::Test {
+class ServerTalkTest : public testing::Test {
 protected:
   static const bool loggingEnabled = true;
   static void SetUpTestSuite() {
     Logger::disabled = !loggingEnabled;
     net::Config::mockEnabled = false;
   }
-  static void TearDownTestSuite() {}
+  static void TearDownTestSuite() { net::Config::mockEnabled = true; }
   void SetUp() override { Logger::disabled = !loggingEnabled; }
   void TearDown() override {}
 };
 
-TEST_F(ServerTalkCmptTest, CanStartAnIn2Server) {
+TEST_F(ServerTalkTest, CanStartAnIn2Server) {
   logger::info("Program Begin.");
   srand(time(NULL));
+  net::Config::mockEnabled = false;
   snw::state::ServerContext::init();
   auto uiInstance = ui::Ui();
 
   logger::info("Waiting for client to connect.");
 
   try {
-    SDL2Wrapper::Window window("ServerTalkCmptTest", 480, 854, 25, 50);
+    SDL2Wrapper::Window window;
 
     window.startRenderLoop([&]() {
       ServerContext::get().update();
@@ -50,13 +51,8 @@ TEST_F(ServerTalkCmptTest, CanStartAnIn2Server) {
 
     logger::info("Program End.");
   } catch (const std::string& e) {
-    Logger(LogType::ERROR) << e << Logger::endl;
+    Logger().get(LogType::ERROR) << e << Logger::endl;
   }
 
   EXPECT_EQ(1, 1);
-}
-
-int main(int argc, char** argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

@@ -55,9 +55,10 @@ namespace dispatch {
 
 void establishConnection(const std::string& playerName) {
   const DispatchAction action{
-      ActionCl::SEND_ONLY,
+      ActionCl::BOTH,
       DispatchActionType::NET_CONNECT,
       json(payloads::PayloadEstablishConnection{0, playerName})};
+  ClientContext::get().getDispatch().enqueue(action);
 }
 
 void startTalk(const std::string& talkName) {

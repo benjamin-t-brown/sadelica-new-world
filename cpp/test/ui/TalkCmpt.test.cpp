@@ -74,7 +74,7 @@ TEST_F(TalkCmptTest, CanDisplayAConversation) {
 
     logger::info("Program End.");
   } catch (const std::string& e) {
-    Logger(LogType::ERROR) << e << Logger::endl;
+    Logger().get(LogType::ERROR) << e << Logger::endl;
   }
 
   ImGui_ImplSDLRenderer_Shutdown();
@@ -82,9 +82,4 @@ TEST_F(TalkCmptTest, CanDisplayAConversation) {
   ImGui::DestroyContext();
 
   EXPECT_EQ(1, 1);
-}
-
-int main(int argc, char** argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

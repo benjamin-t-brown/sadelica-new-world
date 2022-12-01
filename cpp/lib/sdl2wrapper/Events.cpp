@@ -67,7 +67,7 @@ void Events::setMouseEvent(const std::string& name,
   } else if (name == "mouseup") {
     route->onmouseup = cb;
   } else {
-    Logger(WARN) << "[SDL2Wrapper] WARNING Cannot set mouse event named: "
+    Logger().get(WARN) << "[SDL2Wrapper] WARNING Cannot set mouse event named: "
                  << name << Logger::endl;
   }
 }
@@ -81,7 +81,7 @@ void Events::setKeyboardEvent(const std::string& name,
   } else if (name == "keypress") {
     route->onkeypress = cb;
   } else {
-    Logger(WARN) << "[SDL2Wrapper] WARNING Cannot set keyboard event named: "
+    Logger().get(WARN) << "[SDL2Wrapper] WARNING Cannot set keyboard event named: "
                  << name << Logger::endl;
   }
 }
@@ -117,7 +117,7 @@ void Events::mousemove(int x, int y) {
 void Events::keydown(int key) {
   std::unique_ptr<EventRoute>& route = routes.top();
   const std::string k = std::string(SDL_GetKeyName(key));
-  // Logger(DEBUG) << "SDLKEY: " << key << " " << k << Logger::endl;
+  // Logger().get(DEBUG) << "SDLKEY: " << key << " " << k << Logger::endl;
   if (!keys[k]) {
     keys[k] = true;
     route->onkeydown(k);

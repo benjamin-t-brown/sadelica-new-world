@@ -110,6 +110,8 @@ void Client::update(std::function<void(const std::string& msg)> cb) {
       }
       case ENET_EVENT_TYPE_DISCONNECT: {
         connected = false;
+        logger::error("Disconnected from server!");
+        cb("");
         break;
       }
       default:

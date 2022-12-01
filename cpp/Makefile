@@ -56,9 +56,10 @@ test/state/ServerState.test.cpp\
 test/net/NetMock.test.cpp
 
 TEST_CODE_UI=\
+test/test.cpp\
 test/ui/TalkCmpt.test.cpp\
-test/ui/ClientTalkCmpt.test.cpp\
-test/ui/ServerTalkCmpt.test.cpp
+test/ui/ClientTalk.test.cpp\
+test/ui/ServerTalk.test.cpp
 
 MAIN_ALL_OBJECT=$(MAIN_ALL:.cpp=.o)
 
@@ -70,6 +71,9 @@ TEST_UI_OBJECTS=$(TEST_CODE_UI:.cpp=.o)
 
 ALL_CLIENT_OBJECTS=$(CLIENT_OBJECTS) $(SHARED_OBJECTS)
 ALL_SERVER_OBJECTS=$(SERVER_OBJECTS) $(SHARED_OBJECTS)
+ALL_OBJECTS=$(SERVER_OBJECTS) $(SHARED_OBJECTS) $(CLIENT_OBJECTS) $(TEST_CODE:.cpp=.o) $(TEST_CODE_UI:.cpp=.o)
+
+ALL_INCLUDE_TXT=$(ALL_OBJECTS:.o=.txt)
 
 WORKING_DIR = $(shell pwd)
 
@@ -98,6 +102,20 @@ ifeq (testui,$(firstword $(MAKECMDGOALS)))
 	endif
 	TEST_ARGS := --gtest_filter=*$(ARGS)*
 endif
+
+# This allows you to write "make testui <test regex>" and it will run tests
+# with that filter enabled
+ifeq (testui2,$(firstword $(MAKECMDGOALS)))
+  ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+	ifeq ($(ARGS),)
+		ARGS := *
+	else
+	  # ...and turn them into do-nothing targets
+  	$(eval $(ARGS):;@:)
+	endif
+	TEST_ARGS := --gtest_filter=*$(ARGS)*
+endif
+
 
 EMCC_LIBS_CLIENT=\
 -g -O3\
@@ -139,6 +157,7 @@ EMCC_EXPORTED=\
 EXE=SNW
 EXE_TEST=SNW_TEST
 EXE_TEST_UI=SNW_TEST_UI
+EXE_TEST_UI2=EXE_TEST_UI2
 
 ifeq ($(OS),Windows_NT)
   LIBS=-mconsole -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lenet
@@ -147,7 +166,7 @@ else
 endif
 LIBS_TEST=-lpthread -lgtest
 
-FLAGS=-O0 -g -Wall -std=c++17 -DFMT_HEADER_ONLY -I$(WORKING_DIR)
+FLAGS=-O0 -g -Wall -std=c++17 -DFMT_HEADER_ONLY -I$(WORKING_DIR) -M
 
 .PHONY: $(EXE) test
 $(EXE): precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(MAIN_ALL_OBJECT) $(TEST_OBJECTS) $(TEST_UI_OBJECTS)
@@ -174,11 +193,20 @@ testnorun: precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECT
 testui: testuinorun
 	./$(EXE_TEST_UI) $(TEST_ARGS)
 
+testui2: testuinorun2
+	./$(EXE_TEST_UI2) $(TEST_ARGS)
+
 testuinorun: precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(TEST_UI_OBJECTS)
 	g++ $(FLAGS) $(TEST_UI_OBJECTS) $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) -o $(EXE_TEST_UI) $(LIBS_TEST) $(LIBS)
 
+testuinorun2: precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(TEST_UI_OBJECTS)
+	g++ $(FLAGS) $(TEST_UI_OBJECTS) $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) -o $(EXE_TEST_UI2) $(LIBS_TEST) $(LIBS)
+
 .cpp.o:
 	g++ $(FLAGS) -include precompiled.h -c $(@:.o=.cpp) -o $@
+
+.cpp.txt:
+	g++ $(FLAGS) -include precompiled.h -c $(@:.txt=.cpp) -o $@
 
 # temp:
 # 	mkdir -p .build
@@ -193,5 +221,5 @@ clean:
 	rm -f $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(MAIN_ALL_OBJECT)
 	rm -f $(TEST_OBJECTS) $(TEST_UI_OBJECTS)
 	rm -f precompiled.h.gch
-	rm -f $(EXE) $(EXE).exe $(EXE_CLIENT) $(EXE_TEST) $(EXE_TEST).exe $(EXE_TEST_UI) $(EXE_TEST_UI).exe
+	rm -f $(EXE) $(EXE).exe $(EXE_CLIENT) $(EXE_TEST) $(EXE_TEST).exe $(EXE_TEST_UI) $(EXE_TEST_UI).exe $(EXE_TEST_UI2).exe $(EXE_TEST_UI2)
 	rm -fd .build

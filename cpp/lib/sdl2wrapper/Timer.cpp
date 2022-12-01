@@ -23,7 +23,7 @@ void Timer::remove() { removeFlag = true; }
 void Timer::update(double dt) {
   if (!removeFlag) {
     aggTime += dt;
-    // Logger() << "What " << aggTime << " " << dt << " vs " << maxTime
+    // Logger().get() << "What " << aggTime << " " << dt << " vs " << maxTime
     //          << Logger::endl;
     if (aggTime > maxTime) {
       remove();

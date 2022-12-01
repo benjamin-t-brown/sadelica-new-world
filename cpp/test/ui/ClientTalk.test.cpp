@@ -20,35 +20,32 @@ using namespace snw;
 using namespace snw::state;
 using ClientContext = snw::state::ClientContext;
 
-class ClientTalkCmptTest : public testing::Test {
+class ClientTalkTest : public testing::Test {
 protected:
   static const bool loggingEnabled = true;
   static void SetUpTestSuite() {
     Logger::disabled = !loggingEnabled;
     net::Config::mockEnabled = false;
-    // in2::init("");
   }
-  static void TearDownTestSuite() {}
+  static void TearDownTestSuite() { net::Config::mockEnabled = true; }
   void SetUp() override { Logger::disabled = !loggingEnabled; }
   void TearDown() override {}
-
-  static const ClientState& getState() {
-    return ClientContext::get().getState();
-  }
 };
 
-TEST_F(ClientTalkCmptTest, CanDisplayAConversation) {
+TEST_F(ClientTalkTest, CanDisplayAConversation) {
   logger::info("Program Begin.");
   srand(time(NULL));
   snw::state::ClientContext::init();
   snw::in2::init("");
   auto uiInstance = ui::Ui();
+  net::Config::mockEnabled = false;
+
   try {
-    SDL2Wrapper::Window window("TestTalkCmpt", 480, 854, 25, 50);
+    SDL2Wrapper::Window window("ClientTalkTest", 480, 854, 25, 50);
 
     uiInstance.init(window);
 
-    dispatch::startTalk("CPP_Test");
+    dispatch::establishConnection("Player1");
 
     window.startRenderLoop([&]() {
       ImGui_ImplSDLRenderer_NewFrame();
@@ -60,16 +57,18 @@ TEST_F(ClientTalkCmptTest, CanDisplayAConversation) {
 
       ClientContext::get().update();
 
-      if (ClientContext::get().getIn2Ctx().executionCompleted) {
-        return false;
-      }
+      ImGui::ShowDemoWindow();
+
+      ImGui::PopFont();
+      ImGui::Render();
+      ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
 
       return true;
     });
 
     logger::info("Program End.");
   } catch (const std::string& e) {
-    Logger(LogType::ERROR) << e << Logger::endl;
+    Logger().get(LogType::ERROR) << e << Logger::endl;
   }
 
   ImGui_ImplSDLRenderer_Shutdown();
@@ -77,9 +76,4 @@ TEST_F(ClientTalkCmptTest, CanDisplayAConversation) {
   ImGui::DestroyContext();
 
   EXPECT_EQ(1, 1);
-}
-
-int main(int argc, char** argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

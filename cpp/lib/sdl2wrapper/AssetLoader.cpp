@@ -114,7 +114,7 @@ int getLineFromStream(std::istream& is) {
 }
 
 void loadSpriteAssetsFromFile(const std::string& path) {
-  Logger(DEBUG) << "Loading sprite assets from file " << (PREFIX + path)
+  Logger().get(DEBUG) << "Loading sprite assets from file " << (PREFIX + path)
                 << Logger::endl;
   try {
     FILE* file = fopen((PREFIX + path).c_str(), "r");
@@ -164,13 +164,13 @@ void loadSpriteAssetsFromFile(const std::string& path) {
     }
     fclose(file);
   } catch (std::exception& e) {
-    Logger(ERROR) << "Failed to parse sprite list: " << e.what()
+    Logger().get(ERROR) << "Failed to parse sprite list: " << e.what()
                   << Logger::endl;
   }
 }
 
 void loadAnimationAssetsFromFile(const std::string& path) {
-  Logger(DEBUG) << "Loading anim assets from file  " << (PREFIX + path)
+  Logger().get(DEBUG) << "Loading anim assets from file  " << (PREFIX + path)
                 << Logger::endl;
   try {
     std::string animName = "";
@@ -210,9 +210,9 @@ void loadAnimationAssetsFromFile(const std::string& path) {
             try {
               frames = std::stoi(strFrames);
             } catch (std::exception& e) {
-              Logger(ERROR) << "Failed to load anim sprite for: " << animName
+              Logger().get(ERROR) << "Failed to load anim sprite for: " << animName
                             << Logger::endl;
-              Logger(ERROR) << " FROM: '" << line << "'" << Logger::endl;
+              Logger().get(ERROR) << " FROM: '" << line << "'" << Logger::endl;
             }
             anim.addSprite(strName, frames);
           }
@@ -221,12 +221,12 @@ void loadAnimationAssetsFromFile(const std::string& path) {
     }
     fclose(file);
   } catch (std::exception& e) {
-    Logger(ERROR) << "Failed to parse anim list: " << e.what() << Logger::endl;
+    Logger().get(ERROR) << "Failed to parse anim list: " << e.what() << Logger::endl;
   }
 }
 
 void loadSoundAssetsFromFile(const std::string& path) {
-  Logger(DEBUG) << "Loading sound assets from file " << (PREFIX + path)
+  Logger().get(DEBUG) << "Loading sound assets from file " << (PREFIX + path)
                 << Logger::endl;
   FILE* file = fopen((PREFIX + path).c_str(), "r");
   char str[TEXT_LEN];
@@ -251,7 +251,7 @@ void loadSoundAssetsFromFile(const std::string& path) {
     }
     fclose(file);
   } catch (std::exception& e) {
-    Logger(ERROR) << "Failed to parse sound/music list: " << e.what()
+    Logger().get(ERROR) << "Failed to parse sound/music list: " << e.what()
                   << Logger::endl;
   }
 }

@@ -2,6 +2,7 @@
 #include "game/dispatchAction.h"
 #include "game/resultAction.h"
 #include "lib/json/json.h"
+#include "lib/net/config.h"
 #include "logger.h"
 
 using json = nlohmann::json;
@@ -20,12 +21,16 @@ ClientContext::ClientContext()
       clientResultProcessor(ClientResultProcessor()),
       clientLoopbackProcessor(ClientLoopbackProcessor()) {}
 void ClientContext::init() {
-#ifndef NET_ENABLED
-  logger::info("CLI using mock net.");
-#endif
+  if (net::Config::mockEnabled) {
+    logger::info("CLI using mock net.");
+  }
   logger::info("CLI attempting to connect to %s:%i", CONNECT_URL, CONNECT_PORT);
-  ClientContext::get().getNetClient().connect(CONNECT_URL, CONNECT_PORT);
-  logger::info("CLI now connected.");
+  bool c = ClientContext::get().getNetClient().connect(CONNECT_URL, CONNECT_PORT);
+  if (c) {
+    logger::info("CLI now connected.");
+  } else {
+    throw std::runtime_error("Could not connect to server (eclipsed timeout).");
+  }
 }
 ClientContext& ClientContext::get() { return globalClientContext; }
 const ClientState& ClientContext::getState() const { return clientState; }
@@ -58,6 +63,9 @@ void ClientContext::update() {
 
   netClient.update([](const std::string& msg) {
     logger::info("CLI Recvd message from server %s", msg.c_str());
+    if (msg.size() == 0) {
+      throw std::runtime_error("DISCONNECTED!");
+    }
   });
 }
 

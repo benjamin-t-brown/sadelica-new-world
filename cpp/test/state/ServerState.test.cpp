@@ -29,7 +29,7 @@ protected:
 
   static std::string readIn2CompiledSrcMock() {
     const std::string path = "test/in2/main.compiled.mock.js";
-    Logger(LogType::DEBUG) << "Reading in2 compiled src from " << path
+    Logger().get(LogType::DEBUG) << "Reading in2 compiled src from " << path
                            << Logger::endl;
     const std::ifstream src(path);
 

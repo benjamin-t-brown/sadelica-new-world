@@ -29,7 +29,7 @@ void initConnectionSrvHandlers(ServerDispatchProcessor& p) {
 
         if (clientState.isConnected) {
           logger::error("Both clients are already connected!");
-          return state;
+          return;
         }
 
         auto& in2State =

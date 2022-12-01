@@ -19,22 +19,11 @@ void initConnectionLoopbackHandlers(ClientLoopbackProcessor& p) {
       DispatchActionType::NET_CONNECT,
       //
       [](const ClientState& state, const DispatchAction& it) {
-        auto& in2Ctx = getCliContext().getIn2Ctx();
-
-        if (in2Ctx.isExecutionActive()) {
-          logLoopbackDispatchAssertionError(DispatchActionType::NET_CONNECT,
-                                            "conversation is already active.");
-          return state;
-        }
-
         auto& j = it.jsonPayload;
-
         auto args = j.get<payloads::PayloadEstablishConnection>();
-
         auto newState = ClientState(state);
         newState.account.isConnected = false;
         newState.account.name = args.playerName;
-
         return newState;
       });
 }

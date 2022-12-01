@@ -1,6 +1,7 @@
 #include "srvContext.h"
 #include "game/dispatchAction.h"
 #include "game/resultAction.h"
+#include "lib/net/config.h"
 #include "logger.h"
 
 namespace snw {
@@ -12,10 +13,10 @@ ServerContext ServerContext::globalServerContext;
 
 ServerContext::ServerContext() {}
 void ServerContext::init() {
+  if (net::Config::mockEnabled) {
+    logger::info("SRV using mock net.");
+  }
   ServerContext::get().getNetServer().listen(LISTEN_PORT);
-#ifndef NET_ENABLED
-  logger::info("SRV using mock net.");
-#endif
   logger::info("SRV now listening on port %i", LISTEN_PORT);
 }
 
