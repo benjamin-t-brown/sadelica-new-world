@@ -165,13 +165,17 @@ runserver: server
 precompiled.h.gch:
 	g++ $(FLAGS) -c precompiled.h -o precompiled.h.gch
 
-test: precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(TEST_OBJECTS)
-	g++ $(FLAGS) $(TEST_OBJECTS) $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) -o $(EXE_TEST) $(LIBS_TEST) $(LIBS)
+test: testnorun
 	./$(EXE_TEST) $(TEST_ARGS)
 
-testui: precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(TEST_UI_OBJECTS)
-	g++ $(FLAGS) $(TEST_UI_OBJECTS) $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) -o $(EXE_TEST_UI) $(LIBS_TEST) $(LIBS)
+testnorun: precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(TEST_OBJECTS)
+	g++ $(FLAGS) $(TEST_OBJECTS) $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) -o $(EXE_TEST) $(LIBS_TEST) $(LIBS)
+
+testui: testuinorun
 	./$(EXE_TEST_UI) $(TEST_ARGS)
+
+testuinorun: precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(TEST_UI_OBJECTS)
+	g++ $(FLAGS) $(TEST_UI_OBJECTS) $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) -o $(EXE_TEST_UI) $(LIBS_TEST) $(LIBS)
 
 .cpp.o:
 	g++ $(FLAGS) -include precompiled.h -c $(@:.o=.cpp) -o $@

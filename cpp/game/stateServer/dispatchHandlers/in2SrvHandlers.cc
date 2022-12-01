@@ -13,68 +13,59 @@ void initIn2SrvHandlers(ServerDispatchProcessor& p) {
       //
       DispatchActionType::TALK_START,
       //
-      [](const ServerState& state, const DispatchAction& it) {
+      [](ServerState& state, const DispatchAction& it) {
         auto& j = it.jsonPayload;
         auto args = j.get<payloads::PayloadCivilDeclareTalk>();
         if (args.fileName == "") {
           logServerDispatchAssertionError(DispatchActionType::TALK_START,
                                           "fileName is empty str ''.");
-          return state;
+          return;
         }
 
-        auto newState = ServerState(state);
         auto& in2State =
-            newState.in2States.at(helpers::clientIdToIndex(it.clientId));
+            state.in2States.at(helpers::clientIdToIndex(it.clientId));
         in2State.chName = args.fileName;
         in2State.waitingState = In2WaitingState::WAITING_FOR_CONTINUE;
-
-        return newState;
       });
 
   p.addHandler(
       //
       DispatchActionType::TALK_CONTINUE,
       //
-      [](const ServerState& state, const DispatchAction& it) { return state; });
+      [](ServerState& state, const DispatchAction& it) {});
 
   p.addHandler(
       //
       DispatchActionType::TALK_SELECT_CHOICE,
       //
-      [](const ServerState& state, const DispatchAction& it) { return state; });
+      [](ServerState& state, const DispatchAction& it) {});
 
   p.addHandler(
       //
       DispatchActionType::TALK_END,
       //
-      [](const ServerState& state, const DispatchAction& it) {
-        auto newState = ServerState(state);
+      [](ServerState& state, const DispatchAction& it) {
         auto& in2State =
-            newState.in2States.at(helpers::clientIdToIndex(it.clientId));
+            state.in2States.at(helpers::clientIdToIndex(it.clientId));
         in2State.waitingState = In2WaitingState::IN2_NONE;
-
-        return newState;
       });
 
   p.addHandler(
       //
       DispatchActionType::TALK_UPDATE,
       //
-      [](const ServerState& state, const DispatchAction& it) {
+      [](ServerState& state, const DispatchAction& it) {
         auto& j = it.jsonPayload;
         auto args = j.get<payloads::PayloadCivilTalkUpdate>();
 
-        auto newState = ServerState(state);
         auto& in2State =
-            newState.in2States.at(helpers::clientIdToIndex(it.clientId));
+            state.in2States.at(helpers::clientIdToIndex(it.clientId));
         in2State.chName = args.chName;
         in2State.choices = args.choices;
         in2State.waitingState = args.waitingState;
         in2State.conversationText = args.conversationText;
 
         result::setTalkUpdated(it.clientId, in2State);
-
-        return newState;
       });
 }
 

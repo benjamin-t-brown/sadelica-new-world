@@ -13,7 +13,11 @@ protected:
     // other tests interfere with it.
     net::Server::mockClientsConnected.clear();
   }
-  void TearDown() override {}
+  void TearDown() override {
+    net::Server::mockClientsConnected.clear();
+    net::Server::mockServerMessagesToProcess.clear();
+    net::Server::mockServerMessagesToBroadcast.clear();
+  }
 };
 
 TEST_F(NetMockTest, CanSendAndReceiveMessagesBetweenServerAndClient) {

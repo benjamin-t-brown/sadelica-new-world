@@ -12,9 +12,8 @@ namespace state {
 class ServerDispatchProcessor {
 private:
   std::vector<DispatchAction> actionsToCommit;
-  std::unordered_map<
-      DispatchActionType,
-      std::function<ServerState(const ServerState&, const DispatchAction&)>>
+  std::unordered_map<DispatchActionType,
+                     std::function<void(ServerState&, const DispatchAction&)>>
       handlers;
 
   void init();
@@ -25,8 +24,7 @@ public:
   void process();
   void reset();
   void addHandler(DispatchActionType type,
-                  std::function<ServerState(const ServerState&,
-                                            const DispatchAction&)> handler);
+                  std::function<void(ServerState&, const DispatchAction&)> handler);
 };
 
 void logServerDispatchAssertionError(DispatchActionType type,

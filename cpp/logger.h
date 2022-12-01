@@ -1,6 +1,6 @@
 #pragma once
 
-#include "lib/fmt/format.h"
+// #include "lib/fmt/format.h"
 #include "lib/sdl2wrapper/Logger.h"
 #include <sstream>
 #include <stdarg.h>

@@ -1,6 +1,7 @@
 #include "srvDispatchProcessor.h"
 #include "dispatchHandlers/dispatchHandlers.h"
 #include "game/dispatchAction.h"
+#include "game/payloads.h"
 #include "lib/json/json.h"
 #include "logger.h"
 #include "srvContext.h"
@@ -24,7 +25,7 @@ void ServerDispatchProcessor::enqueue(const ClientId clientId,
 }
 
 void ServerDispatchProcessor::process() {
-  ServerState state = ServerState(ServerContext::get().getState());
+  ServerState& state = ServerContext::get().getStateMut();
   for (auto& it : actionsToCommit) {
     logger::debug("SRV process dispatch action %s",
                   dispatchActionToString(it.type).c_str());
@@ -35,9 +36,8 @@ void ServerDispatchProcessor::process() {
       logger::warn("Payload: %s", it.jsonPayload.dump().c_str());
       continue;
     }
-    state = ServerState(handlers[it.type](state, it));
+    handlers[it.type](state, it);
   }
-  ServerContext::get().setState(state);
 }
 
 void ServerDispatchProcessor::reset() {
@@ -46,14 +46,14 @@ void ServerDispatchProcessor::reset() {
 
 void ServerDispatchProcessor::addHandler(
     DispatchActionType type,
-    std::function<ServerState(const ServerState&, const DispatchAction&)>
-        handler) {
+    std::function<void(ServerState&, const DispatchAction&)> handler) {
   if (handlers.find(type) != handlers.end()) {
     throw std::runtime_error("A server handler for " +
                              dispatchActionToString(type) + " already exists!");
   }
 
-  // logger::debug("SRV add handler for %s", dispatchActionToString(type).c_str());
+  // logger::debug("SRV add handler for %s",
+  // dispatchActionToString(type).c_str());
   handlers[type] = handler;
 }
 

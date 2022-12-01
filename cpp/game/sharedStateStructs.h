@@ -8,7 +8,7 @@ namespace snw {
 namespace state {
 
 enum In2WaitingState {
-  IN2_NONE,
+  IN2_NONE = 0,
   WAITING_FOR_CONTINUE,
   WAITING_FOR_CHOICE,
   COMPLETE,

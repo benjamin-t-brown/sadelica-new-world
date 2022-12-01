@@ -14,7 +14,7 @@ void initConnectionSrvHandlers(ServerDispatchProcessor& p) {
       //
       DispatchActionType::NET_CONNECT,
       //
-      [](const ServerState& state, const DispatchAction& it) {
+      [](ServerState& state, const DispatchAction& it) {
         auto& j = it.jsonPayload;
         auto args = j.get<payloads::PayloadEstablishConnection>();
 
@@ -24,9 +24,8 @@ void initConnectionSrvHandlers(ServerDispatchProcessor& p) {
           clientId = ClientId::PLAYER2;
         }
 
-        auto newState = ServerState(state);
         auto& clientState =
-            newState.clients.at(helpers::clientIdToIndex(it.clientId));
+            state.clients.at(helpers::clientIdToIndex(it.clientId));
 
         if (clientState.isConnected) {
           logger::error("Both clients are already connected!");
@@ -34,10 +33,8 @@ void initConnectionSrvHandlers(ServerDispatchProcessor& p) {
         }
 
         auto& in2State =
-            newState.in2States.at(helpers::clientIdToIndex(it.clientId));
+            state.in2States.at(helpers::clientIdToIndex(it.clientId));
         result::setConnected(clientId, args.playerName);
-
-        return newState;
       });
 }
 
