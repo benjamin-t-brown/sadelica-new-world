@@ -2,8 +2,11 @@
 #include "client.h"
 #include "config.h"
 #include "logger.h"
-#include <enet/enet.h>
 #include <stdexcept>
+
+#ifdef NET_ENABLE_ENET
+#include <enet/enet.h>
+#endif
 
 namespace net {
 
@@ -30,6 +33,7 @@ std::string getRandomId(int len = 10) {
 
 void Server::listen(int port) {
   if (!Config::mockEnabled) {
+#ifdef NET_ENABLE_ENET
     if (enet_initialize() != 0) {
       throw std::runtime_error(
           "[NET] An error occurred while initializing ENet.");
@@ -52,17 +56,23 @@ void Server::listen(int port) {
                                "an ENet server host.");
       return;
     }
-
+    isListening = true;
     serverHost = server;
+#else
+    throw std::runtime_error(
+        "[NET] Server cannot listen!  No network library is available "
+        "and mocks are disabled.");
+#endif
+  } else {
+    isListening = true;
   }
-
-  isListening = true;
 }
 
 void Server::broadcast(const std::string& message) {
   if (Config::mockEnabled) {
     Server::mockServerMessagesToBroadcast.push_back(message);
   } else {
+#ifdef NET_ENABLE_ENET
     if (serverHost == nullptr) {
       throw std::runtime_error("[NET] Cannot broadcast, server is null.");
       return;
@@ -71,6 +81,11 @@ void Server::broadcast(const std::string& message) {
     ENetPacket* packet = enet_packet_create(
         message.c_str(), message.size() + 1, ENET_PACKET_FLAG_RELIABLE);
     enet_host_broadcast(server, 0, packet);
+#else
+    throw std::runtime_error(
+        "[NET] Server cannot broadcast!  No network library is available "
+        "and mocks are disabled.");
+#endif
   }
 }
 
@@ -92,6 +107,7 @@ void Server::update(
     Server::mockServerMessagesToBroadcast.clear();
 
   } else {
+#ifdef NET_ENABLE_ENET
     if (serverHost == nullptr) {
       return;
     }
@@ -145,18 +161,26 @@ void Server::update(
         break;
       }
     }
+#else
+    throw std::runtime_error(
+        "[NET] Server cannot update!  No network library is available "
+        "and mocks are disabled.");
+#endif
   }
 }
 
 void Server::cleanUp() {
   if (!Config::mockEnabled) {
+#ifdef NET_ENABLE_ENET
     if (serverHost != nullptr) {
       ENetHost* server = reinterpret_cast<ENetHost*>(serverHost);
       enet_host_destroy(server);
       enet_deinitialize();
       serverHost = nullptr;
     }
+#endif
   }
+  isListening = false;
 }
 
 } // namespace net

@@ -8,7 +8,6 @@ lib/imgui/imgui_widgets.cpp\
 lib/imgui/imgui_impl_sdl.cpp\
 lib/imgui/imgui_impl_sdlrenderer.cpp\
 lib/imgui/imgui.cpp\
-lib/net/client.cpp\
 game/stateClient/cliContext.cpp\
 game/stateClient/cliDispatch.cpp\
 game/stateClient/cliResultProcessor.cpp\
@@ -26,8 +25,7 @@ game/stateServer/srvContext.cpp\
 game/stateServer/srvResult.cpp\
 game/stateServer/srvDispatchProcessor.cpp\
 game/stateServer/srvState.cpp\
-game/stateServer/dispatchHandlers/dispatchHandlers.cpp\
-lib/net/server.cpp
+game/stateServer/dispatchHandlers/dispatchHandlers.cpp
 
 SHARED_CODE=\
 lib/sdl2wrapper/Animation.cpp\
@@ -42,6 +40,8 @@ lib/sdl2wrapper/Timer.cpp\
 lib/sdl2wrapper/Gauge.cpp\
 lib/sdl2wrapper/Logger.cpp\
 lib/duktape/duktape.cpp\
+lib/net/client.cpp\
+lib/net/server.cpp\
 game/in2/in2.cpp\
 game/actions.cpp\
 utils/utils.cpp
@@ -167,13 +167,13 @@ else
 endif
 LIBS_TEST=-lpthread -lgtest
 
-FLAGS=-O0 -g -Wall -std=c++17 -DFMT_HEADER_ONLY -I$(WORKING_DIR)
+FLAGS=-O0 -g -Wall -std=c++17 -DFMT_HEADER_ONLY -DNET_ENABLE_ENET -I$(WORKING_DIR)
 
-.PHONY: $(EXE) test includes
+.PHONY: $(EXE) test includes main2
 $(EXE): precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(MAIN_ALL_OBJECT) $(TEST_OBJECTS) $(TEST_UI_OBJECTS)
 	g++ -include precompiled.h $(FLAGS) $(MAIN_ALL_OBJECT) $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) -o $(EXE) $(LIBS)
 
-run: $(EXE)
+run:
 	./$(EXE) --nointro
 
 runclient: client
@@ -204,6 +204,10 @@ testuinorun2: precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJ
 	g++ $(FLAGS) $(TEST_UI_OBJECTS) $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) -o $(EXE_TEST_UI2) $(LIBS_TEST) $(LIBS)
 
 includes: $(ALL_INCLUDE_TXT)
+
+main2: precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) Main2.o
+	g++ -include precompiled.h $(FLAGS) Main2.o $(CLIENT_OBJECTS) $(SHARED_OBJECTS) $(SERVER_OBJECTS) -o MAIN2.exe $(LIBS)
+	rm -rf MAIN2.exe
 
 .cpp.o:
 	g++ $(FLAGS) -include precompiled.h -c $(@:.o=.cpp) -o $@

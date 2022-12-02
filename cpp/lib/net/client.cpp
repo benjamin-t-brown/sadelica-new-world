@@ -2,8 +2,11 @@
 #include "config.h"
 #include "logger.h"
 #include "server.h"
-#include <enet/enet.h>
 #include <stdexcept>
+
+#ifdef NET_ENABLE_ENET
+#include <enet/enet.h>
+#endif
 
 namespace net {
 
@@ -13,6 +16,7 @@ bool Client::connect(const std::string& host, int port) {
     connected = true;
     return true;
   } else {
+#ifdef NET_ENABLE_ENET
     if (enet_initialize() != 0) {
       throw std::runtime_error(
           "[NET] An error occurred while initializing ENet");
@@ -56,6 +60,11 @@ bool Client::connect(const std::string& host, int port) {
       connected = false;
       return false;
     }
+#else
+    throw std::runtime_error(
+        "[NET] Client cannot connect!  No network library is available "
+        "and mocks are disabled.");
+#endif
   }
 }
 
@@ -63,6 +72,7 @@ void Client::send(const std::string& message) {
   if (Config::mockEnabled) {
     mockClientMessagesToSend.push_back(message);
   } else {
+#ifdef NET_ENABLE_ENET
     if (clientPeer == nullptr) {
       // throw std::runtime_error("[NET] Cannot send.  Not connected!");
       return;
@@ -73,6 +83,11 @@ void Client::send(const std::string& message) {
     ENetPacket* packet = enet_packet_create(
         message.c_str(), message.size() + 1, ENET_PACKET_FLAG_RELIABLE);
     enet_peer_send(peer, 0, packet);
+#else
+    throw std::runtime_error(
+        "[NET] Client cannot send!  No network library is available "
+        "and mocks are disabled.");
+#endif
   }
 }
 
@@ -90,6 +105,7 @@ void Client::update(std::function<void(const std::string& msg)> cb) {
     mockClientMessagesToSend.clear();
     mockClientMessagesToProcess.clear();
   } else {
+#ifdef NET_ENABLE_ENET
     if (clientPeer == nullptr || clientHost == nullptr) {
       throw std::runtime_error("[NET] Cannot update.  Not connected!");
       return;
@@ -118,6 +134,11 @@ void Client::update(std::function<void(const std::string& msg)> cb) {
         break;
       }
     }
+#else
+    throw std::runtime_error(
+        "[NET] Client Cannot update!  No network library is available "
+        "and mocks are disabled.");
+#endif
   }
 }
 
@@ -125,6 +146,7 @@ bool Client::isConnected() { return connected; }
 
 void Client::cleanUp() {
   if (!Config::mockEnabled) {
+#ifdef NET_ENABLE_ENET
     // Drop connection, since disconnection didn't succeed
     if (clientPeer != nullptr && clientHost != nullptr) {
       // ENetPeer* peer = reinterpret_cast<ENetPeer*>(clientPeer);
@@ -132,6 +154,7 @@ void Client::cleanUp() {
       enet_host_destroy(client);
       enet_deinitialize();
     }
+#endif
   }
   connected = false;
 }
