@@ -1,7 +1,7 @@
 #include "loopbackHandlers.h"
 
-#include "connectionLoopbackHandlers.cc"
-#include "in2LoopHandlers.cc"
+#include "handlerLoopConnection.cc"
+#include "handlerLoopIn2.cc"
 
 namespace snw {
 namespace state {

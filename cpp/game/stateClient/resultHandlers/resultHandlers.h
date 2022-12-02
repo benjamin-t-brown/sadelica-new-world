@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../cliResultProcessor.h"
+#include "../stateClient.h"
 
 namespace snw {
 namespace state {

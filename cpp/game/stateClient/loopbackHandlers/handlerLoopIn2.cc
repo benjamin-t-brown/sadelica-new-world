@@ -1,9 +1,7 @@
+#include "../stateClient.h"
 #include "game/actions.h"
 #include "game/dispatchAction.h"
 #include "game/payloads.h"
-#include "game/stateClient/cliContext.h"
-#include "game/stateClient/cliLoopbackProcessor.h"
-#include "game/stateClient/cliState.h"
 #include "lib/json/json.h"
 #include "logger.h"
 #include "utils/utils.h"
@@ -18,13 +16,13 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
       //
       DispatchActionType::TALK_START,
       //
-      [](const ClientState& state, const DispatchAction& it) {
+      [](ClientState& state, const DispatchAction& it) {
         auto& in2Ctx = getCliContext().getIn2Ctx();
 
         if (in2Ctx.isExecutionActive()) {
           logLoopbackDispatchAssertionError(DispatchActionType::TALK_START,
                                             "conversation is already active.");
-          return state;
+          return;
         }
 
         auto& j = it.jsonPayload;
@@ -33,63 +31,55 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
         if (args.fileName == "") {
           logLoopbackDispatchAssertionError(DispatchActionType::TALK_START,
                                             "fileName is empty str ''.");
-          return state;
+          return;
         }
 
-        auto newState = ClientState(state);
-        newState.sections.push_back(SectionType::CONVERSATION);
-        newState.in2.chName = args.fileName;
-        newState.in2.conversationText = "";
+        state.sections.push_back(SectionType::CONVERSATION);
+        state.in2.chName = args.fileName;
+        state.in2.conversationText = "";
+
         in2Ctx.createNewCtx();
         in2Ctx.executeFile(args.fileName);
-        helpers::setIn2StateAfterExecution(newState);
-        dispatch::updateTalk(newState.in2);
+        helpers::setIn2StateAfterExecution(state);
+        dispatch::updateTalk(state.in2);
         // dispatch::update
-
-        return newState;
       });
 
   p.addHandler(
       //
       DispatchActionType::TALK_CONTINUE,
       //
-      [](const ClientState& state, const DispatchAction& it) {
+      [](ClientState& state, const DispatchAction& it) {
         auto& in2Ctx = getCliContext().getIn2Ctx();
 
         if (!in2Ctx.isExecutionActive()) {
           logLoopbackDispatchAssertionError(DispatchActionType::TALK_CONTINUE,
                                             "no conversation is active.");
-          return state;
+          return;
         }
 
-        logger::info("Talk continue!");
-
-        auto newState = ClientState(state);
         in2Ctx.resumeExecution();
-        helpers::setIn2StateAfterExecution(newState);
+        helpers::setIn2StateAfterExecution(state);
         if (in2Ctx.executionCompleted) {
           dispatch::endTalk();
         }
-        dispatch::updateTalk(newState.in2);
-
-        return newState;
+        dispatch::updateTalk(state.in2);
       });
 
   p.addHandler(
       //
       DispatchActionType::TALK_SELECT_CHOICE,
       //
-      [](const ClientState& state, const DispatchAction& it) {
+      [](ClientState& state, const DispatchAction& it) {
         auto& in2Ctx = getCliContext().getIn2Ctx();
 
         if (!in2Ctx.isExecutionActive()) {
           logLoopbackDispatchAssertionError(
               DispatchActionType::TALK_SELECT_CHOICE,
               "no conversation is active.");
-          return state;
+          return;
         }
 
-        auto newState = ClientState(state);
         auto& choices = in2Ctx.getChoices();
         auto& j = it.jsonPayload;
         auto args = j.get<payloads::PayloadCivilTalkChoose>();
@@ -98,7 +88,7 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
           logLoopbackDispatchAssertionError(
               DispatchActionType::TALK_SELECT_CHOICE,
               "choiceIndex is not valid: " + std::to_string(args.choiceIndex));
-          return state;
+          return;
         }
 
         auto& choice = choices[args.choiceIndex];
@@ -106,32 +96,28 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
         ss << "  " << args.choiceIndex + 1 << ". " << choice.line;
         in2Ctx.pushLine(ss.str());
         in2Ctx.chooseExecution(choice.id);
-        helpers::setIn2StateAfterExecution(newState);
+        helpers::setIn2StateAfterExecution(state);
         if (in2Ctx.executionCompleted) {
           dispatch::endTalk();
         }
-        dispatch::updateTalk(newState.in2);
+        dispatch::updateTalk(state.in2);
 
         logger::info("Log storage");
         in2Ctx.logStorage();
-
-        return newState;
       });
 
   p.addHandler(
       //
       DispatchActionType::TALK_END,
       //
-      [](const ClientState& state, const DispatchAction& it) {
+      [](ClientState& state, const DispatchAction& it) {
         auto& in2Ctx = getCliContext().getIn2Ctx();
 
         if (!in2Ctx.isExecutionActive()) {
           logLoopbackDispatchAssertionError(DispatchActionType::TALK_END,
                                             "no conversation is active.");
-          return state;
+          return;
         }
-
-        auto newState = ClientState(state);
 
         if (!in2Ctx.executionCompleted) {
           logger::warn("Ending conversation without conversation having been "
@@ -139,18 +125,17 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
         }
 
         in2Ctx.cleanCtx();
-        newState.in2.conversationText = "";
-        newState.in2.chName = "";
-        newState.in2.choices = {};
-        newState.in2.waitingState = In2WaitingState::IN2_NONE;
-        newState.sections.erase(
+        state.in2.conversationText = "";
+        state.in2.chName = "";
+        state.in2.choices = {};
+        state.in2.waitingState = In2WaitingState::IN2_NONE;
+        state.sections.erase(
+            //
             std::remove_if(
-                newState.sections.begin(),
-                newState.sections.end(),
+                state.sections.begin(),
+                state.sections.end(),
                 [](SectionType i) { return i == SectionType::CONVERSATION; }),
-            newState.sections.end());
-
-        return newState;
+            state.sections.end());
       });
 }
 

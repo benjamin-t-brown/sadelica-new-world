@@ -1,8 +1,7 @@
+#include "../stateServer.h"
 #include "dispatchHandlers.h"
 #include "game/dispatchAction.h"
 #include "game/payloads.h"
-#include "game/stateServer/srvResult.h"
-#include "game/stateServer/srvState.h"
 #include "lib/json/json.h"
 
 namespace snw {
@@ -65,7 +64,7 @@ void initIn2SrvHandlers(ServerDispatchProcessor& p) {
         in2State.waitingState = args.waitingState;
         in2State.conversationText = args.conversationText;
 
-        result::setTalkUpdated(it.clientId, in2State);
+        results::setTalkUpdated(it.clientId, in2State);
       });
 }
 

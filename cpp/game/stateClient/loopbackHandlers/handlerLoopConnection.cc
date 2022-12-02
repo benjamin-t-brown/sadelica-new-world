@@ -1,9 +1,7 @@
+#include "../stateClient.h"
 #include "game/actions.h"
 #include "game/dispatchAction.h"
 #include "game/payloads.h"
-#include "game/stateClient/cliContext.h"
-#include "game/stateClient/cliLoopbackProcessor.h"
-#include "game/stateClient/cliState.h"
 #include "lib/json/json.h"
 #include "logger.h"
 #include "utils/utils.h"
@@ -18,13 +16,14 @@ void initConnectionLoopbackHandlers(ClientLoopbackProcessor& p) {
       //
       DispatchActionType::NET_CONNECT,
       //
-      [](const ClientState& state, const DispatchAction& it) {
+      [](ClientState& state, const DispatchAction& it) {
         auto& j = it.jsonPayload;
         auto args = j.get<payloads::PayloadEstablishConnection>();
-        auto newState = ClientState(state);
-        newState.account.isConnected = false;
-        newState.account.name = args.playerName;
-        return newState;
+        logger::info("setting net connect action on loopback");
+
+        state.account.isConnected = false;
+        state.account.playerId = args.playerId;
+        state.account.playerName = args.playerName;
       });
 }
 

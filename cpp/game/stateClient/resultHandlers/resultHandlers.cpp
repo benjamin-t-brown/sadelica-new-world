@@ -1,7 +1,7 @@
 #include "resultHandlers.h"
 
-#include "connectionResultHandlers.cc"
-#include "in2ResultHandlers.cc"
+#include "handlerResultConnection.cc"
+#include "handlerResultIn2.cc"
 
 namespace snw {
 namespace state {

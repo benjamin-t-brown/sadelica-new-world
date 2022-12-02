@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../cliLoopbackProcessor.h"
+#include "../stateClient.h"
 
 namespace snw {
 namespace state {

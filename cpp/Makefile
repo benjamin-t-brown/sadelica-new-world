@@ -8,23 +8,16 @@ lib/imgui/imgui_widgets.cpp\
 lib/imgui/imgui_impl_sdl.cpp\
 lib/imgui/imgui_impl_sdlrenderer.cpp\
 lib/imgui/imgui.cpp\
-game/stateClient/cliContext.cpp\
-game/stateClient/cliDispatch.cpp\
-game/stateClient/cliResultProcessor.cpp\
-game/stateClient/resultHandlers/resultHandlers.cpp\
-game/stateClient/cliLoopbackProcessor.cpp\
-game/stateClient/cliState.cpp\
+game/stateClient/stateClient.cpp\
 game/stateClient/loopbackHandlers/loopbackHandlers.cpp\
+game/stateClient/resultHandlers/resultHandlers.cpp\
 ui/Ui.cpp\
 ui/Elements.cpp\
 ui/components/TalkCmpt.cpp\
 ui/components/InGameCmpt.cpp
 
 SERVER_CODE=\
-game/stateServer/srvContext.cpp\
-game/stateServer/srvResult.cpp\
-game/stateServer/srvDispatchProcessor.cpp\
-game/stateServer/srvState.cpp\
+game/stateServer/stateServer.cpp\
 game/stateServer/dispatchHandlers/dispatchHandlers.cpp
 
 SHARED_CODE=\
@@ -167,7 +160,8 @@ else
 endif
 LIBS_TEST=-lpthread -lgtest
 
-FLAGS=-O0 -g -Wall -std=c++17 -DFMT_HEADER_ONLY -DNET_ENABLE_ENET -I$(WORKING_DIR)
+FLAGS=-O0 -g -Wall -std=c++17 -DNET_ENABLE_ENET -I$(WORKING_DIR)
+# FLAGS=-O0 -g -Wall -std=c++17 -I$(WORKING_DIR)
 
 .PHONY: $(EXE) test includes main2
 $(EXE): precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) $(MAIN_ALL_OBJECT) $(TEST_OBJECTS) $(TEST_UI_OBJECTS)

@@ -1,6 +1,6 @@
 #include "game/in2/in2.h"
-#include "game/stateClient/cliContext.h"
-#include "game/stateServer/srvContext.h"
+#include "game/stateClient/stateClient.h"
+#include "game/stateServer/stateServer.h"
 #include "lib/imgui/imgui.h"
 #include "lib/imgui/imgui_impl_sdl.h"
 #include "lib/imgui/imgui_impl_sdlrenderer.h"

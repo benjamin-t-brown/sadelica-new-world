@@ -20,25 +20,25 @@ std::string Logger::getLabel(LogType type) {
   std::string label;
   switch (type) {
   case DEBUG:
-    label = "{DEBUG} ";
+    label = "{ DEBUG } ";
     if (Logger::colorEnabled) {
       label = "\033[36m" + label + "\033[0m";
     }
     break;
   case INFO:
-    label = "{INFO} ";
+    label = "{ INFO  } ";
     if (Logger::colorEnabled) {
       label = "\033[32m" + label + "\033[0m";
     }
     break;
   case WARN:
-    label = "{WARN} ";
+    label = "{ WARN  } ";
     if (Logger::colorEnabled) {
       label = "\033[33m" + label + "\033[0m";
     }
     break;
   case ERROR:
-    label = "{ERROR} ";
+    label = "{ ERROR } ";
     if (Logger::colorEnabled) {
       label = "\033[31m" + label + "\033[0m";
     }

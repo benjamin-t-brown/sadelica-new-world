@@ -1,8 +1,7 @@
-#include "../srvResult.h"
+#include "../stateServer.h"
 #include "dispatchHandlers.h"
 #include "game/dispatchAction.h"
 #include "game/payloads.h"
-#include "game/stateServer/srvState.h"
 #include "lib/json/json.h"
 #include "logger.h"
 
@@ -25,16 +24,16 @@ void initConnectionSrvHandlers(ServerDispatchProcessor& p) {
         }
 
         auto& clientState =
-            state.clients.at(helpers::clientIdToIndex(it.clientId));
+            state.clients.at(helpers::clientIdToIndex(clientId));
 
         if (clientState.isConnected) {
           logger::error("Both clients are already connected!");
           return;
         }
-
-        auto& in2State =
-            state.in2States.at(helpers::clientIdToIndex(it.clientId));
-        result::setConnected(clientId, args.playerName);
+        clientState.playerName = args.playerName;
+        clientState.playerId = args.playerId;
+        clientState.isConnected = true;
+        results::setConnected(clientId, args.playerId, args.playerName);
       });
 }
 

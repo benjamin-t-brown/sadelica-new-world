@@ -1,8 +1,6 @@
 #include "game/in2/in2.h"
-#include "game/stateClient/cliContext.h"
-#include "game/stateClient/cliState.h"
-#include "game/stateServer/srvContext.h"
-#include "game/stateServer/srvState.h"
+#include "game/stateClient/stateClient.h"
+#include "game/stateServer/stateServer.h"
 #include "logger.h"
 #include <fstream>
 #include <gtest/gtest.h>
@@ -15,13 +13,12 @@ using ServerContext = snw::state::ServerContext;
 class ServerStateTest : public testing::Test {
 protected:
   static void SetUpTestSuite() {
-    Logger::disabled = true;
+    Logger::disabled = false;
     in2::init(readIn2CompiledSrcMock());
     ClientContext::init();
   }
-  static void TearDownTestSuite() {}
+  static void TearDownTestSuite() { Logger::disabled = true; }
   void SetUp() override {
-    Logger::disabled = true;
     ClientContext::get().setState(ClientState());
     ServerContext::get().setState(ServerState());
   }
@@ -29,8 +26,8 @@ protected:
 
   static std::string readIn2CompiledSrcMock() {
     const std::string path = "test/in2/main.compiled.mock.js";
-    Logger().get(LogType::DEBUG) << "Reading in2 compiled src from " << path
-                           << Logger::endl;
+    Logger().get(LogType::DEBUG)
+        << "Reading in2 compiled src from " << path << Logger::endl;
     const std::ifstream src(path);
 
     std::stringstream buffer;
@@ -38,6 +35,26 @@ protected:
     return buffer.str();
   }
 };
+
+TEST_F(ServerStateTest, ProperlyHandlesConnectionRequests) {
+  dispatch::establishConnection("testPlayer1");
+
+  ClientContext::get().update();
+  ClientContext::get().update();
+  EXPECT_EQ(getCliState().account.playerName, "testPlayer1");
+  EXPECT_NE(getCliState().account.playerId, "");
+  EXPECT_EQ(getCliState().account.isConnected, false);
+
+  ServerContext::get().update();
+  EXPECT_EQ(getSrvState().clients[0].playerName, "testPlayer1");
+  EXPECT_EQ(getSrvState().clients[0].playerId, getCliState().account.playerId);
+  EXPECT_EQ(getSrvState().clients[0].isConnected, true);
+
+  ClientContext::get().update();
+  EXPECT_EQ(getCliState().account.playerName, "testPlayer1");
+  EXPECT_NE(getCliState().account.playerId, "");
+  EXPECT_NE(getCliState().account.isConnected, true);
+}
 
 TEST_F(ServerStateTest, ProperlySendsTalkMessagesToServer) {
   // a startTalk should update the server state to indicate who is talking

@@ -7,6 +7,14 @@ namespace snw {
 
 namespace state {
 
+struct ConnectedClient {
+  ClientId clientId = ClientId::PLAYER1;
+  std::string socketId;
+  std::string playerName;
+  std::string playerId;
+  bool isConnected = false;
+};
+
 enum In2WaitingState {
   IN2_NONE = 0,
   WAITING_FOR_CONTINUE,

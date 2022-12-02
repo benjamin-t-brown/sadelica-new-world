@@ -1,7 +1,7 @@
 #pragma once
 
 #include "lib/json/json.h"
-#include "sharedStateStructs.h"
+#include "sharedState.h"
 #include <string>
 #include <vector>
 
@@ -11,9 +11,11 @@ namespace payloads {
 
 struct PayloadEstablishConnection {
   int clientId;
+  std::string playerId;
   std::string playerName;
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(PayloadEstablishConnection,
                                  clientId,
+                                 playerId,
                                  playerName)
 };
 

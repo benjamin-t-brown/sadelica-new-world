@@ -7,6 +7,7 @@ namespace snw {
 namespace state {
 
 struct ResultAction {
+  ClientId clientId;
   ResultActionType type = ResultActionType::NOOP_RESULT;
   nlohmann::json jsonPayload;
 };

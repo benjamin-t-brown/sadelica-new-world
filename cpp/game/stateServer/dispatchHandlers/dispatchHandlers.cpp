@@ -1,7 +1,7 @@
 #include "dispatchHandlers.h"
 
-#include "connectionSrvHandlers.cc"
-#include "in2SrvHandlers.cc"
+#include "handlerDispatchConnection.cc"
+#include "handlerDispatchIn2.cc"
 
 namespace snw {
 namespace state {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../srvDispatchProcessor.h"
+#include "../stateServer.h"
 
 namespace snw {
 namespace state {
