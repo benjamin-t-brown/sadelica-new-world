@@ -69,8 +69,6 @@ void ServerResult::sendResults() {
   json clientPayload = json::array();
 
   for (auto& it : actionsToCommit) {
-    logger::debug("SRV Send Result action: %s",
-                  resultActionToString(it.type).c_str());
     json action;
     action["type"] = it.type;
     action["payload"] = it.jsonPayload;

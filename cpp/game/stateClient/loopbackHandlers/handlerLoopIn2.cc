@@ -129,13 +129,7 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
         state.in2.chName = "";
         state.in2.choices = {};
         state.in2.waitingState = In2WaitingState::IN2_NONE;
-        state.sections.erase(
-            //
-            std::remove_if(
-                state.sections.begin(),
-                state.sections.end(),
-                [](SectionType i) { return i == SectionType::CONVERSATION; }),
-            state.sections.end());
+        helpers::removeSection(state, SectionType::CONVERSATION);
       });
 }
 

@@ -5,6 +5,7 @@
 #include "lib/imgui/imgui.h"
 #include "lib/imgui/imgui_impl_sdl.h"
 #include "lib/imgui/imgui_impl_sdlrenderer.h"
+#include "lib/net/config.h"
 #include "lib/sdl2wrapper/Events.h"
 #include "lib/sdl2wrapper/Store.h"
 #include "lib/sdl2wrapper/Window.h"
@@ -33,35 +34,88 @@ int main(int argc, char* argv[]) {
   srand(time(NULL));
   IMGUI_CHECKVERSION();
   snw::in2::init("");
-  snw::state::ServerContext::init();
-  snw::state::ClientContext::init();
-  auto uiInstance = ui::Ui();
 
   std::vector<std::string> args;
   utils::parseArgs(argc, argv, args);
+
   try {
-    // SDL2Wrapper::Window window("Sadelica: NW", 720, 1280, 25, 50);
-    // SDL2Wrapper::Window window("Sadelica: NW", 576, 1024, 25, 50);
-    SDL2Wrapper::Window window("Sadelica: NW", 480, 854, 25, 50);
-    uiInstance.init(window);
+    if (utils::includes("server", args)) {
+      net::Config::mockEnabled = false;
+      snw::state::ServerContext::init();
 
-    window.startRenderLoop([&]() {
-      ImGui_ImplSDLRenderer_NewFrame();
-      ImGui_ImplSDL2_NewFrame();
-      ImGui::NewFrame();
-      window.setBackgroundColor(window.makeColor(10, 10, 10));
-      window.setCurrentFont("Chicago", 20);
-      ImGui::PushFont(uiInstance.getFont("Chicago20"));
+      logger::info("Waiting for client to connect.");
 
-      uiInstance.render();
+      try {
+        SDL2Wrapper::Window window;
 
-      ImGui::ShowDemoWindow();
+        window.startRenderLoop([&]() {
+          snw::state::ServerContext::get().update();
+          return true;
+        });
 
-      ImGui::PopFont();
-      ImGui::Render();
-      ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
-      return true;
-    });
+        logger::info("Program End.");
+      } catch (const std::string& e) {
+        Logger().get(LogType::ERROR) << e << Logger::endl;
+      }
+    } else if (utils::includes("client", args)) {
+      net::Config::mockEnabled = false;
+      snw::state::ClientContext::init();
+      auto uiInstance = ui::Ui();
+      // SDL2Wrapper::Window window("Sadelica: NW", 720, 1280, 25, 50);
+      // SDL2Wrapper::Window window("Sadelica: NW", 576, 1024, 25, 50);
+      SDL2Wrapper::Window window("Sadelica: NW (Client)", 480, 854, 25, 50);
+      uiInstance.init(window);
+
+      const std::string playerName =
+          utils::includes("player2", args) ? "Player2" : "Player1";
+
+      logger::info("Handshaking connection with server...");
+      snw::state::dispatch::establishConnection(playerName);
+
+      window.startRenderLoop([&]() {
+        ImGui_ImplSDLRenderer_NewFrame();
+        ImGui_ImplSDL2_NewFrame();
+        ImGui::NewFrame();
+        window.setBackgroundColor(window.makeColor(10, 10, 10));
+        window.setCurrentFont("Chicago", 20);
+        ImGui::PushFont(uiInstance.getFont("Chicago20"));
+
+        snw::state::ClientContext::get().update();
+
+        ImGui::ShowDemoWindow();
+
+        ImGui::PopFont();
+        ImGui::Render();
+        ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
+        return true;
+      });
+    } else {
+      snw::state::ServerContext::init();
+      snw::state::ClientContext::init();
+      auto uiInstance = ui::Ui();
+      // SDL2Wrapper::Window window("Sadelica: NW", 720, 1280, 25, 50);
+      // SDL2Wrapper::Window window("Sadelica: NW", 576, 1024, 25, 50);
+      SDL2Wrapper::Window window("Sadelica: NW", 480, 854, 25, 50);
+      uiInstance.init(window);
+
+      window.startRenderLoop([&]() {
+        ImGui_ImplSDLRenderer_NewFrame();
+        ImGui_ImplSDL2_NewFrame();
+        ImGui::NewFrame();
+        window.setBackgroundColor(window.makeColor(10, 10, 10));
+        window.setCurrentFont("Chicago", 20);
+        ImGui::PushFont(uiInstance.getFont("Chicago20"));
+
+        uiInstance.render();
+
+        ImGui::ShowDemoWindow();
+
+        ImGui::PopFont();
+        ImGui::Render();
+        ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
+        return true;
+      });
+    }
 
     logger::info("Program End.");
   } catch (const std::string& e) {

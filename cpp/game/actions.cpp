@@ -28,7 +28,7 @@ std::string dispatchActionToString(DispatchActionType type) {
   case DispatchActionType::TALK_UPDATE:
     return "TALK_UPDATE";
   default:
-    return std::to_string(static_cast<int>(type));
+    return std::to_string(static_cast<int>(type)) + " (unmapped)";
   }
 }
 std::string resultActionToString(ResultActionType type) {
@@ -37,8 +37,12 @@ std::string resultActionToString(ResultActionType type) {
     return "NOOP_RESULT";
   case ResultActionType::TALK_UPDATED:
     return "TALK_UPDATED";
+  case ResultActionType::NET_PLAYER_CONNECTED:
+    return "NET_PLAYER_CONNECTED";
+  case ResultActionType::NET_PLAYER_DISCONNECTED:
+    return "NET_PLAYER_DISCONNECTED";
   default:
-    return std::to_string(static_cast<int>(type));
+    return std::to_string(static_cast<int>(type)) + " (unmapped)";
   }
 }
 
@@ -78,6 +82,7 @@ ResultActionList jsonToResultActionList(const std::string& jsonMsg) {
     ResultAction action;
     action.type = j["type"];
     action.jsonPayload = j["payload"];
+    action.clientId = action.jsonPayload["clientId"];
     actions.push_back(action);
   }
 

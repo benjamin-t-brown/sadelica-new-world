@@ -170,10 +170,10 @@ $(EXE): precompiled.h.gch $(CLIENT_OBJECTS) $(SERVER_OBJECTS) $(SHARED_OBJECTS) 
 run:
 	./$(EXE) --nointro
 
-runclient: client
+runclient:
 	./$(EXE) --client
 
-runserver: server
+runserver:
 	./$(EXE) --server
 
 precompiled.h.gch:

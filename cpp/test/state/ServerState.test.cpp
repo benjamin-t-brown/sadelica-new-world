@@ -13,7 +13,7 @@ using ServerContext = snw::state::ServerContext;
 class ServerStateTest : public testing::Test {
 protected:
   static void SetUpTestSuite() {
-    Logger::disabled = false;
+    Logger::disabled = true;
     in2::init(readIn2CompiledSrcMock());
     ClientContext::init();
   }
@@ -41,19 +41,21 @@ TEST_F(ServerStateTest, ProperlyHandlesConnectionRequests) {
 
   ClientContext::get().update();
   ClientContext::get().update();
-  EXPECT_EQ(getCliState().account.playerName, "testPlayer1");
-  EXPECT_NE(getCliState().account.playerId, "");
-  EXPECT_EQ(getCliState().account.isConnected, false);
+  EXPECT_EQ(getCliState().client.playerName, "testPlayer1");
+  EXPECT_EQ(getCliState().client.isConnected, false);
+  EXPECT_NE(getCliState().client.playerId, "");
 
   ServerContext::get().update();
+  ServerContext::get().update();
   EXPECT_EQ(getSrvState().clients[0].playerName, "testPlayer1");
-  EXPECT_EQ(getSrvState().clients[0].playerId, getCliState().account.playerId);
+  EXPECT_EQ(getSrvState().clients[0].playerId, getCliState().client.playerId);
   EXPECT_EQ(getSrvState().clients[0].isConnected, true);
 
   ClientContext::get().update();
-  EXPECT_EQ(getCliState().account.playerName, "testPlayer1");
-  EXPECT_NE(getCliState().account.playerId, "");
-  EXPECT_NE(getCliState().account.isConnected, true);
+  EXPECT_EQ(getCliState().client.playerName, "testPlayer1");
+  EXPECT_EQ(getCliState().client.clientId, ClientId::PLAYER1);
+  EXPECT_EQ(getCliState().client.isConnected, true);
+  EXPECT_NE(getCliState().client.playerId, "");
 }
 
 TEST_F(ServerStateTest, ProperlySendsTalkMessagesToServer) {

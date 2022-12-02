@@ -68,8 +68,6 @@ void ClientContext::update() {
   clientDispatch.reset();
   clientLoopbackProcessor.process();
   clientLoopbackProcessor.reset();
-  clientResultProcessor.process();
-  clientResultProcessor.reset();
 
   netClient.update([&](const std::string& msg) {
     logger::info("CLI Recvd message from server %s", msg.c_str());
@@ -82,12 +80,15 @@ void ClientContext::update() {
       clientResultProcessor.enqueue(action);
     }
   });
+
+  clientResultProcessor.process();
+  clientResultProcessor.reset();
 }
 
 ClientContext& getCliContext() { return ClientContext::get(); }
 const ClientState& getCliState() { return ClientContext::get().getState(); }
 
-const ClientId getClientId() { return getCliState().account.clientId; }
+const ClientId getClientId() { return getCliState().client.clientId; }
 
 void ClientDispatch::enqueue(const DispatchAction& action) {
   actionsToCommit.push_back(action);
@@ -115,7 +116,7 @@ void ClientDispatch::dispatch() {
   }
 
   if (serverPayload.size() > 0) {
-    const json message = {{"id", getCliState().account.clientId},
+    const json message = {{"id", getCliState().client.clientId},
                           {"payload", serverPayload}};
     logger::debug("Sending to server: %s", message.dump().c_str());
     getCliContext().getNetClient().send(message.dump());
@@ -187,7 +188,9 @@ ClientResultProcessor::ClientResultProcessor()
 
 void ClientResultProcessor::init() { initResultHandlers(*this); }
 
-void ClientResultProcessor::enqueue(const ResultAction& action) {}
+void ClientResultProcessor::enqueue(const ResultAction& action) {
+  actionsToCommit.push_back(action);
+}
 
 void ClientResultProcessor::process() {
   auto& state = ClientContext::get().getStateMut();
@@ -230,12 +233,34 @@ void logClientResultAssertionError(ResultActionType type,
 }
 
 namespace helpers {
+
 bool isSectionVisible(const ClientState& state, SectionType type) {
   auto it = std::find(state.sections.begin(), state.sections.end(), type);
   if (it != state.sections.end()) {
     return true;
   }
   return false;
+}
+
+void addSection(ClientState& state, SectionType type) {
+  if (isSectionVisible(state, type)) {
+    return;
+  }
+
+  state.sections.push_back(type);
+}
+
+void removeSection(ClientState& state, SectionType type) {
+  if (!isSectionVisible(state, type)) {
+    return;
+  }
+
+  state.sections.erase(
+      //
+      std::remove_if(state.sections.begin(),
+                     state.sections.end(),
+                     [&](SectionType i) { return i == type; }),
+      state.sections.end());
 }
 
 // After the in2 state executes to it's next waiting period, some stuff

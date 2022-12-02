@@ -12,7 +12,7 @@ void initIn2ResultHandlers(ClientResultProcessor& p) {
       //
       ResultActionType::TALK_UPDATED,
       //
-      [](const ClientState& state, const ResultAction& it) {
+      [](ClientState& state, const ResultAction& it) {
         auto& j = it.jsonPayload;
         auto args = j.get<payloads::PayloadCivilTalkUpdateResult>();
 
@@ -22,8 +22,26 @@ void initIn2ResultHandlers(ClientResultProcessor& p) {
           return;
         }
 
-        if (args.clientId == getClientId()) {
+        auto clientId = helpers::intToClientId(args.clientId);
+
+        if (clientId == getClientId()) {
           return;
+        }
+
+        if (state.in2States.find(args.clientId) == state.in2States.end()) {
+          In2State in2;
+          in2.chName = args.chName;
+          in2.choices = args.choices;
+          in2.conversationText = args.conversationText;
+          in2.waitingState = args.waitingState;
+          state.in2States[clientId] = in2;
+        } else {
+          In2State& in2 = state.in2States[clientId];
+          in2.chName = args.chName;
+          in2.choices = args.choices;
+          in2.conversationText = args.conversationText;
+          in2.waitingState = args.waitingState;
+          state.in2States[clientId] = in2;
         }
       });
 }

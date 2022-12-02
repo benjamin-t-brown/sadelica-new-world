@@ -21,9 +21,9 @@ void initConnectionLoopbackHandlers(ClientLoopbackProcessor& p) {
         auto args = j.get<payloads::PayloadEstablishConnection>();
         logger::info("setting net connect action on loopback");
 
-        state.account.isConnected = false;
-        state.account.playerId = args.playerId;
-        state.account.playerName = args.playerName;
+        state.client.isConnected = false;
+        state.client.playerId = args.playerId;
+        state.client.playerName = args.playerName;
       });
 }
 

@@ -5,6 +5,7 @@
 #include "game/sharedState.h"
 #include "lib/net/client.h"
 #include <functional>
+#include <unordered_map>
 
 namespace snw {
 namespace state {
@@ -16,10 +17,11 @@ struct SectionInfo {
 };
 
 struct ClientState {
-  ConnectedClient account;
-  std::vector<ConnectedClient> otherAccounts;
-  std::vector<SectionType> sections;
+  ConnectedClient client;
+  std::unordered_map<ClientId, ConnectedClient> clients;
   In2State in2;
+  std::unordered_map<ClientId, In2State> in2States;
+  std::vector<SectionType> sections;
 };
 
 class ClientLoopbackProcessor {
@@ -84,9 +86,7 @@ private:
   ClientDispatch clientDispatch;
   ClientResultProcessor clientResultProcessor;
   ClientLoopbackProcessor clientLoopbackProcessor;
-
   snw::in2::In2Context in2Ctx;
-
   net::Client netClient;
 
   static ClientContext globalClientContext;
@@ -116,6 +116,8 @@ const ClientId getClientId();
 namespace helpers {
 
 bool isSectionVisible(const ClientState& state, SectionType type);
+void addSection(ClientState& state, SectionType type);
+void removeSection(ClientState& state, SectionType type);
 void setIn2StateAfterExecution(ClientState& state);
 ClientId intToClientId(int clientIdInt);
 

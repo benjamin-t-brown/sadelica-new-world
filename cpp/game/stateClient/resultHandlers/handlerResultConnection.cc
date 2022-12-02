@@ -17,16 +17,28 @@ void initConnectionResultHandlers(ClientResultProcessor& p) {
         auto& j = it.jsonPayload;
         auto args = j.get<payloads::PayloadEstablishConnection>();
 
-        if (args.playerId == state.account.playerId) {
-          state.account.clientId = helpers::intToClientId(args.clientId);
-          state.account.playerId = args.playerId;
-          state.account.playerName = args.playerName;
-          state.account.isConnected = true;
-          return;
+        logger::info("Recv net player event %s=%s?",
+                     args.playerId.c_str(),
+                     state.client.playerId.c_str());
+
+        if (args.playerId == state.client.playerId) {
+          state.client.clientId = helpers::intToClientId(args.clientId);
+          state.client.playerId = args.playerId;
+          state.client.playerName = args.playerName;
+          state.client.isConnected = true;
+
+          logger::info("Connected as clientId=%i", state.client.clientId);
+
+          // So we don't have to keep track of our state twice with extra
+          // copies, no need to also store the client state here
+          // state.clients[state.client.clientId] = state.client;
         } else {
 
+          logger::info("Another client has connected as clientId=%i", state.client.clientId);
+
           // check if another account exists with the clientId
-          for (auto& acct : state.otherAccounts) {
+          for (auto& it2 : state.clients) {
+            auto acct = it2.second;
             if (acct.clientId == args.clientId && acct.isConnected) {
               logger::warn("ClientId '%i' is already connected! (updating "
                            "playerId to %s and playerName to %s)",
@@ -37,14 +49,14 @@ void initConnectionResultHandlers(ClientResultProcessor& p) {
               acct.playerName = args.playerName;
               return;
             }
-          }
 
-          ConnectedClient c;
-          c.clientId = helpers::intToClientId(args.clientId);
-          c.playerId = args.playerId;
-          c.playerName = args.playerName;
-          c.isConnected = true;
-          state.otherAccounts.push_back(c);
+            ConnectedClient c;
+            c.clientId = helpers::intToClientId(args.clientId);
+            c.playerId = args.playerId;
+            c.playerName = args.playerName;
+            c.isConnected = true;
+            state.clients[c.clientId] = c;
+          }
         }
       });
 }
