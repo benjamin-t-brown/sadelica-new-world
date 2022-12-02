@@ -47,11 +47,10 @@ std::string Logger::getLabel(LogType type) {
   return label;
 }
 Logger::~Logger() {
-  // if (messageLevel >= Log::ReportingLevel()) {
-  //   os << std::endl;
-  //   fprintf(stderr, "%s", os.str().c_str());
-  //   fflush(stderr);
-  // }
+  if (!Logger::disabled) {
+    fprintf(stdout, "%s", os.str().c_str());
+    fflush(stdout);
+  }
 }
 
 // void Logger::printMessage(const std::string& msg) {
