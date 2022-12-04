@@ -17,10 +17,6 @@ void initConnectionResultHandlers(ClientResultProcessor& p) {
         auto& j = it.jsonPayload;
         auto args = j.get<payloads::PayloadEstablishConnection>();
 
-        logger::info("Recv net player event %s=%s?",
-                     args.playerId.c_str(),
-                     state.client.playerId.c_str());
-
         if (args.playerId == state.client.playerId) {
           state.client.clientId = helpers::intToClientId(args.clientId);
           state.client.playerId = args.playerId;
@@ -34,7 +30,8 @@ void initConnectionResultHandlers(ClientResultProcessor& p) {
           // state.clients[state.client.clientId] = state.client;
         } else {
 
-          logger::info("Another client has connected as clientId=%i", state.client.clientId);
+          logger::info("Another client has connected as clientId=%i",
+                       state.client.clientId);
 
           // check if another account exists with the clientId
           for (auto& it2 : state.clients) {
@@ -56,6 +53,24 @@ void initConnectionResultHandlers(ClientResultProcessor& p) {
             c.playerName = args.playerName;
             c.isConnected = true;
             state.clients[c.clientId] = c;
+          }
+        }
+      });
+
+  p.addHandler(
+      //
+      ResultActionType::NET_PLAYER_DISCONNECTED,
+      //
+      [](ClientState& state, const ResultAction& it) {
+        auto& j = it.jsonPayload;
+        auto args = j.get<payloads::PayloadEstablishConnection>();
+        logger::info("ClientId=%i has disconnected.", state.client.clientId);
+        // check if another account exists with the clientId
+        for (auto& it2 : state.clients) {
+          auto acct = it2.second;
+          if (acct.clientId == args.clientId && acct.isConnected) {
+            acct.isConnected = false;
+            return;
           }
         }
       });

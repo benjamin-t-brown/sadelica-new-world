@@ -147,6 +147,7 @@ void Server::update(
       case ENET_EVENT_TYPE_DISCONNECT: {
         ConnectionData* d = reinterpret_cast<ConnectionData*>(event.peer->data);
         logger::debug("%s disconnected.", d->socketId.c_str());
+        cb(d->socketId.c_str(), "");
         /* Reset the peer's client information. */
         auto it = connectedPeers.find(d->socketId);
         if (it != connectedPeers.end()) {

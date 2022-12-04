@@ -126,6 +126,7 @@ ClientId intToClientId(int clientIdInt);
 namespace dispatch {
 
 void establishConnection(const std::string& playerName);
+void unEstablishConnection();
 void startTalk(const std::string& talkName);
 void continueTalk();
 void chooseTalk(const int choiceIndex);

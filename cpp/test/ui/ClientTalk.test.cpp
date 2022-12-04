@@ -75,8 +75,8 @@ TEST_F(ClientTalkTest, CanDisplayAConversation) {
   logger::info("Program Begin.");
   srand(time(NULL));
   net::Config::mockEnabled = false;
-  auto uiInstance = ui::Ui();
 
+  auto uiInstance = ui::Ui();
   SDL2Wrapper::Window window("ClientTalkTest", 480, 854, 25, 50);
   uiInstance.init(window);
 
@@ -84,13 +84,15 @@ TEST_F(ClientTalkTest, CanDisplayAConversation) {
     renderPreConnectionScreen(uiInstance);
   });
 
-  snw::state::ClientContext::init();
   snw::in2::init("");
-  dispatch::establishConnection(utils::getRandomId());
 
+  // this blocks execution until UDP socket is established.
+  snw::state::ClientContext::init();
+
+  dispatch::establishConnection(utils::getRandomId());
   logger::info("Socket connection created, initiating handshake...");
 
-  SDL2Wrapper::Gauge connectionGauge = SDL2Wrapper::Gauge(1000);
+  SDL2Wrapper::Gauge connectionGauge = SDL2Wrapper::Gauge(3000);
 
   // wait for connection
   window.startRenderLoop([&]() {
@@ -98,7 +100,7 @@ TEST_F(ClientTalkTest, CanDisplayAConversation) {
     ui::renderFrame(window, uiInstance, true, [&]() {
       snw::state::getCliContext().update();
       renderPreConnectionScreen(uiInstance);
-      connectionGauge.fill(window.getDeltaTime() * window.getFrameRatio());
+      connectionGauge.fill(window.getDeltaTime());
       if (connectionGauge.isFull()) {
         looping = false;
       }
@@ -113,19 +115,22 @@ TEST_F(ClientTalkTest, CanDisplayAConversation) {
 
   if (!snw::state::getCliState().client.isConnected) {
     logger::error("Could not establish connection to server.");
-    EXPECT_TRUE(snw::state::getCliState().client.isConnected);
-    return;
   }
+  EXPECT_TRUE(snw::state::getCliState().client.isConnected);
 
   logger::info("Completed connection handshake.");
 
   try {
-
-    dispatch::establishConnection(utils::getRandomId());
-
     window.startRenderLoop([&]() {
+      bool looping = true;
+
       ui::renderFrame(
           window, uiInstance, false, [&]() { ClientContext::get().update(); });
+
+      if (!snw::state::getCliState().client.isConnected) {
+        looping = false;
+      }
+
       return true;
     });
 
@@ -133,6 +138,11 @@ TEST_F(ClientTalkTest, CanDisplayAConversation) {
   } catch (const std::string& e) {
     Logger().get(LogType::ERROR) << e << Logger::endl;
   }
+
+  logger::info("Ending connection.");
+  dispatch::unEstablishConnection();
+  snw::state::getCliContext().update();
+  snw::state::getCliContext().update();
 
   ImGui_ImplSDLRenderer_Shutdown();
   ImGui_ImplSDL2_Shutdown();

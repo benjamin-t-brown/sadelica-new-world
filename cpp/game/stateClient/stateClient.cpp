@@ -76,11 +76,11 @@ void ClientContext::update() {
   clientLoopbackProcessor.reset();
 
   netClient.update([&](const std::string& msg) {
-    logger::info("CLI Recvd message from server %s", msg.c_str());
     if (msg.size() == 0) {
       logger::error("NET reports that socket is disconnected.");
       throw std::runtime_error("DISCONNECTED!");
     }
+    logger::info("CLI Recvd message from server %s", msg.c_str());
     const auto actionList = jsonToResultActionList(msg);
     for (const auto& action : actionList.actions) {
       clientResultProcessor.enqueue(action);
@@ -312,6 +312,15 @@ void establishConnection(const std::string& playerName) {
                               DispatchActionType::NET_CONNECT,
                               json(payloads::PayloadEstablishConnection{
                                   0, utils::getRandomId(), playerName})};
+  ClientContext::get().getDispatch().enqueue(action);
+}
+
+void unEstablishConnection() {
+  const DispatchAction action{
+      ActionCl::BOTH,
+      DispatchActionType::NET_DISCONNECT,
+      json(payloads::PayloadEstablishConnection{
+          0, getCliState().client.playerId, getCliState().client.playerName})};
   ClientContext::get().getDispatch().enqueue(action);
 }
 

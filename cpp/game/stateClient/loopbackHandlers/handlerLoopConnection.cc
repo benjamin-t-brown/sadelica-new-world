@@ -25,6 +25,20 @@ void initConnectionLoopbackHandlers(ClientLoopbackProcessor& p) {
         state.client.playerId = args.playerId;
         state.client.playerName = args.playerName;
       });
+
+  p.addHandler(
+      //
+      DispatchActionType::NET_DISCONNECT,
+      //
+      [](ClientState& state, const DispatchAction& it) {
+        auto& j = it.jsonPayload;
+        auto args = j.get<payloads::PayloadEstablishConnection>();
+        logger::info("setting net disconnect action on loopback");
+
+        state.client.isConnected = false;
+        state.client.playerId = args.playerId;
+        state.client.playerName = args.playerName;
+      });
 }
 
 } // namespace state

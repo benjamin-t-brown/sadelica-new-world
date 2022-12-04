@@ -11,6 +11,7 @@ struct DispatchAction {
   DispatchActionType type = DispatchActionType::NOOP_DISPATCH;
   nlohmann::json jsonPayload;
   ClientId clientId = ClientId::PLAYER_NONE;
+  std::string socketId;
 };
 
 } // namespace state

@@ -76,7 +76,7 @@ ServerContext& getSrvContext();
 const ServerState& getSrvState();
 
 namespace helpers {
-
+ClientId socketIdToClientId(const std::string& socketId);
 unsigned int clientIdToIndex(ClientId clientId);
 
 } // namespace helpers
@@ -86,6 +86,9 @@ namespace results {
 void setConnected(ClientId clientId,
                   const std::string& playerId,
                   const std::string& playerName);
+void setDisconnected(ClientId clientId,
+                     const std::string& playerId,
+                     const std::string& playerName);
 void setTalkUpdated(ClientId player, const In2State& in2State);
 
 } // namespace results

@@ -33,7 +33,32 @@ void initConnectionSrvHandlers(ServerDispatchProcessor& p) {
         clientState.playerName = args.playerName;
         clientState.playerId = args.playerId;
         clientState.isConnected = true;
+        clientState.socketId = it.socketId;
         results::setConnected(clientId, args.playerId, args.playerName);
+      });
+
+  p.addHandler(
+      //
+      DispatchActionType::NET_DISCONNECT,
+      //
+      [](ServerState& state, const DispatchAction& it) {
+        if (it.clientId == ClientId::PLAYER_NONE) {
+          logger::warn("PLAYER_NONE disconnected socketId=%s.", it.socketId);
+          return;
+        }
+
+        auto& clientState =
+            state.clients.at(helpers::clientIdToIndex(it.clientId));
+
+        if (!clientState.isConnected) {
+          logger::warn("ClientId=%i is already disconnected.", it.clientId);
+          return;
+        }
+
+        clientState.isConnected = false;
+
+        results::setDisconnected(
+            it.clientId, clientState.playerId, clientState.playerName);
       });
 }
 

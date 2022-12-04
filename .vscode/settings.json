@@ -87,7 +87,7 @@
     "regex": "cpp",
     "source_location": "cpp"
   },
-  "clang-tidy.blacklist": ["entt.*"],
+  "clang-tidy.blacklist": ["entt.*", "imgui.*"],
   "clang-tidy.compilerArgsBefore": ["-xc++"],
   "clang-tidy.compilerArgs": ["-std=c++17", "-stdlib=libstdc++", "-Icpp"],
   "clang-tidy.checks": [
@@ -118,6 +118,7 @@
     "-build/include"
   ],
   "C_Cpp.default.configurationProvider": "",
+  "C_Cpp.codeAnalysis.clangTidy.enabled": false,
   "C_Cpp.codeAnalysis.clangTidy.checks.enabled": [
     "misc-*",
     "bugprone-*",

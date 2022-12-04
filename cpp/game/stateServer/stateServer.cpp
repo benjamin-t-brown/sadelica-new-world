@@ -48,11 +48,25 @@ ServerResult& ServerContext::getServerResult() { return serverResult; }
 net::Server& ServerContext::getNetServer() { return netServer; }
 void ServerContext::update() {
   netServer.update([&](const std::string& socketId, const std::string& msg) {
+    if (msg.size() == 0) {
+      logger::error("SRV reports that socketId=%s is disconnected.",
+                    socketId.c_str());
+      DispatchAction disconnectAction;
+      disconnectAction.type = DispatchActionType::NET_DISCONNECT;
+      disconnectAction.clientId = helpers::socketIdToClientId(socketId);
+      disconnectAction.socketId = socketId;
+      disconnectAction.jsonPayload = json();
+      serverDispatchProcessor.enqueue(disconnectAction.clientId,
+                                      disconnectAction);
+      return;
+    }
+
     logger::info("SRV Recvd message from client (socketId=%s): %s",
                  socketId.c_str(),
                  msg.c_str());
-    const auto actionList = jsonToDispatchActionList(msg);
-    for (const auto& action : actionList.actions) {
+    auto actionList = jsonToDispatchActionList(msg);
+    for (auto& action : actionList.actions) {
+      action.socketId = socketId;
       serverDispatchProcessor.enqueue(actionList.clientId, action);
     }
   });
@@ -130,8 +144,6 @@ void ServerDispatchProcessor::addHandler(
                              dispatchActionToString(type) + " already exists!");
   }
 
-  // logger::debug("SRV add handler for %s",
-  // dispatchActionToString(type).c_str());
   handlers[type] = handler;
 }
 
@@ -145,6 +157,16 @@ void logServerDispatchAssertionError(DispatchActionType type,
 }
 
 namespace helpers {
+
+ClientId socketIdToClientId(const std::string& socketId) {
+  auto& state = ServerContext::get().getState();
+  for (auto& it : state.clients) {
+    if (it.socketId == socketId) {
+      return it.clientId;
+    }
+  }
+  return ClientId::PLAYER_NONE;
+}
 
 unsigned int clientIdToIndex(ClientId clientId) {
   if (clientId == ClientId::PLAYER1) {
@@ -168,6 +190,17 @@ void setConnected(ClientId clientId,
                   const std::string& playerName) {
   const ResultAction action{clientId,
                             ResultActionType::NET_PLAYER_CONNECTED,
+                            json(payloads::PayloadEstablishConnection{
+                                clientId, playerId, playerName})};
+
+  ServerContext::get().getServerResult().enqueue(action);
+}
+
+void setDisconnected(ClientId clientId,
+                     const std::string& playerId,
+                     const std::string& playerName) {
+  const ResultAction action{clientId,
+                            ResultActionType::NET_PLAYER_DISCONNECTED,
                             json(payloads::PayloadEstablishConnection{
                                 clientId, playerId, playerName})};
 
