@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "actions.h"
 
 namespace snw {
 

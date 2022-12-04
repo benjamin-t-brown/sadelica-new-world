@@ -24,6 +24,7 @@ pacman -S mingw64/mingw-w64-x86_64-SDL2 mingw64/mingw-w64-x86_64-SDL2_image ming
 # don't worry about the command and remove this argument from the compile commands.
 # But seriously, as of the early parts of this project, my link time went from ~5s to ~200ms
 # on a ryzen9 4900HS.
+# see https://lld.llvm.org/
 pacman -S mingw64/mingw-w64-x86_64-lld
 ```
 

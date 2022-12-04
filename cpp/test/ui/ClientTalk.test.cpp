@@ -34,6 +34,29 @@ protected:
   void SetUp() override { Logger::disabled = !loggingEnabled; }
   void TearDown() override {}
 
+  void handshakeConnection(SDL2Wrapper::Window& window, ui::Ui& uiInstance) {
+    dispatch::establishConnection(utils::getRandomId());
+    SDL2Wrapper::Gauge connectionGauge = SDL2Wrapper::Gauge(3000);
+    // wait for connection
+    window.startRenderLoop([&]() {
+      bool looping = true;
+      ui::renderFrame(window, uiInstance, true, [&]() {
+        snw::state::getCliContext().update();
+        renderPreConnectionScreen(uiInstance);
+        connectionGauge.fill(window.getDeltaTime());
+        if (connectionGauge.isFull()) {
+          looping = false;
+        }
+      });
+
+      if (snw::state::getCliState().client.isConnected) {
+        looping = false;
+      }
+
+      return looping;
+    });
+  }
+
   void renderPreConnectionScreen(ui::Ui& ui) {
     const ImGuiWindowFlags windowFlags =
         ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar |
@@ -47,7 +70,7 @@ protected:
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-    ImGui::Begin("Talk", NULL, windowFlags);
+    ImGui::Begin("ui", NULL, windowFlags);
 
     auto outerWindowSize = ImGui::GetWindowSize();
     const float width = outerWindowSize.x;
@@ -64,6 +87,67 @@ protected:
 
     ImGui::SetCursorPos(ImVec2(0, height / 2));
     ui::elements::TextCentered("Connecting...");
+
+    ImGui::End();
+    ImGui::PopStyleVar(3);
+    ImGui::PopFont();
+  }
+
+  void renderDialogChoiceScreen(ui::Ui& ui) {
+    const ImGuiWindowFlags windowFlags =
+        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar |
+        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize |
+        ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoBringToFrontOnFocus;
+
+    ui::prepareFullScreenWindow();
+    const ImGuiIO& io = ImGui::GetIO();
+
+    ImGui::PushFont(ui.getFont("Chicago20"));
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+    ImGui::Begin("ui", NULL, windowFlags);
+
+    auto outerWindowSize = ImGui::GetWindowSize();
+    const float width = outerWindowSize.x;
+    const float height = outerWindowSize.y;
+
+    static auto rectangle =
+        SDL2Wrapper::Window::getGlobalWindow().getStaticColorTexture(
+            static_cast<int>(width),
+            static_cast<int>(height),
+            ui::imVec4ToSDL2WrapperColor(ui.colors.DARK_GREY));
+
+    ImGui::SetCursorPos(ImVec2(0, 0));
+    ImGui::Image(rectangle, ImVec2(width, height));
+
+    const float spacing = 8.f;
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding,
+                        ImVec2(spacing / 2.f, spacing / 2.f));
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing,
+                        ImVec2(spacing / 2.f, spacing / 2.f));
+
+    ImGui::SetCursorPos(ImVec2(0, height * 0.1f));
+    ui::elements::TextCentered("Select Option");
+
+    ImGui::SetCursorPos(ImVec2(spacing / 2.f, height * 0.2f));
+    const std::vector<std::string> fileNames = {"main", "CPP_Test"};
+    for (const std::string& fileName : fileNames) {
+      ImGui::SetCursorPosX(spacing / 2.f);
+      ui::elements::ButtonProps p;
+      const std::string label = fileName;
+      p.label = label;
+      p.textColor = ui.colors.WHITE;
+      p.bgColor = ui.colors.DARK_CYAN;
+      p.bgColorActive = ui.colors.DARK_GREY;
+      p.bgColorHover = ui.colors.BLACK;
+      p.size = ImVec2(width - spacing, 24.f);
+      p.onClick = [&]() { snw::state::dispatch::startTalk(fileName); };
+      ui::elements::Button(p);
+      ImGui::Spacing();
+    }
+
+    ImGui::PopStyleVar(2);
 
     ImGui::End();
     ImGui::PopStyleVar(3);
@@ -89,29 +173,8 @@ TEST_F(ClientTalkTest, CanDisplayAConversation) {
   // this blocks execution until UDP socket is established.
   snw::state::ClientContext::init();
 
-  dispatch::establishConnection(utils::getRandomId());
   logger::info("Socket connection created, initiating handshake...");
-
-  SDL2Wrapper::Gauge connectionGauge = SDL2Wrapper::Gauge(3000);
-
-  // wait for connection
-  window.startRenderLoop([&]() {
-    bool looping = true;
-    ui::renderFrame(window, uiInstance, true, [&]() {
-      snw::state::getCliContext().update();
-      renderPreConnectionScreen(uiInstance);
-      connectionGauge.fill(window.getDeltaTime());
-      if (connectionGauge.isFull()) {
-        looping = false;
-      }
-    });
-
-    if (snw::state::getCliState().client.isConnected) {
-      looping = false;
-    }
-
-    return looping;
-  });
+  handshakeConnection(window, uiInstance);
 
   if (!snw::state::getCliState().client.isConnected) {
     logger::error("Could not establish connection to server.");
@@ -124,8 +187,15 @@ TEST_F(ClientTalkTest, CanDisplayAConversation) {
     window.startRenderLoop([&]() {
       bool looping = true;
 
-      ui::renderFrame(
-          window, uiInstance, false, [&]() { ClientContext::get().update(); });
+      ui::renderFrame(window, uiInstance, false, [&]() {
+        ClientContext::get().update();
+        if (helpers::isSectionVisible(getCliState(),
+                                      SectionType::CONVERSATION)) {
+          renderTalkCmpt(uiInstance);
+        } else {
+          renderDialogChoiceScreen(uiInstance);
+        }
+      });
 
       if (!snw::state::getCliState().client.isConnected) {
         looping = false;

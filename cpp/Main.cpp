@@ -48,10 +48,10 @@ int main(int argc, char* argv[]) {
       try {
         SDL2Wrapper::Window window;
 
-        window.startRenderLoop([&]() {
+        window.startTimedLoop([&]() {
           snw::state::ServerContext::get().update();
           return true;
-        });
+        }, 16);
 
         logger::info("Program End.");
       } catch (const std::string& e) {

@@ -58,6 +58,34 @@ TEST_F(ServerStateTest, ProperlyHandlesConnectionRequests) {
   EXPECT_NE(getCliState().client.playerId, "");
 }
 
+TEST_F(ServerStateTest, CanHandleReconnection) {
+  auto update = []() {
+    ClientContext::get().update();
+    ServerContext::get().update();
+    ClientContext::get().update();
+    ServerContext::get().update();
+    ClientContext::get().update();
+    ServerContext::get().update();
+  };
+
+  dispatch::establishConnection("testPlayer1");
+  update();
+  EXPECT_TRUE(getSrvState().clients[0].isConnected);
+  EXPECT_TRUE(getCliState().client.isConnected);
+  EXPECT_EQ(getCliState().client.clientId, ClientId::PLAYER1);
+
+  dispatch::unEstablishConnection();
+  update();
+  EXPECT_FALSE(getSrvState().clients[0].isConnected);
+  EXPECT_FALSE(getCliState().client.isConnected);
+
+  dispatch::establishConnection("testPlayer1");
+  update();
+  EXPECT_TRUE(getSrvState().clients[0].isConnected);
+  EXPECT_TRUE(getCliState().client.isConnected);
+  EXPECT_EQ(getCliState().client.clientId, ClientId::PLAYER1);
+}
+
 TEST_F(ServerStateTest, ProperlySendsTalkMessagesToServer) {
   // a startTalk should update the server state to indicate who is talking
   dispatch::startTalk("main1");

@@ -49,7 +49,7 @@ net::Server& ServerContext::getNetServer() { return netServer; }
 void ServerContext::update() {
   netServer.update([&](const std::string& socketId, const std::string& msg) {
     if (msg.size() == 0) {
-      logger::error("SRV reports that socketId=%s is disconnected.",
+      logger::info("SRV reports that socketId=%s is disconnected.",
                     socketId.c_str());
       DispatchAction disconnectAction;
       disconnectAction.type = DispatchActionType::NET_DISCONNECT;
@@ -61,7 +61,7 @@ void ServerContext::update() {
       return;
     }
 
-    logger::info("SRV Recvd message from client (socketId=%s): %s",
+    logger::debug("SRV Recvd message from client (socketId=%s): %s",
                  socketId.c_str(),
                  msg.c_str());
     auto actionList = jsonToDispatchActionList(msg);

@@ -19,7 +19,6 @@ void initConnectionLoopbackHandlers(ClientLoopbackProcessor& p) {
       [](ClientState& state, const DispatchAction& it) {
         auto& j = it.jsonPayload;
         auto args = j.get<payloads::PayloadEstablishConnection>();
-        logger::info("setting net connect action on loopback");
 
         state.client.isConnected = false;
         state.client.playerId = args.playerId;
@@ -33,7 +32,6 @@ void initConnectionLoopbackHandlers(ClientLoopbackProcessor& p) {
       [](ClientState& state, const DispatchAction& it) {
         auto& j = it.jsonPayload;
         auto args = j.get<payloads::PayloadEstablishConnection>();
-        logger::info("setting net disconnect action on loopback");
 
         state.client.isConnected = false;
         state.client.playerId = args.playerId;
