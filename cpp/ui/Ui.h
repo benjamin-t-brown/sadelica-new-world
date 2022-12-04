@@ -31,10 +31,15 @@ using namespace ImGui;
 #define COLOR_BROWN ImColor(122, 68, 74, 255);
 
 namespace ui {
-void textCentered(const std::string& text);
+class Ui;
+
 ImVec2 getBoxBasedOnScreenPct(const float pctWidth, const float pctHeight);
 void prepareFullScreenWindow();
 bool isKeyPressed(ImGuiKey key);
+void renderFrame(SDL2Wrapper::Window& window,
+                 ui::Ui& uiInstance,
+                 bool renderSdl,
+                 std::function<void()> cb);
 
 SDL2Wrapper::Color imVec4ToSDL2WrapperColor(const ImVec4& c);
 

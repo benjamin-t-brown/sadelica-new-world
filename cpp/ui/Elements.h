@@ -18,6 +18,7 @@ struct ButtonProps {
   std::vector<ImGuiKey> keyboardShortcuts = {};
 };
 void Button(const ButtonProps& props);
+void TextCentered(const std::string& text);
 
 } // namespace elements
 } // namespace ui

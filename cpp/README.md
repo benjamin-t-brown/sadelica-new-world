@@ -5,23 +5,36 @@
 `make test` builds everything+tests and runs all tests
 `make test <test regex>` builds everything+tests and then runs tests with the provided regex
 
+There are other make commands.  Look at the makefile to see what they do.
+
 # Installation: Windows
 
-Requires MSYS2, (MINGW64 or UCRT64).  Instructions based on https://www.devdungeon.com/content/install-gcc-compiler-windows-msys2-cc
+This project was primarily developed on Windows.  It should work on other systems though.
+
+Requires MSYS2, (MINGW64 or UCRT64).  For Mingw use the following:
 
 ```
 pacman -S base-devel vim cmake git python2
 pacman -S mingw64/mingw-w64-x86_64-gcc
 pacman -S mingw64/mingw-w64-x86_64-SDL2 mingw64/mingw-w64-x86_64-SDL2_image mingw64/mingw-w64-x86_64-SDL2_mixer mingw64/mingw-w64-x86_64-SDL2_ttf
+# For some reason this isn't common knowledge (on google)? but the lld linker is insanely
+# fast compared to the standard one installed with gcc.
+# The following command installs this faster linker, and to use it, the makefile
+# specifies '-fuse-ld=lld'.  If for whatever reason this doesn't work for you, then
+# don't worry about the command and remove this argument from the compile commands.
+# But seriously, as of the early parts of this project, my link time went from ~5s to ~200ms
+# on a ryzen9 4900HS.
+pacman -S mingw64/mingw-w64-x86_64-lld
 ```
 
-enet for server/client
+enet for server/client.  Technically optional, you can compile without this, but it's not
+that big and recommended.
 
 ```
 pacman -S mingw64/mingw-w64-x86_64-enet
 ```
 
-Gtest for testing
+Gtest for testing.
 
 ```
 pacman -S mingw64/mingw-w64-x86_64-gtest
@@ -32,9 +45,10 @@ Clang for formatting/linting
 ```
 pacman -S mingw-w64-x86_64-clang
 pacman -S mingw-w64-x86_64-clang-tools-extra
+pacman -S mingw-w64-x86_64-include-what-you-use
 ```
 
-_optional_ Python2 For some lib dependencies
+_very optional_ Python2 For some lib dependencies
 
 ```
 pacman -S mingw64/mingw-w64-x86_64-python2-pip mingw64/mingw-w64-x86_64-python2
@@ -42,10 +56,15 @@ pacman -S mingw64/mingw-w64-x86_64-python2-pip mingw64/mingw-w64-x86_64-python2
 
 ## Using ucrt64 instead of mingw64
 
+UCRT links the executable under the Universal C Run Time instead of the old Microsoft one
+that mingw uses.  It's not really that different; there are some compatibility concerns,
+but it's included here for some completeness since UCRT seems to be better for future concerns.
+
 ```
 pacman -S base-devel vim cmake git
 pacman -S ucrt64/mingw-w64-ucrt-x86_64-gcc ucrt64/mingw-w64-ucrt-x86_64-gdb
 pacman -S ucrt64/mingw-w64-ucrt-x86_64-SDL2  ucrt64/mingw-w64-ucrt-x86_64-SDL2_image ucrt64/mingw-w64-ucrt-x86_64-SDL2_mixer ucrt64/mingw-w64-ucrt-x86_64-SDL2_ttf
+pacman -S ucrt64/mingw-w64-ucrt-x86_64-lld
 ```
 
 enet
@@ -65,6 +84,7 @@ Clang for formatting/linting
 ```
 pacman -S ucrt64/mingw-w64-ucrt-x86_64-clang
 pacman -S ucrt64/mingw-w64-ucrt-x86_64-clang-tools-extra
+pacman -S ucrt64/mingw-w64-ucrt-x86_64-include-what-you-use
 ```
 
 _optional_ Python2 For some lib dependencies
@@ -75,6 +95,8 @@ pacman -S ucrt64/mingw-w64-ucrt-x86_64-python2-pip ucrt64/mingw-w64-ucrt-x86_64-
 
 # Installation Ubuntu:
 
+WARNING this section is incomplete.
+
 Install build env (if you don't have these already for some reason):
 
 ```
@@ -84,7 +106,7 @@ sudo apt install make cmake zip unzip
 ```
 
 The version of SDL2 on ubuntu is too old to work with imgui sdl impl, so you need to install
-it manually
+it manually.
 
 ```
 sudo apt install cmake
@@ -150,9 +172,3 @@ cp duktape-src/duktape.c ../duktape.cpp
 cp duktape-src/duk_source_meta.json ../
 ```
 
-fmt
-
-```
-cd fmt/fmt-9.0.0
-cp -r include/fmt/* ../
-```

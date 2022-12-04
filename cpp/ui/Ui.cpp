@@ -18,12 +18,31 @@ void setupWindow(SDL2Wrapper::Window& window) {
 }
 
 void setupImgui(SDL2Wrapper::Window& window) {
-  auto renderer = &window.getRenderer();
-  auto sdlWindow = &window.getSDLWindow();
+  auto renderer = window.getRenderer();
+  auto sdlWindow = window.getSDLWindow();
   ImGui::CreateContext();
   ImGui_ImplSDL2_InitForSDLRenderer(sdlWindow, renderer);
   ImGui_ImplSDLRenderer_Init(renderer);
   ImGui::StyleColorsDark();
+}
+
+void renderFrame(SDL2Wrapper::Window& window,
+                 ui::Ui& uiInstance,
+                 bool renderSdl,
+                 std::function<void()> cb) {
+  ImGui_ImplSDLRenderer_NewFrame();
+  ImGui_ImplSDL2_NewFrame();
+  ImGui::NewFrame();
+  ImGui::PushFont(uiInstance.getFont("Chicago20"));
+  window.setBackgroundColor(window.makeColor(10, 10, 10));
+  window.setCurrentFont("Chicago", 20);
+  cb();
+  ImGui::PopFont();
+  ImGui::Render();
+  ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
+  if (renderSdl) {
+    SDL_RenderPresent(window.getRenderer());
+  }
 }
 
 Ui::Ui() {}
@@ -68,13 +87,6 @@ SDL2Wrapper::Color imVec4ToSDL2WrapperColor(const ImVec4& c) {
                             static_cast<uint8_t>(c.w * 255.)};
 }
 
-void textCentered(const std::string& text) {
-  auto windowWidth = ImGui::GetWindowSize().x;
-  auto textWidth = ImGui::CalcTextSize(text.c_str()).x;
-
-  ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
-  ImGui::Text("%s", text.c_str());
-}
 ImVec2 getBoxBasedOnScreenPct(const float pctWidth, const float pctHeight) {
   auto outerWindowSize = ImGui::GetWindowSize();
   auto width = outerWindowSize.x * pctWidth;

@@ -1,4 +1,10 @@
 #include "utils.h"
+#include "lib/imgui/imgui.h"
+#include "lib/imgui/imgui_impl_sdl.h"
+#include "lib/imgui/imgui_impl_sdlrenderer.h"
+#include "lib/sdl2wrapper/Window.h"
+#include "ui/Ui.h"
+#include <SDL2/SDL.h>
 #include <algorithm>
 #include <sstream>
 #include <vector>

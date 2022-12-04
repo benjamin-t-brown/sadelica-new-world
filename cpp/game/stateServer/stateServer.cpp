@@ -7,6 +7,10 @@
 #include "lib/net/config.h"
 #include "logger.h"
 
+#ifndef SNW_PORT
+#define SNW_PORT 7777
+#endif
+
 using json = nlohmann::json;
 using ResultActionType = snw::state::ResultActionType;
 using ActionCl = snw::state::ActionCl;
@@ -14,7 +18,7 @@ using ActionCl = snw::state::ActionCl;
 namespace snw {
 namespace state {
 
-constexpr int LISTEN_PORT = 7777;
+constexpr int DEFAULT_LISTEN_PORT = SNW_PORT;
 
 ServerContext ServerContext::globalServerContext;
 
@@ -23,8 +27,8 @@ void ServerContext::init() {
   if (net::Config::mockEnabled) {
     logger::info("SRV using mock net.");
   }
-  ServerContext::get().getNetServer().listen(LISTEN_PORT);
-  logger::info("SRV now listening on port %i", LISTEN_PORT);
+  ServerContext::get().getNetServer().listen(DEFAULT_LISTEN_PORT);
+  logger::info("SRV now listening on port %i", DEFAULT_LISTEN_PORT);
 }
 
 ServerContext& ServerContext::get() { return globalServerContext; }

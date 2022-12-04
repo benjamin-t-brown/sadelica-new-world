@@ -14,11 +14,15 @@ using json = nlohmann::json;
 using DispatchActionType = snw::state::DispatchActionType;
 using ActionCl = snw::state::ActionCl;
 
+#ifndef SNW_PORT
+#define SNW_PORT 7777
+#endif
+
 namespace snw {
 namespace state {
 
-constexpr int CONNECT_PORT = 7777;
-constexpr char* CONNECT_URL = "127.0.0.1";
+constexpr int DEFAULT_CONNECT_PORT = SNW_PORT;
+constexpr char* DEFAULT_CONNECT_URL = "127.0.0.1";
 
 ClientContext ClientContext::globalClientContext = ClientContext();
 
@@ -31,9 +35,11 @@ void ClientContext::init() {
   if (net::Config::mockEnabled) {
     logger::info("CLI using mock net.");
   }
-  logger::info("CLI attempting to connect to %s:%i", CONNECT_URL, CONNECT_PORT);
-  bool c =
-      ClientContext::get().getNetClient().connect(CONNECT_URL, CONNECT_PORT);
+  logger::info("CLI attempting to connect to %s:%i",
+               DEFAULT_CONNECT_URL,
+               DEFAULT_CONNECT_PORT);
+  bool c = ClientContext::get().getNetClient().connect(DEFAULT_CONNECT_URL,
+                                                       DEFAULT_CONNECT_PORT);
   if (c) {
     logger::info("CLI now connected.");
   } else {

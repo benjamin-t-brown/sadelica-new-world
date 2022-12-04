@@ -160,7 +160,7 @@ else
 endif
 LIBS_TEST=-lpthread -lgtest
 
-FLAGS=-O0 -g -Wall -std=c++17 -DNET_ENABLE_ENET -I$(WORKING_DIR)
+FLAGS=-O0 -g -Wall -std=c++17 -DNET_ENABLE_ENET -DSNW_PORT=9831 -fuse-ld=lld -I$(WORKING_DIR)
 # FLAGS=-O0 -g -Wall -std=c++17 -I$(WORKING_DIR)
 
 .PHONY: $(EXE) test includes main2

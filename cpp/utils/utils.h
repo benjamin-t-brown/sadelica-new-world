@@ -1,7 +1,16 @@
 #pragma once
 
+#include <functional>
 #include <string>
 #include <vector>
+
+namespace SDL2Wrapper {
+class Window;
+}
+
+namespace ui {
+class Ui;
+}
 
 namespace utils {
 

@@ -24,7 +24,8 @@ void enableSound() {
   int volumePct = SDL2Wrapper::Window::soundPercent;
   Mix_VolumeMusic((double(volumePct) / 100.0) * double(MIX_MAX_VOLUME));
   Mix_Volume(-1, (double(volumePct) / 100.0) * double(MIX_MAX_VOLUME));
-  SDL2Wrapper::Logger().get(SDL2Wrapper::DEBUG) << "Enable sound" << Logger::endl;
+  SDL2Wrapper::Logger().get(SDL2Wrapper::DEBUG)
+      << "Enable sound" << Logger::endl;
 }
 EMSCRIPTEN_KEEPALIVE
 void disableSound() {
@@ -32,7 +33,8 @@ void disableSound() {
 
   Mix_VolumeMusic(0);
   Mix_Volume(-1, 0);
-  SDL2Wrapper::Logger().get(SDL2Wrapper::DEBUG) << "Disable sound" << Logger::endl;
+  SDL2Wrapper::Logger().get(SDL2Wrapper::DEBUG)
+      << "Disable sound" << Logger::endl;
 }
 EMSCRIPTEN_KEEPALIVE
 void setVolume(int volumePct) {
@@ -229,7 +231,7 @@ void Window::createWindow(const std::string& title,
   if (!soundForcedDisabled) {
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
       Logger().get(ERROR) << "SDL_mixer could not initialize! "
-                    << std::string(Mix_GetError()) << Logger::endl;
+                          << std::string(Mix_GetError()) << Logger::endl;
       soundForcedDisabled = true;
       Window::soundCanBeLoaded = false;
     }
@@ -270,9 +272,9 @@ void Window::createWindow(const std::string& title,
 
 Events& Window::getEvents() { return events; }
 
-SDL_Renderer& Window::getRenderer() { return *renderer; }
+SDL_Renderer* Window::getRenderer() { return renderer.get(); }
 
-SDL_Window& Window::getSDLWindow() { return *window; }
+SDL_Window* Window::getSDLWindow() { return window.get(); }
 
 void Window::setBackgroundColor(const SDL_Color& color) {
   SDL_SetRenderDrawColor(renderer.get(), color.r, color.g, color.b, color.a);
@@ -328,7 +330,7 @@ void Window::playSound(const std::string& name) {
   const int channel = Mix_PlayChannel(-1, sound, 0);
   if (channel == -1) {
     Logger().get(WARN) << "Unable to play sound in channel.  sound=" << name
-                 << " err=" << SDL_GetError() << Logger::endl;
+                       << " err=" << SDL_GetError() << Logger::endl;
     return;
   }
   Mix_Volume(channel,

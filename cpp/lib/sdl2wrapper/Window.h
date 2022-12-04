@@ -86,8 +86,8 @@ public:
   static void uninitSDL();
 
   Events& getEvents();
-  SDL_Renderer& getRenderer();
-  SDL_Window& getSDLWindow();
+  SDL_Renderer* getRenderer();
+  SDL_Window* getSDLWindow();
   void setCurrentFont(const std::string& fontName, const int sz);
   const std::string& getCurrentFontName() const;
   int getCurrentFontSize() const;
