@@ -143,7 +143,8 @@ http_server.get('compile', (obj, resp) => {
             .toString();
         }
         execAsync(
-          `cd ${COMPILER_DIR}/../ && babel ${COMPILER_OUT}/${obj.event_args[0]}.compiled.${extension} --out-file ${COMPILER_OUT}/${obj.event_args[0]}.compiled.es5.${extension} --source-type script --presets @babel/preset-env --plugins remove-use-strict`
+          'ls'
+          //`cd ${COMPILER_DIR}/../ && babel ${COMPILER_OUT}/${obj.event_args[0]}.compiled.${extension} --out-file ${COMPILER_OUT}/${obj.event_args[0]}.compiled.es5.${extension} --source-type script --presets @babel/preset-env --plugins remove-use-strict`
         ).then(() => {
           console.log('single file babeled');
           http_server.reply(resp, {
