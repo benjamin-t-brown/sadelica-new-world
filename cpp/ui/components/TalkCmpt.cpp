@@ -20,7 +20,7 @@ constexpr double TALK_CMPT_TEXT_AREA_HEIGHT_PCT_VERT =
      TALK_CMPT_NAMEPLATE_HEIGHT_PCT_VERT - TALK_CMPT_FOOTER_HEIGHT_PCT_VERT);
 // there's a delay of this number of frames before the scrollbar scrolls.  Need
 // this or it flickers dumbly
-constexpr double TALK_CMPT_TEXT_SCROLL_DELAY = 8;
+constexpr double TALK_CMPT_TEXT_SCROLL_DELAY = 2;
 
 // padding between the text and the sides of the screen
 constexpr float TALK_CMPT_TEXT_HORIZ_SPACING = 16;

@@ -19,6 +19,7 @@ void Timer::restart() {
   aggTime = 0.0;
   removeFlag = false;
 }
+double Timer::getMs() const { return maxTime; }
 void Timer::remove() { removeFlag = true; }
 void Timer::update(double dt) {
   if (!removeFlag) {

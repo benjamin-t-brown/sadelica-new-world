@@ -5,8 +5,9 @@
 #include <vector>
 
 namespace SDL2Wrapper {
+
 class Window;
-}
+} // namespace SDL2Wrapper
 
 namespace ui {
 class Ui;

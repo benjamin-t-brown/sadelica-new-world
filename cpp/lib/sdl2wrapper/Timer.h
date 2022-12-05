@@ -14,6 +14,7 @@ public:
   Timer(int maxFrames);
   double getPctComplete() const;
   void restart();
+  double getMs() const;
   virtual bool shouldRemove() const;
   virtual void remove();
   virtual void update(double dt);

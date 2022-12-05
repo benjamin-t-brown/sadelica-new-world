@@ -31,10 +31,12 @@ lib/sdl2wrapper/Store.cpp\
 lib/sdl2wrapper/Window.cpp\
 lib/sdl2wrapper/Timer.cpp\
 lib/sdl2wrapper/Gauge.cpp\
+lib/sdl2wrapper/Transform.cpp\
 lib/sdl2wrapper/Logger.cpp\
 lib/duktape/duktape.cpp\
 lib/net/client.cpp\
 lib/net/server.cpp\
+lib/tiled/tiled.cpp\
 game/in2/in2.cpp\
 game/actions.cpp\
 utils/utils.cpp
@@ -46,7 +48,8 @@ test/in2/In2.test.cpp\
 test/Logger.test.cpp\
 test/state/ClientState.test.cpp\
 test/state/ServerState.test.cpp\
-test/net/NetMock.test.cpp
+test/net/NetMock.test.cpp\
+test/tiled/Tiled.test.cpp
 
 TEST_CODE_UI=\
 test/test.cpp\

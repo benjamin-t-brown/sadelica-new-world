@@ -135,12 +135,11 @@ protected:
     for (const std::string& fileName : fileNames) {
       ImGui::SetCursorPosX(spacing / 2.f);
       ui::elements::ButtonProps p;
-      const std::string label = fileName;
-      p.label = label;
-      p.textColor = ui.colors.WHITE;
-      p.bgColor = ui.colors.DARK_CYAN;
+      p.label = fileName;
+      p.textColor = ui.colors.BLACK;
+      p.bgColor = ui.colors.LIGHT_GREY;
       p.bgColorActive = ui.colors.DARK_GREY;
-      p.bgColorHover = ui.colors.BLACK;
+      p.bgColorHover = ui.colors.GREY;
       p.size = ImVec2(width - spacing, 24.f);
       p.onClick = [&]() { snw::state::dispatch::startTalk(fileName); };
       ui::elements::Button(p);
