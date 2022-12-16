@@ -2,6 +2,7 @@
 #include "game/actions.h"
 #include "game/dispatchAction.h"
 #include "game/payloads.h"
+#include "game/stateClient/dispatch.h"
 #include "lib/json/json.h"
 #include "logger.h"
 #include "utils/utils.h"

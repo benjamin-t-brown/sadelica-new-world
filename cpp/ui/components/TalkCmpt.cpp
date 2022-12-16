@@ -1,4 +1,5 @@
 #include "TalkCmpt.h"
+#include "game/stateClient/dispatch.h"
 #include "game/stateClient/stateClient.h"
 #include "logger.h"
 #include "ui/Elements.h"

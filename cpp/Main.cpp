@@ -1,5 +1,6 @@
 #include "./logger.h"
 #include "game/in2/in2.h"
+#include "game/stateClient/dispatch.h"
 #include "game/stateClient/stateClient.h"
 #include "game/stateServer/stateServer.h"
 #include "lib/imgui/imgui.h"
@@ -48,10 +49,12 @@ int main(int argc, char* argv[]) {
       try {
         SDL2Wrapper::Window window;
 
-        window.startTimedLoop([&]() {
-          snw::state::ServerContext::get().update();
-          return true;
-        }, 16);
+        window.startTimedLoop(
+            [&]() {
+              snw::state::ServerContext::get().update();
+              return true;
+            },
+            16);
 
         logger::info("Program End.");
       } catch (const std::string& e) {

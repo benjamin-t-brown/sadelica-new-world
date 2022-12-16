@@ -1,5 +1,6 @@
 #include "game/in2/in2.h"
 #include "game/stateClient/stateClient.h"
+#include "game/stateClient/dispatch.h"
 #include "logger.h"
 #include <fstream>
 #include <gtest/gtest.h>

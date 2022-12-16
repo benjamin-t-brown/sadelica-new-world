@@ -9,6 +9,7 @@ lib/imgui/imgui_impl_sdl.cpp\
 lib/imgui/imgui_impl_sdlrenderer.cpp\
 lib/imgui/imgui.cpp\
 game/stateClient/stateClient.cpp\
+game/stateClient/dispatch.cpp\
 game/stateClient/loopbackHandlers/loopbackHandlers.cpp\
 game/stateClient/resultHandlers/resultHandlers.cpp\
 ui/Ui.cpp\

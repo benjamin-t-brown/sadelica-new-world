@@ -1,4 +1,5 @@
 #include "game/in2/in2.h"
+#include "game/stateClient/dispatch.h"
 #include "game/stateClient/stateClient.h"
 #include "game/stateServer/stateServer.h"
 #include "lib/imgui/imgui.h"
