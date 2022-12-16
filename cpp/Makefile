@@ -54,8 +54,7 @@ test/tiled/Tiled.test.cpp
 TEST_CODE_UI=\
 test/test.cpp\
 test/ui/TalkCmpt.test.cpp\
-test/ui/ClientTalk.test.cpp\
-test/ui/ServerTalk.test.cpp
+test/ui/ClientTalk.test.cpp
 
 MAIN_ALL_OBJECT=$(MAIN_ALL:.cpp=.o)
 
