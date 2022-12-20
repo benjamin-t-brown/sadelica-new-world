@@ -1,7 +1,7 @@
 #include "../stateServer.h"
 #include "dispatchHandlers.h"
-#include "game/dispatchAction.h"
-#include "game/payloads.h"
+#include "game/state/actions/dispatchAction.h"
+#include "game/state/actions/payloads.h"
 #include "lib/json/json.h"
 #include "logger.h"
 

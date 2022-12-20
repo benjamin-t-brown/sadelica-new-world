@@ -1,8 +1,9 @@
 #include "../stateClient.h"
-#include "game/actions.h"
-#include "game/dispatchAction.h"
-#include "game/payloads.h"
-#include "game/stateClient/dispatch.h"
+#include "../stateClientContext.h"
+#include "game/state/actions/actions.h"
+#include "game/state/actions/dispatchAction.h"
+#include "game/state/actions/payloads.h"
+#include "game/state/stateClient/dispatch.h"
 #include "lib/json/json.h"
 #include "logger.h"
 #include "utils/utils.h"
@@ -18,7 +19,7 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
       DispatchActionType::TALK_START,
       //
       [](ClientState& state, const DispatchAction& it) {
-        auto& in2Ctx = getCliContext().getIn2Ctx();
+        auto& in2Ctx = snw::state::ClientContext::get().getIn2Ctx();
 
         if (in2Ctx.isExecutionActive()) {
           logLoopbackDispatchAssertionError(DispatchActionType::TALK_START,
@@ -51,7 +52,7 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
       DispatchActionType::TALK_CONTINUE,
       //
       [](ClientState& state, const DispatchAction& it) {
-        auto& in2Ctx = getCliContext().getIn2Ctx();
+        auto& in2Ctx = snw::state::ClientContext::get().getIn2Ctx();
 
         if (!in2Ctx.isExecutionActive()) {
           logLoopbackDispatchAssertionError(DispatchActionType::TALK_CONTINUE,
@@ -72,7 +73,7 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
       DispatchActionType::TALK_SELECT_CHOICE,
       //
       [](ClientState& state, const DispatchAction& it) {
-        auto& in2Ctx = getCliContext().getIn2Ctx();
+        auto& in2Ctx = snw::state::ClientContext::get().getIn2Ctx();
 
         if (!in2Ctx.isExecutionActive()) {
           logLoopbackDispatchAssertionError(
@@ -112,7 +113,7 @@ void initIn2Handlers(ClientLoopbackProcessor& p) {
       DispatchActionType::TALK_END,
       //
       [](ClientState& state, const DispatchAction& it) {
-        auto& in2Ctx = getCliContext().getIn2Ctx();
+        auto& in2Ctx = snw::state::ClientContext::get().getIn2Ctx();
 
         if (!in2Ctx.isExecutionActive()) {
           logLoopbackDispatchAssertionError(DispatchActionType::TALK_END,

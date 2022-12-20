@@ -1,12 +1,14 @@
-#include "stateClient.h"
+#include "./stateClientContext.h"
 #include "./loopbackHandlers/loopbackHandlers.h"
 #include "./resultHandlers/resultHandlers.h"
-#include "game/dispatchAction.h"
-#include "game/payloads.h"
-#include "game/resultAction.h"
+#include "game/state/actions/dispatchAction.h"
+#include "game/state/actions/payloads.h"
+#include "game/state/actions/resultAction.h"
+#include "game/state/state.h"
 #include "lib/json/json.h"
 #include "lib/net/config.h"
 #include "logger.h"
+#include "stateClient.h"
 #include "utils/utils.h"
 #include <algorithm>
 
@@ -91,10 +93,9 @@ void ClientContext::update() {
   clientResultProcessor.reset();
 }
 
-ClientContext& getCliContext() { return ClientContext::get(); }
-const ClientState& getCliState() { return ClientContext::get().getState(); }
-
-const ClientId getClientId() { return getCliState().client.clientId; }
+// ClientContext& getCliContext() { return ClientContext::get(); }
+// const ClientState& getClientState() { return ClientContext::get().getState();
+// } const ClientId getClientId() { return getClientState().client.clientId; }
 
 void ClientDispatch::enqueue(const DispatchAction& action) {
   actionsToCommit.push_back(action);
@@ -122,10 +123,10 @@ void ClientDispatch::dispatch() {
   }
 
   if (serverPayload.size() > 0) {
-    const json message = {{"id", getCliState().client.clientId},
+    const json message = {{"id", getClientState().client.clientId},
                           {"payload", serverPayload}};
     logger::debug("Sending to server: %s", message.dump().c_str());
-    getCliContext().getNetClient().send(message.dump());
+    snw::state::ClientContext::get().getNetClient().send(message.dump());
   }
 }
 
@@ -272,7 +273,7 @@ void removeSection(ClientState& state, SectionType type) {
 // After the in2 state executes to it's next waiting period, some stuff
 // on the state needs to be set up.  This function sets all that up.
 void setIn2StateAfterExecution(ClientState& state) {
-  auto& in2Ctx = getCliContext().getIn2Ctx();
+  auto& in2Ctx = snw::state::ClientContext::get().getIn2Ctx();
   state.in2.conversationText = utils::join(in2Ctx.getLines(), "\n\n");
   if (in2Ctx.waitingForChoice) {
     auto& choices = in2Ctx.getChoices();

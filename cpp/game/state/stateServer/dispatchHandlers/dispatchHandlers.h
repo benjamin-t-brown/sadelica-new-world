@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../stateClient.h"
+#include "../stateServerContext.h"
 
 namespace snw {
 namespace state {
 
-void initLoopbackHandlers(ClientLoopbackProcessor& p);
+void initDispatchHandlers(ServerDispatchProcessor& p);
 
 } // namespace state
 } // namespace snw

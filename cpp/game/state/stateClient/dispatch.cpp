@@ -1,7 +1,9 @@
-#include "game/actions.h"
-#include "game/dispatchAction.h"
-#include "game/payloads.h"
-#include "game/stateClient/stateClient.h"
+#include "game/state/actions/actions.h"
+#include "game/state/actions/dispatchAction.h"
+#include "game/state/actions/payloads.h"
+#include "game/state/state.h"
+#include "game/state/stateClient/stateClient.h"
+#include "game/state/stateClient/stateClientContext.h"
 #include "lib/json/json.h"
 #include "utils/utils.h"
 
@@ -22,11 +24,12 @@ void establishConnection(const std::string& playerName) {
 }
 
 void unEstablishConnection() {
-  const DispatchAction action{
-      ActionCl::BOTH,
-      DispatchActionType::NET_DISCONNECT,
-      json(payloads::PayloadEstablishConnection{
-          0, getCliState().client.playerId, getCliState().client.playerName})};
+  const DispatchAction action{ActionCl::BOTH,
+                              DispatchActionType::NET_DISCONNECT,
+                              json(payloads::PayloadEstablishConnection{
+                                  0,
+                                  getClientState().client.playerId,
+                                  getClientState().client.playerName})};
   ClientContext::get().getDispatch().enqueue(action);
 }
 

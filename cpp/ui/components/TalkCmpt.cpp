@@ -1,6 +1,6 @@
 #include "TalkCmpt.h"
-#include "game/stateClient/dispatch.h"
-#include "game/stateClient/stateClient.h"
+#include "game/state/state.h"
+#include "game/state/stateClient/dispatch.h"
 #include "logger.h"
 #include "ui/Elements.h"
 #include "ui/Ui.h"
@@ -25,8 +25,6 @@ constexpr double TALK_CMPT_TEXT_SCROLL_DELAY = 2;
 
 // padding between the text and the sides of the screen
 constexpr float TALK_CMPT_TEXT_HORIZ_SPACING = 16;
-
-using ClientContext = snw::state::ClientContext;
 
 namespace ui_TalkCmpt {}
 using namespace ui;
@@ -132,7 +130,7 @@ void renderTextArea(Ui& ui) {
   ImGui::SetCursorPosX(spacing);
   ImGui::BeginChild("in2_TextArea", ImVec2(width, height), false);
 
-  auto& state = ClientContext::get().getState();
+  auto& state = snw::state::getClientState();
   const std::string& text = state.in2.conversationText;
 
   // if (state.in2.in2Ctx == nullptr || state.in2.in2Ctx->isExecutionErrored) {
@@ -175,7 +173,7 @@ void renderTextArea(Ui& ui) {
       ImGui::PushID(ctr);
       std::stringstream ss;
 
-      if (ClientContext::get().getIn2Ctx().hasChosenChoice(ctr - 1)) {
+      if (snw::state::getIn2Ctx().hasChosenChoice(ctr - 1)) {
         ImGui::PushStyleColor(ImGuiCol_Button, ui.colors.DARK_CYAN);
         ImGui::PushStyleColor(ImGuiCol_Text, ui.colors.WHITE);
         ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ui.colors.BLACK);

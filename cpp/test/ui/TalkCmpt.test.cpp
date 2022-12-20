@@ -1,7 +1,10 @@
+#include "ui/components/TalkCmpt.h"
 #include "game/in2/in2.h"
-#include "game/stateClient/dispatch.h"
-#include "game/stateClient/stateClient.h"
-#include "game/stateServer/stateServer.h"
+#include "game/state/stateClient/dispatch.h"
+#include "game/state/stateClient/stateClient.h"
+#include "game/state/stateClient/stateClientContext.h"
+#include "game/state/stateServer/stateServer.h"
+#include "game/state/stateServer/stateServerContext.h"
 #include "lib/imgui/imgui.h"
 #include "lib/imgui/imgui_impl_sdl.h"
 #include "lib/imgui/imgui_impl_sdlrenderer.h"
@@ -10,7 +13,6 @@
 #include "lib/sdl2wrapper/Window.h"
 #include "logger.h"
 #include "ui/Ui.h"
-#include "ui/components/TalkCmpt.h"
 #include "utils/utils.h"
 #include <SDL2/SDL.h>
 #include <fstream>

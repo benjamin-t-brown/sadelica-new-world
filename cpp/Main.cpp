@@ -1,8 +1,11 @@
 #include "./logger.h"
 #include "game/in2/in2.h"
-#include "game/stateClient/dispatch.h"
-#include "game/stateClient/stateClient.h"
-#include "game/stateServer/stateServer.h"
+#include "game/state/state.h"
+#include "game/state/stateClient/dispatch.h"
+#include "game/state/stateClient/stateClient.h"
+#include "game/state/stateClient/stateClientContext.h"
+#include "game/state/stateServer/stateServer.h"
+#include "game/state/stateServer/stateServerContext.h"
 #include "lib/imgui/imgui.h"
 #include "lib/imgui/imgui_impl_sdl.h"
 #include "lib/imgui/imgui_impl_sdlrenderer.h"
@@ -39,6 +42,8 @@ int main(int argc, char* argv[]) {
   std::vector<std::string> args;
   utils::parseArgs(argc, argv, args);
 
+  bool isClient = false;
+
   try {
     if (utils::includes("server", args)) {
       net::Config::mockEnabled = false;
@@ -61,6 +66,7 @@ int main(int argc, char* argv[]) {
         Logger().get(LogType::ERROR) << e << Logger::endl;
       }
     } else if (utils::includes("client", args)) {
+      isClient = true;
       net::Config::mockEnabled = false;
       snw::state::ClientContext::init();
       auto uiInstance = ui::Ui();
@@ -123,6 +129,12 @@ int main(int argc, char* argv[]) {
     logger::info("Program End.");
   } catch (const std::string& e) {
     Logger().get(LogType::ERROR) << e << Logger::endl;
+  }
+
+  if (isClient) {
+    logger::info("Ending connection.");
+    snw::state::dispatch::unEstablishConnection();
+    snw::state::ClientContext::get().update();
   }
 
   ImGui_ImplSDLRenderer_Shutdown();

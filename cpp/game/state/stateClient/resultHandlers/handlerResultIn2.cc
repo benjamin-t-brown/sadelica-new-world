@@ -1,6 +1,8 @@
 #include "../stateClient.h"
-#include "game/payloads.h"
-#include "game/resultAction.h"
+#include "../stateClientContext.h"
+#include "game/state/state.h"
+#include "game/state/actions/payloads.h"
+#include "game/state/actions/resultAction.h"
 #include "lib/json/json.h"
 #include "resultHandlers.h"
 

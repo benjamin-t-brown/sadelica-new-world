@@ -8,18 +8,18 @@ lib/imgui/imgui_widgets.cpp\
 lib/imgui/imgui_impl_sdl.cpp\
 lib/imgui/imgui_impl_sdlrenderer.cpp\
 lib/imgui/imgui.cpp\
-game/stateClient/stateClient.cpp\
-game/stateClient/dispatch.cpp\
-game/stateClient/loopbackHandlers/loopbackHandlers.cpp\
-game/stateClient/resultHandlers/resultHandlers.cpp\
+game/state/stateClient/stateClientContext.cpp\
+game/state/stateClient/dispatch.cpp\
+game/state/stateClient/loopbackHandlers/loopbackHandlers.cpp\
+game/state/stateClient/resultHandlers/resultHandlers.cpp\
 ui/Ui.cpp\
 ui/Elements.cpp\
 ui/components/TalkCmpt.cpp\
 ui/components/InGameCmpt.cpp
 
 SERVER_CODE=\
-game/stateServer/stateServer.cpp\
-game/stateServer/dispatchHandlers/dispatchHandlers.cpp
+game/state/stateServer/stateServerContext.cpp\
+game/state/stateServer/dispatchHandlers/dispatchHandlers.cpp
 
 SHARED_CODE=\
 lib/sdl2wrapper/Animation.cpp\
@@ -39,7 +39,8 @@ lib/net/client.cpp\
 lib/net/server.cpp\
 lib/tiled/tiled.cpp\
 game/in2/in2.cpp\
-game/actions.cpp\
+game/state/actions/actions.cpp\
+game/state/state.cpp\
 utils/utils.cpp
 
 TEST_CODE=\

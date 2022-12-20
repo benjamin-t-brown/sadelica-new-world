@@ -1,6 +1,7 @@
 #include "game/in2/in2.h"
-#include "game/stateClient/stateClient.h"
-#include "game/stateClient/dispatch.h"
+#include "game/state/stateClient/dispatch.h"
+#include "game/state/stateClient/stateClient.h"
+#include "game/state/stateClient/stateClientContext.h"
 #include "logger.h"
 #include <fstream>
 #include <gtest/gtest.h>
@@ -63,5 +64,6 @@ TEST_F(ClientStateTest, CanStartContinueAndStopAConversation) {
   EXPECT_FALSE(
       helpers::isSectionVisible(getState(), SectionType::CONVERSATION));
   EXPECT_EQ(getState().in2.waitingState, In2WaitingState::IN2_NONE);
-  EXPECT_FALSE(getCliContext().getIn2Ctx().isExecutionActive());
+  EXPECT_FALSE(
+      snw::state::ClientContext::get().getIn2Ctx().isExecutionActive());
 }

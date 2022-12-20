@@ -1,7 +1,9 @@
 #include "game/in2/in2.h"
-#include "game/stateClient/dispatch.h"
-#include "game/stateClient/stateClient.h"
-#include "game/stateServer/stateServer.h"
+#include "game/state/state.h"
+#include "game/state/stateClient/dispatch.h"
+#include "game/state/stateClient/stateClientContext.h"
+#include "game/state/stateServer/stateServer.h"
+#include "game/state/stateServer/stateServerContext.h"
 #include "lib/imgui/imgui.h"
 #include "lib/imgui/imgui_impl_sdl.h"
 #include "lib/imgui/imgui_impl_sdlrenderer.h"
@@ -22,7 +24,6 @@
 
 using namespace snw;
 using namespace snw::state;
-using ClientContext = snw::state::ClientContext;
 
 class ClientTalkTest : public testing::Test {
 protected:
@@ -42,7 +43,7 @@ protected:
     window.startRenderLoop([&]() {
       bool looping = true;
       ui::renderFrame(window, uiInstance, true, [&]() {
-        snw::state::getCliContext().update();
+        snw::state::ClientContext::get().update();
         renderPreConnectionScreen(uiInstance);
         connectionGauge.fill(window.getDeltaTime());
         if (connectionGauge.isFull()) {
@@ -50,7 +51,7 @@ protected:
         }
       });
 
-      if (snw::state::getCliState().client.isConnected) {
+      if (snw::state::getClientState().client.isConnected) {
         looping = false;
       }
 
@@ -176,10 +177,10 @@ TEST_F(ClientTalkTest, CanDisplayAConversation) {
   logger::info("Socket connection created, initiating handshake...");
   handshakeConnection(window, uiInstance);
 
-  if (!snw::state::getCliState().client.isConnected) {
+  if (!snw::state::getClientState().client.isConnected) {
     logger::error("Could not establish connection to server.");
   }
-  EXPECT_TRUE(snw::state::getCliState().client.isConnected);
+  EXPECT_TRUE(snw::state::getClientState().client.isConnected);
 
   logger::info("Completed connection handshake.");
 
@@ -189,7 +190,7 @@ TEST_F(ClientTalkTest, CanDisplayAConversation) {
 
       ui::renderFrame(window, uiInstance, false, [&]() {
         ClientContext::get().update();
-        if (helpers::isSectionVisible(getCliState(),
+        if (helpers::isSectionVisible(getClientState(),
                                       SectionType::CONVERSATION)) {
           renderTalkCmpt(uiInstance);
         } else {
@@ -197,7 +198,7 @@ TEST_F(ClientTalkTest, CanDisplayAConversation) {
         }
       });
 
-      if (!snw::state::getCliState().client.isConnected) {
+      if (!snw::state::getClientState().client.isConnected) {
         looping = false;
       }
 
@@ -211,8 +212,8 @@ TEST_F(ClientTalkTest, CanDisplayAConversation) {
 
   logger::info("Ending connection.");
   dispatch::unEstablishConnection();
-  snw::state::getCliContext().update();
-  snw::state::getCliContext().update();
+  snw::state::ClientContext::get().update();
+  snw::state::ClientContext::get().update();
 
   ImGui_ImplSDLRenderer_Shutdown();
   ImGui_ImplSDL2_Shutdown();

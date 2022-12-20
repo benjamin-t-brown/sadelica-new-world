@@ -1,11 +1,11 @@
-#include "stateServer.h"
 #include "./dispatchHandlers/dispatchHandlers.h"
-#include "game/dispatchAction.h"
-#include "game/payloads.h"
-#include "game/resultAction.h"
+#include "game/state/actions/dispatchAction.h"
+#include "game/state/actions/payloads.h"
+#include "game/state/actions/resultAction.h"
 #include "lib/json/json.h"
 #include "lib/net/config.h"
 #include "logger.h"
+#include "stateServer.h"
 
 #ifndef SNW_PORT
 #define SNW_PORT 7777
@@ -50,7 +50,7 @@ void ServerContext::update() {
   netServer.update([&](const std::string& socketId, const std::string& msg) {
     if (msg.size() == 0) {
       logger::info("SRV reports that socketId=%s is disconnected.",
-                    socketId.c_str());
+                   socketId.c_str());
       DispatchAction disconnectAction;
       disconnectAction.type = DispatchActionType::NET_DISCONNECT;
       disconnectAction.clientId = helpers::socketIdToClientId(socketId);
@@ -62,8 +62,8 @@ void ServerContext::update() {
     }
 
     logger::debug("SRV Recvd message from client (socketId=%s): %s",
-                 socketId.c_str(),
-                 msg.c_str());
+                  socketId.c_str(),
+                  msg.c_str());
     auto actionList = jsonToDispatchActionList(msg);
     for (auto& action : actionList.actions) {
       action.socketId = socketId;
@@ -76,9 +76,6 @@ void ServerContext::update() {
   serverResult.sendResults();
   serverResult.reset();
 }
-
-ServerContext& getSrvContext() { return ServerContext::get(); }
-const ServerState& getSrvState() { return getSrvContext().getState(); }
 
 void ServerResult::enqueue(const ResultAction& action) {
   actionsToCommit.push_back(action);
@@ -96,7 +93,7 @@ void ServerResult::sendResults() {
   if (clientPayload.size() > 0) {
     const json message = {{"id", "server"}, {"payload", clientPayload}};
     logger::debug("SRV Sending to clients: %s", message.dump().c_str());
-    getSrvContext().getNetServer().broadcast(message.dump());
+    ServerContext::get().getNetServer().broadcast(message.dump());
   }
 }
 
